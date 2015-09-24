@@ -399,7 +399,7 @@ begin
     Tag := EDITBONE_DOCUMENT_EDITOR_TAG;
   end;
   OptionsContainer.AssignTo(LEditor);
-  LEditor.Minimap.Visible := ShowMinimap;
+  LEditor.Minimap.Visible := LEditor.Minimap.Visible or ShowMinimap;
 
   { create search TODO: move to own procecure }
   LPanelSearch := TBCPanel.Create(LTabSheet);
