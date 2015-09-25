@@ -402,6 +402,8 @@ begin
   if not Assigned(LastNode) then
   begin
     FRootNode := OutputTreeView.AddChild(nil);
+    //FRootNode.CheckType := ctCheckBox;
+    //FRootNode.CheckState := csCheckedNormal;
     NodeData := OutputTreeView.GetNodeData(FRootNode);
     NodeData.Level := 0;
     if Ln = -1 then

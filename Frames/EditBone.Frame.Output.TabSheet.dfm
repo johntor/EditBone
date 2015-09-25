@@ -40,9 +40,10 @@ object OutputTabSheetFrame: TOutputTabSheetFrame
       Header.MainColumn = -1
       Header.Options = []
       TabOrder = 0
-      TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale]
+      TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale]
       TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning]
-      TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware]
+      TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused]
+      TreeOptions.SelectionOptions = [toFullRowSelect, toMiddleClickSelect]
       OnInitNode = VirtualDrawTreeInitNode
       Columns = <>
     end
