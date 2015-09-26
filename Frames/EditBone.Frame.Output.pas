@@ -713,9 +713,9 @@ end;
 procedure TOutputFrame.ReadOutputFile;
 var
   Filename, S: string;
-  OutputFile: TextFile;
+  OutputFile: TStreamReader;
   VirtualDrawTree: TVirtualDrawTree;
-  AFilename, Text, SearchString: WideString;
+  AFilename, Text, SearchString: string;
   Ln, Ch: Cardinal;
 begin
   FProcessingTabSheet := True;
@@ -723,31 +723,33 @@ begin
   Filename := GetOutFilename;
   if FileExists(Filename) then
   begin
-    AssignFile(OutputFile, Filename);
-    Reset(OutputFile);
-    while not Eof(OutputFile) do
-    begin
-      Readln(OutputFile, S);
-      if Pos('s:', S) = 1 then
-        VirtualDrawTree := AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [Copy(S, 3, Length(S))]))
-      else
+    OutputFile := TStreamReader.Create(Filename, TEncoding.Unicode);
+    try
+      while not OutputFile.EndOfStream do
       begin
-        if Assigned(VirtualDrawTree) then
+        S := OutputFile.ReadLine;
+        if Pos('s:', S) = 1 then
+          VirtualDrawTree := AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [Copy(S, 3, Length(S))]))
+        else
         begin
-          AFilename := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
-          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-          Ln := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
-          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-          Ch := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
-          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-          Text := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
-          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-          SearchString := S;
-          AddTreeViewLine(VirtualDrawTree, AFilename, Ln, Ch, Text, SearchString);
+          if Assigned(VirtualDrawTree) then
+          begin
+            AFilename := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
+            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+            Ln := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
+            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+            Ch := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
+            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+            Text := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
+            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+            SearchString := S;
+            AddTreeViewLine(VirtualDrawTree, AFilename, Ln, Ch, Text, SearchString);
+          end;
         end;
       end;
+    finally
+      OutputFile.Free;
     end;
-    CloseFile(OutputFile);
   end;
   FProcessingTabSheet := False;
 end;
@@ -756,7 +758,7 @@ procedure TOutputFrame.WriteOutputFile;
 var
   i: Integer;
   Filename: string;
-  OutputFile: TextFile;
+  OutputFile: TStreamWriter;
   Node: PVirtualNode;
   NodeData: POutputRec;
   VirtualDrawTree: TVirtualDrawTree;
@@ -768,33 +770,35 @@ begin
   if OptionsContainer.OutputSaveTabs then
     if PageControl.PageCount > 0 then
     begin
-      AssignFile(OutputFile, Filename);
-      ReWrite(OutputFile);
-      for i := 0 to PageControl.PageCount - 1 do
-      begin
-        VirtualDrawTree := TOutputTabSheetFrame(PageControl.Pages[i].Components[0]).VirtualDrawTree;
-        if Assigned(VirtualDrawTree) then
+      OutputFile := TStreamWriter.Create(Filename, False, TEncoding.Unicode);
+      try
+        for i := 0 to PageControl.PageCount - 1 do
         begin
-          { tab sheet }
-          Node := VirtualDrawTree.GetFirst;
-          Node := VirtualDrawTree.GetFirstChild(Node);
-          if Assigned(Node) then
+          VirtualDrawTree := TOutputTabSheetFrame(PageControl.Pages[i].Components[0]).VirtualDrawTree;
+          if Assigned(VirtualDrawTree) then
           begin
-            NodeData := VirtualDrawTree.GetNodeData(Node);
-            Writeln(OutputFile, Format('s:%s', [NodeData.SearchString]));
-          end;
-          { data }
-          while Assigned(Node) do
-          begin
-            NodeData := VirtualDrawTree.GetNodeData(Node);
-            if NodeData.SearchString <> '' then
-              WriteLn(OutputFile, Format('%s%s%d%s%d%s%s%s%s', [NodeData.Filename, OUTPUT_FILE_SEPARATOR, NodeData.Ln,
-                OUTPUT_FILE_SEPARATOR, NodeData.Ch, OUTPUT_FILE_SEPARATOR, NodeData.Text, OUTPUT_FILE_SEPARATOR, NodeData.SearchString]));
-            Node := VirtualDrawTree.GetNext(Node);
+            { tab sheet }
+            Node := VirtualDrawTree.GetFirst;
+            Node := VirtualDrawTree.GetFirstChild(Node);
+            if Assigned(Node) then
+            begin
+              NodeData := VirtualDrawTree.GetNodeData(Node);
+              OutputFile.Writeline(Format('s:%s', [NodeData.SearchString]));
+            end;
+            { data }
+            while Assigned(Node) do
+            begin
+              NodeData := VirtualDrawTree.GetNodeData(Node);
+              if NodeData.SearchString <> '' then
+                OutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s', [NodeData.Filename, OUTPUT_FILE_SEPARATOR, NodeData.Ln,
+                  OUTPUT_FILE_SEPARATOR, NodeData.Ch, OUTPUT_FILE_SEPARATOR, NodeData.Text, OUTPUT_FILE_SEPARATOR, NodeData.SearchString]));
+              Node := VirtualDrawTree.GetNext(Node);
+            end;
           end;
         end;
+      finally
+        OutputFile.Free;
       end;
-      CloseFile(OutputFile);
     end;
   FProcessingTabSheet := False;
 end;
