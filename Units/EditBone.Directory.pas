@@ -439,7 +439,8 @@ begin
       FPageControl.Pages[LActivePageIndex].Free;
       if LActivePageIndex > 0 then
         FPageControl.ActivePageIndex := LActivePageIndex - 1
-      else if FPageControl.PageCount > 0 then
+      else
+      if FPageControl.PageCount > 0 then
         FPageControl.ActivePageIndex := 0;
     end
     else

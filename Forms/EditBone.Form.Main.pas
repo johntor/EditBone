@@ -2426,6 +2426,7 @@ begin
   end;
   FDocument.Free;
   FDirectory.Free;
+  FOutput.Free;
   OptionsContainer.Free;
   SQLFormatterOptionsContainer.Free;
 
@@ -2957,7 +2958,7 @@ begin
   FStopWatch.Stop;
   if not FOutput.CancelSearch then
   begin
-    if FOutput.IsEmpty then
+    if FFindInFilesThread.Count = 0 then
     begin
       FOutput.AddTreeViewLine(FOutputTreeView, '', -1, 0,
         Format(LanguageDataModule.GetMessage('CannotFindString'), [FFindInFilesThread.FindWhatText]));
@@ -2967,7 +2968,7 @@ begin
       TimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
     else
       TimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
-    StatusBar.Panels[4].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FOutput.Count, TimeDifference])
+    StatusBar.Panels[4].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, TimeDifference])
   end;
   FOutput.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
   FOutput.ProcessingTabSheet := False;

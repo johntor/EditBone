@@ -11,6 +11,7 @@ type
 
   TFindInFilesThread = class(TThread)
   private
+    FCount: Integer;
     FOnCancelSearch: TOnCancelSearch;
     FOnProgressBarStep: TNotifyEvent;
     FOnAddTreeViewLine: TOnAddTreeViewLine;
@@ -26,6 +27,7 @@ type
     constructor Create(AFindWhatText, AFileTypeText, AFolderText: String; ASearchCaseSensitive, ALookInSubfolders: Boolean;
       AFileExtensions: string); overload;
     procedure Execute; override;
+    property Count: Integer read FCount;
     property FindWhatText: string read FFindWhatOriginalText;
     property OnCancelSearch: TOnCancelSearch read FOnCancelSearch write FOnCancelSearch;
     property OnProgressBarStep: TNotifyEvent read FOnProgressBarStep write FOnProgressBarStep;
@@ -58,6 +60,7 @@ begin
   FFolderText := AFolderText;
   FSearchCaseSensitive := ASearchCaseSensitive;
   FLookInSubfolders := ALookInSubfolders;
+  FCount := 0;
 end;
 
 { Recursive method to find files. }
@@ -136,6 +139,7 @@ begin
                       end;
                       if LFindWhatTextPtr^ = #0 then
                       begin
+                        Inc(FCount);
                         if Assigned(FOnCancelSearch) and FOnCancelSearch then
                         begin
                           Terminate;

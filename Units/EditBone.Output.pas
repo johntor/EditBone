@@ -28,9 +28,9 @@ type
     FPageControl: TBCPageControl;
     FTabSheetFindInFiles: TTabSheet;
     FSkinManager: TBCSkinManager;
-    function GetCount: Integer;
+    //function GetCount: Integer;
     function GetIsAnyOutput: Boolean;
-    function GetIsEmpty: Boolean;
+    //function GetIsEmpty: Boolean;
     function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
     function TabFound(TabCaption: string): Boolean;
     function CheckCancel(ATabIndex: Integer = -1): Boolean;
@@ -49,9 +49,9 @@ type
     procedure SetProcessingTabSheet(Value: Boolean);
     procedure OpenFiles(OnlySelected: Boolean = False);
     procedure SetCheckedState(Value: TCheckState);
-    property Count: Integer read GetCount;
+    //property Count: Integer read GetCount;
     property IsAnyOutput: Boolean read GetIsAnyOutput;
-    property IsEmpty: Boolean read GetIsEmpty;
+    //property IsEmpty: Boolean read GetIsEmpty;
     property OnTabsheetDblClick: TNotifyEvent read FTabsheetDblClick write FTabsheetDblClick;
     property OnOpenAll: TOpenAllEvent read FOpenAll write FOpenAll;
     property ProcessingTabSheet: Boolean read FProcessingTabSheet write SetProcessingTabSheet;
@@ -134,8 +134,8 @@ end;
 function TEBOutput.AddTreeView(TabCaption: string): TVirtualDrawTree;
 var
   LTabSheet: TsTabSheet;
-  LPanel: TBCPanel;
   LVirtualDrawTree: TVirtualDrawTree;
+  LPanel: TBCPanel;
 begin
   { check if there already is a tab with same name }
   if TabFound(StringReplace(TabCaption, '&', '&&', [rfReplaceAll])) then
@@ -160,24 +160,22 @@ begin
   LTabSheet.Caption := StringReplace(TabCaption, '&', '&&', [rfReplaceAll]);
   PageControl.ActivePage := LTabSheet;
 
+  { Panel needed because Virtual tree's AlignWithMargins does not work. Remove when fixed. }
   LPanel := TBCPanel.Create(LTabSheet);
   with LPanel do
   begin
     Parent := LTabSheet;
+    Align := alClient;
     AlignWithMargins := True;
     Margins.Left := 2;
     Margins.Top := 2;
     Margins.Right := 2;
     Margins.Bottom := 2;
-    Align := alClient;
-    BevelOuter := bvNone;
-    Color := clWindow;
-    SkinData.SkinSection := 'CHECKBOX';
   end;
-  LVirtualDrawTree := TVirtualDrawTree.Create(LTabSheet);
+  LVirtualDrawTree := TVirtualDrawTree.Create(LPanel);
   with LVirtualDrawTree do
   begin
-    Parent := LTabSheet;
+    Parent := LPanel;
     Align := alClient;
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale];
     TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
@@ -190,7 +188,6 @@ begin
     OnDblClick := TabsheetDblClick;
     NodeDataSize := SizeOf(TOutputRec);
   end;
-
   Result := LVirtualDrawTree;
   LTabSheet.TabVisible := True;
 end;
@@ -348,8 +345,6 @@ begin
   if not Assigned(LastNode) then
   begin
     FRootNode := OutputTreeView.AddChild(nil);
-    //FRootNode.CheckType := ctCheckBox;
-    //FRootNode.CheckState := csCheckedNormal;
     NodeData := OutputTreeView.GetNodeData(FRootNode);
     NodeData.Level := 0;
     if Ln = -1 then
@@ -421,32 +416,6 @@ begin
   end;
 end;
 
-function TEBOutput.GetIsEmpty: Boolean;
-var
-  OutputTreeView: TVirtualDrawTree;
-begin
-  Result := True;
-  if FCancelSearch then
-    Exit;
-  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-  if not Assigned(OutputTreeView) then
-    Exit;
-  Result := OutputTreeView.GetFirst = nil;
-end;
-
-function TEBOutput.GetCount: Integer;
-var
-  OutputTreeView: TVirtualDrawTree;
-begin
-  Result := 0;
-  if FCancelSearch then
-    Exit;
-  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-  if not Assigned(OutputTreeView) then
-    Exit;
-  Result := OutputTreeView.Tag;
-end;
-
 procedure TEBOutput.CopyToClipboard(OnlySelected: Boolean);
 var
   OutputTreeView: TVirtualDrawTree;
@@ -488,7 +457,7 @@ function TEBOutput.GetIsAnyOutput: Boolean;
 begin
   Result := False;
   if Assigned(PageControl) then
-    Result := PageControl.PageCount <> 0;
+    Result := PageControl.PageCount > 1;
 end;
 
 function TEBOutput.CheckCancel(ATabIndex: Integer = -1): Boolean;
@@ -516,28 +485,30 @@ var
   LActivePageIndex: Integer;
 begin
   Result := True;
+
   if CheckCancel(ATabIndex) then
     Exit(False);
-  if PageControl.PageCount > 0 then
+  if FPageControl.PageCount > 0 then
   begin
-    PageControl.TabClosed := True;
-
+    FPageControl.TabClosed := True;
     if ATabIndex = -1 then
-      LActivePageIndex := PageControl.ActivePageIndex
+      LActivePageIndex := FPageControl.ActivePageIndex
     else
       LActivePageIndex := ATabIndex;
-
-    if AFreePage and (PageControl.PageCount > 0) then
+    if AFreePage and (FPageControl.PageCount > 0) then
     begin
-      PageControl.Pages[LActivePageIndex].Free;
+      FPageControl.Pages[LActivePageIndex].Free;
       if LActivePageIndex > 0 then
-        PageControl.ActivePageIndex := LActivePageIndex - 1
+        FPageControl.ActivePageIndex := LActivePageIndex - 1
       else
-      if PageControl.PageCount > 0 then
-        PageControl.ActivePageIndex := 0;
+      if FPageControl.PageCount > 0 then
+        FPageControl.ActivePageIndex := 0;
     end
     else
-      TsTabSheet(PageControl.Pages[LActivePageIndex]).TabVisible := False;
+    begin
+      TsTabSheet(FPageControl.Pages[LActivePageIndex]).TabVisible := False;
+      FPageControl.Pages[LActivePageIndex].PageIndex := LActivePageIndex + 1;
+    end;
   end;
 end;
 
@@ -545,7 +516,7 @@ procedure TEBOutput.CloseAllTabSheets;
 var
   i, j: Integer;
 begin
-  j := PageControl.PageCount - 1;
+  j := PageControl.PageCount - 2;
   for i := j downto 0 do
     CloseTabSheet(True, i);
 end;
@@ -557,7 +528,7 @@ begin
   if CheckCancel then
     Exit;
   PageControl.ActivePage.PageIndex := 0;
-  j := PageControl.PageCount - 1;
+  j := PageControl.PageCount - 2;
   for i := j downto 1 do
     PageControl.Pages[i].Free;
 end;
@@ -575,16 +546,15 @@ var
 begin
   Result := nil;
   if Assigned(TabSheet) then
-    if TabSheet.ControlCount <> 0 then
-      if Assigned(TabSheet.Controls[0]) then
-        if TabSheet.Controls[0] is TBCPanel then
-        begin
-          LPanel := TBCPanel(TabSheet.Controls[0]);
-          if LPanel.ControlCount <> 0 then
-            if Assigned(LPanel.Controls[0]) then
-              if LPanel.Controls[0] is TVirtualDrawTree then
-                Result := TVirtualDrawTree(LPanel.Controls[0]);
-        end;
+    if Assigned(TabSheet.Controls[0]) then
+      if TabSheet.Controls[0] is TBCPanel then
+      begin
+        LPanel := TBCPanel(TabSheet.Controls[0]);
+        if Assigned(LPanel) then
+          if Assigned(LPanel.Controls[0]) then
+            if LPanel.Controls[0] is TVirtualDrawTree then
+              Result := TVirtualDrawTree(LPanel.Controls[0]);
+      end;
 end;
 
 procedure TEBOutput.SetOptions;
