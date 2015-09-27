@@ -9,8 +9,8 @@ uses
   sSkinProvider, BCComponents.SkinProvider, acTitleBar, BCComponents.TitleBar, sSkinManager, BCComponents.SkinManager,
   Vcl.ComCtrls, sStatusBar, BCControls.StatusBar, Vcl.ExtCtrls, sPanel, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
-  EditBone.Directory, EditBone.Document, EditBone.Frame.Output, VirtualTrees, BCEditor.Print.Types,
-  Vcl.ActnMan, Vcl.ActnMenus, BCComponents.DragDrop, System.Diagnostics,
+  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
+  Vcl.ActnMan, Vcl.ActnMenus, BCComponents.DragDrop, System.Diagnostics, EditBone.Output,
   Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, System.ImageList, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
   System.Generics.Collections, Vcl.StdCtrls, System.Win.TaskbarCore, Vcl.Taskbar;
@@ -626,6 +626,30 @@ type
     MenuItemMainMenuDocumentFormatJSONIndent2: TMenuItem;
     MenuItemMainMenuDocumentFormatJSONIndent3: TMenuItem;
     MenuItemMainMenuDocumentFormatJSONIndent4: TMenuItem;
+    PageControlOutput: TBCPageControl;
+    TabSheetFindInFiles: TsTabSheet;
+    PopupMenuOutput: TPopupMenu;
+    MenuItemOutputClose: TMenuItem;
+    MenuItemOutputCloseAll: TMenuItem;
+    MenuItemOutputCloseAllOtherPages: TMenuItem;
+    MenuItemOutputDivider1: TMenuItem;
+    MenuItemOutputCopyAllToClipboard: TMenuItem;
+    MenuItemOutputCopySelectedToClipboard: TMenuItem;
+    MenuItemOutputDivider2: TMenuItem;
+    MenuItemOutputOpenAll: TMenuItem;
+    MenuItemOutputOpenSelected: TMenuItem;
+    MenuItemOutputDivider3: TMenuItem;
+    MenuItemOutputSelectAll: TMenuItem;
+    MenuItemOutputUnselectAll: TMenuItem;
+    ActionOutputClose: TAction;
+    ActionOutputCloseAll: TAction;
+    ActionOutputCloseAllOtherPages: TAction;
+    ActionOutputCopyAllToClipboard: TAction;
+    ActionOutputCopySelectedToClipboard: TAction;
+    ActionOutputOpenAll: TAction;
+    ActionOutputOpenSelected: TAction;
+    ActionOutputSelectAll: TAction;
+    ActionOutputUnselectAll: TAction;
     procedure ActionFileNewExecute(Sender: TObject);
     procedure ActionFileOpenExecute(Sender: TObject);
     procedure ActionFileSaveAllExecute(Sender: TObject);
@@ -783,12 +807,25 @@ type
     procedure ActionDocumentFormatJSONIndent2Execute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent3Execute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent4Execute(Sender: TObject);
+    procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PageControlOutputDblClick(Sender: TObject);
+    procedure PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
+      var Action: TacCloseAction);
+    procedure ActionOutputCloseExecute(Sender: TObject);
+    procedure ActionOutputCloseAllExecute(Sender: TObject);
+    procedure ActionOutputCloseAllOtherPagesExecute(Sender: TObject);
+    procedure ActionOutputCopyAllToClipboardExecute(Sender: TObject);
+    procedure ActionOutputCopySelectedToClipboardExecute(Sender: TObject);
+    procedure ActionOutputOpenAllExecute(Sender: TObject);
+    procedure ActionOutputOpenSelectedExecute(Sender: TObject);
+    procedure ActionOutputSelectAllExecute(Sender: TObject);
+    procedure ActionOutputUnselectAllExecute(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
     FImageListCount: Integer;
-    FOutputFrame: TOutputFrame;
+    FOutput: TBCOutput;
     FProcessingEventHandler: Boolean;
     FFindInFilesThread: TFindInFilesThread;
     FSQLFormatterDLLFound: Boolean;
@@ -895,6 +932,26 @@ begin
     FDocument.Close;
 end;
 
+procedure TMainForm.PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
+  var Action: TacCloseAction);
+begin
+  inherited;
+  // TODO
+end;
+
+procedure TMainForm.PageControlOutputDblClick(Sender: TObject);
+begin
+  inherited;
+  // TODO
+end;
+
+procedure TMainForm.PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  inherited;
+  // TODO
+end;
+
 procedure TMainForm.PageControlDirectoryMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
@@ -939,6 +996,24 @@ end;
 procedure TMainForm.ActionFileReopenExecute(Sender: TObject);
 begin
   { dummy action }
+end;
+
+procedure TMainForm.ActionOutputCloseAllOtherPagesExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.CloseAllOtherTabSheets;
+end;
+
+procedure TMainForm.ActionOutputCopyAllToClipboardExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.CopyToClipboard;
+end;
+
+procedure TMainForm.ActionOutputCopySelectedToClipboardExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.CopyToClipboard(True);
 end;
 
 procedure TMainForm.ActionDirectoryContextMenuExecute(Sender: TObject);
@@ -1228,6 +1303,30 @@ begin
   PageControlToolbar.ActivePage := TabSheetView;
 end;
 
+procedure TMainForm.ActionOutputOpenAllExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.OpenFiles;
+end;
+
+procedure TMainForm.ActionOutputOpenSelectedExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.OpenFiles(True);
+end;
+
+procedure TMainForm.ActionOutputCloseAllExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.CloseAllTabSheets;
+end;
+
+procedure TMainForm.ActionOutputCloseExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.CloseTabSheet;
+end;
+
 procedure TMainForm.ActionFileNewExecute(Sender: TObject);
 begin
   FDocument.New;
@@ -1364,6 +1463,12 @@ begin
     if Assigned(LEditor) then
       LEditor.ToggleBookMark
   end;
+end;
+
+procedure TMainForm.ActionOutputSelectAllExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.SetCheckedState(csCheckedNormal);
 end;
 
 procedure TMainForm.ActionSelectEncodingExecute(Sender: TObject);
@@ -1611,6 +1716,12 @@ end;
 procedure TMainForm.ActionToolsSelectForCompareExecute(Sender: TObject);
 begin
  FDocument.SelectForCompare;
+end;
+
+procedure TMainForm.ActionOutputUnselectAllExecute(Sender: TObject);
+begin
+  inherited;
+  FOutput.SetCheckedState(csUncheckedNormal);
 end;
 
 procedure TMainForm.ActionDummyExecute(Sender: TObject);
@@ -1997,7 +2108,7 @@ begin
     ActionSearchSearch.Enabled := ActiveDocumentFound;
     ActionSearchGotoLine.Enabled := ActiveDocumentFound;
     ActionSearchReplace.Enabled := ActiveDocumentFound;
-    ActionSearchFindInFiles.Enabled := Assigned(FOutputFrame) and not FOutputFrame.ProcessingTabSheet;
+    ActionSearchFindInFiles.Enabled := Assigned(FOutput) and not FOutput.ProcessingTabSheet;
     ActionSearchFindNext.Enabled := ActiveDocumentFound;
     ActionSearchFindPrevious.Enabled := ActiveDocumentFound;
     ActionSearchToggleBookmark.Enabled := OptionsContainer.LeftMarginShowBookmarks and ActiveDocumentFound;
@@ -2015,7 +2126,7 @@ begin
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and ActiveDocumentFound and IsSQLDocument;
     ActionDocumentFormatXML.Enabled := ActiveDocumentFound and IsXMLDocument;
 
-    ActionViewOutput.Enabled := FOutputFrame.IsAnyOutput;
+    ActionViewOutput.Enabled := FOutput.IsAnyOutput;
     if not ActionViewOutput.Enabled then { if there's no output then hide panel }
       PanelOutput.Visible := False;
 
@@ -2170,7 +2281,7 @@ begin
   { mainform }
   UpdateLanguage(Self, ALanguage);
   { frames }
-  UpdateLanguage(TForm(FOutputFrame), ALanguage); // TODO: Remove when frames is removed
+  UpdateLanguage(TForm(FOutput), ALanguage); // TODO: Remove when frames is removed
   { menubar }
   UpdateMenuBarLanguage;
   SendMessage(Application.MainForm.Handle, WM_SIZE, 0, 0);
@@ -2235,10 +2346,10 @@ procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   Rslt: Integer;
 begin
-  if FOutputFrame.ProcessingTabSheet then
+  if FOutput.ProcessingTabSheet then
   begin
     if AskYesOrNo(LanguageDataModule.GetYesOrNoMessage('CancelSearch')) then
-      FOutputFrame.CancelSearch := True;
+      FOutput.CancelSearch := True;
     Action := caNone;
     Exit;
   end;
@@ -2299,7 +2410,7 @@ begin
     OptionsContainer.WriteIniFile;
     FDocument.WriteIniFile;
     FDirectory.WriteIniFile;
-    FOutputFrame.WriteOutputFile;
+    FOutput.WriteOutputFile;
     WriteIniFile;
   end;
   FDocument.Free;
@@ -2370,8 +2481,8 @@ begin
 
   OptionsContainer.AssignTo(StatusBar);
   { Output }
-  if Assigned(FOutputFrame) then
-    FOutputFrame.SetOptions;
+  if Assigned(FOutput) then
+    FOutput.SetOptions;
   { Directory }
   if Assigned(FDirectory) then
   begin
@@ -2407,8 +2518,8 @@ begin
   Self.ReadLanguageFile(GetSelectedLanguage('English'));
 
   CreateFileReopenList;
-  FOutputFrame.ReadOutputFile;
-  PanelOutput.Visible := FOutputFrame.IsAnyOutput;
+  FOutput.ReadOutputFile;
+  PanelOutput.Visible := FOutput.IsAnyOutput;
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
   //SetMargins;
@@ -2478,6 +2589,7 @@ end;
 procedure TMainForm.TimerTimer(Sender: TObject);
 begin
   inherited;
+  // TODO: refactor
   FDocument.CheckFileDateTimes;
 end;
 
@@ -2589,11 +2701,6 @@ end;
 
 procedure TMainForm.CreateObjects;
 begin
-  { TOutputFrame }
-  FOutputFrame := TOutputFrame.Create(PanelOutput);
-  FOutputFrame.Parent := PanelOutput;
-  FOutputFrame.OnTabsheetDblClick := OutputDblClickActionExecute;
-  FOutputFrame.OnOpenAll := OutputOpenAllEvent;
   { TDocumentFrame }
   FDocument := TEBDocument.Create(PageControlDocument);
   FDocument.PopupMenuEditor := PopupMenuEditor;
@@ -2619,6 +2726,10 @@ begin
   FDirectory.PopupMenuFileTreeView := PopupMenuFileTreeView;
   FDirectory.SkinManager := SkinManager;
   FDirectory.ReadIniFile;
+  { TBCOutput }
+  FOutput := TBCOutput.Create(PageControlOutput);
+  FOutput.OnTabsheetDblClick := OutputDblClickActionExecute;
+  FOutput.OnOpenAll := OutputOpenAllEvent;
 end;
 
 procedure TMainForm.ReadIniSizePositionAndState;
@@ -2740,7 +2851,7 @@ var
   Filename: string;
   Ln, Ch: LongWord;
 begin
-  if FOutputFrame.SelectedLine(Filename, Ln, Ch) then
+  if FOutput.SelectedLine(Filename, Ln, Ch) then
     FDocument.Open(Filename, Ln, Ch);
 end;
 
@@ -2766,7 +2877,7 @@ end;
 
 procedure TMainForm.OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString);
 begin
-  FOutputFrame.AddTreeViewLine(FOutputTreeView, Filename, Ln, Ch, Text, SearchString);
+  FOutput.AddTreeViewLine(FOutputTreeView, Filename, Ln, Ch, Text, SearchString);
 end;
 
 procedure TMainForm.OnProgressBarStepFindInFiles(Sender: TObject);
@@ -2803,8 +2914,8 @@ begin
       ProgressBar.Show(LCount);
       FStopWatch.Reset;
       FStopWatch.Start;
-      FOutputTreeView := FOutputFrame.AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [FindWhatText]));
-      FOutputFrame.ProcessingTabSheet := True;
+      FOutputTreeView := FOutput.AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [FindWhatText]));
+      FOutput.ProcessingTabSheet := True;
       PanelOutput.Visible := True;
       PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
       Application.ProcessMessages;
@@ -2826,11 +2937,11 @@ var
 begin
   ProgressBar.Hide;
   FStopWatch.Stop;
-  if not FOutputFrame.CancelSearch then
+  if not FOutput.CancelSearch then
   begin
-    if FOutputFrame.IsEmpty then
+    if FOutput.IsEmpty then
     begin
-      FOutputFrame.AddTreeViewLine(FOutputTreeView, '', -1, 0,
+      FOutput.AddTreeViewLine(FOutputTreeView, '', -1, 0,
         Format(LanguageDataModule.GetMessage('CannotFindString'), [FFindInFilesThread.FindWhatText]));
       StatusBar.Panels[3].Text := '';
     end;
@@ -2838,17 +2949,17 @@ begin
       TimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
     else
       TimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
-    StatusBar.Panels[4].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FOutputFrame.Count, TimeDifference])
+    StatusBar.Panels[4].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FOutput.Count, TimeDifference])
   end;
-  FOutputFrame.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
-  FOutputFrame.ProcessingTabSheet := False;
+  FOutput.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
+  FOutput.ProcessingTabSheet := False;
   FFindInFilesThread := nil;
   SetFields;
 end;
 
 function TMainForm.OnCancelSearch: Boolean;
 begin
-  Result := FOutputFrame.CancelSearch;
+  Result := FOutput.CancelSearch;
 end;
 
 procedure TMainForm.WriteIniFile;

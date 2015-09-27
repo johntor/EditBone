@@ -7,8 +7,6 @@ inherited MainForm: TMainForm
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  ExplicitWidth = 1127
-  ExplicitHeight = 741
   PixelsPerInch = 96
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
@@ -50,9 +48,6 @@ inherited MainForm: TMainForm
       end>
     ParentColor = True
     OnDrawPanel = StatusBarDrawPanel
-    ExplicitTop = 657
-    ExplicitWidth = 1111
-    ExplicitHeight = 25
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 0
       Top = 3
@@ -2982,6 +2977,44 @@ inherited MainForm: TMainForm
     TabOrder = 4
     Visible = False
     SkinData.SkinSection = 'CHECKBOX'
+    object PageControlOutput: TBCPageControl
+      Left = 0
+      Top = 0
+      Width = 1111
+      Height = 121
+      ActivePage = TabSheetFindInFiles
+      Align = alClient
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      Images = ImagesDataModule.ImageListSmall
+      ParentDoubleBuffered = False
+      ParentFont = False
+      PopupMenu = PopupMenuOutput
+      TabHeight = 22
+      TabOrder = 0
+      OnMouseDown = PageControlOutputMouseDown
+      TabMargin = 4
+      TabPadding = 2
+      SkinData.SkinSection = 'PAGECONTROL'
+      OnDblClick = PageControlOutputDblClick
+      OnCloseBtnClick = PageControlOutputCloseBtnClick
+      HoldShiftToDragDrop = False
+      RightClickSelect = True
+      TabDragDrop = True
+      object TabSheetFindInFiles: TsTabSheet
+        DoubleBuffered = False
+        ParentDoubleBuffered = False
+        TabType = ttButton
+        TabSkin = 'CHECKBOX'
+        SkinData.CustomColor = False
+        SkinData.CustomFont = False
+        OnClickBtn = TabSheetOpenClickBtn
+      end
+    end
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
@@ -4449,6 +4482,69 @@ inherited MainForm: TMainForm
       ImageIndex = 28
       OnExecute = ActionDocumentFormatJSONIndent4Execute
     end
+    object ActionOutputClose: TAction
+      Category = 'Output'
+      Caption = '&Close'
+      Hint = 'Close current page'
+      ImageIndex = 6
+      OnExecute = ActionOutputCloseExecute
+    end
+    object ActionOutputCloseAll: TAction
+      Category = 'Output'
+      Caption = 'Close &all'
+      Hint = 'Close all pages'
+      ImageIndex = 7
+      OnExecute = ActionOutputCloseAllExecute
+    end
+    object ActionOutputCloseAllOtherPages: TAction
+      Category = 'Output'
+      Caption = 'Close a&ll other pages'
+      Hint = 'Close all other pages'
+      ImageIndex = 8
+      OnExecute = ActionOutputCloseAllOtherPagesExecute
+    end
+    object ActionOutputCopyAllToClipboard: TAction
+      Category = 'Output'
+      Caption = 'C&opy all to Clipboard'
+      Hint = 'Copy all to clipboard'
+      ImageIndex = 15
+      OnExecute = ActionOutputCopyAllToClipboardExecute
+    end
+    object ActionOutputCopySelectedToClipboard: TAction
+      Category = 'Output'
+      Caption = 'Cop&y selected to Clipboard'
+      Hint = 'Copy selected to clipboard'
+      ImageIndex = 100
+      OnExecute = ActionOutputCopySelectedToClipboardExecute
+    end
+    object ActionOutputOpenAll: TAction
+      Category = 'Output'
+      Caption = 'O&pen all'
+      Hint = 'Open all files'
+      ImageIndex = 1
+      OnExecute = ActionOutputOpenAllExecute
+    end
+    object ActionOutputOpenSelected: TAction
+      Category = 'Output'
+      Caption = 'Op&en selected'
+      Hint = 'Open selected files'
+      ImageIndex = 101
+      OnExecute = ActionOutputOpenSelectedExecute
+    end
+    object ActionOutputSelectAll: TAction
+      Category = 'Output'
+      Caption = 'Select all'
+      Hint = 'Select all files'
+      ImageIndex = 102
+      OnExecute = ActionOutputSelectAllExecute
+    end
+    object ActionOutputUnselectAll: TAction
+      Category = 'Output'
+      Caption = 'Unselect all'
+      Hint = 'Unselect all files'
+      ImageIndex = 103
+      OnExecute = ActionOutputUnselectAllExecute
+    end
   end
   object PopupMenuDocument: TPopupMenu [22]
     Images = ImagesDataModule.ImageListSmall
@@ -5269,6 +5365,47 @@ inherited MainForm: TMainForm
     end
     object MenuItemProperties: TMenuItem
       Action = ActionDirectoryProperties
+    end
+  end
+  object PopupMenuOutput: TPopupMenu
+    Images = ImagesDataModule.ImageListSmall
+    Left = 592
+    Top = 412
+    object MenuItemOutputClose: TMenuItem
+      Action = ActionOutputClose
+    end
+    object MenuItemOutputCloseAll: TMenuItem
+      Action = ActionOutputCloseAll
+    end
+    object MenuItemOutputCloseAllOtherPages: TMenuItem
+      Action = ActionOutputCloseAllOtherPages
+    end
+    object MenuItemOutputDivider1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemOutputCopyAllToClipboard: TMenuItem
+      Action = ActionOutputCopyAllToClipboard
+    end
+    object MenuItemOutputCopySelectedToClipboard: TMenuItem
+      Action = ActionOutputCopySelectedToClipboard
+    end
+    object MenuItemOutputDivider2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemOutputOpenAll: TMenuItem
+      Action = ActionOutputOpenAll
+    end
+    object MenuItemOutputOpenSelected: TMenuItem
+      Action = ActionOutputOpenSelected
+    end
+    object MenuItemOutputDivider3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemOutputSelectAll: TMenuItem
+      Action = ActionOutputSelectAll
+    end
+    object MenuItemOutputUnselectAll: TMenuItem
+      Action = ActionOutputUnselectAll
     end
   end
 end
