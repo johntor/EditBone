@@ -3,7 +3,7 @@ program EditBone;
 uses
   {$ifdef DEBUG}
   FastMM4,
-  {$endif}
+  {$endif }
   Vcl.Forms,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
   EditBone.DataModule.Images in 'DataModules\EditBone.DataModule.Images.pas' {EBDataModuleImages: TDataModule},
@@ -22,8 +22,6 @@ uses
   EditBone.Frame.Options.Editor.TabSheet in 'Frames\EditBone.Frame.Options.Editor.TabSheet.pas' {OptionsEditorTabsFrame: TFrame},
   EditBone.Frame.Options.FileTypes in 'Frames\EditBone.Frame.Options.FileTypes.pas' {OptionsFileTypesFrame: TFrame},
   EditBone.Frame.Options.Output.TabSheet in 'Frames\EditBone.Frame.Options.Output.TabSheet.pas' {OptionsOutputTabsFrame: TFrame},
-  EditBone.Frame.Output in 'Frames\EditBone.Frame.Output.pas' {OutputFrame: TFrame},
-  EditBone.Frame.Output.TabSheet in 'Frames\EditBone.Frame.Output.TabSheet.pas' {OutputTabSheetFrame: TFrame},
   EditBone.Output in 'Units\EditBone.Output.pas',
   EditBone.Types in 'Units\EditBone.Types.pas',
   EditBone.XMLTree in 'Units\EditBone.XMLTree.pas';

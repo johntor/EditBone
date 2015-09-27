@@ -4,47 +4,20 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Buttons, Vcl.ComCtrls,
-  Vcl.ActnList, Vcl.Menus, VirtualTrees, Vcl.PlatformDefaultStyleActnCtrls,
-  EditBone.Frame.Output.TabSheet, BCControls.PageControl, System.Actions, BCCommon.Images, sPageControl,
+  Vcl.ActnList, Vcl.Menus, VirtualTrees, Vcl.PlatformDefaultStyleActnCtrls, BCComponents.SkinManager,
+  BCControls.PageControl, System.Actions, BCCommon.Images, sPageControl,
   sFrameAdapter;
 
 type
   TOpenAllEvent = procedure(var FileNames: TStrings);
 
-  TBCOutput = class(TObject)
-    ActionCloseAllOtherPages: TAction;
-    ActionCopyAllToClipboard: TAction;
-    ActionCopySelectedToClipboard: TAction;
-    ActionList: TActionList;
-    ActionOpenAll: TAction;
-    ActionOpenSelected: TAction;
-    ActionOutputClose: TAction;
-    ActionOutputCloseAll: TAction;
-    ActionSelectAll: TAction;
-    ActionUnselectAll: TAction;
-    FrameAdapter: TsFrameAdapter;
-    MenuItemClose: TMenuItem;
-    MenuItemCloseAll: TMenuItem;
-    MenuItemCloseAllOtherPages: TMenuItem;
-    MenuItemCopySelectedToClipboard: TMenuItem;
-    MenuItemCopyToClipboard: TMenuItem;
-    MenuItemOpenAll: TMenuItem;
-    MenuItemOpenSelected: TMenuItem;
-    MenuItemSelectAll: TMenuItem;
-    MenuItemSeparator1: TMenuItem;
-    MenuItemSeparator2: TMenuItem;
-    MenuItemSeparator3: TMenuItem;
-    MenuItemUnselectAll: TMenuItem;
-    PageControl: TBCPageControl;
-    PopupMenu: TPopupMenu;
-    procedure TabsheetDblClick(Sender: TObject);
+  TEBOutput = class(TObject)
     procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
-    procedure PageControlCloseButtonClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
-      var Action: TacCloseAction);
-    procedure PageControlDblClick(Sender: TObject);
-    procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
+      var InitialStates: TVirtualNodeInitStates);
+    procedure TabsheetDblClick(Sender: TObject);
   private
     FCancelSearch: Boolean;
     FProcessingTabSheet: Boolean;
@@ -54,10 +27,11 @@ type
     FRootNode: PVirtualNode;
     FPageControl: TBCPageControl;
     FTabSheetFindInFiles: TTabSheet;
+    FSkinManager: TBCSkinManager;
     function GetCount: Integer;
     function GetIsAnyOutput: Boolean;
     function GetIsEmpty: Boolean;
-    function GetOutputTabSheetFrame(TabSheet: TsTabSheet): TOutputTabSheetFrame;
+    function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
     function TabFound(TabCaption: string): Boolean;
     function CheckCancel(ATabIndex: Integer = -1): Boolean;
   public
@@ -82,55 +56,31 @@ type
     property OnOpenAll: TOpenAllEvent read FOpenAll write FOpenAll;
     property ProcessingTabSheet: Boolean read FProcessingTabSheet write SetProcessingTabSheet;
     property CancelSearch: Boolean read FCancelSearch write FCancelSearch;
+    property SkinManager: TBCSkinManager read FSkinManager write FSkinManager;
+    property PageControl: TBCPageControl read FPageControl;
   end;
 
 implementation
 
 uses
   EditBone.Types, BCCommon.Options.Container, System.Math, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
-  BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types;
+  BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types,
+  BCControls.Panel;
 
-constructor TBCOutput.Create(AOwner: TBCPageControl);
+constructor TEBOutput.Create(AOwner: TBCPageControl);
 begin
   inherited Create;
   FPageControl := AOwner;
   FTabSheetFindInFiles := AOwner.Pages[0];
-  { IDE can lose there properties }
-  ActionList.Images := ImagesDataModule.ImageListSmall;
-  PopupMenu.Images := ImagesDataModule.ImageListSmall;
 end;
 
-procedure TBCOutput.PageControlCloseButtonClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
-  var Action: TacCloseAction);
-begin
-  if CloseTabSheet(False, TabIndex) then
-  begin
-    Application.ProcessMessages;
-    Action := acaFree
-  end
-  else
-    CanClose := False;
-end;
-
-procedure TBCOutput.PageControlDblClick(Sender: TObject);
-begin
-  if OptionsContainer.OutputCloseTabByDblClick then
-    ActionOutputClose.Execute;
-end;
-
-procedure TBCOutput.PageControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if (Button = mbMiddle) and OptionsContainer.OutputCloseTabByMiddleClick then
-    ActionOutputClose.Execute;
-end;
-
-procedure TBCOutput.TabsheetDblClick(Sender: TObject);
+procedure TEBOutput.TabsheetDblClick(Sender: TObject);
 begin
   if Assigned(FTabsheetDblClick) then
     FTabsheetDblClick(Sender);
 end;
 
-procedure TBCOutput.OpenFiles(OnlySelected: Boolean);
+procedure TEBOutput.OpenFiles(OnlySelected: Boolean);
 var
   FileNames: TStrings;
 
@@ -140,7 +90,7 @@ var
     Node: PVirtualNode;
     Data: POutputRec;
   begin
-    OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+    OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
     Node := OutputTreeView.GetFirst;
     while Assigned(Node) do
     begin
@@ -166,7 +116,7 @@ begin
   end;
 end;
 
-function TBCOutput.TabFound(TabCaption: string): Boolean;
+function TEBOutput.TabFound(TabCaption: string): Boolean;
 var
   i: Integer;
 begin
@@ -181,15 +131,16 @@ begin
     end;
 end;
 
-function TBCOutput.AddTreeView(TabCaption: string): TVirtualDrawTree;
+function TEBOutput.AddTreeView(TabCaption: string): TVirtualDrawTree;
 var
-  TabSheet: TsTabSheet;
-  OutputTabSheetFrame: TOutputTabSheetFrame;
+  LTabSheet: TsTabSheet;
+  LPanel: TBCPanel;
+  LVirtualDrawTree: TVirtualDrawTree;
 begin
   { check if there already is a tab with same name }
   if TabFound(StringReplace(TabCaption, '&', '&&', [rfReplaceAll])) then
   begin
-    Result := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+    Result := GetOutputTreeView(PageControl.ActivePage);
     if Assigned(Result) then
     begin
       Result.Clear;
@@ -198,31 +149,53 @@ begin
     Exit;
   end;
 
-  TabSheet := TsTabSheet.Create(PageControl);
-  TabSheet.PageControl := PageControl;
-  TabSheet.TabVisible := False;
-  TabSheet.ImageIndex := IMAGE_INDEX_FIND_IN_FILES;
-  TabSheet.Caption := StringReplace(TabCaption, '&', '&&', [rfReplaceAll]);
-  PageControl.ActivePage := TabSheet;
+  LTabSheet := TsTabSheet.Create(PageControl);
+  LTabSheet.PageControl := PageControl;
 
-  OutputTabSheetFrame := TOutputTabSheetFrame.Create(TabSheet);
-  with OutputTabSheetFrame do
+  if Assigned(FTabSheetFindInFiles) then
+    FTabSheetFindInFiles.PageIndex := FPageControl.PageCount - 1;
+
+  LTabSheet.TabVisible := False;
+  LTabSheet.ImageIndex := IMAGE_INDEX_FIND_IN_FILES;
+  LTabSheet.Caption := StringReplace(TabCaption, '&', '&&', [rfReplaceAll]);
+  PageControl.ActivePage := LTabSheet;
+
+  LPanel := TBCPanel.Create(LTabSheet);
+  with LPanel do
   begin
-    Parent := TabSheet;
-    with VirtualDrawTree do
-    begin
-      OnDrawNode := VirtualDrawTreeDrawNode;
-      OnFreeNode := VirtualDrawTreeFreeNode;
-      OnGetNodeWidth := VirtualDrawTreeGetNodeWidth;
-      OnDblClick := TabsheetDblClick;
-      NodeDataSize := SizeOf(TOutputRec);
-    end;
-    Result := VirtualDrawTree;
+    Parent := LTabSheet;
+    AlignWithMargins := True;
+    Margins.Left := 2;
+    Margins.Top := 2;
+    Margins.Right := 2;
+    Margins.Bottom := 2;
+    Align := alClient;
+    BevelOuter := bvNone;
+    Color := clWindow;
+    SkinData.SkinSection := 'CHECKBOX';
   end;
-  TabSheet.TabVisible := True;
+  LVirtualDrawTree := TVirtualDrawTree.Create(LTabSheet);
+  with LVirtualDrawTree do
+  begin
+    Parent := LTabSheet;
+    Align := alClient;
+    TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale];
+    TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
+    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused];
+    TreeOptions.SelectionOptions := [toFullRowSelect, toMiddleClickSelect];
+    OnDrawNode := VirtualDrawTreeDrawNode;
+    OnFreeNode := VirtualDrawTreeFreeNode;
+    OnGetNodeWidth := VirtualDrawTreeGetNodeWidth;
+    OnInitNode := VirtualDrawTreeInitNode;
+    OnDblClick := TabsheetDblClick;
+    NodeDataSize := SizeOf(TOutputRec);
+  end;
+
+  Result := LVirtualDrawTree;
+  LTabSheet.TabVisible := True;
 end;
 
-procedure TBCOutput.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree;
+procedure TEBOutput.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree;
   const PaintInfo: TVTPaintInfo);
 var
   Data: POutputRec;
@@ -238,17 +211,17 @@ begin
     if not Assigned(Data) then
       Exit;
 
-    if Assigned(FrameAdapter.SkinData) then
-      LColor := FrameAdapter.SkinData.SkinManager.GetActiveEditFontColor
+    if Assigned(FSkinManager) then
+      LColor := FSkinManager.GetActiveEditFontColor
     else
       LColor := clWindowText;
 
     if vsSelected in PaintInfo.Node.States then
     begin
-      if Assigned(FrameAdapter.SkinData) then
+      if Assigned(FSkinManager) then
       begin
-        Canvas.Brush.Color := FrameAdapter.SkinData.SkinManager.GetHighLightColor;
-        LColor := FrameAdapter.SkinData.SkinManager.GetHighLightFontColor
+        Canvas.Brush.Color := FSkinManager.GetHighLightColor;
+        LColor := FSkinManager.GetHighLightFontColor
       end
       else
       begin
@@ -313,7 +286,7 @@ begin
   end;
 end;
 
-procedure TBCOutput.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree;
+procedure TEBOutput.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree;
   HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
   Data: POutputRec;
@@ -342,7 +315,7 @@ begin
   end;
 end;
 
-procedure TBCOutput.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TEBOutput.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   Data: POutputRec;
 begin
@@ -351,7 +324,7 @@ begin
   inherited;
 end;
 
-procedure TBCOutput.AddTreeViewLine(OutputTreeView: TVirtualDrawTree; Filename: WideString; Ln, Ch: LongInt;
+procedure TEBOutput.AddTreeViewLine(OutputTreeView: TVirtualDrawTree; Filename: WideString; Ln, Ch: LongInt;
   Text: WideString; SearchString: WideString);
 var
   Node, LastNode: PVirtualNode;
@@ -425,14 +398,14 @@ begin
   Application.ProcessMessages;
 end;
 
-function TBCOutput.SelectedLine(var Filename: string; var Ln: LongWord; var Ch: LongWord): Boolean;
+function TEBOutput.SelectedLine(var Filename: string; var Ln: LongWord; var Ch: LongWord): Boolean;
 var
   Node: PVirtualNode;
   NodeData: POutputRec;
   OutputTreeView: TVirtualDrawTree;
 begin
   Result := False;
-  OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
   if not Assigned(OutputTreeView) then
     Exit;
 
@@ -448,40 +421,40 @@ begin
   end;
 end;
 
-function TBCOutput.GetIsEmpty: Boolean;
+function TEBOutput.GetIsEmpty: Boolean;
 var
   OutputTreeView: TVirtualDrawTree;
 begin
   Result := True;
   if FCancelSearch then
     Exit;
-  OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
   if not Assigned(OutputTreeView) then
     Exit;
   Result := OutputTreeView.GetFirst = nil;
 end;
 
-function TBCOutput.GetCount: Integer;
+function TEBOutput.GetCount: Integer;
 var
   OutputTreeView: TVirtualDrawTree;
 begin
   Result := 0;
   if FCancelSearch then
     Exit;
-  OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
   if not Assigned(OutputTreeView) then
     Exit;
   Result := OutputTreeView.Tag;
 end;
 
-procedure TBCOutput.CopyToClipboard(OnlySelected: Boolean);
+procedure TEBOutput.CopyToClipboard(OnlySelected: Boolean);
 var
   OutputTreeView: TVirtualDrawTree;
   Node, ChildNode: PVirtualNode;
   Data, ChildData: POutputRec;
   StringList: TStrings;
 begin
-  OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
   if Assigned(OutputTreeView) then
   begin
     StringList := TStringList.Create;
@@ -511,14 +484,14 @@ begin
   end;
 end;
 
-function TBCOutput.GetIsAnyOutput: Boolean;
+function TEBOutput.GetIsAnyOutput: Boolean;
 begin
   Result := False;
   if Assigned(PageControl) then
     Result := PageControl.PageCount <> 0;
 end;
 
-function TBCOutput.CheckCancel(ATabIndex: Integer = -1): Boolean;
+function TEBOutput.CheckCancel(ATabIndex: Integer = -1): Boolean;
 var
   LTabSheet: TTabSheet;
 begin
@@ -538,7 +511,7 @@ begin
     end;
 end;
 
-function TBCOutput.CloseTabSheet(AFreePage: Boolean = True; ATabIndex: Integer = -1): Boolean;
+function TEBOutput.CloseTabSheet(AFreePage: Boolean = True; ATabIndex: Integer = -1): Boolean;
 var
   LActivePageIndex: Integer;
 begin
@@ -568,7 +541,7 @@ begin
   end;
 end;
 
-procedure TBCOutput.CloseAllTabSheets;
+procedure TEBOutput.CloseAllTabSheets;
 var
   i, j: Integer;
 begin
@@ -577,7 +550,7 @@ begin
     CloseTabSheet(True, i);
 end;
 
-procedure TBCOutput.CloseAllOtherTabSheets;
+procedure TEBOutput.CloseAllOtherTabSheets;
 var
   i, j: Integer;
 begin
@@ -589,24 +562,32 @@ begin
     PageControl.Pages[i].Free;
 end;
 
-procedure TBCOutput.SetProcessingTabSheet(Value: Boolean);
+procedure TEBOutput.SetProcessingTabSheet(Value: Boolean);
 begin
   FProcessingTabSheet := Value;
   FProcessingPage := PageControl.ActivePage;
   FCancelSearch := False;
 end;
 
-function TBCOutput.GetOutputTabSheetFrame(TabSheet: TsTabSheet): TOutputTabSheetFrame;
+function TEBOutput.GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
+var
+  LPanel: TBCPanel;
 begin
   Result := nil;
   if Assigned(TabSheet) then
-    if TabSheet.ComponentCount <> 0 then
-      if Assigned(TabSheet.Components[0]) then
-        if TabSheet.Components[0] is TOutputTabSheetFrame then
-          Result := TOutputTabSheetFrame(TabSheet.Components[0]);
+    if TabSheet.ControlCount <> 0 then
+      if Assigned(TabSheet.Controls[0]) then
+        if TabSheet.Controls[0] is TBCPanel then
+        begin
+          LPanel := TBCPanel(TabSheet.Controls[0]);
+          if LPanel.ControlCount <> 0 then
+            if Assigned(LPanel.Controls[0]) then
+              if LPanel.Controls[0] is TVirtualDrawTree then
+                Result := TVirtualDrawTree(LPanel.Controls[0]);
+        end;
 end;
 
-procedure TBCOutput.SetOptions;
+procedure TEBOutput.SetOptions;
 var
   i: Integer;
   VirtualDrawTree: TVirtualDrawTree;
@@ -620,9 +601,9 @@ begin
     PageControl.Images := ImagesDataModule.ImageListSmall
   else
     PageControl.Images := nil;
-  for i := 0 to PageControl.PageCount - 1 do
+  for i := 0 to PageControl.PageCount - 2 do
   begin
-    VirtualDrawTree := TOutputTabSheetFrame(PageControl.Pages[i].Components[0]).VirtualDrawTree;
+    VirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
     VirtualDrawTree.Indent := OptionsContainer.OutputIndent;
     if OptionsContainer.OutputShowTreeLines then
       VirtualDrawTree.TreeOptions.PaintOptions := VirtualDrawTree.TreeOptions.PaintOptions + [toShowTreeLines]
@@ -637,19 +618,14 @@ begin
       Node := VirtualDrawTree.GetNextSibling(Node);
     end;
   end;
-
-  ActionCopySelectedToClipboard.Visible := OptionsContainer.OutputShowCheckBox;
-  ActionOpenSelected.Visible := OptionsContainer.OutputShowCheckBox;
-  ActionSelectAll.Visible := OptionsContainer.OutputShowCheckBox;
-  ActionUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
 end;
 
-procedure TBCOutput.SetCheckedState(Value: TCheckState);
+procedure TEBOutput.SetCheckedState(Value: TCheckState);
 var
   OutputTreeView: TVirtualDrawTree;
   Node: PVirtualNode;
 begin
-  OutputTreeView := GetOutputTabSheetFrame(PageControl.ActivePage).VirtualDrawTree;
+  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
   Node := OutputTreeView.GetFirst;
   while Assigned(Node) do
   begin
@@ -658,7 +634,7 @@ begin
   end;
 end;
 
-procedure TBCOutput.ReadOutputFile;
+procedure TEBOutput.ReadOutputFile;
 var
   Filename, S: string;
   OutputFile: TStreamReader;
@@ -702,7 +678,7 @@ begin
   FProcessingTabSheet := False;
 end;
 
-procedure TBCOutput.WriteOutputFile;
+procedure TEBOutput.WriteOutputFile;
 var
   i: Integer;
   Filename: string;
@@ -720,9 +696,9 @@ begin
     begin
       OutputFile := TStreamWriter.Create(Filename, False, TEncoding.Unicode);
       try
-        for i := 0 to PageControl.PageCount - 1 do
+        for i := 0 to PageControl.PageCount - 2 do
         begin
-          VirtualDrawTree := TOutputTabSheetFrame(PageControl.Pages[i].Components[0]).VirtualDrawTree;
+          VirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
           if Assigned(VirtualDrawTree) then
           begin
             { tab sheet }
@@ -749,6 +725,28 @@ begin
       end;
     end;
   FProcessingTabSheet := False;
+end;
+
+procedure TEBOutput.VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
+  var InitialStates: TVirtualNodeInitStates);
+var
+  Data: POutputRec;
+begin
+  with Sender do
+  if OptionsContainer.OutputShowCheckBox then
+  begin
+    if GetNodeLevel(Node) = 0 then
+    begin
+      Data := Sender.GetNodeData(Node);
+      if Data.Level <> 2 then
+      begin
+        CheckType[Node] := ctCheckBox;
+        CheckState[Node] := csCheckedNormal;
+      end;
+    end
+  end
+  else
+    CheckType[Node] := ctNone;
 end;
 
 end.

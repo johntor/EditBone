@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Top = 4
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetSearch
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3007,12 +3007,13 @@ inherited MainForm: TMainForm
       TabDragDrop = True
       object TabSheetFindInFiles: TsTabSheet
         DoubleBuffered = False
+        ImageIndex = 36
         ParentDoubleBuffered = False
         TabType = ttButton
         TabSkin = 'CHECKBOX'
         SkinData.CustomColor = False
         SkinData.CustomFont = False
-        OnClickBtn = TabSheetOpenClickBtn
+        OnClickBtn = TabSheetFindInFilesClickBtn
       end
     end
   end

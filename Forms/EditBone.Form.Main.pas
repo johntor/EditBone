@@ -820,12 +820,13 @@ type
     procedure ActionOutputOpenSelectedExecute(Sender: TObject);
     procedure ActionOutputSelectAllExecute(Sender: TObject);
     procedure ActionOutputUnselectAllExecute(Sender: TObject);
+    procedure TabSheetFindInFilesClickBtn(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
     FImageListCount: Integer;
-    FOutput: TBCOutput;
+    FOutput: TEBOutput;
     FProcessingEventHandler: Boolean;
     FFindInFilesThread: TFindInFilesThread;
     FSQLFormatterDLLFound: Boolean;
@@ -935,21 +936,26 @@ end;
 procedure TMainForm.PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
   var Action: TacCloseAction);
 begin
-  inherited;
-  // TODO
+  if FOutput.CloseTabSheet(False, TabIndex) then
+  begin
+    Application.ProcessMessages;
+    Action := acaFree
+  end
+  else
+    CanClose := False;
 end;
 
 procedure TMainForm.PageControlOutputDblClick(Sender: TObject);
 begin
-  inherited;
-  // TODO
+  if OptionsContainer.OutputCloseTabByDblClick then
+    ActionOutputClose.Execute;
 end;
 
 procedure TMainForm.PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
   Y: Integer);
 begin
-  inherited;
-  // TODO
+  if (Button = mbMiddle) and OptionsContainer.OutputCloseTabByMiddleClick then
+    ActionOutputClose.Execute;
 end;
 
 procedure TMainForm.PageControlDirectoryMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -2170,6 +2176,11 @@ begin
     ActionMacroSaveAs.Enabled := ActionMacroPlayback.Enabled;
     TitleBar.Items[0].Visible := not PanelMenubar.Visible;
     FProcessingEventHandler := False;
+
+    ActionOutputCopySelectedToClipboard.Visible := OptionsContainer.OutputShowCheckBox;
+    ActionOutputOpenSelected.Visible := OptionsContainer.OutputShowCheckBox;
+    ActionOutputSelectAll.Visible := OptionsContainer.OutputShowCheckBox;
+    ActionOutputUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
   except
     { intentionally silent }
   end;
@@ -2580,6 +2591,12 @@ begin
   end;
 end;
 
+procedure TMainForm.TabSheetFindInFilesClickBtn(Sender: TObject);
+begin
+  inherited;
+  SearchFindInFiles;
+end;
+
 procedure TMainForm.TabSheetOpenClickBtn(Sender: TObject);
 begin
   inherited;
@@ -2726,10 +2743,11 @@ begin
   FDirectory.PopupMenuFileTreeView := PopupMenuFileTreeView;
   FDirectory.SkinManager := SkinManager;
   FDirectory.ReadIniFile;
-  { TBCOutput }
-  FOutput := TBCOutput.Create(PageControlOutput);
+  { TEBOutput }
+  FOutput := TEBOutput.Create(PageControlOutput);
   FOutput.OnTabsheetDblClick := OutputDblClickActionExecute;
   FOutput.OnOpenAll := OutputOpenAllEvent;
+  FOutput.SkinManager := SkinManager;
 end;
 
 procedure TMainForm.ReadIniSizePositionAndState;
