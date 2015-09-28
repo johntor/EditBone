@@ -24,6 +24,8 @@ type
     StickyLabelRightClickSelect: TsStickyLabel;
     StickyLabelSaveTabs: TsStickyLabel;
     StickyLabelShowCloseButton: TsStickyLabel;
+    SliderShowFindInFilesButton: TsSlider;
+    StickyLabelShowFindInFilesButton: TsStickyLabel;
   protected
     procedure GetData; override;
     procedure PutData; override;
@@ -65,6 +67,7 @@ begin
   SliderSaveTabs.SliderOn := OptionsContainer.OutputSaveTabs;
   SliderShowCloseButton.SliderOn := OptionsContainer.OutputShowCloseButton;
   SliderShowImage.SliderOn := OptionsContainer.OutputShowImage;
+  SliderShowFindInFilesButton.SliderOn := OptionsContainer.OutputShowFindInFilesButton;
   SliderRightClickSelect.SliderOn := OptionsContainer.OutputRightClickSelect;
 end;
 
@@ -76,6 +79,7 @@ begin
   OptionsContainer.OutputSaveTabs := SliderSaveTabs.SliderOn;
   OptionsContainer.OutputShowCloseButton := SliderShowCloseButton.SliderOn;
   OptionsContainer.OutputShowImage := SliderShowImage.SliderOn;
+  OptionsContainer.OutputShowFindInFilesButton := SliderShowFindInFilesButton.SliderOn;
   OptionsContainer.OutputRightClickSelect := SliderRightClickSelect.SliderOn;
 end;
 

@@ -28,9 +28,7 @@ type
     FPageControl: TBCPageControl;
     FTabSheetFindInFiles: TTabSheet;
     FSkinManager: TBCSkinManager;
-    //function GetCount: Integer;
     function GetIsAnyOutput: Boolean;
-    //function GetIsEmpty: Boolean;
     function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
     function TabFound(TabCaption: string): Boolean;
     function CheckCancel(ATabIndex: Integer = -1): Boolean;
@@ -49,9 +47,7 @@ type
     procedure SetProcessingTabSheet(Value: Boolean);
     procedure OpenFiles(OnlySelected: Boolean = False);
     procedure SetCheckedState(Value: TCheckState);
-    //property Count: Integer read GetCount;
     property IsAnyOutput: Boolean read GetIsAnyOutput;
-    //property IsEmpty: Boolean read GetIsEmpty;
     property OnTabsheetDblClick: TNotifyEvent read FTabsheetDblClick write FTabsheetDblClick;
     property OnOpenAll: TOpenAllEvent read FOpenAll write FOpenAll;
     property ProcessingTabSheet: Boolean read FProcessingTabSheet write SetProcessingTabSheet;
@@ -516,21 +512,39 @@ procedure TEBOutput.CloseAllTabSheets;
 var
   i, j: Integer;
 begin
-  j := PageControl.PageCount - 2;
-  for i := j downto 0 do
-    CloseTabSheet(True, i);
+  Screen.Cursor := crHourGlass;
+  try
+    PageControl.Visible := False;
+    j := PageControl.PageCount - 2;
+    for i := j downto 0 do
+    if TsTabSheet(PageControl.Pages[i]).TabType = ttTab then
+      CloseTabSheet(True, i);
+    PageControl.Visible := True;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 procedure TEBOutput.CloseAllOtherTabSheets;
 var
   i, j: Integer;
+  LTabSheet: TsTabSheet;
 begin
   if CheckCancel then
     Exit;
-  PageControl.ActivePage.PageIndex := 0;
-  j := PageControl.PageCount - 2;
-  for i := j downto 1 do
-    PageControl.Pages[i].Free;
+  LTabSheet := PageControl.ActivePage;
+  LTabSheet.PageIndex := 0; { move the page first }
+  Screen.Cursor := crHourGlass;
+  try
+    PageControl.Visible := False;
+    j := PageControl.PageCount - 2;
+    for i := j downto 1 do
+      PageControl.Pages[i].Free;
+    PageControl.ActivePage := LTabSheet;
+    PageControl.Visible := True;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 procedure TEBOutput.SetProcessingTabSheet(Value: Boolean);
@@ -566,11 +580,13 @@ begin
   PageControl.MultiLine := OptionsContainer.OutputMultiLine;
   PageControl.ShowCloseBtns := OptionsContainer.OutputShowCloseButton;
   PageControl.RightClickSelect := OptionsContainer.OutputRightClickSelect;
+  FTabSheetFindInFiles.TabVisible := OptionsContainer.OutputShowFindInFilesButton;
 
   if OptionsContainer.OutputShowImage then
     PageControl.Images := ImagesDataModule.ImageListSmall
   else
     PageControl.Images := nil;
+
   for i := 0 to PageControl.PageCount - 2 do
   begin
     VirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);

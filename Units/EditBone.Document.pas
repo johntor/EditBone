@@ -961,8 +961,6 @@ begin
   if Rslt <> mrCancel then
   begin
     PageControl.ActivePage.PageIndex := 0; { move the page first }
-    //if Assigned(FTabSheetNew) then
-    //  FTabSheetNew.PageIndex := 1;
     Screen.Cursor := crHourGlass;
     try
       FProgressBar.Show(PageControl.PageCount - 3);
