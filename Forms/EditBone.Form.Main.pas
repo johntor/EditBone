@@ -2688,10 +2688,10 @@ begin
     begin
       MainForm.ProgressBar.StepIt;
       MainForm.FDocument.Open(FileNames.Strings[i], False);
-      if LActivePageIndex = -1 then
-        MainForm.PageControlDocument.ActivePageIndex := 0;
     end;
     MainForm.PageControlDocument.Visible := True;
+    if LActivePageIndex = -1 then
+      MainForm.PageControlDocument.ActivePage := TsTabSheet(MainForm.PageControlDocument.Pages[0]);
     MainForm.ProgressBar.Hide;
   finally
     Screen.Cursor := crDefault;

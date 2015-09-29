@@ -2832,7 +2832,10 @@ begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
     if Trim(LEditor.Text) <> '' then
+    begin
       LEditor.Text := BCCommon.StringUtils.FormatJSON(LEditor.Text, AIndentSize);
+      LEditor.CaretZero;
+    end;
 end;
 
 function TEBDocument.IsJSONDocument: Boolean;

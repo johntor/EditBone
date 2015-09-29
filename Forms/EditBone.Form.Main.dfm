@@ -1904,6 +1904,7 @@ inherited MainForm: TMainForm
       Margins.Bottom = 5
       Align = alClient
       BevelOuter = bvNone
+      Caption = 'Processing...'
       Color = clWindow
       DoubleBuffered = False
       ParentBackground = False
