@@ -111,6 +111,7 @@ type
     function ToggleSpecialChars: Boolean;
     function ToggleWordWrap: Boolean;
     function ToggleXMLTree: Boolean;
+    procedure ActivateSearch;
     procedure CheckFileDateTimes;
     procedure ClearBookmarks;
     procedure CloseAll;
@@ -145,7 +146,6 @@ type
     procedure Paste;
     procedure PlaybackMacro;
     procedure PreviousPage;
-    //procedure Print;
     procedure PrintPreview;
     procedure RecordMacro;
     procedure Redo;
@@ -174,7 +174,6 @@ type
     procedure ToggleSplit;
     procedure Undo;
     procedure UpdateHighlighterColors;
-    //procedure UpdateLanguage(SelectedLanguage: string);
     procedure WriteIniFile;
     property ActiveDocumentFound: Boolean read GetActiveDocumentFound;
     property ActiveDocumentModified: Boolean read GetActiveDocumentModified;
@@ -202,7 +201,6 @@ type
     property SkinManager: TBCSkinManager read FSkinManager write FSkinManager;
     property SplitChecked: Boolean read GetSplitChecked;
     property StatusBar: TBCStatusBar write FStatusBar;
-    //property TabSheetNew: TsTabSheet read FTabSheetNew write FTabSheetNew;
     property XMLTreeVisible: Boolean read GetXMLTreeVisible;
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
@@ -1254,6 +1252,22 @@ begin
   end;
 end;
 
+procedure TEBDocument.ActivateSearch;
+var
+  LSearchPanel: TBCPanel;
+  LComboBoxSearchText: TBCComboBox;
+begin
+  LSearchPanel := GetActiveSearchPanel;
+  if Assigned(LSearchPanel) then
+  begin
+    LSearchPanel.Visible := True;
+    LComboBoxSearchText := GetActiveComboBoxSearchText;
+    if Assigned(LComboBoxSearchText) then
+      if LComboBoxSearchText.CanFocus then
+        LComboBoxSearchText.SetFocus;
+  end;
+end;
+
 procedure TEBDocument.Search;
 var
   LOldCaretPosition: TBCEditorTextPosition;
@@ -1316,7 +1330,7 @@ begin
       LEditor.SelectionBeginPosition := LOldSelectionBeginPosition;
       LEditor.SelectionEndPosition := LOldSelectionEndPosition;
     end;
-    //Application.ProcessMessages;
+
     LSearchPanel := GetActiveSearchPanel;
     if Assigned(LSearchPanel) then
       LSearchPanel.Visible := True;

@@ -1453,7 +1453,7 @@ end;
 
 procedure TMainForm.ActionSearchSearchExecute(Sender: TObject);
 begin
-  FDocument.Search;
+  FDocument.ActivateSearch;
 end;
 
 procedure TMainForm.ActionSearchToggleBookmarkExecute(Sender: TObject);
@@ -2291,8 +2291,6 @@ begin
   BCCommon.Language.Strings.ReadLanguageFile(ALanguage);
   { mainform }
   UpdateLanguage(Self, ALanguage);
-  { frames }
-  UpdateLanguage(TForm(FOutput), ALanguage); // TODO: Remove when frames is removed
   { menubar }
   UpdateMenuBarLanguage;
   SendMessage(Application.MainForm.Handle, WM_SIZE, 0, 0);
