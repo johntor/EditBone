@@ -1590,7 +1590,7 @@ var
     if AIndex >= AList.Strings.Count then
       Result := False
     else
-      Result := AList.Values[IntToStr(AIndex)] = '1'
+      Result := AList.Values[IntToStr(AIndex)] = 'True'
   end;
 
 begin
