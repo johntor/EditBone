@@ -557,7 +557,7 @@ var
   LEditor: TBCEditor;
   LCommand: TBCEditorCommand;
 begin
-  if (Key = 35) or (Key = 36) or (Key = 38) or (Key = 40) then
+  if (Key = VK_END) or (Key = VK_HOME) or (Key = VK_UP) or (Key = VK_DOWN) then
   begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
@@ -565,10 +565,10 @@ begin
       if LEditor.CanFocus then
         LEditor.SetFocus;
       case Key of
-        38: LCommand := ecUp;
-        40: LCommand := ecDown;
-        35: LCommand := ecLineEnd;
-        36: LCommand := ecLineStart;
+        VK_UP: LCommand := ecUp;
+        VK_DOWN: LCommand := ecDown;
+        VK_END: LCommand := ecLineEnd;
+        VK_HOME: LCommand := ecLineStart;
       else
         LCommand := ecNone;
       end;
