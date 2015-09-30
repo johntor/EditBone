@@ -76,15 +76,6 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
     Margins.Bottom = 2
     Align = alTop
     Alignment = taLeftJustify
-    BoundLabel.Indent = 0
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'COMBOBOX'
     VerticalAlignment = taAlignTop
     Font.Charset = DEFAULT_CHARSET

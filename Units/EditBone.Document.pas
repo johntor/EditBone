@@ -26,6 +26,7 @@ type
     procedure EditorAfterClearBookmark(Sender: TObject);
     procedure ComboBoxSearchTextChange(Sender: TObject);
     procedure ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBoxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);
   private
     FSkinManager: TBCSkinManager;
@@ -427,6 +428,7 @@ begin
     Tag := EDITBONE_DOCUMENT_COMBOBOX_SEARCH_TEXT_TAG;
     OnChange := ComboBoxSearchTextChange;
     OnKeyPress := ComboBoxSearchTextKeyPress;
+    OnKeyDown := ComboBoxKeyDown;
   end;
   LSplitter := TBCSplitter.Create(LTabSheet);
   with LSplitter do
@@ -537,11 +539,6 @@ begin
   if Assigned(FSetTitleBarMenus) then
     FSetTitleBarMenus;
 
-  { XML Tree }
-  {XMLTreeVisible := OptionsContainer.ShowXMLTree and IsXMLDocument;
-  if XMLTreeVisible then
-    LoadFromXML(Editor.Text);}
-
   { reduce flickering by setting width and height to zero }
   LEditor.Width := 0;
   LEditor.Height := 0;
@@ -555,22 +552,62 @@ begin
   FProcessing := False;
 end;
 
+procedure TEBDocument.ComboBoxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  LEditor: TBCEditor;
+  LCommand: TBCEditorCommand;
+begin
+  if (Key = 35) or (Key = 36) or (Key = 38) or (Key = 40) then
+  begin
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) then
+    begin
+      if LEditor.CanFocus then
+        LEditor.SetFocus;
+      case Key of
+        38: LCommand := ecUp;
+        40: LCommand := ecDown;
+        35: LCommand := ecLineEnd;
+        36: LCommand := ecLineStart;
+      else
+        LCommand := ecNone;
+      end;
+      LEditor.ExecuteCommand(LCommand, EDITBONE_NONE_CHAR, nil);
+    end;
+  end;
+end;
+
 procedure TEBDocument.ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
 var
   LEditor: TBCEditor;
   LComboBoxSearchText: TBCComboBox;
-begin
-  if (Key = #13) or (Key = #10) then
+  LSearchPanel: TBCPanel;
+
+  procedure SetFocus;
   begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
       if LEditor.CanFocus then
         LEditor.SetFocus;
+  end;
+
+begin
+  if (Key = EDITBONE_CARRIAGE_RETURN) or (Key = EDITBONE_LINEFEED) then
+  begin
+    SetFocus;
     LComboBoxSearchText := GetActiveComboBoxSearchText;
     if Assigned(LComboBoxSearchText) then
       if LComboBoxSearchText.Items.IndexOf(LComboBoxSearchText.Text) = -1 then
         LComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
-    Key := #0;
+    Key := EDITBONE_NONE_CHAR;
+  end;
+  if Key = EDITBONE_ESCAPE then
+  begin
+    LSearchPanel := GetActiveSearchPanel;
+    if Assigned(LSearchPanel) then
+      LSearchPanel.Visible := False;
+    SetFocus;
+    Key := EDITBONE_NONE_CHAR;
   end;
 end;
 
@@ -1706,7 +1743,7 @@ begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
     begin
-      LEditor.CommandProcessor(ecImeStr, #0, PWideChar(Format('<%s></%s>', [LTagName, LTagName])));
+      LEditor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(Format('<%s></%s>', [LTagName, LTagName])));
       LEditor.DisplayCaretX := LEditor.DisplayCaretX - Length(LTagName) - 3; { -3 from </> }
     end;
   end;
@@ -1718,7 +1755,7 @@ var
 begin
   Editor := GetActiveEditor;
   if Assigned(Editor) then
-    Editor.CommandProcessor(ecImeStr, #0, PWideChar(DateTimeToStr(Now)));
+    Editor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(DateTimeToStr(Now)));
 end;
 
 function TEBDocument.Options(AActionList: TActionList): Boolean;
@@ -2623,8 +2660,8 @@ begin
     if Assigned(Editor.MacroRecorder) then
     begin
       SaveDialog.InitialDir := '';
-      SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', #0, [rfReplaceAll]
-        )) + #0#0;
+      SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll]
+        )) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
       SaveDialog.Title := LanguageDataModule.GetConstant('SaveAs');
       SaveDialog.FileName := '';
       SaveDialog.DefaultExt := 'mcr';
@@ -2640,7 +2677,7 @@ begin
   Editor := GetActiveEditor;
   if Assigned(Editor) then
   begin
-    OpenDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', #0, [rfReplaceAll])) + #0#0;
+    OpenDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
     OpenDialog.Title := LanguageDataModule.GetConstant('Open');
     OpenDialog.DefaultExt := 'mcr';
     if OpenDialog.Execute(Application.Handle) then
@@ -2937,111 +2974,5 @@ begin
     Screen.Cursor := crDefault;
   end;
 end;
-
-(*
-function TDocTabSheetFrame.GetSearchFrame: TBCSearchFrame;
-begin
-  if not Assigned(FSearchFrame) then
-  begin
-    FSearchFrame := TBCSearchFrame.Create(PanelSearchFrame);
-    FSearchFrame.Align := alClient;
-    FSearchFrame.AlignWithMargins := True;
-    FSearchFrame.Margins.Left := 2;
-    FSearchFrame.Margins.Top := 0;
-    FSearchFrame.Margins.Right := 0;
-    FSearchFrame.Margins.Bottom := 0;
-    FSearchFrame.Parent := PanelSearchFrame;
-    FSearchFrame.Editor := Editor;
-    FSearchFrame.OnSearchText := DoOnSearchText;
-    { IDE losing these }
-    FSearchFrame.ActionList.Images := ImagesDataModule.ImageListSmall;
-    FSearchFrame.SpeedButtonFindPrevious.Images := ImagesDataModule.ImageListSmall;
-    FSearchFrame.SpeedButtonFindNext.Images := ImagesDataModule.ImageListSmall;
-    FSearchFrame.SpeedButtonOptions.Images := ImagesDataModule.ImageListSmall;
-  end;
-  Result := FSearchFrame;
-end;
-
-procedure TDocTabSheetFrame.ApplicationEventsMessage(var Msg: tagMSG; var Handled: Boolean);
-begin
-  PanelSearchFrame.Visible := Editor.Search.Enabled;
-
-  if not PanelSearchFrame.Visible and Assigned(FSearchFrame) then
-  begin
-    FSearchFrame.Free;
-    FSearchFrame := nil;
-  end;
-end;
-
-constructor TDocTabSheetFrame.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-
-  FModified := False;
-end;
-
-procedure TDocTabSheetFrame.DoOnSearchText(Sender: TObject);
-begin
-  OptionsContainer.DocumentSpecificSearchText := '';
-  if OptionsContainer.DocumentSpecificSearch then
-    OptionsContainer.DocumentSpecificSearchText := Editor.Search.SearchText
-end;
-
-destructor TDocTabSheetFrame.Destroy;
-begin
-  if Assigned(FDocumentXMLTreeFrame) then
-    FDocumentXMLTreeFrame.Free;
-  inherited;
-end;
-
-procedure TDocTabSheetFrame.UpdateLanguage(SelectedLanguage: string);
-begin
-  BCCommon.Language.Utils.UpdateLanguage(TForm(Self), SelectedLanguage);
-end;
-
-procedure TDocTabSheetFrame.EditorEnter(Sender: TObject);
-begin
-  if Assigned(FSearchFrame) then
-    FSearchFrame.Editor := Editor;
-end;
-
-procedure TDocTabSheetFrame.EditorRightMarginMouseUp(Sender: TObject);
-begin
-  OptionsContainer.RightMarginPosition := Editor.RightMargin.Position;
-  if Assigned(FEditorSplit) then
-    FEditorSplit.RightMargin.Position := Editor.RightMargin.Position;
-end;
-
-procedure TDocTabSheetFrame.SplitEditorRightMarginMouseUp(Sender: TObject);
-begin
-  if Assigned(FEditorSplit) then
-  begin
-    OptionsContainer.RightMarginPosition := FEditorSplit.RightMargin.Position;
-    Editor.RightMargin.Position := FEditorSplit.RightMargin.Position;
-  end;
-end;
-
-procedure TDocTabSheetFrame.RefreshActionExecute(Sender: TObject);
-begin
-  LoadFromXML(Editor.Text);
-end;
-
-procedure TDocTabSheetFrame.LoadFromXML(XML: string);
-begin
-  if Assigned(FDocumentXMLTreeFrame) then
-    FDocumentXMLTreeFrame.LoadFromXML(XML);
-end;
-
-function TDocTabSheetFrame.GetSplitVisible: Boolean;
-begin
-  Result := Assigned(FEditorSplit) and FEditorSplit.Visible;
-end;
-
-function TDocTabSheetFrame.GetEditorSplit: TBCEditor;
-begin
-  Result := nil;
-  if Assigned(FEditorSplit) then
-    Result := FEditorSplit
-end;*)
 
 end.

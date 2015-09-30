@@ -49,7 +49,7 @@ implementation
 {$R *.dfm}
 
 uses
-  IniFiles, BCEditor.Editor.KeyCommands, BCCommon.FileUtils, BCCommon.Utils, BCCommon.Language.Utils;
+  IniFiles, BCEditor.Editor.KeyCommands, BCCommon.FileUtils, BCCommon.Utils, BCCommon.Language.Utils, EditBone.Consts;
 
 var
   FUnicodeCharacterMapForm: TUnicodeCharacterMapForm;
@@ -117,7 +117,7 @@ begin
   begin
     New(PC);
     StringToWideChar(Chr(StringGridCharacter.ColCount * StringGridCharacter.Row + StringGridCharacter.Col), PC, 2);
-    FEditor.ExecuteCommand(ecImeStr, #0, PC);
+    FEditor.ExecuteCommand(ecImeStr, EDITBONE_NONE_CHAR, PC);
     Dispose(PC);
   end;
 end;

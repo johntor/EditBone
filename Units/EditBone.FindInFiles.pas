@@ -38,7 +38,7 @@ implementation
 
 uses
   Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms,
-  BCEditor.Encoding, BCEditor.Editor.Utils;
+  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts;
 
 procedure TFindInFilesThread.Execute;
 begin
@@ -125,19 +125,19 @@ begin
                     LTextLine := UpperCase(LTextLine);
                   LStartTextPtr := PChar(LTextLine);
                   LTextPtr := LStartTextPtr;
-                  while LTextPtr^ <> #0 do
+                  while LTextPtr^ <> EDITBONE_NONE_CHAR do
                   begin
                     if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
                     begin
                       LFindWhatTextPtr := PChar(FFindWhatSearchText);
                       LBookmarkTextPtr := LTextPtr;
                       { check if the keyword found }
-                      while (LTextPtr^ <> #0) and (LFindWhatTextPtr^ <> #0) and (LTextPtr^ = LFindWhatTextPtr^) do
+                      while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and (LTextPtr^ = LFindWhatTextPtr^) do
                       begin
                         Inc(LTextPtr);
                         Inc(LFindWhatTextPtr);
                       end;
-                      if LFindWhatTextPtr^ = #0 then
+                      if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
                       begin
                         Inc(FCount);
                         if Assigned(FOnCancelSearch) and FOnCancelSearch then

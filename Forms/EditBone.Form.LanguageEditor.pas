@@ -99,7 +99,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IniFiles, BCCommon.Utils, BCCommon.Language.Strings, BCCommon.Language.Utils,
+  System.IniFiles, BCCommon.Utils, BCCommon.Language.Strings, BCCommon.Language.Utils, EditBone.Consts,
   Vcl.StdCtrls, Vcl.Menus, BCCommon.Messages, BCCommon.FileUtils, System.Types, VirtualTrees.Utils, BCCommon.Consts;
 
 var
@@ -166,7 +166,7 @@ begin
   DefaultPath := IncludeTrailingPathDelimiter(Format('%s%s', [ExtractFilePath(ParamStr(0)), 'Languages']));
 
   OpenDialog.InitialDir := DefaultPath;
-  OpenDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Language'), '|', #0, [rfReplaceAll])) + #0#0;
+  OpenDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Language'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
   OpenDialog.Title := LanguageDataModule.GetConstant('Open');
   if OpenDialog.Execute(Handle) then
     LoadLanguageFile(OpenDialog.Files[0]);
@@ -284,7 +284,7 @@ end;
 function TLanguageEditorForm.SaveAs(FileName: string): Boolean;
 begin
   SaveDialog.InitialDir := ExtractFilePath(FileName);
-  SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Language'), '|', #0, [rfReplaceAll])) + #0#0;
+  SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Language'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
   SaveDialog.Title := LanguageDataModule.GetConstant('SaveAs');
   SaveDialog.FileName := ExtractFileName(FileName);
   SaveDialog.DefaultExt := 'lng';
@@ -662,15 +662,15 @@ procedure TEditLink.EditKeyPress(Sender: TObject; var Key: Char);
 begin
   inherited;
   case Key of
-    #27:
+    EDITBONE_ESCAPE:
       begin
         FTree.CancelEditNode;
-        Key := #0;
+        Key := EDITBONE_NONE_CHAR;
       end;
-    #13:
+    EDITBONE_CARRIAGE_RETURN:
       begin
         FTree.EndEditNode;
-        Key := #0;
+        Key := EDITBONE_NONE_CHAR;
       end;
   end;
 end;

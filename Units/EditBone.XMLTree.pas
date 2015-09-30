@@ -51,10 +51,11 @@ type
 implementation
 
 uses
-  Winapi.Windows, System.SysUtils, System.Generics.Collections, System.Types, BCEditor.Editor.Utils, VirtualTrees.Utils;
+  Winapi.Windows, System.SysUtils, System.Generics.Collections, System.Types, BCEditor.Editor.Utils, VirtualTrees.Utils,
+  EditBone.Consts;
 
 const
-  CWHITESPACE = [#32, #9];
+  CWHITESPACE = [EDITBONE_SPACE_CHAR, EDITBONE_TAB_CHAR];
 
 constructor TEBXMLTree.Create(AOwner: TComponent);
 begin
@@ -98,7 +99,7 @@ var
 
   procedure IncChar(N: Integer = 1);
   begin
-    if CharInSet(LPLineText^, [#$D, #$A, #0]) then
+    if CharInSet(LPLineText^, [#$D, #$A, EDITBONE_NONE_CHAR]) then
     begin
       if LPLineText^ = #$D then
       begin
@@ -137,7 +138,7 @@ var
     AttributePhase: TAttributePhase;
   begin
     AttributePhase := apName;
-    while (LPLineText^ <> #0) and (LPLineText^ <> '>') do
+    while (LPLineText^ <> EDITBONE_NONE_CHAR) and (LPLineText^ <> '>') do
     begin
       if not CharInSet(LPLineText^, CWHITESPACE) then
       case AttributePhase of
@@ -152,7 +153,7 @@ var
             LData := GetNodeData(LNode);
             LData.NodeType := ntAttribute;
             LData.BlockBegin := GetTextPosition(LChar, LLine);
-            LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+            LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
             LData.BlockEnd := GetTextPosition(LChar, LLine);
             LNodeStack.Push(LNode);
 
@@ -215,7 +216,7 @@ var
     LData := GetNodeData(LNode);
     LData.NodeType := ntReserved;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
-    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
     LNodeStack.Push(LNode);
     ReadAttributes;
@@ -233,7 +234,7 @@ var
     LData.NodeType := ntComment;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
     LData.NodeName := 'comment';
-    while (LPLineText^ <> #0) and (StrLComp(LPLineText, '-->', 3) <> 0) do
+    while (LPLineText^ <> EDITBONE_NONE_CHAR) and (StrLComp(LPLineText, '-->', 3) <> 0) do
       IncChar;
     IncChar(3); { '-->' }
     LData.BlockEnd := GetTextPosition(LChar, LLine);
@@ -245,20 +246,20 @@ var
     LData := GetNodeData(LNode);
     LData.NodeType := ntElement;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
-    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
 
     LNode := AddChild(LNode);
     LData := GetNodeData(LNode);
     LData.NodeType := ntAttribute;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
-    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
   end;
 
   procedure ReadDocTypeItems;
   begin
-    while (LPLineText^ <> #0) and (LPLineText^ <> ']') do
+    while (LPLineText^ <> EDITBONE_NONE_CHAR) and (LPLineText^ <> ']') do
     begin
       if StrLComp(LPLineText, '<!--', 4) = 0 then
         ReadComment
@@ -289,10 +290,10 @@ var
     LData := GetNodeData(LNode);
     LData.NodeType := ntAttribute;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
-    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
 
-    while (LPLineText^ <> #0) and (LPLineText^ <> '>') do
+    while (LPLineText^ <> EDITBONE_NONE_CHAR) and (LPLineText^ <> '>') do
     begin
       if StrLComp(LPLineText, '[', 1) = 0 then
         ReadDocTypeItems;
@@ -311,7 +312,7 @@ var
     LData.NodeType := ntComment;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
     LData.NodeName := 'CDATA';
-    while (LPLineText^ <> #0) and (StrLComp(LPLineText, ']]>', 3) <> 0) do
+    while (LPLineText^ <> EDITBONE_NONE_CHAR) and (StrLComp(LPLineText, ']]>', 3) <> 0) do
       IncChar;
     IncChar(3); { ']]>' }
     LData.BlockEnd := GetTextPosition(LChar, LLine);
@@ -327,7 +328,7 @@ var
     LData := GetNodeData(LNode);
     LData.NodeType := ntElement;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
-    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']);
+    LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
     if LPLineText^ <> '/' then
     begin
@@ -339,7 +340,7 @@ var
   procedure ReadEndTag;
   begin
     IncChar(2); { '</' }
-    ExtractText(LPLineText, CWHITESPACE + ['=', '/', #0, '>']); { skip tag }
+    ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']); { skip tag }
     if LNodeStack.Count > 0 then
       LNodeStack.Pop;
   end;
@@ -347,9 +348,9 @@ var
   procedure ProcessLines;
   begin
     LChar := 1;
-    while LPLineText^ <> #0 do
+    while LPLineText^ <> EDITBONE_NONE_CHAR do
     begin
-      while CharInSet(LPLineText^, [#8, #10, #13, #32]) do
+      while CharInSet(LPLineText^, [EDITBONE_BACKSPACE_CHAR, EDITBONE_LINEFEED, EDITBONE_CARRIAGE_RETURN, EDITBONE_SPACE_CHAR]) do
         IncChar;
 
       if StrLComp(LPLineText, '<?xml ', 6) = 0 then
