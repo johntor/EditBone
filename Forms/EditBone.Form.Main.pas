@@ -2765,6 +2765,8 @@ begin
     Left := SetFormInsideWorkArea(Left, Width);
     { Directory }
     PanelDirectory.Width := ReadInteger('Options', 'DirectoryWidth', 321);
+    { Output }
+    PanelOutput.Height := ReadInteger('Options', 'OutputPanelHeight', 121);
     Application.ProcessMessages;
     { State }
     State := ReadInteger('Size', 'State', 0);
@@ -2996,6 +2998,7 @@ begin
     WriteInteger('Size', 'State', Ord(WindowState));
     { Options }
     WriteInteger('Options', 'DirectoryWidth', PanelDirectory.Width);
+    WriteInteger('Options', 'OutputPanelHeight', PanelOutput.Height);
     WriteBool('Options', 'ShowToolbar', PanelToolbar.Visible);
     WriteBool('Options', 'ShowStatusbar', StatusBar.Visible);
     WriteBool('Options', 'ShowDirectory', PanelDirectory.Visible);

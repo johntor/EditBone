@@ -353,25 +353,25 @@ var
   LTabSheet: TTabSheet;
 begin
   with TBigIniFile.Create(GetIniFilename) do
-    try
-      WriteInteger('Options', 'ActiveDirectoryIndex', FPageControl.ActivePageIndex);
-      { Options }
-      EraseSection('LastPaths');
-      { Open directories }
-      if OptionsContainer.DirSaveTabs then
-        for i := 0 to FPageControl.PageCount - 2 do
-        begin
-          LTabSheet := FPageControl.Pages[i];
-          FileTreeView := GetFileTreeView(LTabSheet);
-          if Assigned(FileTreeView) then
-            WriteString('LastPaths', IntToStr(i), Format('%s;%s;%s;%d;%s;%d;%s', [Trim(LTabSheet.Caption),
-              FileTreeView.RootDirectory, FileTreeView.SelectedPath, GetDrivesPanelOrientation(LTabSheet),
-              BoolToStr(FileTreeView.ExcludeOtherBranches), GetFileTypePanelOrientation(LTabSheet),
-              GetFileType(LTabSheet)]));
-        end;
-    finally
-      Free;
-    end;
+  try
+    WriteInteger('Options', 'ActiveDirectoryIndex', FPageControl.ActivePageIndex);
+    { Options }
+    EraseSection('LastPaths');
+    { Open directories }
+    if OptionsContainer.DirSaveTabs then
+      for i := 0 to FPageControl.PageCount - 2 do
+      begin
+        LTabSheet := FPageControl.Pages[i];
+        FileTreeView := GetFileTreeView(LTabSheet);
+        if Assigned(FileTreeView) then
+          WriteString('LastPaths', IntToStr(i), Format('%s;%s;%s;%d;%s;%d;%s', [Trim(LTabSheet.Caption),
+            FileTreeView.RootDirectory, FileTreeView.SelectedPath, GetDrivesPanelOrientation(LTabSheet),
+            BoolToStr(FileTreeView.ExcludeOtherBranches), GetFileTypePanelOrientation(LTabSheet),
+            GetFileType(LTabSheet)]));
+      end;
+  finally
+    Free;
+  end;
 end;
 
 function TEBDirectory.GetFileTreeView(ATabSheet: TTabSheet): TBCFileTreeView;
