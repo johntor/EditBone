@@ -156,7 +156,7 @@ type
     procedure Save; overload;
     procedure SaveAll;
     procedure SaveMacro;
-    procedure Search;
+    //procedure Search;
     procedure SearchOptions;
     procedure SelectAll;
     procedure SelectForCompare;
@@ -491,8 +491,8 @@ begin
   LSpeedButton := TBCSpeedButton.Create(LTabSheet);
   with LSpeedButton do
   begin
-    Align := alRight;
     Parent := LPanelSearch;
+    Align := alRight;
     Width := 20;
     ShowCaption := False;
     SkinData.SkinSection := 'TOOLBUTTON';
@@ -1291,29 +1291,9 @@ end;
 
 procedure TEBDocument.ActivateSearch;
 var
-  LSearchPanel: TBCPanel;
-  LComboBoxSearchText: TBCComboBox;
-begin
-  LSearchPanel := GetActiveSearchPanel;
-  if Assigned(LSearchPanel) then
-  begin
-    LSearchPanel.Visible := True;
-    LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) then
-      if LComboBoxSearchText.CanFocus then
-        LComboBoxSearchText.SetFocus;
-  end;
-end;
-
-procedure TEBDocument.Search;
-var
-  LOldCaretPosition: TBCEditorTextPosition;
-  LOldSelectionBeginPosition, LOldSelectionEndPosition: TBCEditorTextPosition;
-  LSelectedText: string;
-  LSelectionAvailable: Boolean;
   LEditor: TBCEditor;
-  LComboBoxSearchText: TBCComboBox;
   LSearchPanel: TBCPanel;
+  LComboBoxSearchText: TBCComboBox;
 
   procedure ReadSearchOptions;
 
@@ -1348,6 +1328,30 @@ var
     end;
   end;
 
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    ReadSearchOptions;
+  LSearchPanel := GetActiveSearchPanel;
+  if Assigned(LSearchPanel) then
+  begin
+    LSearchPanel.Visible := True;
+    LComboBoxSearchText := GetActiveComboBoxSearchText;
+    if Assigned(LComboBoxSearchText) then
+      if LComboBoxSearchText.CanFocus then
+        LComboBoxSearchText.SetFocus;
+  end;
+end;
+
+(*procedure TEBDocument.Search;
+var
+  LOldCaretPosition: TBCEditorTextPosition;
+  LOldSelectionBeginPosition, LOldSelectionEndPosition: TBCEditorTextPosition;
+  LSelectedText: string;
+  LSelectionAvailable: Boolean;
+  LEditor: TBCEditor;
+  LComboBoxSearchText: TBCComboBox;
+  LSearchPanel: TBCPanel;
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
@@ -1392,7 +1396,7 @@ begin
         LComboBoxSearchText.SetFocus;
     end;
   end;
-end;
+end;   *)
 
 function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
 var
@@ -1945,6 +1949,7 @@ begin
   if ATabSheet.Controls[i].Tag = EDITBONE_DOCUMENT_SEARCH_PANEL_TAG then
   begin
     Result := ATabSheet.Controls[i] as TBCPanel;
+    Result.Realign;
     Break;
   end;
 end;
