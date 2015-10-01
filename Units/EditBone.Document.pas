@@ -656,7 +656,7 @@ begin
       SetSearchMatchesFound;
     end;
     OptionsContainer.DocumentSpecificSearchText := '';
-    if OptionsContainer.DocumentSpecificSearch then
+    if not OptionsContainer.DocumentSpecificSearch then
       OptionsContainer.DocumentSpecificSearchText := LEditor.Search.SearchText
   end;
 end;
@@ -1211,7 +1211,7 @@ begin
         if Assigned(LSplitEditor) and LSplitEditor.Search.Enabled then
           LSplitEditor.Search.SearchText := Clipboard.AsText;
 
-        if OptionsContainer.DocumentSpecificSearch then
+        if not OptionsContainer.DocumentSpecificSearch then
           OptionsContainer.DocumentSpecificSearchText := Clipboard.AsText;
 
         LComboBoxSearchText := GetActiveComboBoxSearchText;
@@ -1362,7 +1362,7 @@ var
   LSearchPanel: TBCPanel;
 begin
   Result := False;
-  if OptionsContainer.DocumentSpecificSearch then
+  if not OptionsContainer.DocumentSpecificSearch then
   begin
     LSearchPanel := GetActiveSearchPanel;
     if Assigned(LSearchPanel) then
