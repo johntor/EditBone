@@ -69,7 +69,6 @@ type
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
     //function GetCompareFrame(TabSheet: TTabSheet): TCompareFrame;
-    //function GetDocTabSheetFrame(TabSheet: TTabSheet): TDocTabSheetFrame;
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
     function GetOpenTabSheetCount: Integer;
     function GetSelectionFound: Boolean;
@@ -108,11 +107,12 @@ type
     function Options(AActionList: TActionList): Boolean;
     function ReadIniOpenFiles: Boolean;
     function SaveAs: string;
+    function SearchChecked: Boolean;
     function ToggleLineNumbers: Boolean;
+    function ToggleSearch: Boolean;
     function ToggleSpecialChars: Boolean;
     function ToggleWordWrap: Boolean;
     function ToggleXMLTree: Boolean;
-    procedure ActivateSearch;
     procedure CheckFileDateTimes;
     procedure ClearBookmarks;
     procedure CloseAll;
@@ -156,7 +156,6 @@ type
     procedure Save; overload;
     procedure SaveAll;
     procedure SaveMacro;
-    //procedure Search;
     procedure SearchOptions;
     procedure SelectAll;
     procedure SelectForCompare;
@@ -414,7 +413,7 @@ begin
     Margins.Bottom := 2;
     AutoSize := True;
     Height := 21;
-    Visible := False;
+    Visible := OptionsContainer.SearchVisible;
     Parent := LTabSheet;
     Tag := EDITBONE_DOCUMENT_SEARCH_PANEL_TAG;
   end;
@@ -1289,7 +1288,7 @@ begin
   end;
 end;
 
-procedure TEBDocument.ActivateSearch;
+function TEBDocument.ToggleSearch: Boolean;
 var
   LEditor: TBCEditor;
   LSearchPanel: TBCPanel;
@@ -1329,74 +1328,34 @@ var
   end;
 
 begin
+  Result := False;
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
     ReadSearchOptions;
   LSearchPanel := GetActiveSearchPanel;
   if Assigned(LSearchPanel) then
   begin
-    LSearchPanel.Visible := True;
-    LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) then
-      if LComboBoxSearchText.CanFocus then
-        LComboBoxSearchText.SetFocus;
+    LSearchPanel.Visible := not LSearchPanel.Visible;
+    Result := LSearchPanel.Visible;
+    if Result then
+    begin
+      LComboBoxSearchText := GetActiveComboBoxSearchText;
+      if Assigned(LComboBoxSearchText) then
+        if LComboBoxSearchText.CanFocus then
+          LComboBoxSearchText.SetFocus;
+    end;
   end;
 end;
 
-(*procedure TEBDocument.Search;
+function TEBDocument.SearchChecked: Boolean;
 var
-  LOldCaretPosition: TBCEditorTextPosition;
-  LOldSelectionBeginPosition, LOldSelectionEndPosition: TBCEditorTextPosition;
-  LSelectedText: string;
-  LSelectionAvailable: Boolean;
-  LEditor: TBCEditor;
-  LComboBoxSearchText: TBCComboBox;
   LSearchPanel: TBCPanel;
 begin
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-  begin
-    LOldCaretPosition := LEditor.TextCaretPosition;
-    LSelectionAvailable := LEditor.SelectionAvailable;
-    if LSelectionAvailable then
-    begin
-      LOldSelectionBeginPosition := LEditor.SelectionBeginPosition;
-      LOldSelectionEndPosition := LEditor.SelectionEndPosition;
-    end;
-    ReadSearchOptions;
-    LEditor.Search.Enabled := True;
-    LEditor.TextCaretPosition := LOldCaretPosition;
-    if LSelectionAvailable then
-    begin
-      LEditor.SelectionBeginPosition := LOldSelectionBeginPosition;
-      LEditor.SelectionEndPosition := LOldSelectionEndPosition;
-    end;
-
-    LSearchPanel := GetActiveSearchPanel;
-    if Assigned(LSearchPanel) then
-      LSearchPanel.Visible := True;
-
-    LSelectedText := LEditor.SelectedText;
-    LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) then
-    begin
-      if LSelectedText <> '' then
-      begin
-        LEditor.Search.SearchText := LSelectedText;
-        LComboBoxSearchText.Text := LEditor.Search.SearchText;
-        LComboBoxSearchText.OnChange(nil);
-      end
-      else
-      if OptionsContainer.DocumentSpecificSearch then
-      begin
-        LEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
-        LComboBoxSearchText.Text := LEditor.Search.SearchText;
-      end;
-      if LComboBoxSearchText.CanFocus then
-        LComboBoxSearchText.SetFocus;
-    end;
-  end;
-end;   *)
+  Result := False;
+  LSearchPanel := GetActiveSearchPanel;
+  if Assigned(LSearchPanel) then
+    Result := LSearchPanel.Visible;
+end;
 
 function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
 var

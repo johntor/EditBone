@@ -1453,7 +1453,7 @@ end;
 
 procedure TMainForm.ActionSearchSearchExecute(Sender: TObject);
 begin
-  FDocument.ActivateSearch;
+  ActionSearchSearch.Checked := FDocument.ToggleSearch;
 end;
 
 procedure TMainForm.ActionSearchToggleBookmarkExecute(Sender: TObject);
@@ -2112,6 +2112,7 @@ begin
     ActionViewMinimap.Checked := ActiveDocumentFound and FDocument.MinimapChecked;
 
     ActionSearchSearch.Enabled := ActiveDocumentFound;
+    ActionSearchSearch.Checked := ActiveDocumentFound and FDocument.SearchChecked;
     ActionSearchGotoLine.Enabled := ActiveDocumentFound;
     ActionSearchReplace.Enabled := ActiveDocumentFound;
     ActionSearchFindInFiles.Enabled := Assigned(FOutput) and not FOutput.ProcessingTabSheet;

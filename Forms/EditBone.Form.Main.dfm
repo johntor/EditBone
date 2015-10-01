@@ -814,6 +814,8 @@ inherited MainForm: TMainForm
             Height = 58
             Action = ActionSearchSearch
             Align = alLeft
+            AllowAllUp = True
+            GroupIndex = 10
             Flat = True
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -822,7 +824,6 @@ inherited MainForm: TMainForm
             Font.Style = []
             Layout = blGlyphTop
             ParentFont = False
-            ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
             ImageIndex = 34
             Images = ImagesDataModule.ImageList
@@ -2679,6 +2680,7 @@ inherited MainForm: TMainForm
       Height = 24
       Action = ActionSearchSearch
       Align = alLeft
+      GroupIndex = 10
       Flat = True
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3653,7 +3655,9 @@ inherited MainForm: TMainForm
     end
     object ActionSearchSearch: TAction
       Category = 'Search'
+      AutoCheck = True
       Caption = 'Search'
+      GroupIndex = 10
       Hint = 'Search the specified text'
       ImageIndex = 34
       ShortCut = 16454
@@ -5077,6 +5081,7 @@ inherited MainForm: TMainForm
       Action = ActionSearch
       object MenuItemMainMenuSearchSearch: TMenuItem
         Action = ActionSearchSearch
+        AutoCheck = True
       end
       object MenuItemMainMenuSearchReplace: TMenuItem
         Action = ActionSearchReplace
