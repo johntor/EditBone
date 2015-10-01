@@ -4404,7 +4404,7 @@ inherited MainForm: TMainForm
     object ActionSearchOptions: TAction
       Category = 'Search'
       Caption = 'ActionSearchOptions'
-      Hint = 'Options'
+      Hint = 'Search options'
       ImageIndex = 78
       OnExecute = ActionSearchOptionsExecute
     end
@@ -4550,6 +4550,12 @@ inherited MainForm: TMainForm
       Hint = 'Unselect all files'
       ImageIndex = 103
       OnExecute = ActionOutputUnselectAllExecute
+    end
+    object ActionSearchTextItems: TAction
+      Category = 'Search'
+      Hint = 'Search items'
+      ImageIndex = 77
+      OnExecute = ActionSearchTextItemsExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [22]

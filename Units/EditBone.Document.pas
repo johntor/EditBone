@@ -48,6 +48,7 @@ type
     FSetTitleBarMenus: TEBSetTitleBarMenus;
     FTabSheetNew: TTabSheet;
     FImages: TImageList;
+    FActionSearchTextItems: TAction;
     FActionSearchFindPrevious: TAction;
     FActionSearchFindNext: TAction;
     FActionSearchOptions: TAction;
@@ -63,7 +64,6 @@ type
     function GetActiveTabSheetCaption: string;
     function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
     function GetActiveSearchPanel: TBCPanel;
-    function GetActiveComboBoxSearchText: TBCComboBox;
     function GetActiveLabelSearchResultCount: TBCLabelFX;
     function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
     function GetCanRedo: Boolean;
@@ -97,6 +97,7 @@ type
     function GetMacroRecordPauseImageIndex: Integer;
     function GetModifiedInfo: string;
     function GetActiveBookmarkList: TBCEditorBookmarkList;
+    function GetActiveComboBoxSearchText: TBCComboBox;
     procedure InsertTag;
     procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
     function IsMacroStopped: Boolean;
@@ -202,6 +203,7 @@ type
     property SplitChecked: Boolean read GetSplitChecked;
     property StatusBar: TBCStatusBar write FStatusBar;
     property XMLTreeVisible: Boolean read GetXMLTreeVisible;
+    property ActionSearchTextItems: TAction read FActionSearchTextItems write FActionSearchTextItems;
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
     property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
@@ -445,6 +447,29 @@ begin
     ShowCaption := False;
     Left := LSplitter.Left + 1;
     SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchTextItems.OnExecute;
+    ImageIndex := ActionSearchTextItems.ImageIndex;
+    Hint := ActionSearchTextItems.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 10;
+    ButtonStyle := tbsDivider;
+    Left := LSplitter.Left + LSplitter.Width + 22;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := LSplitter.Left + LSplitter.Width + 32;
+    SkinData.SkinSection := 'TOOLBUTTON';
     OnClick := ActionSearchFindPrevious.OnExecute;
     ImageIndex := ActionSearchFindPrevious.ImageIndex;
     Hint := ActionSearchFindPrevious.Hint;
@@ -457,7 +482,7 @@ begin
     Parent := LPanelSearch;
     Width := 21;
     ShowCaption := False;
-    Left := LSplitter.Left + 22;
+    Left := LSplitter.Left + LSplitter.Width + 53;
     SkinData.SkinSection := 'TOOLBUTTON';
     OnClick := ActionSearchFindNext.OnExecute;
     ImageIndex := ActionSearchFindNext.ImageIndex;
@@ -471,7 +496,7 @@ begin
     Parent := LPanelSearch;
     Width := 10;
     ButtonStyle := tbsDivider;
-    Left := LSplitter.Left + 43;
+    Left := LSplitter.Left + LSplitter.Width + 74;
   end;
   LSpeedButton := TBCSpeedButton.Create(LTabSheet);
   with LSpeedButton do
@@ -480,7 +505,7 @@ begin
     Parent := LPanelSearch;
     Width := 21;
     ShowCaption := False;
-    Left := LSplitter.Left + 64;
+    Left := LSplitter.Left + LSplitter.Width + 84;
     SkinData.SkinSection := 'TOOLBUTTON';
     OnClick := ActionSearchOptions.OnExecute;
     ImageIndex := ActionSearchOptions.ImageIndex;
@@ -2273,6 +2298,8 @@ procedure TEBDocument.Refresh(Page: Integer);
 var
   Editor: TBCEditor;
 begin
+  if (Page < 0) or (Page > PageControl.PageCount - 2) then
+    Exit;
   Editor := GetEditor(PageControl.Pages[Page]);
   if Assigned(Editor) then
   begin

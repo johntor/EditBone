@@ -650,6 +650,7 @@ type
     ActionOutputOpenSelected: TAction;
     ActionOutputSelectAll: TAction;
     ActionOutputUnselectAll: TAction;
+    ActionSearchTextItems: TAction;
     procedure ActionFileNewExecute(Sender: TObject);
     procedure ActionFileOpenExecute(Sender: TObject);
     procedure ActionFileSaveAllExecute(Sender: TObject);
@@ -821,6 +822,7 @@ type
     procedure ActionOutputSelectAllExecute(Sender: TObject);
     procedure ActionOutputUnselectAllExecute(Sender: TObject);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
+    procedure ActionSearchTextItemsExecute(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -869,7 +871,7 @@ uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
   BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
-  BCCommon.Utils, BCControls.Utils, BCCommon.Dialogs.FindInFiles,
+  BCCommon.Utils, BCControls.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialogs.DownloadURL,
   BCCommon.Forms.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Forms.SearchForFiles,
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialogs.SkinSelect, sGraphUtils, sConst,
@@ -1454,6 +1456,26 @@ end;
 procedure TMainForm.ActionSearchSearchExecute(Sender: TObject);
 begin
   ActionSearchSearch.Checked := FDocument.ToggleSearch;
+end;
+
+procedure TMainForm.ActionSearchTextItemsExecute(Sender: TObject);
+var
+  LComboBox: TBCComboBox;
+begin
+  inherited;
+  with TItemListDialog.Create(Self) do
+  try
+    Caption := LanguageDataModule.GetConstant('SearchItems');
+    LComboBox := FDocument.GetActiveComboBoxSearchText;
+    if Assigned(LComboBox) then
+    begin
+      ListBox.Items.Assign(LComboBox.Items);
+      if ShowModal = mrOk then
+        LComboBox.Items.Assign(ListBox.Items);
+    end;
+  finally
+    Free;
+  end;
 end;
 
 procedure TMainForm.ActionSearchToggleBookmarkExecute(Sender: TObject);
@@ -2730,6 +2752,7 @@ begin
   FDocument.GetActionList := GetActionList;
   FDocument.SkinManager := SkinManager;
   FDocument.StatusBar := StatusBar;
+  FDocument.ActionSearchTextItems := ActionSearchTextItems;
   FDocument.ActionSearchFindPrevious := ActionSearchFindPrevious;
   FDocument.ActionSearchFindNext := ActionSearchFindNext;
   FDocument.ActionSearchOptions := ActionSearchOptions;
