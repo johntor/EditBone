@@ -812,7 +812,7 @@ inherited MainForm: TMainForm
             Top = 0
             Width = 60
             Height = 58
-            Action = ActionSearchSearch
+            Action = ActionSearchSearchButton
             Align = alLeft
             AllowAllUp = True
             GroupIndex = 10
@@ -2678,7 +2678,7 @@ inherited MainForm: TMainForm
       Top = 2
       Width = 26
       Height = 24
-      Action = ActionSearchSearch
+      Action = ActionSearchSearchButton
       Align = alLeft
       GroupIndex = 10
       Flat = True
@@ -3653,13 +3653,18 @@ inherited MainForm: TMainForm
       Caption = 'Search'
       OnExecute = ActionDummyExecute
     end
-    object ActionSearchSearch: TAction
+    object ActionSearchSearchButton: TAction
       Category = 'Search'
       AutoCheck = True
       Caption = 'Search'
       GroupIndex = 10
       Hint = 'Search the specified text'
       ImageIndex = 34
+      OnExecute = ActionSearchSearchButtonExecute
+    end
+    object ActionSearchSearch: TAction
+      Category = 'Search'
+      Caption = 'ActionSearchSearch'
       ShortCut = 16454
       OnExecute = ActionSearchSearchExecute
     end
@@ -5086,7 +5091,7 @@ inherited MainForm: TMainForm
     object MenuItemMainMenuSearch: TMenuItem
       Action = ActionSearch
       object MenuItemMainMenuSearchSearch: TMenuItem
-        Action = ActionSearchSearch
+        Action = ActionSearchSearchButton
         AutoCheck = True
       end
       object MenuItemMainMenuSearchReplace: TMenuItem

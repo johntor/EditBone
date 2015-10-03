@@ -95,7 +95,7 @@ type
     ActionSearchGoToBookmarks: TAction;
     ActionSearchGoToLine: TAction;
     ActionSearchReplace: TAction;
-    ActionSearchSearch: TAction;
+    ActionSearchSearchButton: TAction;
     ActionSearchToggleBookmark: TAction;
     ActionSearchToggleBookmarks: TAction;
     ActionSelectEncoding: TAction;
@@ -651,6 +651,7 @@ type
     ActionOutputSelectAll: TAction;
     ActionOutputUnselectAll: TAction;
     ActionSearchTextItems: TAction;
+    ActionSearchSearch: TAction;
     procedure ActionFileNewExecute(Sender: TObject);
     procedure ActionFileOpenExecute(Sender: TObject);
     procedure ActionFileSaveAllExecute(Sender: TObject);
@@ -675,7 +676,7 @@ type
     procedure ActionEditInsertTagExecute(Sender: TObject);
     procedure ActionEditInsertDateTimeExecute(Sender: TObject);
     procedure ApplicationEventsHint(Sender: TObject);
-    procedure ActionSearchSearchExecute(Sender: TObject);
+    procedure ActionSearchSearchButtonExecute(Sender: TObject);
     procedure ActionSearchReplaceExecute(Sender: TObject);
     procedure ActionSearchFindInFilesExecute(Sender: TObject);
     procedure ActionSearchFindNextExecute(Sender: TObject);
@@ -823,6 +824,7 @@ type
     procedure ActionOutputUnselectAllExecute(Sender: TObject);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
     procedure ActionSearchTextItemsExecute(Sender: TObject);
+    procedure ActionSearchSearchExecute(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -1453,9 +1455,15 @@ begin
   FDocument.Replace;
 end;
 
+procedure TMainForm.ActionSearchSearchButtonExecute(Sender: TObject);
+begin
+  ActionSearchSearchButton.Checked := FDocument.ToggleSearch;
+end;
+
 procedure TMainForm.ActionSearchSearchExecute(Sender: TObject);
 begin
-  ActionSearchSearch.Checked := FDocument.ToggleSearch;
+  inherited;
+  FDocument.ToggleSearch(True);
 end;
 
 procedure TMainForm.ActionSearchTextItemsExecute(Sender: TObject);
@@ -2134,7 +2142,8 @@ begin
     ActionViewMinimap.Checked := ActiveDocumentFound and FDocument.MinimapChecked;
 
     ActionSearchSearch.Enabled := ActiveDocumentFound;
-    ActionSearchSearch.Checked := ActiveDocumentFound and FDocument.SearchChecked;
+    ActionSearchSearchButton.Enabled := ActiveDocumentFound;
+    ActionSearchSearchButton.Checked := ActiveDocumentFound and FDocument.SearchChecked;
     ActionSearchGotoLine.Enabled := ActiveDocumentFound;
     ActionSearchReplace.Enabled := ActiveDocumentFound;
     ActionSearchFindInFiles.Enabled := Assigned(FOutput) and not FOutput.ProcessingTabSheet;

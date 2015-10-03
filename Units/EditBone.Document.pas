@@ -110,7 +110,7 @@ type
     function SaveAs: string;
     function SearchChecked: Boolean;
     function ToggleLineNumbers: Boolean;
-    function ToggleSearch: Boolean;
+    function ToggleSearch(AShowPanel: Boolean = False): Boolean;
     function ToggleSpecialChars: Boolean;
     function ToggleWordWrap: Boolean;
     function ToggleXMLTree: Boolean;
@@ -1313,7 +1313,7 @@ begin
   end;
 end;
 
-function TEBDocument.ToggleSearch: Boolean;
+function TEBDocument.ToggleSearch(AShowPanel: Boolean = False): Boolean;
 var
   LEditor: TBCEditor;
   LSearchPanel: TBCPanel;
@@ -1354,13 +1354,22 @@ var
 
 begin
   Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    ReadSearchOptions;
+
   LSearchPanel := GetActiveSearchPanel;
   if Assigned(LSearchPanel) then
   begin
-    LSearchPanel.Visible := not LSearchPanel.Visible;
+    if not LSearchPanel.Visible then
+    begin
+      LEditor := GetActiveEditor;
+      if Assigned(LEditor) then
+        ReadSearchOptions;
+    end;
+
+    if AShowPanel then
+      LSearchPanel.Visible := True
+    else
+      LSearchPanel.Visible := not LSearchPanel.Visible;
+
     Result := LSearchPanel.Visible;
     if Result then
     begin
