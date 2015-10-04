@@ -53,7 +53,6 @@ type
     FActionSearchFindNext: TAction;
     FActionSearchOptions: TAction;
     FActionSearchClose: TAction;
-    procedure CreateImageList;
     function CreateNewTabSheet(FileName: string = ''; ShowMinimap: Boolean = False; AHighlighter: string = '';
       AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
     function FindOpenFile(FileName: string): TBCEditor;
@@ -79,7 +78,10 @@ type
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
+    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
+    procedure CreateImageList;
+    procedure CreateSearchPanel(ATabSheet: TsTabSheet);
     procedure SetSearchMatchesFound;
     procedure AddToReopenFiles(FileName: string);
     procedure CheckModifiedDocuments;
@@ -87,7 +89,6 @@ type
     procedure SetActivePageCaptionModified(AModified: Boolean);
     procedure SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
     procedure SetSkinColors(Editor: TBCEditor);
-    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
   public
     constructor Create(AOwner: TBCPageControl);
     destructor Destroy; override;
@@ -340,18 +341,171 @@ begin
     FSetBookmarks;
 end;
 
+procedure TEBDocument.CreateSearchPanel(ATabSheet: TsTabSheet);
+var
+  LPanelSearch: TBCPanel;
+  LComboBoxSearchText: TBCComboBox;
+  LItems: TStrings;
+  LSplitter: TBCSplitter;
+  LSpeedButton: TBCSpeedButton;
+  LLabel: TBCLabelFX;
+  LBitmap: TBitmap;
+begin
+  { create search TODO: move to own procecure }
+  LPanelSearch := TBCPanel.Create(ATabSheet);
+  with LPanelSearch do
+  begin
+    Align := alBottom;
+    AlignWithMargins := True;
+    BevelOuter := bvNone;
+    Caption := '';
+    Margins.Left := 2;
+    Margins.Top := 2;
+    Margins.Right := 2;
+    Margins.Bottom := 2;
+    AutoSize := True;
+    Height := 21;
+    Visible := OptionsContainer.SearchVisible;
+    Parent := ATabSheet;
+    Tag := EDITBONE_DOCUMENT_SEARCH_PANEL_TAG;
+  end;
+  LComboBoxSearchText := TBCComboBox.Create(ATabSheet);
+  with LComboBoxSearchText do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 200;
+    VerticalAlignment := taAlignTop;
+    Tag := EDITBONE_DOCUMENT_COMBOBOX_SEARCH_TEXT_TAG;
+    OnChange := ComboBoxSearchTextChange;
+    OnKeyPress := ComboBoxSearchTextKeyPress;
+    OnKeyDown := ComboBoxKeyDown;
+    LItems := TStringList.Create;
+    with TIniFile.Create(GetIniFilename) do
+    try
+      ReadSectionValues('SearchItems', LItems);
+      InsertItemsToComboBox(LItems, LComboBoxSearchText);
+    finally
+      LItems.Free;
+      Free;
+    end;
+  end;
+  LSplitter := TBCSplitter.Create(ATabSheet);
+  with LSplitter do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Left := LComboBoxSearchText.Width + 1;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := LSplitter.Left + 1;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchTextItems.OnExecute;
+    ImageIndex := ActionSearchTextItems.ImageIndex;
+    Hint := ActionSearchTextItems.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 10;
+    ButtonStyle := tbsDivider;
+    Left := LSplitter.Left + LSplitter.Width + 22;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := LSplitter.Left + LSplitter.Width + 32;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchFindPrevious.OnExecute;
+    ImageIndex := ActionSearchFindPrevious.ImageIndex;
+    Hint := ActionSearchFindPrevious.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := LSplitter.Left + LSplitter.Width + 53;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchFindNext.OnExecute;
+    ImageIndex := ActionSearchFindNext.ImageIndex;
+    Hint := ActionSearchFindNext.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 10;
+    ButtonStyle := tbsDivider;
+    Left := LSplitter.Left + LSplitter.Width + 74;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := LPanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := LSplitter.Left + LSplitter.Width + 84;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchOptions.OnExecute;
+    ImageIndex := ActionSearchOptions.ImageIndex;
+    Hint := ActionSearchOptions.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Parent := LPanelSearch;
+    Align := alRight;
+    Width := 20;
+    ShowCaption := False;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchClose.OnExecute;
+    Hint := ActionSearchClose.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+    LBitmap := TBitmap.Create;
+    LBitmap.Width := 32;
+    LBitmap.Height := 16;
+    LBitmap.LoadFromResourceName(hInstance, 'SEARCHGLYPH');
+    Glyph := LBitmap;
+    LBitmap.Free;
+  end;
+  LLabel := TBCLabelFX.Create(ATabSheet);
+  with LLabel do
+  begin
+    Align := alRight;
+    Parent := LPanelSearch;
+    AutoSize := True;
+    Shadow.AlphaValue := 0;
+    Font.Size := 10;
+    Tag := EDITBONE_DOCUMENT_LABEL_SEARCH_RESULT_COUNT_TAG;
+  end;
+end;
+
 function TEBDocument.CreateNewTabSheet(FileName: string = ''; ShowMinimap: Boolean = False;
   AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
 var
   LTabSheet: TsTabSheet;
   LEditor: TBCEditor;
-  LPanelSearch: TBCPanel;
-  LComboBoxSearchText: TBCComboBox;
-  LSplitter: TBCSplitter;
-  LSpeedButton: TBCSpeedButton;
-  LLabel: TBCLabelFX;
-  LBitmap: TBitmap;
-  LItems: TStrings;
 begin
   FProcessing := True;
 
@@ -402,154 +556,7 @@ begin
   OptionsContainer.AssignTo(LEditor);
   LEditor.Minimap.Visible := LEditor.Minimap.Visible or ShowMinimap;
 
-  { create search TODO: move to own procecure }
-  LPanelSearch := TBCPanel.Create(LTabSheet);
-  with LPanelSearch do
-  begin
-    Align := alBottom;
-    AlignWithMargins := True;
-    BevelOuter := bvNone;
-    Caption := '';
-    Margins.Left := 2;
-    Margins.Top := 2;
-    Margins.Right := 2;
-    Margins.Bottom := 2;
-    AutoSize := True;
-    Height := 21;
-    Visible := OptionsContainer.SearchVisible;
-    Parent := LTabSheet;
-    Tag := EDITBONE_DOCUMENT_SEARCH_PANEL_TAG;
-  end;
-  LComboBoxSearchText := TBCComboBox.Create(LTabSheet);
-  with LComboBoxSearchText do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 200;
-    VerticalAlignment := taAlignTop;
-    Tag := EDITBONE_DOCUMENT_COMBOBOX_SEARCH_TEXT_TAG;
-    OnChange := ComboBoxSearchTextChange;
-    OnKeyPress := ComboBoxSearchTextKeyPress;
-    OnKeyDown := ComboBoxKeyDown;
-    LItems := TStringList.Create;
-    with TIniFile.Create(GetIniFilename) do
-    try
-      ReadSectionValues('SearchItems', LItems);
-      InsertItemsToComboBox(LItems, LComboBoxSearchText);
-    finally
-      LItems.Free;
-      Free;
-    end;
-  end;
-  LSplitter := TBCSplitter.Create(LTabSheet);
-  with LSplitter do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Left := LComboBoxSearchText.Width + 1;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 21;
-    ShowCaption := False;
-    Left := LSplitter.Left + 1;
-    SkinData.SkinSection := 'TOOLBUTTON';
-    OnClick := ActionSearchTextItems.OnExecute;
-    ImageIndex := ActionSearchTextItems.ImageIndex;
-    Hint := ActionSearchTextItems.Hint;
-    Images := ImagesDataModule.ImageListSmall;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 10;
-    ButtonStyle := tbsDivider;
-    Left := LSplitter.Left + LSplitter.Width + 22;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 21;
-    ShowCaption := False;
-    Left := LSplitter.Left + LSplitter.Width + 32;
-    SkinData.SkinSection := 'TOOLBUTTON';
-    OnClick := ActionSearchFindPrevious.OnExecute;
-    ImageIndex := ActionSearchFindPrevious.ImageIndex;
-    Hint := ActionSearchFindPrevious.Hint;
-    Images := ImagesDataModule.ImageListSmall;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 21;
-    ShowCaption := False;
-    Left := LSplitter.Left + LSplitter.Width + 53;
-    SkinData.SkinSection := 'TOOLBUTTON';
-    OnClick := ActionSearchFindNext.OnExecute;
-    ImageIndex := ActionSearchFindNext.ImageIndex;
-    Hint := ActionSearchFindNext.Hint;
-    Images := ImagesDataModule.ImageListSmall;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 10;
-    ButtonStyle := tbsDivider;
-    Left := LSplitter.Left + LSplitter.Width + 74;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Align := alLeft;
-    Parent := LPanelSearch;
-    Width := 21;
-    ShowCaption := False;
-    Left := LSplitter.Left + LSplitter.Width + 84;
-    SkinData.SkinSection := 'TOOLBUTTON';
-    OnClick := ActionSearchOptions.OnExecute;
-    ImageIndex := ActionSearchOptions.ImageIndex;
-    Hint := ActionSearchOptions.Hint;
-    Images := ImagesDataModule.ImageListSmall;
-  end;
-  LSpeedButton := TBCSpeedButton.Create(LTabSheet);
-  with LSpeedButton do
-  begin
-    Parent := LPanelSearch;
-    Align := alRight;
-    Width := 20;
-    ShowCaption := False;
-    SkinData.SkinSection := 'TOOLBUTTON';
-    OnClick := ActionSearchClose.OnExecute;
-    Hint := ActionSearchClose.Hint;
-    Images := ImagesDataModule.ImageListSmall;
-    LBitmap := TBitmap.Create;
-    LBitmap.Width := 32;
-    LBitmap.Height := 16;
-    LBitmap.LoadFromResourceName(hInstance, 'SEARCHGLYPH');
-    Glyph := LBitmap;
-    LBitmap.Free;
-  end;
-  LLabel := TBCLabelFX.Create(LTabSheet);
-  with LLabel do
-  begin
-    Align := alRight;
-    Parent := LPanelSearch;
-    AutoSize := True;
-    Shadow.AlphaValue := 0;
-    Font.Size := 10;
-    Tag := EDITBONE_DOCUMENT_LABEL_SEARCH_RESULT_COUNT_TAG;
-  end;
+  CreateSearchPanel(LTabSheet);
 
   if FileName <> '' then
   begin
