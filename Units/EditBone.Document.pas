@@ -1460,7 +1460,7 @@ begin
 
   LEditor.Search.Options := LEditor.Search.Options - [soBackwards];
 
-  if not SetDocumentSpecificSearchText(LEditor) then
+  if SetDocumentSpecificSearchText(LEditor) then
     LEditor.FindNext;
 end;
 
@@ -1474,7 +1474,7 @@ begin
 
   LEditor.Search.Options := LEditor.Search.Options + [soBackwards];
 
-  if not SetDocumentSpecificSearchText(LEditor) then
+  if SetDocumentSpecificSearchText(LEditor) then
     LEditor.FindPrevious;
 end;
 
