@@ -788,8 +788,6 @@ type
     procedure ActionSelectionBoxRightExecute(Sender: TObject);
     procedure ActionSelectionBoxUpExecute(Sender: TObject);
     procedure ActionXMLTreeRefreshExecute(Sender: TObject);
-    procedure EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer;
-      var Abort: Boolean);
     procedure ActionSearchOptionsExecute(Sender: TObject);
     procedure ActionSearchCloseExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -825,6 +823,7 @@ type
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
     procedure ActionSearchTextItemsExecute(Sender: TObject);
     procedure ActionSearchSearchExecute(Sender: TObject);
+    procedure EditorPrintPrintLine(Sender: TObject; LineNumber, PageNumber: Integer);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -1354,9 +1353,9 @@ begin
     FDocument.InitializeEditorPrint(EditorPrint);
     EditorPrint.Copies := PrintDialog.Copies;
     EditorPrint.SelectedOnly := PrintDialog.PrintRange = prSelection;
-    EditorPrint.UpdatePages(PrintPreviewDialog.Canvas); // TODO: needed?
+    EditorPrint.UpdatePages(PrintPreviewDialog.Canvas);
 
-    ProgressBar.Show(PageControlDocument.PageCount - 1);
+    ProgressBar.Show(EditorPrint.Editor.Lines.Count);
     if PrintDialog.PrintRange = prPageNums then
       EditorPrint.PrintRange(PrintDialog.FromPage, PrintDialog.ToPage)
     else
@@ -2289,8 +2288,7 @@ begin
   FDocument.DropFiles(Sender, Pos, Value);
 end;
 
-procedure TMainForm.EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer;
-  var Abort: Boolean);
+procedure TMainForm.EditorPrintPrintLine(Sender: TObject; LineNumber, PageNumber: Integer);
 begin
   inherited;
   ProgressBar.StepIt;

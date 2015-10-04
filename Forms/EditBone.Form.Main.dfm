@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Top = 4
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetSearch
+      ActivePage = TabSheetFile
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -4931,7 +4931,7 @@ inherited MainForm: TMainForm
     Margins.Right = 15.000000000000000000
     Margins.RightTextIndent = 2.000000000000000000
     Margins.Top = 18.000000000000000000
-    OnPrintStatus = EditorPrintPrintStatus
+    OnPrintLine = EditorPrintPrintLine
     TabWidth = 8
     Left = 872
     Top = 348
