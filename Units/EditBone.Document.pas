@@ -217,8 +217,8 @@ implementation
 uses
   Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialogs.ConfirmReplace,
   Vcl.ActnMenus, System.Types, System.Math, BigIni, Vcl.GraphUtil, BCCommon.Language.Strings, VirtualTrees,
-  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace, BCCommon.FileUtils, BCCommon.Messages,
-  BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options, BCCommon.Images,
+  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace, BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils,
+  BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options, BCCommon.Images, System.IniFiles,
   BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images, BCControls.SpeedButton,
   BCControls.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd, BCEditor.Highlighter.Colors,
   BCCommon.Dialogs.Options.Search, Vcl.ValEdit, System.IOUtils;
@@ -351,6 +351,7 @@ var
   LSpeedButton: TBCSpeedButton;
   LLabel: TBCLabelFX;
   LBitmap: TBitmap;
+  LItems: TStrings;
 begin
   FProcessing := True;
 
@@ -430,6 +431,15 @@ begin
     OnChange := ComboBoxSearchTextChange;
     OnKeyPress := ComboBoxSearchTextKeyPress;
     OnKeyDown := ComboBoxKeyDown;
+    LItems := TStringList.Create;
+    with TIniFile.Create(GetIniFilename) do
+    try
+      ReadSectionValues('SearchItems', LItems);
+      InsertItemsToComboBox(LItems, LComboBoxSearchText);
+    finally
+      LItems.Free;
+      Free;
+    end;
   end;
   LSplitter := TBCSplitter.Create(LTabSheet);
   with LSplitter do
@@ -603,9 +613,11 @@ end;
 
 procedure TEBDocument.ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
 var
+  i: Integer;
   LEditor: TBCEditor;
-  LComboBoxSearchText: TBCComboBox;
+  LComboBoxSearchText, LComboBoxSearchTextPage: TBCComboBox;
   LSearchPanel: TBCPanel;
+  LItems: TStrings;
 
   procedure SetFocus;
   begin
@@ -622,7 +634,30 @@ begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
     if Assigned(LComboBoxSearchText) then
       if LComboBoxSearchText.Items.IndexOf(LComboBoxSearchText.Text) = -1 then
+      begin
         LComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
+        { Update other documents }
+        for i := 0 to FPageControl.PageCount - 2 do
+        if FPageControl.Pages[i] <> FPageControl.ActivePage then
+        begin
+          LComboBoxSearchTextPage := GetComboBoxSearchText(FPageControl.Pages[i]);
+          if Assigned(LComboBoxSearchTextPage) then
+            LComboBoxSearchTextPage.Items.Add(LComboBoxSearchText.Text);
+        end;
+        { Save to ini }
+        LItems := TStringList.Create;
+        try
+          with TIniFile.Create(GetIniFilename) do
+          try
+            ReadSectionValues('SearchItems', LItems);
+            WriteString('SearchItems', IntToStr(LItems.Count), LComboBoxSearchText.Text);
+          finally
+            Free;
+          end;
+        finally
+          LItems.Free;
+        end;
+      end;
     Key := EDITBONE_NONE_CHAR;
   end;
   if Key = EDITBONE_ESCAPE then
