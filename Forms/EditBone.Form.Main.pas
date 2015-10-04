@@ -824,6 +824,8 @@ type
     procedure ActionSearchTextItemsExecute(Sender: TObject);
     procedure ActionSearchSearchExecute(Sender: TObject);
     procedure EditorPrintPrintLine(Sender: TObject; LineNumber, PageNumber: Integer);
+    procedure EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer;
+      var Abort: Boolean);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -2292,6 +2294,13 @@ procedure TMainForm.EditorPrintPrintLine(Sender: TObject; LineNumber, PageNumber
 begin
   inherited;
   ProgressBar.StepIt;
+end;
+
+procedure TMainForm.EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer;
+  var Abort: Boolean);
+begin
+  inherited;
+  //xxx abortti mahdollisuus
 end;
 
 procedure TMainForm.LanguageMenuClick(Sender: TObject);

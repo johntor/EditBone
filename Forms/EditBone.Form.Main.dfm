@@ -4932,6 +4932,7 @@ inherited MainForm: TMainForm
     Margins.RightTextIndent = 2.000000000000000000
     Margins.Top = 18.000000000000000000
     OnPrintLine = EditorPrintPrintLine
+    OnPrintStatus = EditorPrintPrintStatus
     TabWidth = 8
     Left = 872
     Top = 348
