@@ -4,9 +4,8 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Buttons, Vcl.ComCtrls,
-  Vcl.ActnList, Vcl.Menus, VirtualTrees, Vcl.PlatformDefaultStyleActnCtrls, BCComponents.SkinManager,
-  BCControls.PageControl, System.Actions, BCCommon.Images, sPageControl,
-  sFrameAdapter;
+  Vcl.ActnList, VirtualTrees, Vcl.PlatformDefaultStyleActnCtrls, BCComponents.SkinManager,
+  BCControls.PageControl, System.Actions, BCCommon.Images, sPageControl;
 
 type
   TOpenAllEvent = procedure(var FileNames: TStrings);

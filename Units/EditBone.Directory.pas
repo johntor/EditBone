@@ -8,7 +8,7 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
   BCControls.FileControl, Vcl.ImgList, Vcl.ActnList, Vcl.Buttons, Vcl.Menus, BCControls.PageControl, VirtualTrees,
   System.Actions, BCCommon.Forms.SearchForFiles, BCCommon.Images, sPageControl, Vcl.StdCtrls,
-  Vcl.PlatformDefaultStyleActnCtrls, System.ImageList, acAlphaImageList, BCControls.ImageList,
+  Vcl.PlatformDefaultStyleActnCtrls, BCControls.ImageList,
   BCComponents.SkinManager;
 
 type
@@ -81,7 +81,7 @@ uses
   System.Math, BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils,
   BCCommon.Dialogs.Base,
   Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images,
-  BCControls.Panel, EditBone.Consts;
+  BCControls.Panel;
 
 destructor TEBDirectory.Destroy;
 begin

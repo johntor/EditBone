@@ -13,7 +13,7 @@ uses
   Vcl.ActnMan, Vcl.ActnMenus, BCComponents.DragDrop, System.Diagnostics, EditBone.Output,
   Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, System.ImageList, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, Vcl.StdCtrls, System.Win.TaskbarCore, Vcl.Taskbar, sComboBox, BCControls.ComboBox;
+  System.Generics.Collections, Vcl.StdCtrls, sComboBox, BCControls.ComboBox;
 
 type
   TMainForm = class(TBCBaseForm)
