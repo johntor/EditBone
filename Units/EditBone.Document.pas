@@ -26,6 +26,7 @@ type
     procedure EditorAfterClearBookmark(Sender: TObject);
     procedure ComboBoxSearchTextChange(Sender: TObject);
     procedure ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBoxMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
     procedure ComboBoxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);
   private
@@ -78,7 +79,7 @@ type
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
-    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
+    procedure SetDocumentSpecificSearchText(AEditor: TBCEditor);
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
@@ -86,6 +87,7 @@ type
     procedure AddToReopenFiles(FileName: string);
     procedure CheckModifiedDocuments;
     procedure SelectHighlighter(AEditor: TBCEditor; FileName: string);
+    procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
     procedure SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
     procedure SetSkinColors(Editor: TBCEditor);
@@ -351,7 +353,6 @@ var
   LLabel: TBCLabelFX;
   LBitmap: TBitmap;
 begin
-  { create search TODO: move to own procecure }
   LPanelSearch := TBCPanel.Create(ATabSheet);
   with LPanelSearch do
   begin
@@ -376,10 +377,12 @@ begin
     Parent := LPanelSearch;
     Width := 200;
     VerticalAlignment := taAlignTop;
+    UseMouseWheel := False;
     Tag := EDITBONE_DOCUMENT_COMBOBOX_SEARCH_TEXT_TAG;
     OnChange := ComboBoxSearchTextChange;
     OnKeyPress := ComboBoxSearchTextKeyPress;
     OnKeyDown := ComboBoxKeyDown;
+    OnMouseWheel := ComboBoxMouseWheel;
     LItems := TStringList.Create;
     with TIniFile.Create(GetIniFilename) do
     try
@@ -618,26 +621,31 @@ begin
   end;
 end;
 
+procedure TEBDocument.ComboBoxMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
+begin
+  SetActiveEditorFocus;
+end;
+
+procedure TEBDocument.SetActiveEditorFocus;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    if LEditor.CanFocus then
+      LEditor.SetFocus;
+end;
+
 procedure TEBDocument.ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
 var
   i: Integer;
-  LEditor: TBCEditor;
   LComboBoxSearchText, LComboBoxSearchTextPage: TBCComboBox;
   LSearchPanel: TBCPanel;
   LItems: TStrings;
-
-  procedure SetFocus;
-  begin
-    LEditor := GetActiveEditor;
-    if Assigned(LEditor) then
-      if LEditor.CanFocus then
-        LEditor.SetFocus;
-  end;
-
 begin
   if (Key = EDITBONE_CARRIAGE_RETURN) or (Key = EDITBONE_LINEFEED) then
   begin
-    SetFocus;
+    SetActiveEditorFocus;
     LComboBoxSearchText := GetActiveComboBoxSearchText;
     if Assigned(LComboBoxSearchText) then
       if LComboBoxSearchText.Items.IndexOf(LComboBoxSearchText.Text) = -1 then
@@ -672,7 +680,7 @@ begin
     LSearchPanel := GetActiveSearchPanel;
     if Assigned(LSearchPanel) then
       LSearchPanel.Visible := False;
-    SetFocus;
+    SetActiveEditorFocus;
     Key := EDITBONE_NONE_CHAR;
   end;
 end;
@@ -1433,20 +1441,16 @@ begin
     Result := LSearchPanel.Visible;
 end;
 
-function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
+procedure TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor);
 var
   LSearchPanel: TBCPanel;
 begin
-  Result := False;
   if not OptionsContainer.DocumentSpecificSearch then
   begin
     LSearchPanel := GetActiveSearchPanel;
     if Assigned(LSearchPanel) then
       if not LSearchPanel.Visible then
-      begin
         AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
-        Result := True;
-      end;
   end;
 end;
 
@@ -1460,8 +1464,8 @@ begin
 
   LEditor.Search.Options := LEditor.Search.Options - [soBackwards];
 
-  if SetDocumentSpecificSearchText(LEditor) then
-    LEditor.FindNext;
+  SetDocumentSpecificSearchText(LEditor);
+  LEditor.FindNext;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1474,8 +1478,8 @@ begin
 
   LEditor.Search.Options := LEditor.Search.Options + [soBackwards];
 
-  if SetDocumentSpecificSearchText(LEditor) then
-    LEditor.FindPrevious;
+  SetDocumentSpecificSearchText(LEditor);
+  LEditor.FindPrevious;
 end;
 
 procedure TEBDocument.Replace;
