@@ -4318,31 +4318,37 @@ inherited MainForm: TMainForm
       Caption = 'ActionSelectHighlighterColor'
       OnExecute = ActionSelectHighlighterColorExecute
     end
-    object ActionEncodingASCII: TAction
-      Caption = 'ASCII'
-      OnExecute = ActionSelectEncodingExecute
-    end
     object ActionEncodingANSI: TAction
       Caption = 'ANSI'
       OnExecute = ActionSelectEncodingExecute
     end
+    object ActionEncodingASCII: TAction
+      Tag = 1
+      Caption = 'ASCII'
+      OnExecute = ActionSelectEncodingExecute
+    end
     object ActionEncodingBigEndianUnicode: TAction
+      Tag = 2
       Caption = 'Big Endian Unicode'
       OnExecute = ActionSelectEncodingExecute
     end
     object ActionEncodingUnicode: TAction
+      Tag = 3
       Caption = 'Unicode'
       OnExecute = ActionSelectEncodingExecute
     end
     object ActionEncodingUTF7: TAction
+      Tag = 4
       Caption = 'UTF-7'
       OnExecute = ActionSelectEncodingExecute
     end
     object ActionEncodingUTF8: TAction
+      Tag = 5
       Caption = 'UTF-8'
       OnExecute = ActionSelectEncodingExecute
     end
     object ActionEncodingUTF8WithoutBOM: TAction
+      Tag = 6
       Caption = 'UTF-8 without BOM'
       OnExecute = ActionSelectEncodingExecute
     end
