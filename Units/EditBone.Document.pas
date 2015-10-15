@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts,
   BCEditor.Editor, Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons,
-  Vcl.ActnList, System.Actions, BCControls.ProgressBar, Vcl.ActnMan, BCControls.Panel,
+  Vcl.ActnList, System.Actions, BCControls.ProgressBar, Vcl.ActnMan, BCControls.Panel, sLabel,
   sPageControl, BCEditor.Types, BCControls.StatusBar, BCEditor.MacroRecorder, BCEditor.Print,
   Vcl.PlatformDefaultStyleActnCtrls, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
   BCEditor.Print.Types, EditBone.XMLTree, BCControls.Splitter, BCControls.ComboBox,
@@ -64,7 +64,7 @@ type
     function GetActiveTabSheetCaption: string;
     function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
     function GetActiveSearchPanel: TBCPanel;
-    function GetActiveLabelSearchResultCount: TBCLabelFX;
+    function GetActiveLabelSearchResultCount: TsLabel;
     function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
@@ -121,6 +121,7 @@ type
     procedure ClearBookmarks;
     procedure CloseAll;
     procedure CloseAllOtherPages;
+    procedure CollapseAll;
     //procedure CompareFiles(FileName: string = ''; AFileDragDrop: Boolean = False);
     procedure Copy;
     procedure Cut;
@@ -350,7 +351,7 @@ var
   LItems: TStrings;
   LSplitter: TBCSplitter;
   LSpeedButton: TBCSpeedButton;
-  LLabel: TBCLabelFX;
+  LLabel: TsLabel;
   LBitmap: TBitmap;
 begin
   LPanelSearch := TBCPanel.Create(ATabSheet);
@@ -474,6 +475,19 @@ begin
     Hint := ActionSearchOptions.Hint;
     Images := ImagesDataModule.ImageListSmall;
   end;
+  LLabel := TsLabel.Create(ATabSheet);
+  with LLabel do
+  begin
+    Align := alRight;
+    AlignWithMargins := True;
+    Margins.Top := 1;
+    Margins.Right := 6;
+    Parent := LPanelSearch;
+    AutoSize := True;
+    Font.Size := 10;
+    Tag := EDITBONE_DOCUMENT_LABEL_SEARCH_RESULT_COUNT_TAG;
+    SkinManager := FSkinManager;
+  end;
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -491,16 +505,6 @@ begin
     LBitmap.LoadFromResourceName(hInstance, 'SEARCHGLYPH');
     Glyph := LBitmap;
     LBitmap.Free;
-  end;
-  LLabel := TBCLabelFX.Create(ATabSheet);
-  with LLabel do
-  begin
-    Align := alRight;
-    Parent := LPanelSearch;
-    AutoSize := True;
-    Shadow.AlphaValue := 0;
-    Font.Size := 10;
-    Tag := EDITBONE_DOCUMENT_LABEL_SEARCH_RESULT_COUNT_TAG;
   end;
 end;
 
@@ -698,7 +702,7 @@ procedure TEBDocument.SetSearchMatchesFound;
 var
   s: string;
   LEditor: TBCEditor;
-  LLabelSearchResultCount: TBCLabelFX;
+  LLabelSearchResultCount: TsLabel;
 begin
   s := '';
   LEditor := GetActiveEditor;
@@ -1950,7 +1954,7 @@ begin
   end;
 end;
 
-function TEBDocument.GetActiveLabelSearchResultCount: TBCLabelFX;
+function TEBDocument.GetActiveLabelSearchResultCount: TsLabel;
 var
   i: Integer;
   LSearchPanel: TBCPanel;
@@ -1961,7 +1965,7 @@ begin
   for i := 0 to LSearchPanel.ControlCount - 1 do
   if LSearchPanel.Controls[i].Tag = EDITBONE_DOCUMENT_LABEL_SEARCH_RESULT_COUNT_TAG then
   begin
-    Result := LSearchPanel.Controls[i] as TBCLabelFX;
+    Result := LSearchPanel.Controls[i] as TsLabel;
     Break;
   end;
 end;
@@ -2986,6 +2990,15 @@ begin
   Editor := GetActiveEditor;
   if Assigned(Editor) then
     Result := Editor.Marks;
+end;
+
+procedure TEBDocument.CollapseAll;
+var
+  Editor: TBCEditor;
+begin
+  Editor := GetActiveEditor;
+  if Assigned(Editor) then
+    Editor.CodeFoldingCollapseAll;
 end;
 
 procedure TEBDocument.DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);

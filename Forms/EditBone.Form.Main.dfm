@@ -7,6 +7,8 @@ inherited MainForm: TMainForm
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnShow = FormShow
+  ExplicitWidth = 1127
+  ExplicitHeight = 741
   PixelsPerInch = 96
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
@@ -48,6 +50,9 @@ inherited MainForm: TMainForm
       end>
     ParentColor = True
     OnDrawPanel = StatusBarDrawPanel
+    ExplicitTop = 657
+    ExplicitWidth = 1111
+    ExplicitHeight = 25
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 0
       Top = 3
@@ -56,8 +61,8 @@ inherited MainForm: TMainForm
       Action = ActionMacroPlayback
       Flat = True
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 87
       Images = ImagesDataModule.ImageList
+      ImageIndex = 87
       ShowCaption = False
     end
     object SpeedButtonMacroRecordPause: TBCSpeedButton
@@ -68,8 +73,8 @@ inherited MainForm: TMainForm
       Action = ActionMacroRecord
       Flat = True
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 88
       Images = ImagesDataModule.ImageList
+      ImageIndex = 88
       ShowCaption = False
     end
     object SpeedButtonMacroStop: TBCSpeedButton
@@ -80,8 +85,8 @@ inherited MainForm: TMainForm
       Action = ActionMacroStop
       Flat = True
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 90
       Images = ImagesDataModule.ImageList
+      ImageIndex = 90
       ShowCaption = False
     end
   end
@@ -163,8 +168,8 @@ inherited MainForm: TMainForm
             ShowHint = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 0
             Images = ImagesDataModule.ImageList
+            ImageIndex = 0
           end
           object SpeedButtonFileOpen: TBCSpeedButton
             Left = 60
@@ -183,8 +188,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 1
             Images = ImagesDataModule.ImageList
+            ImageIndex = 1
           end
           object SpeedButtonFileReopen: TBCSpeedButton
             Left = 120
@@ -204,8 +209,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuFileReopen
-            ImageIndex = 2
             Images = ImagesDataModule.ImageList
+            ImageIndex = 2
           end
           object SpeedButtonFileDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -247,8 +252,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 3
             Images = ImagesDataModule.ImageList
+            ImageIndex = 3
           end
           object SpeedButtonFileSaveAs: TBCSpeedButton
             Left = 260
@@ -267,8 +272,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 4
             Images = ImagesDataModule.ImageList
+            ImageIndex = 4
           end
           object SpeedButtonFileSaveAll: TBCSpeedButton
             Left = 320
@@ -287,8 +292,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 5
             Images = ImagesDataModule.ImageList
+            ImageIndex = 5
           end
           object SpeedButtonFileDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -330,8 +335,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 8
             Images = ImagesDataModule.ImageList
+            ImageIndex = 8
           end
           object SpeedButtonCloseAll: TBCSpeedButton
             Left = 440
@@ -350,8 +355,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 7
             Images = ImagesDataModule.ImageList
+            ImageIndex = 7
           end
           object SpeedButtonClose: TBCSpeedButton
             Left = 380
@@ -370,8 +375,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 6
             Images = ImagesDataModule.ImageList
+            ImageIndex = 6
           end
           object SpeedButtonFilePrint: TBCSpeedButton
             Left = 576
@@ -390,8 +395,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 9
             Images = ImagesDataModule.ImageList
+            ImageIndex = 9
           end
           object SpeedButtonFilePrintPreview: TBCSpeedButton
             Left = 636
@@ -410,8 +415,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 10
             Images = ImagesDataModule.ImageList
+            ImageIndex = 10
           end
           object SpeedButtonFileDivider3: TBCSpeedButton
             AlignWithMargins = True
@@ -453,8 +458,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 11
             Images = ImagesDataModule.ImageList
+            ImageIndex = 11
           end
         end
       end
@@ -490,8 +495,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 12
             Images = ImagesDataModule.ImageList
+            ImageIndex = 12
           end
           object SpeedButtonEditRedo: TBCSpeedButton
             Left = 60
@@ -510,8 +515,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 13
             Images = ImagesDataModule.ImageList
+            ImageIndex = 13
           end
           object SpeedButtonEditDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -553,8 +558,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 14
             Images = ImagesDataModule.ImageList
+            ImageIndex = 14
           end
           object SpeedButtonEditCopy: TBCSpeedButton
             Left = 190
@@ -573,8 +578,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 15
             Images = ImagesDataModule.ImageList
+            ImageIndex = 15
           end
           object SpeedButtonEditPaste: TBCSpeedButton
             Left = 250
@@ -593,8 +598,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 16
             Images = ImagesDataModule.ImageList
+            ImageIndex = 16
           end
           object SpeedButtonEditDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -636,8 +641,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 17
             Images = ImagesDataModule.ImageList
+            ImageIndex = 17
           end
           object SpeedButtonEditInsert: TBCSpeedButton
             Left = 380
@@ -657,8 +662,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuEditInsert
-            ImageIndex = 18
             Images = ImagesDataModule.ImageList
+            ImageIndex = 18
           end
           object SpeedButtonEditDelete: TBCSpeedButton
             Left = 450
@@ -678,8 +683,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuEditDelete
-            ImageIndex = 22
             Images = ImagesDataModule.ImageList
+            ImageIndex = 22
           end
           object SpeedButtonEditDivider3: TBCSpeedButton
             AlignWithMargins = True
@@ -722,8 +727,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuEditSort
-            ImageIndex = 30
             Images = ImagesDataModule.ImageList
+            ImageIndex = 30
           end
           object SpeedButtonEditIndent: TBCSpeedButton
             Left = 530
@@ -743,8 +748,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuEditIndent
-            ImageIndex = 27
             Images = ImagesDataModule.ImageList
+            ImageIndex = 27
           end
           object SpeedButtonEditDivider4: TBCSpeedButton
             AlignWithMargins = True
@@ -787,8 +792,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuToggleCase
-            ImageIndex = 33
             Images = ImagesDataModule.ImageList
+            ImageIndex = 33
           end
         end
       end
@@ -825,8 +830,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 34
             Images = ImagesDataModule.ImageList
+            ImageIndex = 34
           end
           object SpeedButtonSearchReplace: TBCSpeedButton
             Left = 60
@@ -845,8 +850,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 35
             Images = ImagesDataModule.ImageList
+            ImageIndex = 35
           end
           object SpeedButtonSearchDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -888,8 +893,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 36
             Images = ImagesDataModule.ImageList
+            ImageIndex = 36
           end
           object SpeedButtonSearchToggleBookmark: TBCSpeedButton
             Left = 190
@@ -908,8 +913,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 39
             Images = ImagesDataModule.ImageList
+            ImageIndex = 39
           end
           object SpeedButtonSearchToggleBookmarks: TBCSpeedButton
             Left = 270
@@ -929,8 +934,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuSearchToggleBookmarks
-            ImageIndex = 40
             Images = ImagesDataModule.ImageList
+            ImageIndex = 40
           end
           object SpeedButtonSearchGoToBookmarks: TBCSpeedButton
             Left = 364
@@ -950,8 +955,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuSearchGotoBookmarks
-            ImageIndex = 41
             Images = ImagesDataModule.ImageList
+            ImageIndex = 41
           end
           object SpeedButtonSearchDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -993,8 +998,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 42
             Images = ImagesDataModule.ImageList
+            ImageIndex = 42
           end
           object SpeedButtonSearchGoToLine: TBCSpeedButton
             Left = 548
@@ -1013,8 +1018,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 43
             Images = ImagesDataModule.ImageList
+            ImageIndex = 43
           end
         end
       end
@@ -1052,8 +1057,8 @@ inherited MainForm: TMainForm
             ShowHint = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 53
             Images = ImagesDataModule.ImageList
+            ImageIndex = 53
           end
           object SpeedButtonViewCloseDirectory: TBCSpeedButton
             Left = 60
@@ -1072,8 +1077,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 54
             Images = ImagesDataModule.ImageList
+            ImageIndex = 54
           end
           object SpeedButtonViewDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -1115,8 +1120,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 55
             Images = ImagesDataModule.ImageList
+            ImageIndex = 55
           end
           object SpeedButtonViewFiles: TBCSpeedButton
             Left = 190
@@ -1135,8 +1140,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 56
             Images = ImagesDataModule.ImageList
+            ImageIndex = 56
           end
           object SpeedButtonViewWordWrap: TBCSpeedButton
             Left = 260
@@ -1156,8 +1161,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 57
             Images = ImagesDataModule.ImageList
+            ImageIndex = 57
           end
           object SpeedButtonViewDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -1200,8 +1205,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 60
             Images = ImagesDataModule.ImageList
+            ImageIndex = 60
           end
           object SpeedButtonViewSpecialChars: TBCSpeedButton
             Left = 380
@@ -1221,8 +1226,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 59
             Images = ImagesDataModule.ImageList
+            ImageIndex = 59
           end
           object SpeedButtonViewLineNumbers: TBCSpeedButton
             Left = 320
@@ -1242,8 +1247,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 58
             Images = ImagesDataModule.ImageList
+            ImageIndex = 58
           end
           object SpeedButtonViewPreviousPage: TBCSpeedButton
             Left = 690
@@ -1262,8 +1267,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 61
             Images = ImagesDataModule.ImageList
+            ImageIndex = 61
           end
           object SpeedButtonViewDivider3: TBCSpeedButton
             AlignWithMargins = True
@@ -1305,8 +1310,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 62
             Images = ImagesDataModule.ImageList
+            ImageIndex = 62
           end
           object SpeedButtonXMLTree: TBCSpeedButton
             Left = 620
@@ -1326,8 +1331,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 85
             Images = ImagesDataModule.ImageList
+            ImageIndex = 85
           end
           object SpeedButtonViewSplit: TBCSpeedButton
             Left = 560
@@ -1347,8 +1352,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 95
             Images = ImagesDataModule.ImageList
+            ImageIndex = 95
           end
           object SpeedButtonViewMinimap: TBCSpeedButton
             Left = 500
@@ -1368,8 +1373,8 @@ inherited MainForm: TMainForm
             Layout = blGlyphTop
             ParentFont = False
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 94
             Images = ImagesDataModule.ImageList
+            ImageIndex = 94
           end
         end
       end
@@ -1407,8 +1412,8 @@ inherited MainForm: TMainForm
             ShowHint = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 63
             Images = ImagesDataModule.ImageList
+            ImageIndex = 63
           end
           object SpeedButtonDocumentDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -1450,8 +1455,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 64
             Images = ImagesDataModule.ImageList
+            ImageIndex = 64
           end
           object SpeedButtonDocumentDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -1494,8 +1499,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuDocumentFormat
-            ImageIndex = 65
             Images = ImagesDataModule.ImageList
+            ImageIndex = 65
           end
           object SpeedButtonDocumentMacro: TBCSpeedButton
             Left = 146
@@ -1515,8 +1520,8 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsDropDown
             SkinData.SkinSection = 'TOOLBUTTON'
             DropdownMenu = PopupMenuDocumentMacro
-            ImageIndex = 136
             Images = ImagesDataModule.ImageList
+            ImageIndex = 136
           end
         end
       end
@@ -1554,8 +1559,8 @@ inherited MainForm: TMainForm
             ShowHint = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 68
             Images = ImagesDataModule.ImageList
+            ImageIndex = 68
           end
           object SpeedButtonToolsCompareFiles: TBCSpeedButton
             Left = 70
@@ -1574,8 +1579,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 69
             Images = ImagesDataModule.ImageList
+            ImageIndex = 69
           end
           object SpeedButtonToolsDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -1617,8 +1622,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 70
             Images = ImagesDataModule.ImageList
+            ImageIndex = 70
           end
           object SpeedButtonToolsCharacterMap: TBCSpeedButton
             Left = 190
@@ -1637,8 +1642,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 71
             Images = ImagesDataModule.ImageList
+            ImageIndex = 71
           end
           object SpeedButtonToolsDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -1680,8 +1685,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 75
             Images = ImagesDataModule.ImageList
+            ImageIndex = 75
           end
         end
       end
@@ -1719,8 +1724,8 @@ inherited MainForm: TMainForm
             ShowHint = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 72
             Images = ImagesDataModule.ImageList
+            ImageIndex = 72
           end
           object SpeedButtonHelpVisitHomepage: TBCSpeedButton
             Left = 91
@@ -1739,8 +1744,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 73
             Images = ImagesDataModule.ImageList
+            ImageIndex = 73
           end
           object SpeedButtonHelpDivider1: TBCSpeedButton
             AlignWithMargins = True
@@ -1782,8 +1787,8 @@ inherited MainForm: TMainForm
             ParentFont = False
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
-            ImageIndex = 74
             Images = ImagesDataModule.ImageList
+            ImageIndex = 74
           end
           object SpeedButtonHelpDivider2: TBCSpeedButton
             AlignWithMargins = True
@@ -1991,8 +1996,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 0
       Images = ImagesDataModule.ImageList
+      ImageIndex = 0
       ShowCaption = False
     end
     object SpeedButtonToolbarFileOpen: TBCSpeedButton
@@ -2014,8 +2019,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 1
       Images = ImagesDataModule.ImageList
+      ImageIndex = 1
       ShowCaption = False
     end
     object SpeedButtonToolbarDivider1: TBCSpeedButton
@@ -2061,8 +2066,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 3
       Images = ImagesDataModule.ImageList
+      ImageIndex = 3
       ShowCaption = False
     end
     object SpeedButtonToolbarFileSaveAs: TBCSpeedButton
@@ -2084,8 +2089,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 4
       Images = ImagesDataModule.ImageList
+      ImageIndex = 4
       ShowCaption = False
     end
     object SpeedButtonToolbarFileSaveAll: TBCSpeedButton
@@ -2107,8 +2112,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 5
       Images = ImagesDataModule.ImageList
+      ImageIndex = 5
       ShowCaption = False
     end
     object SpeedButtonToolbarFileClose: TBCSpeedButton
@@ -2130,8 +2135,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 6
       Images = ImagesDataModule.ImageList
+      ImageIndex = 6
       ShowCaption = False
     end
     object SpeedButtonToolbarFileCloseAll: TBCSpeedButton
@@ -2153,8 +2158,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 7
       Images = ImagesDataModule.ImageList
+      ImageIndex = 7
       ShowCaption = False
     end
     object SpeedButtonToolbarDivider6: TBCSpeedButton
@@ -2200,8 +2205,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 9
       Images = ImagesDataModule.ImageList
+      ImageIndex = 9
       ShowCaption = False
     end
     object SpeedButtonToolbarFilePrintPreview: TBCSpeedButton
@@ -2223,8 +2228,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 10
       Images = ImagesDataModule.ImageList
+      ImageIndex = 10
       ShowCaption = False
     end
     object SpeedButtonToolbarDivider3: TBCSpeedButton
@@ -2462,8 +2467,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 53
       Images = ImagesDataModule.ImageList
+      ImageIndex = 53
       ShowCaption = False
     end
     object SpeedButtonToolbarViewCloseDirectory: TBCSpeedButton
@@ -2485,8 +2490,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 54
       Images = ImagesDataModule.ImageList
+      ImageIndex = 54
       ShowCaption = False
     end
     object SpeedButtonToolbarViewEditDirectory: TBCSpeedButton
@@ -2508,8 +2513,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 55
       Images = ImagesDataModule.ImageList
+      ImageIndex = 55
       ShowCaption = False
     end
     object SpeedButtonToolbarEditIndentIncrease: TBCSpeedButton
@@ -2531,8 +2536,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 28
       Images = ImagesDataModule.ImageList
+      ImageIndex = 28
       ShowCaption = False
     end
     object SpeedButtonToolbarEditIndentDecrease: TBCSpeedButton
@@ -2554,8 +2559,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 29
       Images = ImagesDataModule.ImageList
+      ImageIndex = 29
       ShowCaption = False
     end
     object SpeedButtonToolbarEditSortAsc: TBCSpeedButton
@@ -2577,8 +2582,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 31
       Images = ImagesDataModule.ImageList
+      ImageIndex = 31
       ShowCaption = False
     end
     object SpeedButtonToolbarEditSortDesc: TBCSpeedButton
@@ -2600,8 +2605,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 32
       Images = ImagesDataModule.ImageList
+      ImageIndex = 32
       ShowCaption = False
     end
     object SpeedButtonToolbarEditToggleCase: TBCSpeedButton
@@ -2623,8 +2628,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 33
       Images = ImagesDataModule.ImageList
+      ImageIndex = 33
       ShowCaption = False
     end
     object SpeedButtonToolbarEditUndo: TBCSpeedButton
@@ -2646,8 +2651,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 12
       Images = ImagesDataModule.ImageList
+      ImageIndex = 12
       ShowCaption = False
     end
     object SpeedButtonToolbarEditRedo: TBCSpeedButton
@@ -2669,8 +2674,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 13
       Images = ImagesDataModule.ImageList
+      ImageIndex = 13
       ShowCaption = False
     end
     object SpeedButtonToolbarSearchSearch: TBCSpeedButton
@@ -2693,8 +2698,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 34
       Images = ImagesDataModule.ImageList
+      ImageIndex = 34
       ShowCaption = False
     end
     object SpeedButtonToolbarSearchReplace: TBCSpeedButton
@@ -2716,8 +2721,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 35
       Images = ImagesDataModule.ImageList
+      ImageIndex = 35
       ShowCaption = False
     end
     object SpeedButtonToolbarSearchFindInFiles: TBCSpeedButton
@@ -2739,8 +2744,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 36
       Images = ImagesDataModule.ImageList
+      ImageIndex = 36
       ShowCaption = False
     end
     object SpeedButtonToolbarViewWordWrap: TBCSpeedButton
@@ -2764,8 +2769,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 57
       Images = ImagesDataModule.ImageList
+      ImageIndex = 57
       ShowCaption = False
     end
     object SpeedButtonToolbarViewLineNumbers: TBCSpeedButton
@@ -2789,8 +2794,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 58
       Images = ImagesDataModule.ImageList
+      ImageIndex = 58
       ShowCaption = False
     end
     object SpeedButtonToolbarViewSpecialChars: TBCSpeedButton
@@ -2814,8 +2819,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 59
       Images = ImagesDataModule.ImageList
+      ImageIndex = 59
       ShowCaption = False
     end
     object SpeedButtonToolbarViewSelectionMode: TBCSpeedButton
@@ -2839,8 +2844,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 60
       Images = ImagesDataModule.ImageList
+      ImageIndex = 60
       ShowCaption = False
     end
     object SpeedButtonToolbarToolsCompareFiles: TBCSpeedButton
@@ -2862,8 +2867,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 69
       Images = ImagesDataModule.ImageList
+      ImageIndex = 69
       ShowCaption = False
     end
     object SpeedButtonToolbarDocumentInfo: TBCSpeedButton
@@ -2885,8 +2890,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 63
       Images = ImagesDataModule.ImageList
+      ImageIndex = 63
       ShowCaption = False
     end
     object SpeedButtonToolbarDocumentViewInBrowser: TBCSpeedButton
@@ -2908,8 +2913,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 64
       Images = ImagesDataModule.ImageList
+      ImageIndex = 64
       ShowCaption = False
     end
     object SpeedButtonToolbarViewSplit: TBCSpeedButton
@@ -2933,8 +2938,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 95
       Images = ImagesDataModule.ImageList
+      ImageIndex = 95
       ShowCaption = False
     end
     object SpeedButtonToolbarViewMinimap: TBCSpeedButton
@@ -2958,8 +2963,8 @@ inherited MainForm: TMainForm
       ShowHint = False
       ButtonStyle = tbsCheck
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 94
       Images = ImagesDataModule.ImageList
+      ImageIndex = 94
       ShowCaption = False
     end
   end
