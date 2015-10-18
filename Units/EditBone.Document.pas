@@ -622,6 +622,7 @@ begin
       end;
       LEditor.ExecuteCommand(LCommand, EDITBONE_NONE_CHAR, nil);
     end;
+    Key := 0;
   end;
 end;
 
@@ -1399,6 +1400,7 @@ var
         LEditor.Search.Engine := seNormal;
       SetOption(ReadBool('Options', 'SearchOnTyping', True), soSearchOnTyping);
       SetOption(ReadBool('Options', 'SearchSelectedOnly', False), soSelectedOnly);
+      SetOption(ReadBool('Options', 'SearchShowSearchMatchNotFound', True), soShowSearchMatchNotFound);
       SetOption(ReadBool('Options', 'SearchShowSearchStringNotFound', False), soShowStringNotFound);
       SetOption(ReadBool('Options', 'SearchWholeWordsOnly', False), soWholeWordsOnly);
     finally

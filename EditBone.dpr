@@ -24,7 +24,9 @@ uses
   EditBone.Frame.Options.Output.TabSheet in 'Frames\EditBone.Frame.Options.Output.TabSheet.pas' {OptionsOutputTabsFrame: TFrame},
   EditBone.Output in 'Units\EditBone.Output.pas',
   EditBone.Types in 'Units\EditBone.Types.pas',
-  EditBone.XMLTree in 'Units\EditBone.XMLTree.pas';
+  EditBone.XMLTree in 'Units\EditBone.XMLTree.pas',
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
