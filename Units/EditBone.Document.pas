@@ -2807,20 +2807,17 @@ begin
     LSplitEditor := TBCEditor.Create(PageControl.ActivePage);
     LSplitEditor.Align := alBottom;
     LSplitEditor.AlignWithMargins := True;
-    LSplitEditor.Margins.Left := 2;
-    LSplitEditor.Margins.Top := 0;
-    LSplitEditor.Margins.Right := 2;
-    LSplitEditor.Margins.Bottom := 2;
+    LSplitEditor.Margins.SetBounds(2, 0, 2, 2);
     LSplitEditor.Width := 0; { avoid flickering }
     LSplitEditor.Height := LEditor.Height div 2;
     LSplitEditor.Tag := EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG;
     LSplitEditor.Parent := PageControl.ActivePage;
     OptionsContainer.AssignTo(LSplitEditor);
-    LSplitEditor.Highlighter.LoadFromFile(LEditor.Highlighter.FileName);
-    LSplitEditor.Highlighter.Colors.LoadFromFile(LEditor.Highlighter.Colors.FileName);
+    LSplitEditor.name := 'test';
     LSplitEditor.ChainEditor(LEditor);
     LSplitEditor.SetFocus;
     LSplitEditor.Minimap.Visible := LEditor.Minimap.Visible;
+    LSplitEditor.CodeFolding.Visible := LEditor.CodeFolding.Visible;
     { horizontal splitter }
     LSplitterHorizontal := TBCSplitter.Create(PageControl.ActivePage);
     LSplitterHorizontal.Align := alBottom;
