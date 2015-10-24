@@ -17,9 +17,20 @@ uses
 
 type
   TMainForm = class(TBCBaseForm)
+    ActionDirectoryContextMenu: TAction;
+    ActionDirectoryDelete: TAction;
+    ActionDirectoryFindInFiles: TAction;
+    ActionDirectoryProperties: TAction;
+    ActionDirectoryRefresh: TAction;
+    ActionDirectoryRename: TAction;
     ActionDirectorySearchFindInFiles: TAction;
     ActionDocument: TAction;
     ActionDocumentFormat: TAction;
+    ActionDocumentFormatJSON: TAction;
+    ActionDocumentFormatJSONIndent2: TAction;
+    ActionDocumentFormatJSONIndent3: TAction;
+    ActionDocumentFormatJSONIndent4: TAction;
+    ActionDocumentFormatJSONMinify: TAction;
     ActionDocumentFormatSQL: TAction;
     ActionDocumentFormatXML: TAction;
     ActionDocumentInfo: TAction;
@@ -46,7 +57,19 @@ type
     ActionEditSortAsc: TAction;
     ActionEditSortDesc: TAction;
     ActionEditToggleCase: TAction;
+    ActionEditToggleCaseAlternating: TAction;
+    ActionEditToggleCaseLower: TAction;
+    ActionEditToggleCaseSentence: TAction;
+    ActionEditToggleCaseTitle: TAction;
+    ActionEditToggleCaseUpper: TAction;
     ActionEditUndo: TAction;
+    ActionEncodingANSI: TAction;
+    ActionEncodingASCII: TAction;
+    ActionEncodingBigEndianUnicode: TAction;
+    ActionEncodingUnicode: TAction;
+    ActionEncodingUTF7: TAction;
+    ActionEncodingUTF8: TAction;
+    ActionEncodingUTF8WithoutBOM: TAction;
     ActionFile: TAction;
     ActionFileClose: TAction;
     ActionFileCloseAll: TAction;
@@ -75,7 +98,9 @@ type
     ActionHelpAboutEditBone: TAction;
     ActionHelpCheckForUpdates: TAction;
     ActionHelpVisitHomepage: TAction;
+    ActionMacro: TAction;
     ActionMacroOpen: TAction;
+    ActionMacroPause: TAction;
     ActionMacroPlayback: TAction;
     ActionMacroRecord: TAction;
     ActionMacroSaveAs: TAction;
@@ -87,20 +112,37 @@ type
     ActionMenuSearch: TAction;
     ActionMenuTools: TAction;
     ActionMenuView: TAction;
+    ActionOutputClose: TAction;
+    ActionOutputCloseAll: TAction;
+    ActionOutputCloseAllOtherPages: TAction;
+    ActionOutputCopyAllToClipboard: TAction;
+    ActionOutputCopySelectedToClipboard: TAction;
+    ActionOutputOpenAll: TAction;
+    ActionOutputOpenSelected: TAction;
+    ActionOutputSelectAll: TAction;
+    ActionOutputUnselectAll: TAction;
     ActionSearch: TAction;
     ActionSearchClearBookmarks: TAction;
+    ActionSearchClose: TAction;
     ActionSearchFindInFiles: TAction;
     ActionSearchFindNext: TAction;
     ActionSearchFindPrevious: TAction;
     ActionSearchGoToBookmarks: TAction;
     ActionSearchGoToLine: TAction;
+    ActionSearchOptions: TAction;
     ActionSearchReplace: TAction;
+    ActionSearchSearch: TAction;
     ActionSearchSearchButton: TAction;
+    ActionSearchTextItems: TAction;
     ActionSearchToggleBookmark: TAction;
     ActionSearchToggleBookmarks: TAction;
     ActionSelectEncoding: TAction;
     ActionSelectHighlighter: TAction;
     ActionSelectHighlighterColor: TAction;
+    ActionSelectionBoxDown: TAction;
+    ActionSelectionBoxLeft: TAction;
+    ActionSelectionBoxRight: TAction;
+    ActionSelectionBoxUp: TAction;
     ActionSelectReopenFile: TAction;
     ActionToggleBookmarks1: TAction;
     ActionToggleBookmarks2: TAction;
@@ -123,11 +165,11 @@ type
     ActionToolsSelectForCompare: TAction;
     ActionView: TAction;
     ActionViewCloseDirectory: TAction;
+    ActionViewColorSelection: TAction;
     ActionViewDirectory: TAction;
     ActionViewEditDirectory: TAction;
     ActionViewEncodingSelection: TAction;
     ActionViewFiles: TAction;
-    ActionViewColorSelection: TAction;
     ActionViewHighlighterSelection: TAction;
     ActionViewLineNumbers: TAction;
     ActionViewMainMenu: TAction;
@@ -144,8 +186,16 @@ type
     ActionViewToolbar: TAction;
     ActionViewWordWrap: TAction;
     ActionViewXMLTree: TAction;
+    ActionXMLTreeRefresh: TAction;
+    AppInstances: TJvAppInstances;
     DragDrop: TBCDragDrop;
+    EditorMacroRecorder: TBCEditorMacroRecorder;
+    EditorPrint: TBCEditorPrint;
+    J1: TMenuItem;
+    Macro1: TMenuItem;
     MenuItemClearBookmarks: TMenuItem;
+    MenuItemCloseDirectory: TMenuItem;
+    MenuItemContextMenu: TMenuItem;
     MenuItemCopy: TMenuItem;
     MenuItemCut: TMenuItem;
     MenuItemDateandTime: TMenuItem;
@@ -153,13 +203,24 @@ type
     MenuItemDelete: TMenuItem;
     MenuItemDeleteEndOfLine: TMenuItem;
     MenuItemDeleteLine: TMenuItem;
+    MenuItemDeleteWhiteSpace: TMenuItem;
     MenuItemDeleteWord: TMenuItem;
+    MenuItemDirectoryDelete: TMenuItem;
+    MenuItemDirectorySeparator1: TMenuItem;
+    MenuItemDirectorySeparator2: TMenuItem;
+    MenuItemDirectorySeparator3: TMenuItem;
+    MenuItemDirectorySeparator4: TMenuItem;
+    MenuItemDocumentFormatJSONIndent2: TMenuItem;
+    MenuItemDocumentFormatJSONIndent3: TMenuItem;
+    MenuItemDocumentFormatJSONIndent4: TMenuItem;
+    MenuItemDocumentFormatJSONMinify: TMenuItem;
     MenuItemDocumentFormatSQL: TMenuItem;
     MenuItemDocumentFormatXML: TMenuItem;
     MenuItemEditDeleteEndOfLine: TMenuItem;
     MenuItemEditDeleteLine: TMenuItem;
     MenuItemEditDeleteWhitespace: TMenuItem;
     MenuItemEditDeleteWord: TMenuItem;
+    MenuItemEditDirectory: TMenuItem;
     MenuItemEditIndentDecrease: TMenuItem;
     MenuItemEditIndentIncrease: TMenuItem;
     MenuItemEditInsertDate: TMenuItem;
@@ -179,9 +240,18 @@ type
     MenuItemFileCloseAllOther: TMenuItem;
     MenuItemFilePrint: TMenuItem;
     MenuItemFilePrintPreview: TMenuItem;
+    MenuItemFileProperties: TMenuItem;
+    MenuItemFiles: TMenuItem;
     MenuItemFileSave: TMenuItem;
     MenuItemFileSaveAs: TMenuItem;
+    MenuItemFileSelectFromDirectory: TMenuItem;
+    MenuItemFindinFiles: TMenuItem;
     MenuItemFormat: TMenuItem;
+    MenuItemFormatJSON: TMenuItem;
+    MenuItemFormatJSONIndent2: TMenuItem;
+    MenuItemFormatJSONIndent3: TMenuItem;
+    MenuItemFormatJSONIndent4: TMenuItem;
+    MenuItemFormatJSONMinify: TMenuItem;
     MenuItemFormatSQL: TMenuItem;
     MenuItemFormatXML: TMenuItem;
     MenuItemGotoBookmark1: TMenuItem;
@@ -199,9 +269,19 @@ type
     MenuItemInsert: TMenuItem;
     MenuItemInsertLine: TMenuItem;
     MenuItemInsertTag: TMenuItem;
+    MenuItemMacroOpen: TMenuItem;
+    MenuItemMacroPlayback: TMenuItem;
+    MenuItemMacroRecordPause: TMenuItem;
+    MenuItemMacroSaveAs: TMenuItem;
+    MenuItemMacroStop: TMenuItem;
     MenuItemMainMenu: TMenuItem;
     MenuItemMainMenuDocument: TMenuItem;
     MenuItemMainMenuDocumentFormat: TMenuItem;
+    MenuItemMainMenuDocumentFormatJSON: TMenuItem;
+    MenuItemMainMenuDocumentFormatJSONIndent2: TMenuItem;
+    MenuItemMainMenuDocumentFormatJSONIndent3: TMenuItem;
+    MenuItemMainMenuDocumentFormatJSONIndent4: TMenuItem;
+    MenuItemMainMenuDocumentFormatJSONMinify: TMenuItem;
     MenuItemMainMenuDocumentFormatSQL: TMenuItem;
     MenuItemMainMenuDocumentFormatXML: TMenuItem;
     MenuItemMainMenuDocumentInfo: TMenuItem;
@@ -255,6 +335,7 @@ type
     MenuItemMainMenuHelpDivider1: TMenuItem;
     MenuItemMainMenuHelpDivider2: TMenuItem;
     MenuItemMainMenuHelpVisitHomepage: TMenuItem;
+    MenuItemMainMenuMacroRecordPause: TMenuItem;
     MenuItemMainMenuSearch: TMenuItem;
     MenuItemMainMenuSearchClearBookmarks: TMenuItem;
     MenuItemMainMenuSearchDivider1: TMenuItem;
@@ -309,13 +390,29 @@ type
     MenuItemMainMenuViewSplit: TMenuItem;
     MenuItemMainMenuViewWordWrap: TMenuItem;
     MenuItemMainMenuViewXMLTree: TMenuItem;
+    MenuItemOpenDirectory: TMenuItem;
+    MenuItemOutputClose: TMenuItem;
+    MenuItemOutputCloseAll: TMenuItem;
+    MenuItemOutputCloseAllOtherPages: TMenuItem;
+    MenuItemOutputCopyAllToClipboard: TMenuItem;
+    MenuItemOutputCopySelectedToClipboard: TMenuItem;
+    MenuItemOutputDivider1: TMenuItem;
+    MenuItemOutputDivider2: TMenuItem;
+    MenuItemOutputDivider3: TMenuItem;
+    MenuItemOutputOpenAll: TMenuItem;
+    MenuItemOutputOpenSelected: TMenuItem;
+    MenuItemOutputSelectAll: TMenuItem;
+    MenuItemOutputUnselectAll: TMenuItem;
     MenuItemPaste: TMenuItem;
     MenuItemPopupMenuDocumentDivider1: TMenuItem;
     MenuItemPopupMenuDocumentDivider2: TMenuItem;
     MenuItemPopupMenuDocumentDivider3: TMenuItem;
     MenuItemPopupMenuDocumentDivider4: TMenuItem;
+    MenuItemPopupMenuDocumentDivider5: TMenuItem;
+    MenuItemProperties: TMenuItem;
     MenuItemRedo: TMenuItem;
-    MenuItemDeleteWhiteSpace: TMenuItem;
+    MenuItemRefresh: TMenuItem;
+    MenuItemRename: TMenuItem;
     MenuItemSearchGotoBookmark1: TMenuItem;
     MenuItemSearchGotoBookmark2: TMenuItem;
     MenuItemSearchGotoBookmark3: TMenuItem;
@@ -344,6 +441,7 @@ type
     MenuItemSort: TMenuItem;
     MenuItemSortAscending: TMenuItem;
     MenuItemSortDescending: TMenuItem;
+    MenuItemToggleBookmark: TMenuItem;
     MenuItemToggleBookmark1: TMenuItem;
     MenuItemToggleBookmark2: TMenuItem;
     MenuItemToggleBookmark3: TMenuItem;
@@ -353,6 +451,13 @@ type
     MenuItemToggleBookmark7: TMenuItem;
     MenuItemToggleBookmark8: TMenuItem;
     MenuItemToggleBookmark9: TMenuItem;
+    MenuItemToggleBookmarks: TMenuItem;
+    MenuItemToggleCase: TMenuItem;
+    MenuItemToggleCaseAlternating: TMenuItem;
+    MenuItemToggleCaseLower: TMenuItem;
+    MenuItemToggleCaseSentence: TMenuItem;
+    MenuItemToggleCaseTitle: TMenuItem;
+    MenuItemToggleCaseUpper: TMenuItem;
     MenuItemToolbarMenuLanguage: TMenuItem;
     MenuItemToolbarMenuSkin: TMenuItem;
     MenuItemToolbarMenuView: TMenuItem;
@@ -364,7 +469,18 @@ type
     MenuItemToolbarMenuViewOutput: TMenuItem;
     MenuItemToolbarMenuViewStatusBar: TMenuItem;
     MenuItemToolbarMenuViewToolbar: TMenuItem;
+    MenuItemToolsSelectForCompare: TMenuItem;
     MenuItemUndo: TMenuItem;
+    MenuItemXMLRefresh: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N5: TMenuItem;
+    Open1: TMenuItem;
+    OpenDialog: TsOpenDialog;
+    PageControlDirectory: TBCPageControl;
+    PageControlDocument: TBCPageControl;
+    PageControlOutput: TBCPageControl;
     PageControlToolbar: TBCPageControl;
     PanelDirectory: TBCPanel;
     PanelDocument: TBCPanel;
@@ -374,13 +490,16 @@ type
     PanelHelpButtons: TBCPanel;
     PanelMenuBar: TBCPanel;
     PanelMiddle: TBCPanel;
+    PanelOutput: TBCPanel;
     PanelSearchButtons: TBCPanel;
     PanelToolbar: TBCPanel;
     PanelToolsButtons: TBCPanel;
     PanelViewButtons: TBCPanel;
+    Playback1: TMenuItem;
     PopupMenuColors: TPopupMenu;
     PopupMenuDocument: TPopupMenu;
     PopupMenuDocumentFormat: TPopupMenu;
+    PopupMenuDocumentMacro: TPopupMenu;
     PopupMenuEditDelete: TPopupMenu;
     PopupMenuEditIndent: TPopupMenu;
     PopupMenuEditInsert: TPopupMenu;
@@ -388,10 +507,18 @@ type
     PopupMenuEditSort: TPopupMenu;
     PopupMenuEncoding: TPopupMenu;
     PopupMenuFileReopen: TPopupMenu;
+    PopupMenuFileTreeView: TPopupMenu;
     PopupMenuHighlighters: TPopupMenu;
+    PopupMenuOutput: TPopupMenu;
     PopupMenuSearchGotoBookmarks: TPopupMenu;
     PopupMenuSearchToggleBookmarks: TPopupMenu;
+    PopupMenuToggleCase: TPopupMenu;
     PopupMenuToolbar: TPopupMenu;
+    PopupMenuXMLTree: TPopupMenu;
+    PrintDialog: TPrintDialog;
+    Saveas1: TMenuItem;
+    Saveas2: TMenuItem;
+    SaveDialog: TsSaveDialog;
     SpeedButtonClose: TBCSpeedButton;
     SpeedButtonCloseAll: TBCSpeedButton;
     SpeedButtonCloseAllOther: TBCSpeedButton;
@@ -399,6 +526,7 @@ type
     SpeedButtonDocumentDivider2: TBCSpeedButton;
     SpeedButtonDocumentFormat: TBCSpeedButton;
     SpeedButtonDocumentInfo: TBCSpeedButton;
+    SpeedButtonDocumentMacro: TBCSpeedButton;
     SpeedButtonDocumentViewInBrowser: TBCSpeedButton;
     SpeedButtonEditCopy: TBCSpeedButton;
     SpeedButtonEditCut: TBCSpeedButton;
@@ -516,316 +644,183 @@ type
     TabSheetDocument: TsTabSheet;
     TabSheetEdit: TsTabSheet;
     TabSheetFile: TsTabSheet;
+    TabSheetFindInFiles: TsTabSheet;
     TabSheetHelp: TsTabSheet;
+    TabSheetNew: TsTabSheet;
+    TabSheetOpen: TsTabSheet;
     TabSheetSearch: TsTabSheet;
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
-    MenuItemToggleBookmark: TMenuItem;
-    MenuItemToggleBookmarks: TMenuItem;
-    MenuItemToggleCase: TMenuItem;
-    MenuItemToolsSelectForCompare: TMenuItem;
-    MenuItemFileSelectFromDirectory: TMenuItem;
-    MenuItemPopupMenuDocumentDivider5: TMenuItem;
-    MenuItemFileProperties: TMenuItem;
-    ActionEncodingASCII: TAction;
-    ActionEncodingANSI: TAction;
-    ActionEncodingBigEndianUnicode: TAction;
-    ActionEncodingUnicode: TAction;
-    ActionEncodingUTF7: TAction;
-    ActionEncodingUTF8: TAction;
-    ActionEncodingUTF8WithoutBOM: TAction;
-    PopupMenuToggleCase: TPopupMenu;
-    ActionEditToggleCaseUpper: TAction;
-    ActionEditToggleCaseLower: TAction;
-    ActionEditToggleCaseAlternating: TAction;
-    ActionEditToggleCaseSentence: TAction;
-    ActionEditToggleCaseTitle: TAction;
-    Upper1: TMenuItem;
-    Lower1: TMenuItem;
-    Alternating1: TMenuItem;
-    Sentence1: TMenuItem;
-    itle1: TMenuItem;
-    AppInstances: TJvAppInstances;
-    SpeedButtonDocumentMacro: TBCSpeedButton;
-    ActionMacro: TAction;
-    PopupMenuDocumentMacro: TPopupMenu;
-    MenuItemMacroPlayback: TMenuItem;
-    MenuItemMacroRecordPause: TMenuItem;
-    MenuItemMacroStop: TMenuItem;
-    N1: TMenuItem;
-    MenuItemMacroOpen: TMenuItem;
-    MenuItemMacroSaveAs: TMenuItem;
-    ActionMacroPause: TAction;
-    N2: TMenuItem;
-    N3: TMenuItem;
-    Macro1: TMenuItem;
-    Playback1: TMenuItem;
-    MenuItemMainMenuMacroRecordPause: TMenuItem;
-    Saveas1: TMenuItem;
-    N5: TMenuItem;
-    Open1: TMenuItem;
-    Saveas2: TMenuItem;
-    PageControlDocument: TBCPageControl;
-    OpenDialog: TsOpenDialog;
-    SaveDialog: TsSaveDialog;
-    PrintDialog: TPrintDialog;
-    EditorPrint: TBCEditorPrint;
-    EditorMacroRecorder: TBCEditorMacroRecorder;
     Timer: TTimer;
-    ActionSelectionBoxDown: TAction;
-    ActionSelectionBoxLeft: TAction;
-    ActionSelectionBoxRight: TAction;
-    ActionSelectionBoxUp: TAction;
-    ActionXMLTreeRefresh: TAction;
-    PopupMenuXMLTree: TPopupMenu;
-    MenuItemXMLRefresh: TMenuItem;
-    ActionSearchOptions: TAction;
-    ActionSearchClose: TAction;
-    PanelOutput: TBCPanel;
-    PageControlDirectory: TBCPageControl;
-    TabSheetOpen: TsTabSheet;
-    TabSheetNew: TsTabSheet;
-    PopupMenuFileTreeView: TPopupMenu;
-    MenuItemOpenDirectory: TMenuItem;
-    MenuItemCloseDirectory: TMenuItem;
-    MenuItemEditDirectory: TMenuItem;
-    MenuItemDirectorySeparator1: TMenuItem;
-    MenuItemFiles: TMenuItem;
-    MenuItemFindinFiles: TMenuItem;
-    MenuItemDirectorySeparator2: TMenuItem;
-    MenuItemRefresh: TMenuItem;
-    MenuItemDirectorySeparator3: TMenuItem;
-    MenuItemRename: TMenuItem;
-    MenuItemDirectoryDelete: TMenuItem;
-    MenuItemDirectorySeparator4: TMenuItem;
-    MenuItemContextMenu: TMenuItem;
-    MenuItemProperties: TMenuItem;
-    ActionDirectoryRefresh: TAction;
-    ActionDirectoryRename: TAction;
-    ActionDirectoryDelete: TAction;
-    ActionDirectoryProperties: TAction;
-    ActionDirectoryContextMenu: TAction;
-    ActionDirectoryFindInFiles: TAction;
-    J1: TMenuItem;
-    ActionDocumentFormatJSON: TAction;
-    MenuItemMainMenuDocumentFormatJSON: TMenuItem;
-    MenuItemFormatJSON: TMenuItem;
-    MenuItemFormatJSONMinify: TMenuItem;
-    MenuItemFormatJSONIndent2: TMenuItem;
-    MenuItemFormatJSONIndent3: TMenuItem;
-    MenuItemFormatJSONIndent4: TMenuItem;
-    ActionDocumentFormatJSONMinify: TAction;
-    ActionDocumentFormatJSONIndent2: TAction;
-    ActionDocumentFormatJSONIndent3: TAction;
-    ActionDocumentFormatJSONIndent4: TAction;
-    MenuItemDocumentFormatJSONMinify: TMenuItem;
-    MenuItemDocumentFormatJSONIndent2: TMenuItem;
-    MenuItemDocumentFormatJSONIndent3: TMenuItem;
-    MenuItemDocumentFormatJSONIndent4: TMenuItem;
-    MenuItemMainMenuDocumentFormatJSONMinify: TMenuItem;
-    MenuItemMainMenuDocumentFormatJSONIndent2: TMenuItem;
-    MenuItemMainMenuDocumentFormatJSONIndent3: TMenuItem;
-    MenuItemMainMenuDocumentFormatJSONIndent4: TMenuItem;
-    PageControlOutput: TBCPageControl;
-    TabSheetFindInFiles: TsTabSheet;
-    PopupMenuOutput: TPopupMenu;
-    MenuItemOutputClose: TMenuItem;
-    MenuItemOutputCloseAll: TMenuItem;
-    MenuItemOutputCloseAllOtherPages: TMenuItem;
-    MenuItemOutputDivider1: TMenuItem;
-    MenuItemOutputCopyAllToClipboard: TMenuItem;
-    MenuItemOutputCopySelectedToClipboard: TMenuItem;
-    MenuItemOutputDivider2: TMenuItem;
-    MenuItemOutputOpenAll: TMenuItem;
-    MenuItemOutputOpenSelected: TMenuItem;
-    MenuItemOutputDivider3: TMenuItem;
-    MenuItemOutputSelectAll: TMenuItem;
-    MenuItemOutputUnselectAll: TMenuItem;
-    ActionOutputClose: TAction;
-    ActionOutputCloseAll: TAction;
-    ActionOutputCloseAllOtherPages: TAction;
-    ActionOutputCopyAllToClipboard: TAction;
-    ActionOutputCopySelectedToClipboard: TAction;
-    ActionOutputOpenAll: TAction;
-    ActionOutputOpenSelected: TAction;
-    ActionOutputSelectAll: TAction;
-    ActionOutputUnselectAll: TAction;
-    ActionSearchTextItems: TAction;
-    ActionSearchSearch: TAction;
-    procedure ActionFileNewExecute(Sender: TObject);
-    procedure ActionFileOpenExecute(Sender: TObject);
-    procedure ActionFileSaveAllExecute(Sender: TObject);
-    procedure ActionFileSaveAsExecute(Sender: TObject);
-    procedure ActionFileSaveExecute(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure ActionFileCloseExecute(Sender: TObject);
-    procedure ActionFileCloseAllExecute(Sender: TObject);
-    procedure ActionFileCloseAllOtherExecute(Sender: TObject);
-    procedure ActionFilePrintExecute(Sender: TObject);
-    procedure ActionFilePrintPreviewExecute(Sender: TObject);
-    procedure ActionEditUndoExecute(Sender: TObject);
-    procedure ActionEditRedoExecute(Sender: TObject);
-    procedure ActionEditCutExecute(Sender: TObject);
-    procedure ActionEditCopyExecute(Sender: TObject);
-    procedure ActionEditPasteExecute(Sender: TObject);
-    procedure ActionEditSelectAllExecute(Sender: TObject);
-    procedure ActionEditToggleCaseExecute(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormShow(Sender: TObject);
-    procedure ActionEditInsertLineExecute(Sender: TObject);
-    procedure ActionEditInsertTagExecute(Sender: TObject);
-    procedure ActionEditInsertDateTimeExecute(Sender: TObject);
-    procedure ApplicationEventsHint(Sender: TObject);
-    procedure ActionSearchSearchButtonExecute(Sender: TObject);
-    procedure ActionSearchReplaceExecute(Sender: TObject);
-    procedure ActionSearchFindInFilesExecute(Sender: TObject);
-    procedure ActionSearchFindNextExecute(Sender: TObject);
-    procedure ActionSearchFindPreviousExecute(Sender: TObject);
-    procedure ActionSearchToggleBookmarkExecute(Sender: TObject);
-    procedure ActionSearchClearBookmarksExecute(Sender: TObject);
-    procedure ActionSearchGoToLineExecute(Sender: TObject);
-    procedure ActionViewOpenDirectoryExecute(Sender: TObject);
-    procedure ActionViewCloseDirectoryExecute(Sender: TObject);
-    procedure ActionViewEditDirectoryExecute(Sender: TObject);
-    procedure ActionViewFilesExecute(Sender: TObject);
-    procedure ActionViewWordWrapExecute(Sender: TObject);
-    procedure ActionViewLineNumbersExecute(Sender: TObject);
-    procedure ActionViewSpecialCharsExecute(Sender: TObject);
-    procedure ActionViewSelectionModeExecute(Sender: TObject);
-    procedure ActionViewPreviousPageExecute(Sender: TObject);
-    procedure ActionViewNextPageExecute(Sender: TObject);
-    procedure ActionDocumentInfoExecute(Sender: TObject);
-    procedure ActionDocumentViewInBrowserExecute(Sender: TObject);
-    procedure ActionMenuFileExecute(Sender: TObject);
-    procedure ActionMenuEditExecute(Sender: TObject);
-    procedure ActionMenuSearchExecute(Sender: TObject);
-    procedure ActionMenuViewExecute(Sender: TObject);
-    procedure ActionMenuDocumentExecute(Sender: TObject);
-    procedure ActionMenuHelpExecute(Sender: TObject);
-    procedure ActionMenuToolsExecute(Sender: TObject);
-    procedure ActionToolsOptionsExecute(Sender: TObject);
-    procedure ActionToolsCompareFilesExecute(Sender: TObject);
-    procedure ActionToolsConvertExecute(Sender: TObject);
-    procedure ActionToolsCharacterMapExecute(Sender: TObject);
-    procedure ActionHelpCheckForUpdatesExecute(Sender: TObject);
-    procedure ActionHelpVisitHomepageExecute(Sender: TObject);
-    procedure ActionHelpAboutEditBoneExecute(Sender: TObject);
-    procedure ActionDummyExecute(Sender: TObject);
-    procedure SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string;
-      var Glyph: TBitmap; var LineVisible: Boolean);
-    procedure LanguageMenuClick(Sender: TObject);
-    procedure OutputDblClickActionExecute(Sender: TObject);
-    procedure ActionViewXMLTreeExecute(Sender: TObject);
-    procedure FileTreeViewClickActionExecute(Sender: TObject);
-    procedure FileTreeViewDblClickActionExecute(Sender: TObject);
-    procedure ActionSelectReopenFileExecute(Sender: TObject);
-    procedure ActionFileReopenClearExecute(Sender: TObject);
-    procedure DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
-    procedure ActionToggleBookmarksExecute(Sender: TObject);
-    procedure ActionGotoBookmarksExecute(Sender: TObject);
-    procedure ActionViewEncodingSelectionExecute(Sender: TObject);
-    procedure ApplicationEventsActivate(Sender: TObject);
-    procedure ApplicationEventsMessage(var Msg: tagMSG; var Handled: Boolean);
-    procedure ActionMacroPlaybackExecute(Sender: TObject);
-    procedure ActionMacroRecordExecute(Sender: TObject);
-    procedure ActionMacroStopExecute(Sender: TObject);
-    procedure ActionFileSelectFromDirectoryExecute(Sender: TObject);
-    procedure ActionFilePropertiesExecute(Sender: TObject);
-    procedure ActionFileReopenExecute(Sender: TObject);
-    procedure ActionDocumentFormatSQLExecute(Sender: TObject);
-    procedure ActionDocumentFormatXMLExecute(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure ActionMacroOpenExecute(Sender: TObject);
-    procedure ActionMacroSaveAsExecute(Sender: TObject);
-    procedure ActionViewSplitExecute(Sender: TObject);
-    procedure ActionViewStatusBarExecute(Sender: TObject);
-    procedure ActionEditDeleteWhitespaceExecute(Sender: TObject);
-    procedure ActionEditSortAscExecute(Sender: TObject);
-    procedure ActionEditSortDescExecute(Sender: TObject);
-    procedure ActionEditIndentDecreaseExecute(Sender: TObject);
-    procedure ActionEditDeleteEndOfLineExecute(Sender: TObject);
-    procedure ActionEditDeleteLineExecute(Sender: TObject);
-    procedure ActionEditDeleteWordExecute(Sender: TObject);
-    procedure ActionEditIndentIncreaseExecute(Sender: TObject);
-    procedure ActionToolsLanguageEditorExecute(Sender: TObject);
-    procedure ActionToolsSelectForCompareExecute(Sender: TObject);
-    procedure ActionViewDirectoryExecute(Sender: TObject);
-    procedure ActionViewMinimapExecute(Sender: TObject);
-    procedure ActionViewOutputExecute(Sender: TObject);
-    procedure ActionViewToolbarExecute(Sender: TObject);
-    procedure ActionViewMenuBarExecute(Sender: TObject);
-    procedure ActionViewMainMenuExecute(Sender: TObject);
-    procedure ActionSelectHighlighterColorExecute(Sender: TObject);
-    procedure ActionSelectHighlighterExecute(Sender: TObject);
-    procedure ActionSelectEncodingExecute(Sender: TObject);
-    procedure TitleBarItems4MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure TitleBarItems6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure TitleBarItems2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ActionViewHighlighterSelectionExecute(Sender: TObject);
-    procedure ActionViewColorSelectionExecute(Sender: TObject);
-    procedure ChangeSkin(Sender: TObject);
-    procedure ActionEditToggleCaseUpperExecute(Sender: TObject);
-    procedure ActionEditToggleCaseLowerExecute(Sender: TObject);
-    procedure ActionEditToggleCaseAlternatingExecute(Sender: TObject);
-    procedure ActionEditToggleCaseSentenceExecute(Sender: TObject);
-    procedure ActionEditToggleCaseTitleExecute(Sender: TObject);
-    procedure AppInstancesCmdLineReceived(Sender: TObject; CmdLine: TStrings);
-    procedure FormDestroy(Sender: TObject);
-    procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
-    procedure OnTerminateFindInFiles(Sender: TObject);
-    procedure OnProgressBarStepFindInFiles(Sender: TObject);
-    procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
-    procedure ActionToolbarMenuSkinExecute(Sender: TObject);
-    procedure ActionMacroPauseExecute(Sender: TObject);
-    procedure PageControlDocumentChange(Sender: TObject);
-    procedure PageControlDocumentCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
-      var Action: TacCloseAction);
-    procedure PageControlDocumentDblClick(Sender: TObject);
-    procedure PageControlDocumentMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure TimerTimer(Sender: TObject);
-    procedure ActionSelectionBoxDownExecute(Sender: TObject);
-    procedure ActionSelectionBoxLeftExecute(Sender: TObject);
-    procedure ActionSelectionBoxRightExecute(Sender: TObject);
-    procedure ActionSelectionBoxUpExecute(Sender: TObject);
-    procedure ActionXMLTreeRefreshExecute(Sender: TObject);
-    procedure ActionSearchOptionsExecute(Sender: TObject);
-    procedure ActionSearchCloseExecute(Sender: TObject);
+    procedure ActionDirectoryContextMenuExecute(Sender: TObject);
+    procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
+    procedure ActionDirectoryPropertiesExecute(Sender: TObject);
     procedure ActionDirectoryRefreshExecute(Sender: TObject);
     procedure ActionDirectoryRenameExecute(Sender: TObject);
-    procedure ActionDirectoryDeleteExecute(Sender: TObject);
-    procedure ActionDirectoryContextMenuExecute(Sender: TObject);
-    procedure ActionDirectoryPropertiesExecute(Sender: TObject);
-    procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
-      var Action: TacCloseAction);
-    procedure PageControlDirectoryDblClick(Sender: TObject);
-    procedure PageControlDirectoryMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure PopupMenuFileTreeViewPopup(Sender: TObject);
-    procedure TabSheetOpenClickBtn(Sender: TObject);
     procedure ActionDocumentFormatJSONExecute(Sender: TObject);
-    procedure ActionDocumentFormatJSONMinifyExecute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent2Execute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent3Execute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent4Execute(Sender: TObject);
-    procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure PageControlOutputDblClick(Sender: TObject);
-    procedure PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
-      var Action: TacCloseAction);
-    procedure ActionOutputCloseExecute(Sender: TObject);
+    procedure ActionDocumentFormatJSONMinifyExecute(Sender: TObject);
+    procedure ActionDocumentFormatSQLExecute(Sender: TObject);
+    procedure ActionDocumentFormatXMLExecute(Sender: TObject);
+    procedure ActionDocumentInfoExecute(Sender: TObject);
+    procedure ActionDocumentViewInBrowserExecute(Sender: TObject);
+    procedure ActionDummyExecute(Sender: TObject);
+    procedure ActionEditCopyExecute(Sender: TObject);
+    procedure ActionEditCutExecute(Sender: TObject);
+    procedure ActionEditDeleteEndOfLineExecute(Sender: TObject);
+    procedure ActionEditDeleteLineExecute(Sender: TObject);
+    procedure ActionEditDeleteWhitespaceExecute(Sender: TObject);
+    procedure ActionEditDeleteWordExecute(Sender: TObject);
+    procedure ActionEditIndentDecreaseExecute(Sender: TObject);
+    procedure ActionEditIndentIncreaseExecute(Sender: TObject);
+    procedure ActionEditInsertDateTimeExecute(Sender: TObject);
+    procedure ActionEditInsertLineExecute(Sender: TObject);
+    procedure ActionEditInsertTagExecute(Sender: TObject);
+    procedure ActionEditPasteExecute(Sender: TObject);
+    procedure ActionEditRedoExecute(Sender: TObject);
+    procedure ActionEditSelectAllExecute(Sender: TObject);
+    procedure ActionEditSortAscExecute(Sender: TObject);
+    procedure ActionEditSortDescExecute(Sender: TObject);
+    procedure ActionEditToggleCaseAlternatingExecute(Sender: TObject);
+    procedure ActionEditToggleCaseExecute(Sender: TObject);
+    procedure ActionEditToggleCaseLowerExecute(Sender: TObject);
+    procedure ActionEditToggleCaseSentenceExecute(Sender: TObject);
+    procedure ActionEditToggleCaseTitleExecute(Sender: TObject);
+    procedure ActionEditToggleCaseUpperExecute(Sender: TObject);
+    procedure ActionEditUndoExecute(Sender: TObject);
+    procedure ActionFileCloseAllExecute(Sender: TObject);
+    procedure ActionFileCloseAllOtherExecute(Sender: TObject);
+    procedure ActionFileCloseExecute(Sender: TObject);
+    procedure ActionFileNewExecute(Sender: TObject);
+    procedure ActionFileOpenExecute(Sender: TObject);
+    procedure ActionFilePrintExecute(Sender: TObject);
+    procedure ActionFilePrintPreviewExecute(Sender: TObject);
+    procedure ActionFilePropertiesExecute(Sender: TObject);
+    procedure ActionFileReopenClearExecute(Sender: TObject);
+    procedure ActionFileReopenExecute(Sender: TObject);
+    procedure ActionFileSaveAllExecute(Sender: TObject);
+    procedure ActionFileSaveAsExecute(Sender: TObject);
+    procedure ActionFileSaveExecute(Sender: TObject);
+    procedure ActionFileSelectFromDirectoryExecute(Sender: TObject);
+    procedure ActionGotoBookmarksExecute(Sender: TObject);
+    procedure ActionHelpAboutEditBoneExecute(Sender: TObject);
+    procedure ActionHelpCheckForUpdatesExecute(Sender: TObject);
+    procedure ActionHelpVisitHomepageExecute(Sender: TObject);
+    procedure ActionMacroOpenExecute(Sender: TObject);
+    procedure ActionMacroPauseExecute(Sender: TObject);
+    procedure ActionMacroPlaybackExecute(Sender: TObject);
+    procedure ActionMacroRecordExecute(Sender: TObject);
+    procedure ActionMacroSaveAsExecute(Sender: TObject);
+    procedure ActionMacroStopExecute(Sender: TObject);
+    procedure ActionMenuDocumentExecute(Sender: TObject);
+    procedure ActionMenuEditExecute(Sender: TObject);
+    procedure ActionMenuFileExecute(Sender: TObject);
+    procedure ActionMenuHelpExecute(Sender: TObject);
+    procedure ActionMenuSearchExecute(Sender: TObject);
+    procedure ActionMenuToolsExecute(Sender: TObject);
+    procedure ActionMenuViewExecute(Sender: TObject);
     procedure ActionOutputCloseAllExecute(Sender: TObject);
     procedure ActionOutputCloseAllOtherPagesExecute(Sender: TObject);
+    procedure ActionOutputCloseExecute(Sender: TObject);
     procedure ActionOutputCopyAllToClipboardExecute(Sender: TObject);
     procedure ActionOutputCopySelectedToClipboardExecute(Sender: TObject);
     procedure ActionOutputOpenAllExecute(Sender: TObject);
     procedure ActionOutputOpenSelectedExecute(Sender: TObject);
     procedure ActionOutputSelectAllExecute(Sender: TObject);
     procedure ActionOutputUnselectAllExecute(Sender: TObject);
-    procedure TabSheetFindInFilesClickBtn(Sender: TObject);
-    procedure ActionSearchTextItemsExecute(Sender: TObject);
+    procedure ActionSearchClearBookmarksExecute(Sender: TObject);
+    procedure ActionSearchCloseExecute(Sender: TObject);
+    procedure ActionSearchFindInFilesExecute(Sender: TObject);
+    procedure ActionSearchFindNextExecute(Sender: TObject);
+    procedure ActionSearchFindPreviousExecute(Sender: TObject);
+    procedure ActionSearchGoToLineExecute(Sender: TObject);
+    procedure ActionSearchOptionsExecute(Sender: TObject);
+    procedure ActionSearchReplaceExecute(Sender: TObject);
+    procedure ActionSearchSearchButtonExecute(Sender: TObject);
     procedure ActionSearchSearchExecute(Sender: TObject);
+    procedure ActionSearchTextItemsExecute(Sender: TObject);
+    procedure ActionSearchToggleBookmarkExecute(Sender: TObject);
+    procedure ActionSelectEncodingExecute(Sender: TObject);
+    procedure ActionSelectHighlighterColorExecute(Sender: TObject);
+    procedure ActionSelectHighlighterExecute(Sender: TObject);
+    procedure ActionSelectionBoxDownExecute(Sender: TObject);
+    procedure ActionSelectionBoxLeftExecute(Sender: TObject);
+    procedure ActionSelectionBoxRightExecute(Sender: TObject);
+    procedure ActionSelectionBoxUpExecute(Sender: TObject);
+    procedure ActionSelectReopenFileExecute(Sender: TObject);
+    procedure ActionToggleBookmarksExecute(Sender: TObject);
+    procedure ActionToolbarMenuSkinExecute(Sender: TObject);
+    procedure ActionToolsCharacterMapExecute(Sender: TObject);
+    procedure ActionToolsCompareFilesExecute(Sender: TObject);
+    procedure ActionToolsConvertExecute(Sender: TObject);
+    procedure ActionToolsLanguageEditorExecute(Sender: TObject);
+    procedure ActionToolsOptionsExecute(Sender: TObject);
+    procedure ActionToolsSelectForCompareExecute(Sender: TObject);
+    procedure ActionViewCloseDirectoryExecute(Sender: TObject);
+    procedure ActionViewColorSelectionExecute(Sender: TObject);
+    procedure ActionViewDirectoryExecute(Sender: TObject);
+    procedure ActionViewEditDirectoryExecute(Sender: TObject);
+    procedure ActionViewEncodingSelectionExecute(Sender: TObject);
+    procedure ActionViewFilesExecute(Sender: TObject);
+    procedure ActionViewHighlighterSelectionExecute(Sender: TObject);
+    procedure ActionViewLineNumbersExecute(Sender: TObject);
+    procedure ActionViewMainMenuExecute(Sender: TObject);
+    procedure ActionViewMenuBarExecute(Sender: TObject);
+    procedure ActionViewMinimapExecute(Sender: TObject);
+    procedure ActionViewNextPageExecute(Sender: TObject);
+    procedure ActionViewOpenDirectoryExecute(Sender: TObject);
+    procedure ActionViewOutputExecute(Sender: TObject);
+    procedure ActionViewPreviousPageExecute(Sender: TObject);
+    procedure ActionViewSelectionModeExecute(Sender: TObject);
+    procedure ActionViewSpecialCharsExecute(Sender: TObject);
+    procedure ActionViewSplitExecute(Sender: TObject);
+    procedure ActionViewStatusBarExecute(Sender: TObject);
+    procedure ActionViewToolbarExecute(Sender: TObject);
+    procedure ActionViewWordWrapExecute(Sender: TObject);
+    procedure ActionViewXMLTreeExecute(Sender: TObject);
+    procedure ActionXMLTreeRefreshExecute(Sender: TObject);
+    procedure AppInstancesCmdLineReceived(Sender: TObject; CmdLine: TStrings);
+    procedure ApplicationEventsActivate(Sender: TObject);
+    procedure ApplicationEventsHint(Sender: TObject);
+    procedure ApplicationEventsMessage(var Msg: tagMSG; var Handled: Boolean);
+    procedure ChangeSkin(Sender: TObject);
+    procedure DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
     procedure EditorPrintPrintLine(Sender: TObject; LineNumber, PageNumber: Integer);
-    procedure EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer;
-      var Abort: Boolean);
+    procedure EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPrintStatus; PageNumber: Integer; var Abort: Boolean);
+    procedure FileTreeViewClickActionExecute(Sender: TObject);
+    procedure FileTreeViewDblClickActionExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure LanguageMenuClick(Sender: TObject);
+    procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
+    procedure OnProgressBarStepFindInFiles(Sender: TObject);
+    procedure OnTerminateFindInFiles(Sender: TObject);
+    procedure OutputDblClickActionExecute(Sender: TObject);
+    procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
+    procedure PageControlDirectoryDblClick(Sender: TObject);
+    procedure PageControlDirectoryMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PageControlDocumentChange(Sender: TObject);
+    procedure PageControlDocumentCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
+    procedure PageControlDocumentDblClick(Sender: TObject);
+    procedure PageControlDocumentMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
+    procedure PageControlOutputDblClick(Sender: TObject);
+    procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PopupMenuFileTreeViewPopup(Sender: TObject);
+    procedure SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string; var Glyph: TBitmap; var LineVisible: Boolean);
+    procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+    procedure TabSheetFindInFilesClickBtn(Sender: TObject);
+    procedure TabSheetOpenClickBtn(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -1510,21 +1505,21 @@ end;
 
 procedure TMainForm.ActionSelectEncodingExecute(Sender: TObject);
 begin
-  TitleBar.Items[2].Caption := TAction(Sender).Caption; // TODO: const for item
+  TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := TAction(Sender).Caption;
   TAction(Sender).Checked := True;
   FDocument.SetEncoding(FDocument.GetActiveEditor, TAction(Sender).Tag);
 end;
 
 procedure TMainForm.ActionSelectHighlighterColorExecute(Sender: TObject);
 begin
-  TitleBar.Items[6].Caption := TAction(Sender).Caption; // TODO: const for item
+  TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := TAction(Sender).Caption;
   TAction(Sender).Checked := True;
   FDocument.SetHighlighterColor(FDocument.GetActiveEditor, TAction(Sender).Caption);
 end;
 
 procedure TMainForm.ActionSelectHighlighterExecute(Sender: TObject);
 begin
-  TitleBar.Items[4].Caption := TAction(Sender).Caption; // TODO: const for item
+  TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := TAction(Sender).Caption;
   TAction(Sender).Checked := True;
   FDocument.SetHighlighter(FDocument.GetActiveEditor, TAction(Sender).Caption);
 end;
@@ -2085,12 +2080,12 @@ begin
     SplitterHorizontal.Visible := PanelOutput.Visible;
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
-    TitleBar.Items[2].Visible := ActionViewEncodingSelection.Checked;
-    TitleBar.Items[3].Visible := TitleBar.Items[2].Visible;
-    TitleBar.Items[4].Visible := ActionViewHighlighterSelection.Checked;
-    TitleBar.Items[5].Visible := TitleBar.Items[4].Visible;
-    TitleBar.Items[6].Visible := ActionViewColorSelection.Checked;
-    TitleBar.Items[7].Visible := TitleBar.Items[6].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ActionViewEncodingSelection.Checked;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING1].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ActionViewHighlighterSelection.Checked;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ActionViewColorSelection.Checked;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING3].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
 
     ActionViewXMLTree.Enabled := ActiveDocumentFound and IsXMLDocument;
     if ActionViewXMLTree.Enabled then
@@ -2101,9 +2096,9 @@ begin
       ActiveDocumentName := FDocument.ActiveTabSheetCaption;
 
     if ActiveDocumentName = '' then
-      TitleBar.Items[1].Caption := Application.Title
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
     else
-      TitleBar.Items[1].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [ActiveDocumentName]);
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [ActiveDocumentName]);
     ActionFileProperties.Enabled := ActiveDocumentFound and (ActiveDocumentName <> '');
 
     ActionFileReopen.Enabled := PopupMenuFileReopen.Items.Count > 0;
@@ -2207,7 +2202,7 @@ begin
     ActionMacroPlayback.Enabled := ActiveDocumentFound and FDocument.IsMacroStopped;
     ActionMacroOpen.Enabled := ActiveDocumentFound;
     ActionMacroSaveAs.Enabled := ActionMacroPlayback.Enabled;
-    TitleBar.Items[0].Visible := not PanelMenubar.Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_MENU].Visible := not PanelMenubar.Visible;
     FProcessingEventHandler := False;
 
     ActionOutputCopySelectedToClipboard.Visible := OptionsContainer.OutputShowCheckBox;
@@ -2648,29 +2643,29 @@ begin
   FDocument.CheckFileDateTimes;
 end;
 
-procedure TMainForm.TitleBarItems2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TMainForm.TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LMenuItem: TMenuItem;
 begin
-  LMenuItem := PopupMenuEncoding.Items.Find(TitleBar.Items[2].Caption);
+  LMenuItem := PopupMenuEncoding.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
   if Assigned(LMenuItem) then
     LMenuItem.Checked := True;
 end;
 
-procedure TMainForm.TitleBarItems4MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TMainForm.TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LMenuItem: TMenuItem;
 begin
-  LMenuItem := PopupMenuHighlighters.Items.Find(TitleBar.Items[4].Caption);
+  LMenuItem := PopupMenuHighlighters.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
   if Assigned(LMenuItem) then
     LMenuItem.Checked := True;
 end;
 
-procedure TMainForm.TitleBarItems6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TMainForm.TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LMenuItem: TMenuItem;
 begin
-  LMenuItem := PopupMenuColors.Items.Find(TitleBar.Items[6].Caption);
+  LMenuItem := PopupMenuColors.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
   if Assigned(LMenuItem) then
     LMenuItem.Checked := True;
 end;
@@ -2687,9 +2682,9 @@ begin
     { Options }
     StatusBar.Visible := ReadBool('Options', 'ShowStatusbar', True);
     PanelDirectory.Visible := ReadBool('Options', 'ShowDirectory', True);
-    TitleBar.Items[2].Visible := ReadBool('Options', 'ShowEncodingSelection', True);
-    TitleBar.Items[4].Visible := ReadBool('Options', 'ShowHighlighterSelection', True);
-    TitleBar.Items[6].Visible := ReadBool('Options', 'ShowHighlighterColorSelection', True);
+    TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ReadBool('Options', 'ShowEncodingSelection', True);
+    TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ReadBool('Options', 'ShowHighlighterSelection', True);
+    TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ReadBool('Options', 'ShowHighlighterColorSelection', True);
     SplitterVertical.Visible := PanelDirectory.Visible;
 
     //ActionViewXMLTree.Checked := OptionsContainer.ShowXMLTree;
@@ -2697,9 +2692,9 @@ begin
     ActionViewLineNumbers.Checked := OptionsContainer.EnableLineNumbers;
     ActionViewSpecialChars.Checked := OptionsContainer.EnableSpecialChars;
     ActionViewSelectionMode.Checked := OptionsContainer.EnableSelectionMode;
-    ActionViewEncodingSelection.Checked := TitleBar.Items[2].Visible;
-    ActionViewHighlighterSelection.Checked := TitleBar.Items[4].Visible;
-    ActionViewColorSelection.Checked := TitleBar.Items[6].Visible;
+    ActionViewEncodingSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
+    ActionViewHighlighterSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
+    ActionViewColorSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
 
     { if items doesn't exist in ini, create them }
     if not SectionExists('ToolbarItems') then
@@ -3042,9 +3037,9 @@ begin
     WriteBool('Options', 'ShowToolbar', PanelToolbar.Visible);
     WriteBool('Options', 'ShowStatusbar', StatusBar.Visible);
     WriteBool('Options', 'ShowDirectory', PanelDirectory.Visible);
-    WriteBool('Options', 'ShowEncodingSelection', TitleBar.Items[2].Visible);
-    WriteBool('Options', 'ShowHighlighterSelection', TitleBar.Items[4].Visible);
-    WriteBool('Options', 'ShowHighlighterColorSelection', TitleBar.Items[6].Visible);
+    WriteBool('Options', 'ShowEncodingSelection', TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible);
+    WriteBool('Options', 'ShowHighlighterSelection', TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible);
+    WriteBool('Options', 'ShowHighlighterColorSelection', TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible);
     WriteString('Options', 'SelectedSkin', SkinManager.SkinName);
   finally
     Free;
@@ -3123,11 +3118,12 @@ end;
 
 function TMainForm.GetHighlighterColor: string;
 begin
-  Result := TitleBar.Items[6].Caption;
+  Result := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption;
 end;
 
 procedure TMainForm.SetTitleBarMenus;
 var
+  LCaption: string;
   LEditor: TBCEditor;
 begin
   LEditor := FDocument.GetActiveEditor;
@@ -3135,28 +3131,29 @@ begin
   begin
     { Encoding }
     if LEditor.Encoding = TEncoding.ASCII then
-      TitleBar.Items[2].Caption := 'ASCII'
+      LCaption := 'ASCII'
     else
     if LEditor.Encoding = TEncoding.BigEndianUnicode then
-      TitleBar.Items[2].Caption := 'Big Endian Unicode'
+      LCaption := 'Big Endian Unicode'
     else
     if LEditor.Encoding = TEncoding.Unicode then
-      TitleBar.Items[2].Caption := 'Unicode'
+      LCaption := 'Unicode'
     else
     if LEditor.Encoding = TEncoding.UTF7 then
-      TitleBar.Items[2].Caption := 'UTF-7'
+      LCaption := 'UTF-7'
     else
     if LEditor.Encoding = TEncoding.UTF8 then
-      TitleBar.Items[2].Caption := 'UTF-8'
+      LCaption := 'UTF-8'
     else
     if LEditor.Encoding = BCEditor.Encoding.TEncoding.UTF8WithoutBOM then
-      TitleBar.Items[2].Caption := 'UTF-8 without BOM'
+      LCaption := 'UTF-8 without BOM'
     else
-      TitleBar.Items[2].Caption := 'ANSI';
+      LCaption := 'ANSI';
+    TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := LCaption;
     { Highlighter }
-    TitleBar.Items[4].Caption := LEditor.Highlighter.Name;
+    TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
     { Color }
-    TitleBar.Items[6].Caption := LEditor.Highlighter.Colors.Name;
+    TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;
   end;
 end;
 

@@ -3072,7 +3072,7 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 56
-        OnMouseDown = TitleBarItems2MouseDown
+        OnMouseDown = TitleBarItemsEncodingMouseDown
       end
       item
         Align = tbaRight
@@ -3102,7 +3102,7 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 52
-        OnMouseDown = TitleBarItems4MouseDown
+        OnMouseDown = TitleBarItemsHighlighterMouseDown
       end
       item
         Align = tbaRight
@@ -3132,7 +3132,7 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 68
-        OnMouseDown = TitleBarItems6MouseDown
+        OnMouseDown = TitleBarItemsColorsMouseDown
       end
       item
         Align = tbaRight
@@ -4847,19 +4847,19 @@ inherited MainForm: TMainForm
     Images = ImagesDataModule.ImageList
     Left = 937
     Top = 586
-    object Upper1: TMenuItem
+    object MenuItemToggleCaseUpper: TMenuItem
       Action = ActionEditToggleCaseUpper
     end
-    object Lower1: TMenuItem
+    object MenuItemToggleCaseLower: TMenuItem
       Action = ActionEditToggleCaseLower
     end
-    object Alternating1: TMenuItem
+    object MenuItemToggleCaseAlternating: TMenuItem
       Action = ActionEditToggleCaseAlternating
     end
-    object Sentence1: TMenuItem
+    object MenuItemToggleCaseSentence: TMenuItem
       Action = ActionEditToggleCaseSentence
     end
-    object itle1: TMenuItem
+    object MenuItemToggleCaseTitle: TMenuItem
       Action = ActionEditToggleCaseTitle
     end
   end

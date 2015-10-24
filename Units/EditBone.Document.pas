@@ -2099,7 +2099,7 @@ end;
 
 procedure TEBDocument.SetActivePageCaptionModified(AModified: Boolean);
 begin
-  PageControl.ActivePage.Caption{ActivePageCaption} := FormatFileName(PageControl.ActivePage.Caption{ActivePageCaption}, AModified);
+  PageControl.ActivePage.Caption := FormatFileName(PageControl.ActivePage.Caption, AModified);
 end;
 
 procedure TEBDocument.EditorOnChange(Sender: TObject);
