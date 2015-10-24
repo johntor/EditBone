@@ -3059,8 +3059,8 @@ inherited MainForm: TMainForm
       end
       item
         Align = tbaRight
-        Caption = 'ANSI'
-        DropdownMenu = PopupMenuEncoding
+        Caption = ' '
+        DropdownMenu = PopupMenuOpenFiles
         FontData.Font.Charset = DEFAULT_CHARSET
         FontData.Font.Color = clWindowText
         FontData.Font.Height = -11
@@ -3068,11 +3068,10 @@ inherited MainForm: TMainForm
         FontData.Font.Style = []
         Height = 22
         Index = 2
-        Name = 'TitleBarItemEncoding'
+        Name = 'TitleBarItemFileName'
         ShowHint = False
         Style = bsMenu
-        Width = 56
-        OnMouseDown = TitleBarItemsEncodingMouseDown
+        Width = 33
       end
       item
         Align = tbaRight
@@ -3089,8 +3088,8 @@ inherited MainForm: TMainForm
       end
       item
         Align = tbaRight
-        Caption = 'Text'
-        DropdownMenu = PopupMenuHighlighters
+        Caption = 'ANSI'
+        DropdownMenu = PopupMenuEncoding
         FontData.Font.Charset = DEFAULT_CHARSET
         FontData.Font.Color = clWindowText
         FontData.Font.Height = -11
@@ -3098,11 +3097,11 @@ inherited MainForm: TMainForm
         FontData.Font.Style = []
         Height = 22
         Index = 4
-        Name = 'TitleBarItemHighlighter'
+        Name = 'TitleBarItemEncoding'
         ShowHint = False
         Style = bsMenu
-        Width = 52
-        OnMouseDown = TitleBarItemsHighlighterMouseDown
+        Width = 56
+        OnMouseDown = TitleBarItemsEncodingMouseDown
       end
       item
         Align = tbaRight
@@ -3119,6 +3118,36 @@ inherited MainForm: TMainForm
       end
       item
         Align = tbaRight
+        Caption = 'Text'
+        DropdownMenu = PopupMenuHighlighters
+        FontData.Font.Charset = DEFAULT_CHARSET
+        FontData.Font.Color = clWindowText
+        FontData.Font.Height = -11
+        FontData.Font.Name = 'Tahoma'
+        FontData.Font.Style = []
+        Height = 22
+        Index = 6
+        Name = 'TitleBarItemHighlighter'
+        ShowHint = False
+        Style = bsMenu
+        Width = 52
+        OnMouseDown = TitleBarItemsHighlighterMouseDown
+      end
+      item
+        Align = tbaRight
+        FontData.Font.Charset = DEFAULT_CHARSET
+        FontData.Font.Color = clWindowText
+        FontData.Font.Height = -11
+        FontData.Font.Name = 'Tahoma'
+        FontData.Font.Style = []
+        Index = 7
+        Name = 'TitleBarItemSpacing3'
+        ShowHint = False
+        Style = bsSpacing
+        Width = 2
+      end
+      item
+        Align = tbaRight
         Caption = 'Default'
         DropdownMenu = PopupMenuColors
         FontData.Font.Charset = DEFAULT_CHARSET
@@ -3127,7 +3156,7 @@ inherited MainForm: TMainForm
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
         Height = 22
-        Index = 6
+        Index = 8
         Name = 'TitleBarItemColors'
         ShowHint = False
         Style = bsMenu
@@ -3141,8 +3170,8 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Index = 7
-        Name = 'TitleBarItemSpacing3'
+        Index = 9
+        Name = 'TitleBarItemSpacing4'
         ShowHint = False
         Style = bsSpacing
         Width = 2
@@ -5426,6 +5455,14 @@ inherited MainForm: TMainForm
     end
     object MenuItemOutputUnselectAll: TMenuItem
       Action = ActionOutputUnselectAll
+    end
+  end
+  object PopupMenuOpenFiles: TPopupMenu
+    OnPopup = PopupMenuOpenFilesPopup
+    Left = 802
+    Top = 467
+    object MenuItemPopupMenuOpenFilesDummy: TMenuItem
+      Caption = 'Dummy'
     end
   end
 end

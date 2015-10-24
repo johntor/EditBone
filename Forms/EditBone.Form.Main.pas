@@ -652,6 +652,8 @@ type
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
     Timer: TTimer;
+    PopupMenuOpenFiles: TPopupMenu;
+    MenuItemPopupMenuOpenFilesDummy: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -801,6 +803,7 @@ type
     procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
     procedure OnProgressBarStepFindInFiles(Sender: TObject);
     procedure OnTerminateFindInFiles(Sender: TObject);
+    procedure OpenFilesMenuClick(Sender: TObject);
     procedure OutputDblClickActionExecute(Sender: TObject);
     procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
     procedure PageControlDirectoryDblClick(Sender: TObject);
@@ -821,6 +824,7 @@ type
     procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PopupMenuOpenFilesPopup(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -969,6 +973,39 @@ procedure TMainForm.PopupMenuFileTreeViewPopup(Sender: TObject);
 begin
   inherited;
   ActionDirectoryProperties.Enabled := FileExists(FDirectory.SelectedFile);
+end;
+
+procedure TMainForm.PopupMenuOpenFilesPopup(Sender: TObject);
+var
+  i: Integer;
+  LEditor: TBCEditor;
+  LMenuItem: TMenuItem;
+begin
+  inherited;
+  PopupMenuOpenFiles.Items.Clear;
+  for i := 0 to PageControlDocument.PageCount - 1 do
+  begin
+    LEditor := FDocument.GetEditor(PageControlDocument.Pages[i]);
+    if Assigned(LEditor) then
+    begin
+      LMenuItem := PopupMenuOpenFiles.CreateMenuItem;
+      if LEditor.FileName <> '' then
+        LMenuItem.Caption := LEditor.FileName
+      else
+        LMenuItem.Caption := PageControlDocument.Pages[i].Caption;
+      LMenuItem.Tag := i;
+      LMenuItem.OnClick := OpenFilesMenuClick;
+      LMenuItem.RadioItem := True;
+      LMenuItem.Checked := LMenuItem.Caption = TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption;
+      PopupMenuOpenFiles.Items.Add(LMenuItem);
+    end;
+  end;
+  SkinManager.SkinableMenus.HookPopupMenu(PopupMenuOpenFiles, True);
+end;
+
+procedure TMainForm.OpenFilesMenuClick(Sender: TObject);
+begin
+  PageControlDocument.ActivePageIndex := TMenuItem(Sender).Tag;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -2053,7 +2090,7 @@ end;
 
 procedure TMainForm.SetFields;
 var
-  ActiveDocumentName: string;
+  LActiveDocumentName, LActiveFileName: string;
   ActiveDocumentFound: Boolean;
   InfoText: string;
   KeyState: TKeyboardState;
@@ -2081,25 +2118,28 @@ begin
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ActionViewEncodingSelection.Checked;
-    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING1].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ActionViewHighlighterSelection.Checked;
-    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING3].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ActionViewColorSelection.Checked;
-    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING3].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING4].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
 
     ActionViewXMLTree.Enabled := ActiveDocumentFound and IsXMLDocument;
     if ActionViewXMLTree.Enabled then
      ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
 
-    ActiveDocumentName := FDocument.ActiveDocumentName;
-    if ActiveDocumentName = '' then
-      ActiveDocumentName := FDocument.ActiveTabSheetCaption;
+    LActiveDocumentName := FDocument.ActiveDocumentName;
+    if LActiveDocumentName = '' then
+      LActiveDocumentName := FDocument.ActiveTabSheetCaption;
 
-    if ActiveDocumentName = '' then
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
-    else
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [ActiveDocumentName]);
-    ActionFileProperties.Enabled := ActiveDocumentFound and (ActiveDocumentName <> '');
+    LActiveFileName := FDocument.ActiveFileName;
+    if LActiveFileName = '' then
+      LActiveFileName := FDocument.ActiveTabSheetCaption;
+
+    TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := LActiveFileName;
+
+    ActionFileProperties.Enabled := ActiveDocumentFound and (LActiveDocumentName <> '');
 
     ActionFileReopen.Enabled := PopupMenuFileReopen.Items.Count > 0;
     ActionFileClose.Enabled := FDocument.OpenTabSheetCount > 0;
@@ -2566,7 +2606,6 @@ begin
   PanelOutput.Visible := FOutput.IsAnyOutput;
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
-  //SetMargins;
 
   Editor := FDocument.GetActiveEditor;
   if Assigned(Editor) then
@@ -2579,6 +2618,12 @@ procedure TMainForm.SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var Sk
 begin
   inherited;
 
+  if (FirstItem = PopupMenuOpenFiles.Items[0]) and (PageControlDocument.PageCount > 4) then
+  begin
+    LineVisible := True;
+    Caption := LanguageDataModule.GetConstant('OpenFiles');
+  end
+  else
   if FirstItem = PopupMenuHighlighters.Items[0] then
   begin
     LineVisible := True;

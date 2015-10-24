@@ -54,12 +54,13 @@ type
     FActionSearchFindNext: TAction;
     FActionSearchOptions: TAction;
     FActionSearchClose: TAction;
-    function CreateNewTabSheet(FileName: string = ''; ShowMinimap: Boolean = False; AHighlighter: string = '';
+    function CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False; AHighlighter: string = '';
       AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
     function FindOpenFile(FileName: string): TBCEditor;
     function GetActiveDocumentFound: Boolean;
     function GetActiveDocumentModified: Boolean;
     function GetActiveDocumentName: string;
+    function GetActiveFileName: string;
     function GetActivePageCaption: string;
     function GetActiveTabSheetCaption: string;
     function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
@@ -75,7 +76,6 @@ type
     function GetSelectionModeChecked: Boolean;
     function GetSplitChecked: Boolean;
     function GetMinimapChecked: Boolean;
-    function GetEditor(const ATabSheet: TTabSheet; const ATag: Integer = EDITBONE_DOCUMENT_EDITOR_TAG): TBCEditor;
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
@@ -101,6 +101,7 @@ type
     function GetModifiedInfo: string;
     function GetActiveBookmarkList: TBCEditorBookmarkList;
     function GetActiveComboBoxSearchText: TBCComboBox;
+    function GetEditor(const ATabSheet: TTabSheet; const ATag: Integer = EDITBONE_DOCUMENT_EDITOR_TAG): TBCEditor;
     procedure InsertTag;
     procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
     function IsMacroStopped: Boolean;
@@ -183,6 +184,7 @@ type
     property ActiveDocumentFound: Boolean read GetActiveDocumentFound;
     property ActiveDocumentModified: Boolean read GetActiveDocumentModified;
     property ActiveDocumentName: string read GetActiveDocumentName;
+    property ActiveFileName: string read GetActiveFileName;
     property ActiveTabSheetCaption: string read GetActiveTabSheetCaption;
     property CanRedo: Boolean read GetCanRedo;
     property CanUndo: Boolean read GetCanUndo;
@@ -508,7 +510,7 @@ begin
   end;
 end;
 
-function TEBDocument.CreateNewTabSheet(FileName: string = ''; ShowMinimap: Boolean = False;
+function TEBDocument.CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False;
   AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
 var
   LTabSheet: TsTabSheet;
@@ -520,8 +522,8 @@ begin
   LTabSheet := TsTabSheet.Create(PageControl);
   LTabSheet.PageControl := PageControl;
 
-  if FileName <> '' then
-    LTabSheet.ImageIndex := GetIconIndex(FileName)
+  if AFileName <> '' then
+    LTabSheet.ImageIndex := GetIconIndex(AFileName)
   else
     LTabSheet.ImageIndex := FNewImageIndex;
   LTabSheet.TabVisible := False;
@@ -531,10 +533,10 @@ begin
   FTabSheetNew.PageIndex := PageControl.PageCount - 1;
 
   { set the Caption property }
-  if FileName = '' then
+  if AFileName = '' then
     LTabSheet.Caption := LanguageDataModule.GetConstant('Document') + IntToStr(FNumberOfNewDocument)
   else
-    LTabSheet.Caption := ExtractFileName(FileName);
+    LTabSheet.Caption := ExtractFileName(AFileName);
 
   { create editor }
   LEditor := TBCEditor.Create(LTabSheet);
@@ -548,9 +550,9 @@ begin
     Margins.Bottom := 2;
     Visible := False;
     Parent := LTabSheet;
-    DocumentName := FileName;
+    DocumentName := AFileName;
     SearchString := '';
-    FileDateTime := GetFileDateTime(FileName);
+    FileDateTime := GetFileDateTime(AFileName);
     OnChange := EditorOnChange;
     OnCaretChanged := EditorCaretChanged;
     OnReplaceText := EditorReplaceText;
@@ -561,21 +563,21 @@ begin
     Tag := EDITBONE_DOCUMENT_EDITOR_TAG;
   end;
   OptionsContainer.AssignTo(LEditor);
-  LEditor.Minimap.Visible := LEditor.Minimap.Visible or ShowMinimap;
+  LEditor.Minimap.Visible := LEditor.Minimap.Visible or AShowMinimap;
 
   CreateSearchPanel(LTabSheet);
 
-  if FileName <> '' then
+  if AFileName <> '' then
   begin
     if AHighlighter <> '' then
       SetHighlighter(LEditor, AHighlighter)
     else
-      SelectHighlighter(LEditor, FileName);
+      SelectHighlighter(LEditor, AFileName);
     if AColor <> '' then
       SetHighlighterColor(LEditor, AColor)
     else
       SetHighlighterColor(LEditor, OptionsContainer.DefaultColor);
-    LEditor.LoadFromFile(FileName);
+    LEditor.LoadFromFile(AFileName);
   end
   else
   begin
@@ -1126,9 +1128,9 @@ begin
         AFileName := FormatFileName(AFileName);
       end
       else
-        AFileName := ExtractFileName(LEditor.DocumentName);
+        AFileName := LEditor.FileName;
 
-      FilePath := ExtractFilePath(LEditor.DocumentName);
+      FilePath := LEditor.FilePath;
       FilterIndex := OptionsContainer.GetFilterIndex(ExtractFileExt(AFileName));
       SaveDialog.InitialDir := FilePath;
       SaveDialog.Filter := OptionsContainer.Filters;
@@ -2155,6 +2157,19 @@ begin
     if Assigned(Editor) then
       if Editor.DocumentName <> '' then
         Result := FormatFileName(Editor.DocumentName, Editor.Modified);
+  end;
+end;
+
+function TEBDocument.GetActiveFileName: string;
+var
+  Editor: TBCEditor;
+begin
+  Result := '';
+  if Assigned(PageControl.ActivePage) then
+  begin
+    Editor := GetActiveEditor;
+    if Assigned(Editor) then
+      Result := Editor.FileName
   end;
 end;
 
