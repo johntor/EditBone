@@ -2117,6 +2117,7 @@ begin
     SplitterHorizontal.Visible := PanelOutput.Visible;
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
+
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ActionViewEncodingSelection.Checked;
     TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ActionViewHighlighterSelection.Checked;
@@ -2132,11 +2133,16 @@ begin
     if LActiveDocumentName = '' then
       LActiveDocumentName := FDocument.ActiveTabSheetCaption;
 
+    if LActiveDocumentName = '' then
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
+    else
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
+
     LActiveFileName := FDocument.ActiveFileName;
     if LActiveFileName = '' then
       LActiveFileName := FDocument.ActiveTabSheetCaption;
 
-    TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveFileName <> '';
     TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := LActiveFileName;
 
     ActionFileProperties.Enabled := ActiveDocumentFound and (LActiveDocumentName <> '');
@@ -2618,12 +2624,6 @@ procedure TMainForm.SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var Sk
 begin
   inherited;
 
-  if (FirstItem = PopupMenuOpenFiles.Items[0]) and (PageControlDocument.PageCount > 4) then
-  begin
-    LineVisible := True;
-    Caption := LanguageDataModule.GetConstant('OpenFiles');
-  end
-  else
   if FirstItem = PopupMenuHighlighters.Items[0] then
   begin
     LineVisible := True;
