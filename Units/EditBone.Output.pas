@@ -481,11 +481,11 @@ var
 begin
   Result := True;
 
+  FPageControl.TabClosed := True;
   if CheckCancel(ATabIndex) then
     Exit(False);
   if FPageControl.PageCount > 0 then
   begin
-    FPageControl.TabClosed := True;
     if ATabIndex = -1 then
       LActivePageIndex := FPageControl.ActivePageIndex
     else

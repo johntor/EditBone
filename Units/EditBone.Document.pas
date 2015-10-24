@@ -972,6 +972,8 @@ begin
     Editor := GetEditor(PageControl.Pages[ATabIndex])
   else
     Editor := GetActiveEditor;
+
+  PageControl.TabClosed := True;
   if Assigned(Editor) and Editor.Modified then
   begin
     Result := SaveChanges;
@@ -981,7 +983,6 @@ begin
 
   if Result <> mrCancel then
   begin
-    PageControl.TabClosed := True;
     if ATabIndex = -1 then
       LActivePageIndex := PageControl.ActivePageIndex
     else

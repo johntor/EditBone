@@ -425,11 +425,11 @@ begin
     LTabSheet := FPageControl.Pages[ATabIndex]
   else
     LTabSheet := FPageControl.ActivePage;
+  FPageControl.TabClosed := True;
   if not AskYesOrNo(Format(LanguageDataModule.GetYesOrNoMessage('CloseDirectory'), [LTabSheet.Caption])) then
     Exit(False);
   if FPageControl.PageCount > 0 then
   begin
-    FPageControl.TabClosed := True;
     if ATabIndex = -1 then
       LActivePageIndex := FPageControl.ActivePageIndex
     else
