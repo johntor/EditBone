@@ -2745,7 +2745,13 @@ begin
     if not SectionExists('ToolbarItems') then
       for i := 1 to Length(ToolbarItemsArray) do
          WriteString('ToolbarItems', IntToStr(i - 1), ToolbarItemsArray[i]);
+
     SkinManager.SkinName := ReadString('Options', 'SelectedSkin', 'Windows 10');
+    SkinManager.HueOffset := ReadInteger('Options', 'SkinHueOffset', 0);
+    SkinManager.Saturation := ReadInteger('Options', 'SkinSaturation', 10);
+    SkinManager.Brightness := ReadInteger('Options', 'SkinBrightness', 0);
+    SkinManager.AnimEffects.BlendOnMoving.Active := ReadBool('Options', 'SkinBlendOnMoving', False);
+    SkinManager.ExtendedBorders := ReadBool('Options', 'SkinExtendedBorders', False);
   finally
     Free;
   end;
@@ -3086,6 +3092,11 @@ begin
     WriteBool('Options', 'ShowHighlighterSelection', TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible);
     WriteBool('Options', 'ShowHighlighterColorSelection', TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible);
     WriteString('Options', 'SelectedSkin', SkinManager.SkinName);
+    WriteInteger('Options', 'SkinHueOffset', SkinManager.HueOffset);
+    WriteInteger('Options', 'SkinSaturation', SkinManager.Saturation);
+    WriteInteger('Options', 'SkinBrightness', SkinManager.Brightness);
+    WriteBool('Options', 'SkinBlendOnMoving', SkinManager.AnimEffects.BlendOnMoving.Active);
+    WriteBool('Options', 'SkinExtendedBorders', SkinManager.ExtendedBorders);
   finally
     Free;
   end;
