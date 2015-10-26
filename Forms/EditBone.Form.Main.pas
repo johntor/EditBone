@@ -10,9 +10,9 @@ uses
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
   Vcl.ActnMan, Vcl.ActnMenus, BCComponents.DragDrop, System.Diagnostics, EditBone.Output,
-  Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, System.ImageList, Vcl.ImgList,
+  Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, Vcl.StdCtrls, sComboBox, BCControls.ComboBox, Vcl.Mask, Vcl.DBCtrls,
+  System.Generics.Collections, BCControls.ComboBox, Vcl.DBCtrls,
   sLabel;
 
 type

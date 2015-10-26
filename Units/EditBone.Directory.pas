@@ -7,7 +7,7 @@ interface
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
   BCControls.FileControl, Vcl.ImgList, Vcl.ActnList, Vcl.Buttons, Vcl.Menus, BCControls.PageControl, VirtualTrees,
-  System.Actions, BCCommon.Forms.SearchForFiles, BCCommon.Images, sPageControl, Vcl.StdCtrls,
+  System.Actions, BCCommon.Forms.SearchForFiles, BCCommon.Images, sPageControl,
   Vcl.PlatformDefaultStyleActnCtrls, BCControls.ImageList,
   BCComponents.SkinManager;
 

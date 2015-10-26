@@ -3144,7 +3144,7 @@ inherited MainForm: TMainForm
         Name = 'TitleBarItemSpacing3'
         ShowHint = False
         Style = bsSpacing
-        Width = 2
+        Width = 6
       end
       item
         Align = tbaRight
