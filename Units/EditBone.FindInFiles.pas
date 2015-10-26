@@ -3,11 +3,12 @@ unit EditBone.FindInFiles;
 interface
 
 uses
-  System.Classes;
+  System.Classes, System.Types;
 
 type
   TOnCancelSearch = function: Boolean of object;
-  TOnAddTreeViewLine = procedure(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString) of object;
+  TOnAddTreeViewLine = procedure(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString;
+    SearchString: WideString) of object;
 
   TFindInFilesThread = class(TThread)
   private
@@ -21,11 +22,12 @@ type
     FFolderText: string;
     FSearchCaseSensitive: Boolean;
     FLookInSubfolders: Boolean;
+    function GetFiles(const Path, Masks: string): TStringDynArray;
     function GetStringList(AFilename: string): TStringList;
     procedure FindInFiles(AFolderText: String);
   public
-    constructor Create(AFindWhatText, AFileTypeText, AFolderText: String; ASearchCaseSensitive, ALookInSubfolders: Boolean;
-      AFileExtensions: string); overload;
+    constructor Create(AFindWhatText, AFileTypeText, AFolderText: String;
+      ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string); overload;
     procedure Execute; override;
     property Count: Integer read FCount;
     property FindWhatText: string read FFindWhatOriginalText;
@@ -37,22 +39,26 @@ type
 implementation
 
 uses
-  Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms,
-  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts;
+  Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms, System.Masks,
+  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, System.IOUtils, System.StrUtils;
 
 procedure TFindInFilesThread.Execute;
 begin
-  Synchronize(procedure begin FindInFiles(FFolderText) end);
+  Synchronize(
+    procedure
+    begin
+      FindInFiles(FFolderText)
+    end);
 end;
 
-constructor TFindInFilesThread.Create(AFindWhatText, AFileTypeText, AFolderText: String; ASearchCaseSensitive,
-  ALookInSubfolders: Boolean; AFileExtensions: string);
+constructor TFindInFilesThread.Create(AFindWhatText, AFileTypeText, AFolderText: String;
+  ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
   FFindWhatOriginalText := AFindWhatText;
   if ASearchCaseSensitive then
-    FFindWhatSearchText :=  AFindWhatText
+    FFindWhatSearchText := AFindWhatText
   else
     FFindWhatSearchText := UpperCase(AFindWhatText);
   FFileExtensions := AFileExtensions;
@@ -63,118 +69,103 @@ begin
   FCount := 0;
 end;
 
+function TFindInFilesThread.GetFiles(const Path, Masks: string): TStringDynArray;
+var
+  MaskArray: TStringDynArray;
+  Predicate: TDirectory.TFilterPredicate;
+  LSearchOption: TSearchOption;
+begin
+  if FLookInSubfolders then
+    LSearchOption := System.IOUtils.TSearchOption.soAllDirectories
+  else
+    LSearchOption := System.IOUtils.TSearchOption.soTopDirectoryOnly;
+
+  MaskArray := SplitString(Masks, ';');
+  Predicate := function(const Path: string; const SearchRec: TSearchRec): Boolean
+    var
+      Mask: string;
+    begin
+      for Mask in MaskArray do
+        if MatchesMask(SearchRec.Name, Mask) then
+          Exit(True);
+      Exit(False);
+    end;
+  Result := TDirectory.GetFiles(Path, LSearchOption, Predicate);
+end;
+
 { Recursive method to find files. }
 procedure TFindInFilesThread.FindInFiles(AFolderText: String);
 var
-  LFileHandle: THandle;
-  LWin32FindData: TWin32FindData;
   LTextLine: string;
   FName: string;
   i: Integer;
   LStringList: TStringList;
   LTextPtr, LStartTextPtr, LFindWhatTextPtr, LBookmarkTextPtr: PChar;
-
-  function IsDirectory(AWin32FindData: TWin32FindData): Boolean;
-  var
-    TmpAttr: DWORD;
-  begin
-    TmpAttr :=  AWin32FindData.dwFileAttributes and (FILE_ATTRIBUTE_READONLY or FILE_ATTRIBUTE_HIDDEN or
-      FILE_ATTRIBUTE_SYSTEM or FILE_ATTRIBUTE_ARCHIVE or FILE_ATTRIBUTE_NORMAL or FILE_ATTRIBUTE_DIRECTORY);
-    Result := (TmpAttr and FILE_ATTRIBUTE_DIRECTORY = FILE_ATTRIBUTE_DIRECTORY);
-  end;
-
 begin
-  {$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-  LFileHandle := FindFirstFile(PChar(IncludeTrailingBackslash(AFolderText) + '*.*'), LWin32FindData);
-  {$WARNINGS ON}
-  if LFileHandle <> INVALID_HANDLE_VALUE then
-  try
-    repeat
-      if Assigned(FOnCancelSearch) and FOnCancelSearch then
-      begin
-        Terminate;
-        Exit;
-      end;
-      FName := StrPas(LWin32FindData.cFileName);
-
-      if (FName <> '.') and (FName <> '..') then
-      begin
-        if FLookInSubfolders and IsDirectory(LWin32FindData) then
-          {$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-          FindInFiles(IncludeTrailingBackslash(AFolderText) + FName)
-          {$WARNINGS ON}
-        else
-        begin
-          if Assigned(FOnProgressBarStep) then
-            FOnProgressBarStep(Self);
-
-          if (FFileTypeText = '*.*') and IsExtInFileType(ExtractFileExt(FName), FFileExtensions) or
-            IsExtInFileType(ExtractFileExt(FName), FFileTypeText) then
-          begin
-            {$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-            LStringList := GetStringList(IncludeTrailingBackslash(AFolderText) + FName);
-            {$WARNINGS ON}
-            try
-              try
-                if Trim(LStringList.Text) <> '' then
-                for i := 0 to LStringList.Count - 1 do
+  for FName in Self.GetFiles(AFolderText, FFileTypeText) do
+    if (FFileTypeText = '*.*') and IsExtInFileType(ExtractFileExt(FName), FFileExtensions) or
+      IsExtInFileType(ExtractFileExt(FName), FFileTypeText) then
+    begin
+      if Assigned(FOnProgressBarStep) then
+        FOnProgressBarStep(Self);
+{$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
+      LStringList := GetStringList(FName);
+{$WARNINGS ON}
+      try
+        try
+          if Trim(LStringList.Text) <> '' then
+            for i := 0 to LStringList.Count - 1 do
+            begin
+              LTextLine := LStringList.Strings[i];
+              if not FSearchCaseSensitive then
+                LTextLine := UpperCase(LTextLine);
+              LStartTextPtr := PChar(LTextLine);
+              LTextPtr := LStartTextPtr;
+              while LTextPtr^ <> EDITBONE_NONE_CHAR do
+              begin
+                if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
                 begin
-                  Application.ProcessMessages;
-                  LTextLine := LStringList.Strings[i];
-                  if not FSearchCaseSensitive then
-                    LTextLine := UpperCase(LTextLine);
-                  LStartTextPtr := PChar(LTextLine);
-                  LTextPtr := LStartTextPtr;
-                  while LTextPtr^ <> EDITBONE_NONE_CHAR do
+                  LFindWhatTextPtr := PChar(FFindWhatSearchText);
+                  LBookmarkTextPtr := LTextPtr;
+                  { check if the keyword found }
+                  while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and
+                    (LTextPtr^ = LFindWhatTextPtr^) do
                   begin
-                    if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
-                    begin
-                      LFindWhatTextPtr := PChar(FFindWhatSearchText);
-                      LBookmarkTextPtr := LTextPtr;
-                      { check if the keyword found }
-                      while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and (LTextPtr^ = LFindWhatTextPtr^) do
-                      begin
-                        Inc(LTextPtr);
-                        Inc(LFindWhatTextPtr);
-                      end;
-                      if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
-                      begin
-                        Inc(FCount);
-                        if Assigned(FOnCancelSearch) and FOnCancelSearch then
-                        begin
-                          Terminate;
-                          Exit;
-                        end;
-                        {$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-                        if Assigned(FOnAddTreeViewLine) then
-                          FOnAddTreeViewLine(Self, IncludeTrailingBackslash(AFolderText) + FName, i, LBookmarkTextPtr - LStartTextPtr + 1,
-                            LStringList.Strings[i], FFindWhatOriginalText);
-                        {$WARNINGS ON}
-                      end
-                      else
-                        LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
-                    end;
                     Inc(LTextPtr);
+                    Inc(LFindWhatTextPtr);
                   end;
-                end
-              except
-                {$WARNINGS OFF}
-                { IncludeTrailingBackslash is specific to a platform }
-                if Assigned(FOnAddTreeViewLine) then
-                  FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
-                    [IncludeTrailingBackslash(AFolderText) + FName]), '');
-                {$WARNINGS ON}
+                  if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
+                  begin
+                    Inc(FCount);
+                    if Assigned(FOnCancelSearch) and FOnCancelSearch then
+                    begin
+                      Terminate;
+                      Exit;
+                    end;
+{$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
+                    if Assigned(FOnAddTreeViewLine) then
+                      FOnAddTreeViewLine(Self, FName, i, LBookmarkTextPtr - LStartTextPtr + 1, LStringList.Strings[i],
+                        FFindWhatOriginalText);
+{$WARNINGS ON}
+                  end
+                  else
+                    LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
+                end;
+                Inc(LTextPtr);
               end;
-            finally
-              LStringList.Free;
-            end;
-          end;
+            end
+        except
+{$WARNINGS OFF}
+          { IncludeTrailingBackslash is specific to a platform }
+          if Assigned(FOnAddTreeViewLine) then
+            FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
+              [FName]), '');
+{$WARNINGS ON}
         end;
+      finally
+        LStringList.Free;
       end;
-    until not Terminated and not FindNextFile(LFileHandle, LWin32FindData);
-  finally
-    Winapi.Windows.FindClose(LFileHandle);
-  end;
+    end;
 end;
 
 function TFindInFilesThread.GetStringList(AFilename: string): TStringList;
@@ -186,7 +177,7 @@ var
 begin
   Result := TStringList.Create;
   LEncoding := nil;
-  LFileStream := TFileStream.Create(AFileName, fmOpenRead);
+  LFileStream := TFileStream.Create(AFilename, fmOpenRead);
   try
     // Identify encoding
     if IsUTF8(LFileStream, WithBom) then
@@ -206,7 +197,7 @@ begin
   finally
     LFileStream.Free;
   end;
-  Result.LoadFromFile(AFileName, LEncoding);
+  Result.LoadFromFile(AFilename, LEncoding);
 end;
 
 end.
