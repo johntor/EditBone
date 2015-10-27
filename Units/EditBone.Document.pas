@@ -496,6 +496,7 @@ begin
     Parent := LPanelSearch;
     Align := alRight;
     Width := 20;
+    Left := LLabel.Left + LLabel.Width + 1;
     ShowCaption := False;
     SkinData.SkinSection := 'TOOLBUTTON';
     OnClick := ActionSearchClose.OnExecute;
