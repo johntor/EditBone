@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.Edit,
   Vcl.ExtCtrls, BCCommon.Options.Container,  BCCommon.Frames.Options.Base,
-  sEdit, BCControls.Panel, sPanel, sFrameAdapter, acSlider, sLabel;
+  sEdit, BCControls.Panel, sPanel, sFrameAdapter, acSlider, sLabel, sComboBox, BCControls.ComboBox;
 
 type
   TOptionsDirectoryFrame = class(TBCOptionsBaseFrame)
@@ -23,8 +23,10 @@ type
     Panel: TBCPanel;
     SliderAutoHide: TsSlider;
     StickyLabelAutoHide: TsStickyLabel;
+    ComboBoxAlign: TBCComboBox;
   protected
     procedure GetData; override;
+    procedure Init; override;
     procedure PutData; override;
   public
     destructor Destroy; override;
@@ -37,7 +39,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.SysUtils, BCCommon.Utils;
+  System.SysUtils, BCCommon.Utils, BCCommon.Language.Strings;
 
 var
   FOptionsDirectoryFrame: TOptionsDirectoryFrame;
@@ -56,6 +58,15 @@ begin
   FOptionsDirectoryFrame := nil;
 end;
 
+procedure TOptionsDirectoryFrame.Init;
+begin
+  with ComboBoxAlign.Items do
+  begin
+    Add(LanguageDatamodule.GetSQLFormatter('Left'));
+    Add(LanguageDatamodule.GetSQLFormatter('Right'));
+  end;
+end;
+
 procedure TOptionsDirectoryFrame.GetData;
 begin
   with OptionsContainer do
@@ -67,6 +78,7 @@ begin
     SliderShowSystemFiles.SliderOn := DirShowSystemFiles;
     SliderShowArchiveFiles.SliderOn := DirShowArchiveFiles;
     SliderShowOverlayIcons.SliderOn := DirShowOverlayIcons;
+    ComboBoxAlign.ItemIndex := DirAlign;
   end;
 end;
 
@@ -81,6 +93,7 @@ begin
     DirShowArchiveFiles := SliderShowArchiveFiles.SliderOn;
     DirIndent := StrToIntDef(EditIndent.Text, 20);
     DirShowOverlayIcons := SliderShowOverlayIcons.SliderOn;
+    DirAlign := ComboBoxAlign.ItemIndex;
   end;
 end;
 
