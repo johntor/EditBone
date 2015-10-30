@@ -2579,6 +2579,18 @@ begin
     FDirectory.SetOptions;
     ActionDirectoryRefresh.Execute;
   end;
+  if OptionsContainer.DirAlign = 0 then { left }
+  begin
+    PanelDirectory.Align := alLeft;
+    SplitterVertical.Align := alLeft;
+    SplitterVertical.Left := PanelDirectory.Width + 1;
+  end
+  else
+  begin
+    PanelDirectory.Align := alRight;
+    SplitterVertical.Align := alRight;
+    SplitterVertical.Left := PanelDirectory.Left - 1;
+  end;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
