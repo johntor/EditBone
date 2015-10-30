@@ -687,9 +687,10 @@ begin
     Margins.Bottom := 0;
     Align := alBottom;
     FileTreeView := LFileTreeView;
-    FileType := '*.*';
-    Text := '*.*';
     Extensions := OptionsContainer.Extensions;
+    FileType := '*.*';
+    //Text := '*.*';
+    ItemIndex := 0;
     SkinData.SkinSection := 'COMBOBOX';
   end;
 
