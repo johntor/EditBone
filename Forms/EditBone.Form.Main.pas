@@ -2608,7 +2608,7 @@ begin
   Self.ReadLanguageFile(GetSelectedLanguage('English'));
 
   CreateFileReopenList;
-  FOutput.ReadOutputFile;
+  //FOutput.ReadOutputFile;
   PanelOutput.Visible := FOutput.IsAnyOutput;
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
@@ -2833,6 +2833,7 @@ begin
   FOutput.OnTabsheetDblClick := OutputDblClickActionExecute;
   FOutput.OnOpenAll := OutputOpenAllEvent;
   FOutput.SkinManager := SkinManager;
+  FOutput.ReadOutputFile;
 end;
 
 procedure TMainForm.ReadIniSizePositionAndState;
