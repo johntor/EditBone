@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Top = 4
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetDocument
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3566,7 +3566,7 @@ inherited MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Insert'
       ImageIndex = 18
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionEditInsertExecute
     end
     object ActionEditInsertLine: TAction
       Category = 'Edit'
@@ -3596,7 +3596,7 @@ inherited MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Delete'
       ImageIndex = 22
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionEditDeleteExecute
     end
     object ActionEditDeleteLine: TAction
       Category = 'Edit'
@@ -3634,7 +3634,7 @@ inherited MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Indent'
       ImageIndex = 27
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionEditIndentExecute
     end
     object ActionEditIndentIncrease: TAction
       Category = 'Edit'
@@ -3656,7 +3656,7 @@ inherited MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Sort'
       ImageIndex = 30
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionEditSortExecute
     end
     object ActionEditSortAsc: TAction
       Category = 'Edit'
@@ -3749,14 +3749,14 @@ inherited MainForm: TMainForm
       Caption = 'Toggle bookmarks'
       Hint = 'Toggle bookmarks'
       ImageIndex = 40
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionSearchToggleBookmarksExecute
     end
     object ActionSearchGoToBookmarks: TAction
       Category = 'Search'
       Caption = 'Go to bookmarks'
       Hint = 'Go to bookmarks'
       ImageIndex = 41
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionSearchGoToBookmarksExecute
     end
     object ActionSearchClearBookmarks: TAction
       Category = 'Search'
@@ -4257,7 +4257,7 @@ inherited MainForm: TMainForm
       Category = 'Document'
       Caption = 'Format'
       ImageIndex = 65
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionDocumentFormatExecute
     end
     object ActionDocumentFormatSQL: TAction
       Category = 'Document'
@@ -4277,7 +4277,7 @@ inherited MainForm: TMainForm
       Category = 'Macro'
       Caption = 'Macro'
       ImageIndex = 136
-      OnExecute = ActionDummyExecute
+      OnExecute = ActionMacroExecute
     end
     object ActionMacroPlayback: TAction
       Category = 'Macro'

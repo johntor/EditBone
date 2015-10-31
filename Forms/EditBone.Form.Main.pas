@@ -825,6 +825,14 @@ type
     procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupMenuOpenFilesPopup(Sender: TObject);
+    procedure ActionEditInsertExecute(Sender: TObject);
+    procedure ActionEditDeleteExecute(Sender: TObject);
+    procedure ActionEditIndentExecute(Sender: TObject);
+    procedure ActionEditSortExecute(Sender: TObject);
+    procedure ActionSearchToggleBookmarksExecute(Sender: TObject);
+    procedure ActionSearchGoToBookmarksExecute(Sender: TObject);
+    procedure ActionMacroExecute(Sender: TObject);
+    procedure ActionDocumentFormatExecute(Sender: TObject);
   private
     FNoIni: Boolean;
     FDirectory: TEBDirectory;
@@ -844,6 +852,7 @@ type
     procedure CreateObjects;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateToolbar(ACreate: Boolean = False);
+    procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(ALanguage: string);
@@ -1036,9 +1045,19 @@ begin
   CreateFileReopenList;
 end;
 
+
+
 procedure TMainForm.ActionFileReopenExecute(Sender: TObject);
 begin
-  { dummy action }
+  DropdownMenuPopup(SpeedButtonFileReopen);
+end;
+
+procedure TMainForm.DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
+var
+  LPoint: TPoint;
+begin
+  LPoint := ASpeedButton.ClientToScreen(Point(0, ASpeedButton.Height));
+  ASpeedButton.DropdownMenu.Popup(LPoint.X, LPoint.Y);
 end;
 
 procedure TMainForm.ActionOutputCloseAllOtherPagesExecute(Sender: TObject);
@@ -1097,6 +1116,12 @@ procedure TMainForm.ActionDirectoryRenameExecute(Sender: TObject);
 begin
   inherited;
   FDirectory.Rename;
+end;
+
+procedure TMainForm.ActionDocumentFormatExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonDocumentFormat);
 end;
 
 procedure TMainForm.ActionDocumentFormatJSONExecute(Sender: TObject);
@@ -1165,6 +1190,12 @@ begin
   FDocument.DeleteEndOfLine;
 end;
 
+procedure TMainForm.ActionEditDeleteExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonEditDelete);
+end;
+
 procedure TMainForm.ActionEditDeleteLineExecute(Sender: TObject);
 begin
   FDocument.DeleteLine;
@@ -1185,6 +1216,12 @@ begin
   FDocument.DecreaseIndent;
 end;
 
+procedure TMainForm.ActionEditIndentExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonEditIndent);
+end;
+
 procedure TMainForm.ActionEditIndentIncreaseExecute(Sender: TObject);
 begin
   FDocument.IncreaseIndent;
@@ -1193,6 +1230,12 @@ end;
 procedure TMainForm.ActionEditInsertDateTimeExecute(Sender: TObject);
 begin
   FDocument.InsertDateAndTime;
+end;
+
+procedure TMainForm.ActionEditInsertExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonEditInsert);
 end;
 
 procedure TMainForm.ActionEditInsertLineExecute(Sender: TObject);
@@ -1233,6 +1276,12 @@ begin
   FDocument.Sort(soDesc);
 end;
 
+procedure TMainForm.ActionEditSortExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonEditSort);
+end;
+
 procedure TMainForm.ActionEditToggleCaseExecute(Sender: TObject);
 begin
   FDocument.ToggleCase;
@@ -1256,6 +1305,12 @@ end;
 procedure TMainForm.ActionFileCloseExecute(Sender: TObject);
 begin
   FDocument.Close;
+end;
+
+procedure TMainForm.ActionMacroExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonDocumentMacro);
 end;
 
 procedure TMainForm.ActionMacroOpenExecute(Sender: TObject);
@@ -1473,6 +1528,12 @@ begin
   FDocument.FindPrevious;
 end;
 
+procedure TMainForm.ActionSearchGoToBookmarksExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonSearchGotoBookmarks);
+end;
+
 procedure TMainForm.ActionSearchGoToLineExecute(Sender: TObject);
 begin
   FDocument.GotoLine;
@@ -1532,6 +1593,12 @@ begin
     if Assigned(LEditor) then
       LEditor.ToggleBookMark
   end;
+end;
+
+procedure TMainForm.ActionSearchToggleBookmarksExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonSearchToggleBookmarks);
 end;
 
 procedure TMainForm.ActionOutputSelectAllExecute(Sender: TObject);
