@@ -79,7 +79,7 @@ type
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
-    procedure SetDocumentSpecificSearchText(AEditor: TBCEditor);
+    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
@@ -1209,7 +1209,7 @@ end;
 
 function TEBDocument.GetActivePageCaption: string;
 begin
-  Result := FormatFileName(PageControl.ActivePage.Caption{ActivePageCaption});
+  Result := FormatFileName(PageControl.ActivePage.Caption);
 end;
 
 procedure TEBDocument.Undo;
@@ -1221,7 +1221,7 @@ procedure TEBDocument.Undo;
       begin
         AEditor.DoUndo;
         if AEditor.UndoList.ItemCount = 0 then
-          PageControl.ActivePage.Caption{ActivePageCaption} := GetActivePageCaption;
+          PageControl.ActivePage.Caption := GetActivePageCaption;
       end;
   end;
 
@@ -1451,16 +1451,21 @@ begin
     Result := LSearchPanel.Visible;
 end;
 
-procedure TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor);
+function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
 var
   LSearchPanel: TBCPanel;
 begin
+  Result := False;
   if not OptionsContainer.DocumentSpecificSearch then
   begin
     LSearchPanel := GetActiveSearchPanel;
     if Assigned(LSearchPanel) then
       if not LSearchPanel.Visible then
-        AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
+        if AEditor.Search.SearchText <> OptionsContainer.DocumentSpecificSearchText then
+        begin
+          AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
+          Result := True;
+        end;
   end;
 end;
 
@@ -1471,11 +1476,8 @@ begin
   LEditor := GetActiveEditor;
   if not Assigned(LEditor) then
     Exit;
-
-  LEditor.Search.Options := LEditor.Search.Options - [soBackwards];
-
-  SetDocumentSpecificSearchText(LEditor);
-  LEditor.FindNext;
+  if not SetDocumentSpecificSearchText(LEditor) then
+    LEditor.FindNext;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1485,11 +1487,8 @@ begin
   LEditor := GetActiveEditor;
   if not Assigned(LEditor) then
     Exit;
-
-  LEditor.Search.Options := LEditor.Search.Options + [soBackwards];
-
-  SetDocumentSpecificSearchText(LEditor);
-  LEditor.FindPrevious;
+  if not SetDocumentSpecificSearchText(LEditor) then
+    LEditor.FindPrevious;
 end;
 
 procedure TEBDocument.Replace;
