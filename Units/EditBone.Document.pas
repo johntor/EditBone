@@ -3,13 +3,12 @@ unit EditBone.Document;
 interface
 
 uses
-  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts,
-  BCEditor.Editor, Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons,
-  Vcl.ActnList, System.Actions, BCControls.ProgressBar, Vcl.ActnMan, BCControls.Panel, sLabel,
-  sPageControl, BCEditor.Types, BCControls.StatusBar, BCEditor.MacroRecorder, BCEditor.Print,
-  Vcl.PlatformDefaultStyleActnCtrls, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
-  BCEditor.Print.Types, EditBone.XMLTree, BCControls.Splitter, BCControls.ComboBox,
-  System.Generics.Collections, BCComponents.SkinManager, BCControls.Labels;
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
+  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons, Vcl.ActnList, System.Actions,
+  BCControls.ProgressBar, Vcl.ActnMan, BCControls.Panel, sLabel, sPageControl, BCEditor.Types, BCControls.StatusBar,
+  BCEditor.MacroRecorder, BCEditor.Print, Vcl.PlatformDefaultStyleActnCtrls, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
+  BCEditor.Print.Types, EditBone.XMLTree, BCControls.Splitter, BCControls.ComboBox, System.Generics.Collections,
+  BCComponents.SkinManager, BCControls.Labels;
 
 type
   TEBSetBookmarks = procedure of object;
@@ -18,95 +17,90 @@ type
   TEBGetActionList = function: TObjectList<TAction> of object;
 
   TEBDocument = class(TObject)
-    procedure EditorOnChange(Sender: TObject);
-    procedure EditorReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer;
-      DeleteLine: Boolean; var Action: TBCEditorReplaceAction);
-    procedure EditorCaretChanged(Sender: TObject; X, Y: Integer);
-    procedure EditorAfterBookmarkPlaced(Sender: TObject);
-    procedure EditorAfterClearBookmark(Sender: TObject);
+    procedure ComboBoxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ComboBoxMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
     procedure ComboBoxSearchTextChange(Sender: TObject);
     procedure ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
-    procedure ComboBoxMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
-    procedure ComboBoxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);
+    procedure EditorAfterBookmarkPlaced(Sender: TObject);
+    procedure EditorAfterClearBookmark(Sender: TObject);
+    procedure EditorCaretChanged(Sender: TObject; X, Y: Integer);
+    procedure EditorOnChange(Sender: TObject);
+    procedure EditorReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; DeleteLine: Boolean; var Action: TBCEditorReplaceAction);
   private
-    FSkinManager: TBCSkinManager;
+    FActionSearchClose: TAction;
+    FActionSearchFindNext: TAction;
+    FActionSearchFindPrevious: TAction;
+    FActionSearchOptions: TAction;
+    FActionSearchTextItems: TAction;
     FCaretInfo: string;
     FCompareImageIndex, FNewImageIndex: Integer;
     FCreateFileReopenList: TEBCreateFileReopenList;
     FGetActionList: TEBGetActionList;
-    FNumberOfNewDocument: Integer;
-    FPageControl: TBCPageControl;
-    FProcessing: Boolean;
-    FProgressBar: TBCProgressBar;
+    FImages: TImageList;
     FModifiedDocuments: Boolean;
+    FNumberOfNewDocument: Integer;
     FOpenDialog: TOpenDialog;
-    FSaveDialog: TSaveDialog;
-    FStatusBar: TBCStatusBar;
+    FPageControl: TBCPageControl;
     FPopupMenuEditor: TPopupMenu;
     FPopupMenuXMLTree: TPopupMenu;
+    FProcessing: Boolean;
+    FProgressBar: TBCProgressBar;
+    FSaveDialog: TSaveDialog;
     FSetBookmarks: TEBSetBookmarks;
     FSetTitleBarMenus: TEBSetTitleBarMenus;
+    FSkinManager: TBCSkinManager;
+    FStatusBar: TBCStatusBar;
     FTabSheetNew: TTabSheet;
-    FImages: TImageList;
-    FActionSearchTextItems: TAction;
-    FActionSearchFindPrevious: TAction;
-    FActionSearchFindNext: TAction;
-    FActionSearchOptions: TAction;
-    FActionSearchClose: TAction;
-    function CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False; AHighlighter: string = '';
-      AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
+    function CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
     function FindOpenFile(FileName: string): TBCEditor;
     function GetActiveDocumentFound: Boolean;
     function GetActiveDocumentModified: Boolean;
     function GetActiveDocumentName: string;
     function GetActiveFileName: string;
-    function GetActivePageCaption: string;
-    function GetActiveTabSheetCaption: string;
-    function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
-    function GetActiveSearchPanel: TBCPanel;
     function GetActiveLabelSearchResultCount: TsLabel;
-    function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
+    function GetActivePageCaption: string;
+    function GetActiveSearchPanel: TBCPanel;
+    function GetActiveTabSheetCaption: string;
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
-    //function GetCompareFrame(TabSheet: TTabSheet): TCompareFrame;
+    function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
+    function GetMinimapChecked: Boolean;
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
     function GetOpenTabSheetCount: Integer;
+    function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
     function GetSelectionFound: Boolean;
     function GetSelectionModeChecked: Boolean;
     function GetSplitChecked: Boolean;
-    function GetMinimapChecked: Boolean;
+    function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
-    function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
-    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
-    procedure CreateImageList;
-    procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure SetSearchMatchesFound;
+    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
     procedure AddToReopenFiles(FileName: string);
     procedure CheckModifiedDocuments;
+    procedure CreateImageList;
+    procedure CreateSearchPanel(ATabSheet: TsTabSheet);
     procedure SelectHighlighter(AEditor: TBCEditor; FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
     procedure SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
+    procedure SetSearchMatchesFound;
     procedure SetSkinColors(Editor: TBCEditor);
   public
     constructor Create(AOwner: TBCPageControl);
     destructor Destroy; override;
     function Close(AFreePage: Boolean = True; ATabIndex: Integer = -1): Integer;
-    function GetActiveSplitEditor: TBCEditor;
-    function GetActiveEditor: TBCEditor;
-    function GetMacroRecordPauseImageIndex: Integer;
-    function GetModifiedInfo: string;
     function GetActiveBookmarkList: TBCEditorBookmarkList;
     function GetActiveComboBoxSearchText: TBCComboBox;
+    function GetActiveEditor: TBCEditor;
+    function GetActiveSplitEditor: TBCEditor;
     function GetEditor(const ATabSheet: TTabSheet; const ATag: Integer = EDITBONE_DOCUMENT_EDITOR_TAG): TBCEditor;
-    procedure InsertTag;
-    procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
+    function GetMacroRecordPauseImageIndex: Integer;
+    function GetModifiedInfo: string;
+    function IsJSONDocument: Boolean;
     function IsMacroStopped: Boolean;
     function IsRecordingMacro: Boolean;
-    function IsJSONDocument: Boolean;
     function IsSQLDocument: Boolean;
     function IsXMLDocument: Boolean;
     function Options(AActionList: TActionList): Boolean;
@@ -123,7 +117,6 @@ type
     procedure CloseAll;
     procedure CloseAllOtherPages;
     procedure CollapseAll;
-    //procedure CompareFiles(FileName: string = ''; AFileDragDrop: Boolean = False);
     procedure Copy;
     procedure Cut;
     procedure DecreaseIndent;
@@ -135,21 +128,21 @@ type
     procedure FindNext;
     procedure FindPrevious;
     procedure FormatJSON(AIndentSize: Integer);
-    procedure FormatXML;
     procedure FormatSQL;
+    procedure FormatXML;
     procedure GotoBookmarks(ItemIndex: Integer);
     procedure GotoLine;
     procedure IncreaseIndent;
-    procedure InsertLine;
+    procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
     procedure InsertDateAndTime;
+    procedure InsertLine;
+    procedure InsertTag;
     procedure LoadMacro;
     procedure New;
     procedure NextPage;
-    procedure Open(Filename: string; ASetActivePage: Boolean); overload;
+    procedure Open(FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0; StartUp: Boolean = False; ShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True); overload;
     procedure Open(Filename: string; ALine: Integer; AChar: Integer); overload;
-    procedure Open(FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0;
-      StartUp: Boolean = False; ShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = '';
-      ASetActivePage: Boolean = True); overload;
+    procedure Open(Filename: string; ASetActivePage: Boolean); overload;
     procedure Paste;
     procedure PlaybackMacro;
     procedure PreviousPage;
@@ -162,6 +155,7 @@ type
     procedure Save; overload;
     procedure SaveAll;
     procedure SaveMacro;
+    procedure SearchClose;
     procedure SearchOptions;
     procedure SelectAll;
     procedure SelectForCompare;
@@ -169,7 +163,6 @@ type
     procedure SetHighlighter(AEditor: TBCEditor; AHighlighterName: string);
     procedure SetHighlighterColor(AEditor: TBCEditor; AColorName: string);
     procedure SetOptions;
-    procedure SearchClose;
     procedure ShowInfo;
     procedure Sort(ASortOrder: TBCEditorSortOrder = soToggle);
     procedure StopMacro;
@@ -181,6 +174,11 @@ type
     procedure Undo;
     procedure UpdateHighlighterColors;
     procedure WriteIniFile;
+    property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
+    property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
+    property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
+    property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
+    property ActionSearchTextItems: TAction read FActionSearchTextItems write FActionSearchTextItems;
     property ActiveDocumentFound: Boolean read GetActiveDocumentFound;
     property ActiveDocumentModified: Boolean read GetActiveDocumentModified;
     property ActiveDocumentName: string read GetActiveDocumentName;
@@ -209,11 +207,6 @@ type
     property SplitChecked: Boolean read GetSplitChecked;
     property StatusBar: TBCStatusBar write FStatusBar;
     property XMLTreeVisible: Boolean read GetXMLTreeVisible;
-    property ActionSearchTextItems: TAction read FActionSearchTextItems write FActionSearchTextItems;
-    property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
-    property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
-    property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
-    property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
   end;
 
 implementation
@@ -1185,7 +1178,7 @@ end;
 procedure TEBDocument.SaveAll;
 var
   i: Integer;
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   FProcessing := True;
   Application.ProcessMessages;
@@ -1196,8 +1189,8 @@ begin
     begin
       ProgressBar.StepIt;
       Application.ProcessMessages;
-      Editor := GetEditor(PageControl.Pages[i]);
-      if Assigned(Editor) and Editor.Modified then
+      LEditor := GetEditor(PageControl.Pages[i]);
+      if Assigned(LEditor) and LEditor.Modified then
         Save(PageControl.Pages[i]);
     end;
     FProgressBar.Hide;
@@ -1233,11 +1226,11 @@ end;
 
 procedure TEBDocument.Redo;
 
-  procedure Redo(Editor: TBCEditor);
+  procedure Redo(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.DoRedo;
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.DoRedo;
   end;
 
 begin
@@ -1248,11 +1241,11 @@ end;
 
 procedure TEBDocument.Cut;
 
-  procedure Cut(Editor: TBCEditor);
+  procedure Cut(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CutToClipboard;
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CutToClipboard;
   end;
 
 begin
@@ -1262,11 +1255,11 @@ end;
 
 procedure TEBDocument.Copy;
 
-  procedure Copy(Editor: TBCEditor);
+  procedure Copy(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CopyToClipboard;
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CopyToClipboard;
   end;
 
 begin
@@ -1546,51 +1539,51 @@ end;
 
 procedure TEBDocument.ToggleBookmark(AItemIndex: Integer);
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.ToggleBookmark(AItemIndex);
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.ToggleBookmark(AItemIndex);
 end;
 
 function TEBDocument.ToggleWordWrap: Boolean;
 var
   i: Integer;
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   OptionsContainer.EnableWordWrap := not OptionsContainer.EnableWordWrap;
   Result := OptionsContainer.EnableWordWrap;
   for i := 0 to PageControl.PageCount - 2 do
   begin
-    Editor := GetEditor(PageControl.Pages[i]);
-    if Assigned(Editor) then
-      Editor.WordWrap.Enabled := Result;
-    Editor := GetEditor(PageControl.Pages[i], EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG);
-    if Assigned(Editor) then
-      Editor.WordWrap.Enabled := Result;
+    LEditor := GetEditor(PageControl.Pages[i]);
+    if Assigned(LEditor) then
+      LEditor.WordWrap.Enabled := Result;
+    LEditor := GetEditor(PageControl.Pages[i], EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG);
+    if Assigned(LEditor) then
+      LEditor.WordWrap.Enabled := Result;
   end;
 end;
 
 function TEBDocument.ToggleSpecialChars: Boolean;
 var
   i: Integer;
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   OptionsContainer.EnableSpecialChars := not OptionsContainer.EnableSpecialChars;
   Result := OptionsContainer.EnableSpecialChars;
   for i := 0 to PageControl.PageCount - 2 do
   begin
-    Editor := GetEditor(PageControl.Pages[i]);
-    if Assigned(Editor) then
+    LEditor := GetEditor(PageControl.Pages[i]);
+    if Assigned(LEditor) then
     begin
-      Editor.SpecialChars.Visible := Result;
-      Editor.SpecialChars.EndOfLine.Visible := Result;
+      LEditor.SpecialChars.Visible := Result;
+      LEditor.SpecialChars.EndOfLine.Visible := Result;
     end;
-    Editor := GetEditor(PageControl.Pages[i], EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG);
-    if Assigned(Editor) then
+    LEditor := GetEditor(PageControl.Pages[i], EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG);
+    if Assigned(LEditor) then
     begin
-      Editor.SpecialChars.Visible := Result;
-      Editor.SpecialChars.EndOfLine.Visible := Result;
+      LEditor.SpecialChars.Visible := Result;
+      LEditor.SpecialChars.EndOfLine.Visible := Result;
     end;
     //if PageControl.Pages[i].Components[0] is TCompareFrame then
     //  Result := TCompareFrame(PageControl.Pages[i].Components[0]).ToggleSpecialChars
@@ -1599,12 +1592,12 @@ end;
 
 function TEBDocument.GetSelectionModeChecked: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Result := Editor.Selection.Mode = smColumn;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    Result := LEditor.Selection.Mode = smColumn;
 end;
 
 procedure TEBDocument.ToggleSelectionMode;
@@ -1738,7 +1731,7 @@ end;
 procedure TEBDocument.WriteIniFile;
 var
   i, j: Integer;
-  FileType: string;
+  LFileType: string;
   LEditor: TBCEditor;
   LTextCaretPosition: TBCEditorTextPosition;
 begin
@@ -1775,10 +1768,10 @@ begin
     { FileTypes }
     for i := 0 to OptionsContainer.FileTypes.Count - 1 do
     begin
-      FileType := Trim(System.Copy(LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text,
+      LFileType := Trim(System.Copy(LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text,
         0, Pos('(', LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text) - 1));
       WriteString('FileTypes', IntToStr(i),
-        Format('%s (%s)', [FileType, StringBetween(OptionsContainer.FileTypes.Strings[i], '(', ')')]));
+        Format('%s (%s)', [LFileType, StringBetween(OptionsContainer.FileTypes.Strings[i], '(', ')')]));
     end;
   finally
     Free;
@@ -1803,11 +1796,11 @@ end;
 
 procedure TEBDocument.InsertDateAndTime;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(DateTimeToStr(Now)));
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(DateTimeToStr(Now)));
 end;
 
 function TEBDocument.Options(AActionList: TActionList): Boolean;
@@ -1833,65 +1826,65 @@ end;
 
 procedure TEBDocument.CreateImageList;
 var
-  SysImageList: THandle;
-  Icon: TIcon;
+  LSysImageList: THandle;
+  LIcon: TIcon;
 begin
   if not Assigned(FImages) then
     FImages := TImageList.Create(nil);
-  SysImageList := GetSysImageList;
-  if SysImageList <> 0 then
+  LSysImageList := GetSysImageList;
+  if LSysImageList <> 0 then
   begin
-    FImages.Handle := SysImageList;
+    FImages.Handle := LSysImageList;
     FImages.BkColor := clNone;
     FImages.ShareImages := True;
   end;
   { compare and new image index }
-  Icon := TIcon.Create;
+  LIcon := TIcon.Create;
   try
     { Windows font size causing a problem: Icon size will be smaller than PageControl.Images size }
     case FImages.Height of
       16:
         begin
           { smaller }
-          EBDataModuleImages.ImageListDocument16.GetIcon(0, Icon);
-          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
-          EBDataModuleImages.ImageListDocument16.GetIcon(1, Icon);
-          FNewImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+          EBDataModuleImages.ImageListDocument16.GetIcon(0, LIcon);
+          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
+          EBDataModuleImages.ImageListDocument16.GetIcon(1, LIcon);
+          FNewImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           if Assigned(FTabSheetNew) then
           begin
-            EBDataModuleImages.ImageListDocument16.GetIcon(2, Icon);
-            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+            EBDataModuleImages.ImageListDocument16.GetIcon(2, LIcon);
+            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           end;
         end;
       20:
         begin
           { medium }
-          EBDataModuleImages.ImageListDocument20.GetIcon(0, Icon);
-          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
-          EBDataModuleImages.ImageListDocument20.GetIcon(1, Icon);
-          FNewImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+          EBDataModuleImages.ImageListDocument20.GetIcon(0, LIcon);
+          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
+          EBDataModuleImages.ImageListDocument20.GetIcon(1, LIcon);
+          FNewImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           if Assigned(FTabSheetNew) then
           begin
-            EBDataModuleImages.ImageListDocument20.GetIcon(2, Icon);
-            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+            EBDataModuleImages.ImageListDocument20.GetIcon(2, LIcon);
+            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           end;
         end;
       24:
         begin
           { larger }
-          EBDataModuleImages.ImageListDocument24.GetIcon(0, Icon);
-          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
-          EBDataModuleImages.ImageListDocument24.GetIcon(1, Icon);
-          FNewImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+          EBDataModuleImages.ImageListDocument24.GetIcon(0, LIcon);
+          FCompareImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
+          EBDataModuleImages.ImageListDocument24.GetIcon(1, LIcon);
+          FNewImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           if Assigned(FTabSheetNew) then
           begin
-            EBDataModuleImages.ImageListDocument24.GetIcon(2, Icon);
-            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, Icon.Handle);
+            EBDataModuleImages.ImageListDocument24.GetIcon(2, LIcon);
+            FTabSheetNew.ImageIndex := ImageList_AddIcon(FImages.Handle, LIcon.Handle);
           end;
         end;
     end;
   finally
-    Icon.Free;
+    LIcon.Free;
   end;
 end;
 
@@ -2042,33 +2035,33 @@ end;
 
 procedure TEBDocument.GotoBookmarks(ItemIndex: Integer);
 var
-  Editor: TBCEditor;
-  EditorCommand: TBCEditorCommand;
+  LEditor: TBCEditor;
+  LEditorCommand: TBCEditorCommand;
 begin
-  EditorCommand := ecNone;
+  LEditorCommand := ecNone;
   case ItemIndex of
     1:
-      EditorCommand := ecGotoBookmark1;
+      LEditorCommand := ecGotoBookmark1;
     2:
-      EditorCommand := ecGotoBookmark2;
+      LEditorCommand := ecGotoBookmark2;
     3:
-      EditorCommand := ecGotoBookmark3;
+      LEditorCommand := ecGotoBookmark3;
     4:
-      EditorCommand := ecGotoBookmark4;
+      LEditorCommand := ecGotoBookmark4;
     5:
-      EditorCommand := ecGotoBookmark5;
+      LEditorCommand := ecGotoBookmark5;
     6:
-      EditorCommand := ecGotoBookmark6;
+      LEditorCommand := ecGotoBookmark6;
     7:
-      EditorCommand := ecGotoBookmark7;
+      LEditorCommand := ecGotoBookmark7;
     8:
-      EditorCommand := ecGotoBookmark8;
+      LEditorCommand := ecGotoBookmark8;
     9:
-      EditorCommand := ecGotoBookmark9;
+      LEditorCommand := ecGotoBookmark9;
   end;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.CommandProcessor(EditorCommand, Char(ItemIndex), nil);
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(LEditorCommand, Char(ItemIndex), nil);
 end;
 
 procedure TEBDocument.GotoLine;
@@ -2130,47 +2123,46 @@ begin
 
   if Assigned(PageControl.ActivePage) then
     if PageControl.ActivePage.TabType = ttTab then
-      Result := PageControl.ActivePage.Caption{ActivePageCaption};
+      Result := PageControl.ActivePage.Caption;
 end;
 
 function TEBDocument.GetActiveDocumentFound: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := False;
 
   if Assigned(PageControl.ActivePage) then
   begin
-    Editor := GetActiveEditor;
-    if Assigned(Editor) then
-      Result := True;
+    LEditor := GetActiveEditor;
+    Result := Assigned(LEditor);
   end;
 end;
 
 function TEBDocument.GetActiveDocumentName: string;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := '';
   if Assigned(PageControl.ActivePage) then
   begin
-    Editor := GetActiveEditor;
-    if Assigned(Editor) then
-      if Editor.DocumentName <> '' then
-        Result := FormatFileName(Editor.DocumentName, Editor.Modified);
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) then
+      if LEditor.DocumentName <> '' then
+        Result := FormatFileName(LEditor.DocumentName, LEditor.Modified);
   end;
 end;
 
 function TEBDocument.GetActiveFileName: string;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := '';
   if Assigned(PageControl.ActivePage) then
   begin
-    Editor := GetActiveEditor;
-    if Assigned(Editor) then
-      Result := Editor.FileName
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) then
+      Result := LEditor.FileName
   end;
 end;
 
@@ -2182,7 +2174,7 @@ end;
 function TEBDocument.GetModifiedDocuments(CheckActive: Boolean): Boolean;
 var
   i: Integer;
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := True;
   for i := 0 to PageControl.PageCount - 2 do
@@ -2190,9 +2182,9 @@ begin
     if (TsTabSheet(PageControl.Pages[i]).TabType = ttTab) and TsTabSheet(PageControl.Pages[i]).TabVisible then
       if CheckActive or ((PageControl.ActivePageIndex <> i) and not CheckActive) then
       begin
-        Editor := GetEditor(PageControl.Pages[i]);
-        if Assigned(Editor) then
-          if Editor.Modified then
+        LEditor := GetEditor(PageControl.Pages[i]);
+        if Assigned(LEditor) then
+          if LEditor.Modified then
             Exit;
       end;
   end;
@@ -2201,61 +2193,61 @@ end;
 
 function TEBDocument.GetSelectionFound: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Result := Editor.SelectionAvailable;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    Result := LEditor.SelectionAvailable;
 
-  Editor := GetActiveSplitEditor;
-  if Assigned(Editor) then
-    Result := Result or Editor.SelectionAvailable;
+  LEditor := GetActiveSplitEditor;
+  if Assigned(LEditor) then
+    Result := Result or LEditor.SelectionAvailable;
 end;
 
 function TEBDocument.GetCanUndo: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Result := Editor.UndoList.ItemCount > 0;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    Result := LEditor.UndoList.ItemCount > 0;
 
-  Editor := GetActiveSplitEditor;
-  if Assigned(Editor) then
-    Result := Result or (Editor.UndoList.ItemCount > 0);
+  LEditor := GetActiveSplitEditor;
+  if Assigned(LEditor) then
+    Result := Result or (LEditor.UndoList.ItemCount > 0);
 end;
 
 function TEBDocument.GetCanRedo: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Result := Editor.RedoList.ItemCount > 0;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    Result := LEditor.RedoList.ItemCount > 0;
 
-  Editor := GetActiveSplitEditor;
-  if Assigned(Editor) then
-    Result := Result or (Editor.RedoList.ItemCount > 0);
+  LEditor := GetActiveSplitEditor;
+  if Assigned(LEditor) then
+    Result := Result or (LEditor.RedoList.ItemCount > 0);
 end;
 
 procedure TEBDocument.EditorReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer;
   DeleteLine: Boolean; var Action: TBCEditorReplaceAction);
 var
-  ConfirmText: string;
+  LConfirmText: string;
 begin
   if ASearch = AReplace then
     Action := raSkip
   else
   begin
     if DeleteLine then
-      ConfirmText := LanguageDataModule.GetYesOrNoMessage('DeleteLine')
+      LConfirmText := LanguageDataModule.GetYesOrNoMessage('DeleteLine')
     else
-      ConfirmText := Format(LanguageDataModule.GetYesOrNoMessage('ReplaceOccurence'), [ASearch, AReplace]);
+      LConfirmText := Format(LanguageDataModule.GetYesOrNoMessage('ReplaceOccurence'), [ASearch, AReplace]);
 
-    case TConfirmReplaceDialog.ClassShowModal(Application.MainForm, ConfirmText) of
+    case TConfirmReplaceDialog.ClassShowModal(Application.MainForm, LConfirmText) of
       mrYes:
         Action := raReplace;
       mrYesToAll:
@@ -2278,25 +2270,25 @@ end;
 
 function TEBDocument.GetModifiedInfo: string;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := '';
   if OptionsContainer.AutoSave then
     Result := LanguageDataModule.GetConstant('AutoSave')
   else
   begin
-    Editor := GetActiveEditor;
-    if Assigned(Editor) and Editor.Modified then
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) and LEditor.Modified then
       Result := LanguageDataModule.GetConstant('Modified');
   end;
 end;
 
 function TEBDocument.GetActiveDocumentModified: Boolean;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  Result := Assigned(Editor) and Editor.Modified;
+  LEditor := GetActiveEditor;
+  Result := Assigned(LEditor) and LEditor.Modified;
 end;
 
 procedure TEBDocument.NextPage;
@@ -2328,30 +2320,30 @@ end;
 procedure TEBDocument.CheckFileDateTimes;
 var
   i: Integer;
-  Editor: TBCEditor;
-  FileDateTime: TDateTime;
-  DialogResult: Integer;
+  LEditor: TBCEditor;
+  LFileDateTime: TDateTime;
+  LDialogResult: Integer;
 begin
-  DialogResult := mrNo;
+  LDialogResult := mrNo;
   if FProcessing then
     Exit;
   FProcessing := True;
   for i := 0 to PageControl.PageCount - 2 do
   begin
-    Editor := GetEditor(PageControl.Pages[i]);
-    if Assigned(Editor) then
-      if Editor.DocumentName <> '' then
+    LEditor := GetEditor(PageControl.Pages[i]);
+    if Assigned(LEditor) then
+      if LEditor.DocumentName <> '' then
       begin
-        FileDateTime := GetFileDateTime(Editor.DocumentName);
-        if (FileDateTime <> 0) and (FileDateTime <> Editor.FileDateTime) then
+        LFileDateTime := GetFileDateTime(LEditor.DocumentName);
+        if (LFileDateTime <> 0) and (LFileDateTime <> LEditor.FileDateTime) then
         begin
-          if FileExists(Editor.DocumentName) then
+          if FileExists(LEditor.DocumentName) then
           begin
             PageControl.TabClosed := True; { just to avoid begin drag }
-            if not(DialogResult in [mrYesToAll, mrNoToAll]) then
-              DialogResult := AskYesOrNoAll(Format(LanguageDataModule.GetYesOrNoMessage('DocumentTimeChanged'),
-                [Editor.DocumentName]));
-            if DialogResult in [mrYes, mrYesToAll] then
+            if not(LDialogResult in [mrYesToAll, mrNoToAll]) then
+              LDialogResult := AskYesOrNoAll(Format(LanguageDataModule.GetYesOrNoMessage('DocumentTimeChanged'),
+                [LEditor.DocumentName]));
+            if LDialogResult in [mrYes, mrYesToAll] then
               Refresh(i);
           end
           else
@@ -2360,8 +2352,8 @@ begin
               Save
             else
             begin
-              Editor.Modified := True;
-              PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, Editor.Modified);
+              LEditor.Modified := True;
+              PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, LEditor.Modified);
               PageControl.Invalidate;
             end;
           end;
@@ -2373,34 +2365,34 @@ end;
 
 procedure TEBDocument.Refresh(Page: Integer);
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   if (Page < 0) or (Page > PageControl.PageCount - 2) then
     Exit;
-  Editor := GetEditor(PageControl.Pages[Page]);
-  if Assigned(Editor) then
+  LEditor := GetEditor(PageControl.Pages[Page]);
+  if Assigned(LEditor) then
   begin
-    Editor.LoadFromFile(Editor.DocumentName);
-    Editor.FileDateTime := GetFileDateTime(Editor.DocumentName);
+    LEditor.LoadFromFile(LEditor.DocumentName);
+    LEditor.FileDateTime := GetFileDateTime(LEditor.DocumentName);
   end;
 end;
 
 procedure TEBDocument.DecreaseIndent;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.CommandProcessor(ecBlockUnindent, 'U', nil);
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecBlockUnindent, 'U', nil);
 end;
 
 procedure TEBDocument.IncreaseIndent;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.CommandProcessor(ecBlockIndent, 'I', nil);
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecBlockIndent, 'I', nil);
 end;
 
 procedure TEBDocument.SelectAll;
@@ -2481,11 +2473,11 @@ end;
 
 procedure TEBDocument.InsertLine;
 
-  procedure InsertLine(Editor: TBCEditor);
+  procedure InsertLine(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CommandProcessor(ecInsertLine, 'N', nil);
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CommandProcessor(ecInsertLine, 'N', nil);
   end;
 
 begin
@@ -2495,11 +2487,11 @@ end;
 
 procedure TEBDocument.DeleteWord;
 
-  procedure DeleteWord(Editor: TBCEditor);
+  procedure DeleteWord(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CommandProcessor(ecDeleteWord, 'T', nil);
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CommandProcessor(ecDeleteWord, 'T', nil);
   end;
 
 begin
@@ -2509,11 +2501,11 @@ end;
 
 procedure TEBDocument.DeleteLine;
 
-  procedure DeleteLine(Editor: TBCEditor);
+  procedure DeleteLine(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CommandProcessor(ecDeleteLine, 'Y', nil);
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CommandProcessor(ecDeleteLine, 'Y', nil);
   end;
 
 begin
@@ -2523,11 +2515,11 @@ end;
 
 procedure TEBDocument.DeleteEndOfLine;
 
-  procedure DeleteEndOfLine(Editor: TBCEditor);
+  procedure DeleteEndOfLine(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.CommandProcessor(ecDeleteEndOfLine, 'Y', nil);
+    if Assigned(AEditor) then
+      if AEditor.Focused then
+        AEditor.CommandProcessor(ecDeleteEndOfLine, 'Y', nil);
   end;
 
 begin
@@ -2999,21 +2991,21 @@ end;
 
 function TEBDocument.GetActiveBookmarkList: TBCEditorBookmarkList;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := nil;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Result := Editor.Marks;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    Result := LEditor.Marks;
 end;
 
 procedure TEBDocument.CollapseAll;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    Editor.CodeFoldingCollapseAll;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.CodeFoldingCollapseAll;
 end;
 
 procedure TEBDocument.DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);

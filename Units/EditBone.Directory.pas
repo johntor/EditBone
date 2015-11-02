@@ -1,7 +1,5 @@
 unit EditBone.Directory;
 
-{$WARN SYMBOL_PLATFORM OFF}
-
 interface
 
 uses
