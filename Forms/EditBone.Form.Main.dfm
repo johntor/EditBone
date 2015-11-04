@@ -48,7 +48,7 @@ inherited MainForm: TMainForm
     ParentColor = True
     OnDrawPanel = StatusBarDrawPanel
     object SpeedButtonMacroPlay: TBCSpeedButton
-      Left = 0
+      Left = 2
       Top = 3
       Width = 16
       Height = 16
@@ -60,7 +60,7 @@ inherited MainForm: TMainForm
       ShowCaption = False
     end
     object SpeedButtonMacroRecordPause: TBCSpeedButton
-      Left = 18
+      Left = 20
       Top = 3
       Width = 16
       Height = 16
@@ -72,7 +72,7 @@ inherited MainForm: TMainForm
       ShowCaption = False
     end
     object SpeedButtonMacroStop: TBCSpeedButton
-      Left = 36
+      Left = 38
       Top = 3
       Width = 16
       Height = 16
@@ -138,7 +138,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -147,7 +147,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileNew
             Align = alLeft
             Flat = True
@@ -169,7 +169,7 @@ inherited MainForm: TMainForm
             Left = 60
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileOpen
             Align = alLeft
             Flat = True
@@ -189,7 +189,7 @@ inherited MainForm: TMainForm
             Left = 120
             Top = 0
             Width = 70
-            Height = 59
+            Height = 56
             Action = ActionFileReopen
             Align = alLeft
             Flat = True
@@ -211,7 +211,7 @@ inherited MainForm: TMainForm
             Left = 190
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -233,7 +233,7 @@ inherited MainForm: TMainForm
             Left = 200
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileSave
             Align = alLeft
             Flat = True
@@ -253,7 +253,7 @@ inherited MainForm: TMainForm
             Left = 260
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileSaveAs
             Align = alLeft
             Flat = True
@@ -273,7 +273,7 @@ inherited MainForm: TMainForm
             Left = 320
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileSaveAll
             Align = alLeft
             Flat = True
@@ -294,7 +294,7 @@ inherited MainForm: TMainForm
             Left = 566
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -316,7 +316,7 @@ inherited MainForm: TMainForm
             Left = 500
             Top = 0
             Width = 66
-            Height = 59
+            Height = 56
             Action = ActionFileCloseAllOther
             Align = alLeft
             Flat = True
@@ -336,7 +336,7 @@ inherited MainForm: TMainForm
             Left = 440
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileCloseAll
             Align = alLeft
             Flat = True
@@ -356,7 +356,7 @@ inherited MainForm: TMainForm
             Left = 380
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileClose
             Align = alLeft
             Flat = True
@@ -376,7 +376,7 @@ inherited MainForm: TMainForm
             Left = 576
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFilePrint
             Align = alLeft
             Flat = True
@@ -396,7 +396,7 @@ inherited MainForm: TMainForm
             Left = 636
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFilePrintPreview
             Align = alLeft
             Flat = True
@@ -417,7 +417,7 @@ inherited MainForm: TMainForm
             Left = 696
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -439,7 +439,7 @@ inherited MainForm: TMainForm
             Left = 706
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionFileExit
             Align = alLeft
             Flat = True
@@ -467,7 +467,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -476,7 +476,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditUndo
             Align = alLeft
             Flat = True
@@ -496,7 +496,7 @@ inherited MainForm: TMainForm
             Left = 60
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditRedo
             Align = alLeft
             Flat = True
@@ -517,7 +517,7 @@ inherited MainForm: TMainForm
             Left = 120
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -539,7 +539,7 @@ inherited MainForm: TMainForm
             Left = 130
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditCut
             Align = alLeft
             Flat = True
@@ -559,7 +559,7 @@ inherited MainForm: TMainForm
             Left = 190
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditCopy
             Align = alLeft
             Flat = True
@@ -579,7 +579,7 @@ inherited MainForm: TMainForm
             Left = 250
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditPaste
             Align = alLeft
             Flat = True
@@ -600,7 +600,7 @@ inherited MainForm: TMainForm
             Left = 370
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -622,7 +622,7 @@ inherited MainForm: TMainForm
             Left = 310
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionEditSelectAll
             Align = alLeft
             Flat = True
@@ -642,7 +642,7 @@ inherited MainForm: TMainForm
             Left = 380
             Top = 0
             Width = 70
-            Height = 59
+            Height = 56
             Action = ActionEditInsert
             Align = alLeft
             Flat = True
@@ -663,7 +663,7 @@ inherited MainForm: TMainForm
             Left = 450
             Top = 0
             Width = 70
-            Height = 59
+            Height = 56
             Action = ActionEditDelete
             Align = alLeft
             Flat = True
@@ -685,7 +685,7 @@ inherited MainForm: TMainForm
             Left = 520
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -707,7 +707,7 @@ inherited MainForm: TMainForm
             Left = 600
             Top = 0
             Width = 70
-            Height = 59
+            Height = 56
             Action = ActionEditSort
             Align = alLeft
             Flat = True
@@ -728,7 +728,7 @@ inherited MainForm: TMainForm
             Left = 530
             Top = 0
             Width = 70
-            Height = 59
+            Height = 56
             Action = ActionEditIndent
             Align = alLeft
             Flat = True
@@ -750,7 +750,7 @@ inherited MainForm: TMainForm
             Left = 670
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -772,7 +772,7 @@ inherited MainForm: TMainForm
             Left = 680
             Top = 0
             Width = 76
-            Height = 59
+            Height = 56
             Action = ActionEditToggleCase
             Align = alLeft
             Flat = True
@@ -801,7 +801,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -810,7 +810,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionSearchSearchButton
             Align = alLeft
             AllowAllUp = True
@@ -831,7 +831,7 @@ inherited MainForm: TMainForm
             Left = 60
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionSearchReplace
             Align = alLeft
             Flat = True
@@ -852,7 +852,7 @@ inherited MainForm: TMainForm
             Left = 180
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -874,7 +874,7 @@ inherited MainForm: TMainForm
             Left = 120
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionSearchFindInFiles
             Align = alLeft
             Flat = True
@@ -894,7 +894,7 @@ inherited MainForm: TMainForm
             Left = 190
             Top = 0
             Width = 80
-            Height = 59
+            Height = 56
             Action = ActionSearchToggleBookmark
             Align = alLeft
             Flat = True
@@ -914,7 +914,7 @@ inherited MainForm: TMainForm
             Left = 270
             Top = 0
             Width = 94
-            Height = 59
+            Height = 56
             Action = ActionSearchToggleBookmarks
             Align = alLeft
             Flat = True
@@ -935,7 +935,7 @@ inherited MainForm: TMainForm
             Left = 364
             Top = 0
             Width = 94
-            Height = 59
+            Height = 56
             Action = ActionSearchGoToBookmarks
             Align = alLeft
             Flat = True
@@ -957,7 +957,7 @@ inherited MainForm: TMainForm
             Left = 538
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -979,7 +979,7 @@ inherited MainForm: TMainForm
             Left = 458
             Top = 0
             Width = 80
-            Height = 59
+            Height = 56
             Action = ActionSearchClearBookmarks
             Align = alLeft
             Flat = True
@@ -999,7 +999,7 @@ inherited MainForm: TMainForm
             Left = 548
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionSearchGoToLine
             Align = alLeft
             Flat = True
@@ -1027,7 +1027,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -1036,7 +1036,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewOpenDirectory
             Align = alLeft
             Flat = True
@@ -1058,7 +1058,7 @@ inherited MainForm: TMainForm
             Left = 60
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewCloseDirectory
             Align = alLeft
             Flat = True
@@ -1079,7 +1079,7 @@ inherited MainForm: TMainForm
             Left = 180
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1101,7 +1101,7 @@ inherited MainForm: TMainForm
             Left = 120
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewEditDirectory
             Align = alLeft
             Flat = True
@@ -1121,7 +1121,7 @@ inherited MainForm: TMainForm
             Left = 190
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewFiles
             Align = alLeft
             Flat = True
@@ -1141,7 +1141,7 @@ inherited MainForm: TMainForm
             Left = 260
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewWordWrap
             Align = alLeft
             AllowAllUp = True
@@ -1163,7 +1163,7 @@ inherited MainForm: TMainForm
             Left = 250
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1185,7 +1185,7 @@ inherited MainForm: TMainForm
             Left = 440
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewSelectionMode
             Align = alLeft
             AllowAllUp = True
@@ -1206,7 +1206,7 @@ inherited MainForm: TMainForm
             Left = 380
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewSpecialChars
             Align = alLeft
             AllowAllUp = True
@@ -1227,7 +1227,7 @@ inherited MainForm: TMainForm
             Left = 320
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewLineNumbers
             Align = alLeft
             AllowAllUp = True
@@ -1248,7 +1248,7 @@ inherited MainForm: TMainForm
             Left = 690
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewPreviousPage
             Align = alLeft
             Flat = True
@@ -1269,7 +1269,7 @@ inherited MainForm: TMainForm
             Left = 680
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1291,7 +1291,7 @@ inherited MainForm: TMainForm
             Left = 750
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewNextPage
             Align = alLeft
             Flat = True
@@ -1311,7 +1311,7 @@ inherited MainForm: TMainForm
             Left = 620
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewXMLTree
             Align = alLeft
             AllowAllUp = True
@@ -1332,7 +1332,7 @@ inherited MainForm: TMainForm
             Left = 560
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewSplit
             Align = alLeft
             AllowAllUp = True
@@ -1353,7 +1353,7 @@ inherited MainForm: TMainForm
             Left = 500
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionViewMinimap
             Align = alLeft
             AllowAllUp = True
@@ -1529,7 +1529,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -1538,7 +1538,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionToolsOptions
             Align = alLeft
             Flat = True
@@ -1560,7 +1560,7 @@ inherited MainForm: TMainForm
             Left = 70
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionToolsCompareFiles
             Align = alLeft
             Flat = True
@@ -1581,7 +1581,7 @@ inherited MainForm: TMainForm
             Left = 60
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1603,7 +1603,7 @@ inherited MainForm: TMainForm
             Left = 130
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionToolsConvert
             Align = alLeft
             Flat = True
@@ -1623,7 +1623,7 @@ inherited MainForm: TMainForm
             Left = 190
             Top = 0
             Width = 60
-            Height = 59
+            Height = 56
             Action = ActionToolsCharacterMap
             Align = alLeft
             Flat = True
@@ -1644,7 +1644,7 @@ inherited MainForm: TMainForm
             Left = 250
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1666,7 +1666,7 @@ inherited MainForm: TMainForm
             Left = 260
             Top = 0
             Width = 65
-            Height = 59
+            Height = 56
             Action = ActionToolsLanguageEditor
             Align = alLeft
             Flat = True
@@ -1694,7 +1694,7 @@ inherited MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 1103
-          Height = 59
+          Height = 56
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
@@ -1703,7 +1703,7 @@ inherited MainForm: TMainForm
             Left = 0
             Top = 0
             Width = 81
-            Height = 59
+            Height = 56
             Action = ActionHelpCheckForUpdates
             Align = alLeft
             Flat = True
@@ -1725,7 +1725,7 @@ inherited MainForm: TMainForm
             Left = 91
             Top = 0
             Width = 68
-            Height = 59
+            Height = 56
             Action = ActionHelpVisitHomepage
             Align = alLeft
             Flat = True
@@ -1746,7 +1746,7 @@ inherited MainForm: TMainForm
             Left = 81
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0
@@ -1768,7 +1768,7 @@ inherited MainForm: TMainForm
             Left = 169
             Top = 0
             Width = 74
-            Height = 59
+            Height = 56
             Action = ActionHelpAboutEditBone
             Align = alLeft
             Flat = True
@@ -1789,7 +1789,7 @@ inherited MainForm: TMainForm
             Left = 159
             Top = 4
             Width = 10
-            Height = 51
+            Height = 48
             Margins.Left = 0
             Margins.Top = 4
             Margins.Right = 0

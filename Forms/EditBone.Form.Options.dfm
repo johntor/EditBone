@@ -57,7 +57,7 @@ object OptionsForm: TOptionsForm
     Left = 0
     Top = 0
     Width = 714
-    Height = 509
+    Height = 495
     Align = alClient
     BevelOuter = bvNone
     DoubleBuffered = True
@@ -66,19 +66,21 @@ object OptionsForm: TOptionsForm
     ParentDoubleBuffered = False
     TabOrder = 0
     SkinData.SkinSection = 'CHECKBOX'
-    ExplicitHeight = 501
     object Splitter: TBCSplitter
-      Left = 200
+      Left = 203
       Top = 6
-      Height = 503
+      Height = 489
       SkinData.SkinSection = 'SPLITTER'
-      ExplicitHeight = 495
     end
     object VirtualDrawTreeOptions: TVirtualDrawTree
-      Left = 0
+      AlignWithMargins = True
+      Left = 3
       Top = 6
       Width = 200
-      Height = 503
+      Height = 489
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
       Align = alLeft
       Header.AutoSizeIndex = 0
       Header.Font.Charset = DEFAULT_CHARSET
@@ -99,14 +101,13 @@ object OptionsForm: TOptionsForm
       OnGetImageIndex = VirtualDrawTreeOptionsGetImageIndex
       OnGetNodeWidth = VirtualDrawTreeOptionsGetNodeWidth
       OnKeyUp = VirtualDrawTreeOptionsKeyUp
-      ExplicitHeight = 495
       Columns = <>
     end
     object OptionsPanel: TBCPanel
-      Left = 206
+      Left = 209
       Top = 6
-      Width = 508
-      Height = 503
+      Width = 505
+      Height = 489
       Align = alClient
       BevelOuter = bvNone
       DoubleBuffered = True
@@ -114,61 +115,60 @@ object OptionsForm: TOptionsForm
       ParentDoubleBuffered = False
       TabOrder = 1
       SkinData.SkinSection = 'CHECKBOX'
-      ExplicitHeight = 495
       object ScrollBox: TBCScrollBox
         Left = 0
         Top = 0
-        Width = 508
-        Height = 503
+        Width = 505
+        Height = 489
         Align = alClient
         BorderStyle = bsNone
         TabOrder = 0
         SkinData.SkinSection = 'CHECKBOX'
-        ExplicitHeight = 495
       end
     end
   end
   object PanelButton: TBCPanel
-    Left = 0
-    Top = 509
-    Width = 714
-    Height = 33
+    AlignWithMargins = True
+    Left = 3
+    Top = 498
+    Width = 708
+    Height = 41
     Align = alBottom
     BevelOuter = bvNone
     Padding.Top = 8
+    Padding.Bottom = 8
     TabOrder = 1
     SkinData.SkinSection = 'CHECKBOX'
     object ButtonOK: TButton
-      Left = 559
+      AlignWithMargins = True
+      Left = 548
       Top = 8
       Width = 75
       Height = 25
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 5
+      Margins.Bottom = 0
       Align = alRight
       Caption = '&OK'
       Default = True
       ModalResult = 1
       TabOrder = 0
-      ExplicitLeft = 553
     end
     object ButtonCancel: TButton
       AlignWithMargins = True
-      Left = 639
+      Left = 628
       Top = 8
       Width = 75
       Height = 25
-      Margins.Left = 5
+      Margins.Left = 0
       Margins.Top = 0
-      Margins.Right = 0
+      Margins.Right = 5
       Margins.Bottom = 0
       Align = alRight
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
-      ExplicitLeft = 633
     end
   end
   object ActionList: TActionList

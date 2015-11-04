@@ -1922,7 +1922,6 @@ end;
 
 procedure TMainForm.UpdatePageControlMargins;
 begin
-  //PageControlToolbar.AlignWithMargins := SkinManager.ExtendedBorders;
   if SkinManager.ExtendedBorders then
     PageControlToolbar.Margins.SetBounds(3, 3, 3, 0)
   else
@@ -2756,7 +2755,7 @@ begin
   inherited;
   if (Panel.Index = 1) and OptionsContainer.StatusBarShowCaretPosition then
   begin
-    EBDataModuleImages.ImageListStatusBar.Draw(StatusBar.Canvas, Rect.Left, Rect.Top + 1, 0);
+    EBDataModuleImages.ImageListStatusBar.Draw(StatusBar.Canvas, Rect.Left + 2, Rect.Top + 1, 0);
 
     LRect := Rect;
     LRect.Left := LRect.Left + EBDataModuleImages.ImageListStatusBar.Width + 4;
@@ -2855,7 +2854,7 @@ begin
     SkinManager.Saturation := ReadInteger('Options', 'SkinSaturation', 10);
     SkinManager.Brightness := ReadInteger('Options', 'SkinBrightness', 0);
     SkinManager.AnimEffects.BlendOnMoving.Active := ReadBool('Options', 'SkinBlendOnMoving', False);
-    SkinManager.ExtendedBorders := ReadBool('Options', 'SkinExtendedBorders', False);
+    SkinManager.ExtendedBorders := ReadBool('Options', 'SkinExtendedBorders', True);
     UpdatePageControlMargins;
   finally
     Free;
