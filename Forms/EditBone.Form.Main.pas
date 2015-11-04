@@ -409,6 +409,7 @@ type
     MenuItemPopupMenuDocumentDivider3: TMenuItem;
     MenuItemPopupMenuDocumentDivider4: TMenuItem;
     MenuItemPopupMenuDocumentDivider5: TMenuItem;
+    MenuItemPopupMenuOpenFilesDummy: TMenuItem;
     MenuItemProperties: TMenuItem;
     MenuItemRedo: TMenuItem;
     MenuItemRefresh: TMenuItem;
@@ -509,6 +510,7 @@ type
     PopupMenuFileReopen: TPopupMenu;
     PopupMenuFileTreeView: TPopupMenu;
     PopupMenuHighlighters: TPopupMenu;
+    PopupMenuOpenFiles: TPopupMenu;
     PopupMenuOutput: TPopupMenu;
     PopupMenuSearchGotoBookmarks: TPopupMenu;
     PopupMenuSearchToggleBookmarks: TPopupMenu;
@@ -652,14 +654,13 @@ type
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
     Timer: TTimer;
-    PopupMenuOpenFiles: TPopupMenu;
-    MenuItemPopupMenuOpenFilesDummy: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
     procedure ActionDirectoryPropertiesExecute(Sender: TObject);
     procedure ActionDirectoryRefreshExecute(Sender: TObject);
     procedure ActionDirectoryRenameExecute(Sender: TObject);
+    procedure ActionDocumentFormatExecute(Sender: TObject);
     procedure ActionDocumentFormatJSONExecute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent2Execute(Sender: TObject);
     procedure ActionDocumentFormatJSONIndent3Execute(Sender: TObject);
@@ -673,12 +674,15 @@ type
     procedure ActionEditCopyExecute(Sender: TObject);
     procedure ActionEditCutExecute(Sender: TObject);
     procedure ActionEditDeleteEndOfLineExecute(Sender: TObject);
+    procedure ActionEditDeleteExecute(Sender: TObject);
     procedure ActionEditDeleteLineExecute(Sender: TObject);
     procedure ActionEditDeleteWhitespaceExecute(Sender: TObject);
     procedure ActionEditDeleteWordExecute(Sender: TObject);
     procedure ActionEditIndentDecreaseExecute(Sender: TObject);
+    procedure ActionEditIndentExecute(Sender: TObject);
     procedure ActionEditIndentIncreaseExecute(Sender: TObject);
     procedure ActionEditInsertDateTimeExecute(Sender: TObject);
+    procedure ActionEditInsertExecute(Sender: TObject);
     procedure ActionEditInsertLineExecute(Sender: TObject);
     procedure ActionEditInsertTagExecute(Sender: TObject);
     procedure ActionEditPasteExecute(Sender: TObject);
@@ -686,6 +690,7 @@ type
     procedure ActionEditSelectAllExecute(Sender: TObject);
     procedure ActionEditSortAscExecute(Sender: TObject);
     procedure ActionEditSortDescExecute(Sender: TObject);
+    procedure ActionEditSortExecute(Sender: TObject);
     procedure ActionEditToggleCaseAlternatingExecute(Sender: TObject);
     procedure ActionEditToggleCaseExecute(Sender: TObject);
     procedure ActionEditToggleCaseLowerExecute(Sender: TObject);
@@ -711,6 +716,7 @@ type
     procedure ActionHelpAboutEditBoneExecute(Sender: TObject);
     procedure ActionHelpCheckForUpdatesExecute(Sender: TObject);
     procedure ActionHelpVisitHomepageExecute(Sender: TObject);
+    procedure ActionMacroExecute(Sender: TObject);
     procedure ActionMacroOpenExecute(Sender: TObject);
     procedure ActionMacroPauseExecute(Sender: TObject);
     procedure ActionMacroPlaybackExecute(Sender: TObject);
@@ -738,6 +744,7 @@ type
     procedure ActionSearchFindInFilesExecute(Sender: TObject);
     procedure ActionSearchFindNextExecute(Sender: TObject);
     procedure ActionSearchFindPreviousExecute(Sender: TObject);
+    procedure ActionSearchGoToBookmarksExecute(Sender: TObject);
     procedure ActionSearchGoToLineExecute(Sender: TObject);
     procedure ActionSearchOptionsExecute(Sender: TObject);
     procedure ActionSearchReplaceExecute(Sender: TObject);
@@ -745,6 +752,7 @@ type
     procedure ActionSearchSearchExecute(Sender: TObject);
     procedure ActionSearchTextItemsExecute(Sender: TObject);
     procedure ActionSearchToggleBookmarkExecute(Sender: TObject);
+    procedure ActionSearchToggleBookmarksExecute(Sender: TObject);
     procedure ActionSelectEncodingExecute(Sender: TObject);
     procedure ActionSelectHighlighterColorExecute(Sender: TObject);
     procedure ActionSelectHighlighterExecute(Sender: TObject);
@@ -816,6 +824,7 @@ type
     procedure PageControlOutputDblClick(Sender: TObject);
     procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupMenuFileTreeViewPopup(Sender: TObject);
+    procedure PopupMenuOpenFilesPopup(Sender: TObject);
     procedure SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string; var Glyph: TBitmap; var LineVisible: Boolean);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
@@ -824,35 +833,28 @@ type
     procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure PopupMenuOpenFilesPopup(Sender: TObject);
-    procedure ActionEditInsertExecute(Sender: TObject);
-    procedure ActionEditDeleteExecute(Sender: TObject);
-    procedure ActionEditIndentExecute(Sender: TObject);
-    procedure ActionEditSortExecute(Sender: TObject);
-    procedure ActionSearchToggleBookmarksExecute(Sender: TObject);
-    procedure ActionSearchGoToBookmarksExecute(Sender: TObject);
-    procedure ActionMacroExecute(Sender: TObject);
-    procedure ActionDocumentFormatExecute(Sender: TObject);
   private
-    FNoIni: Boolean;
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
-    FImageListCount: Integer;
-    FOutput: TEBOutput;
-    FProcessingEventHandler: Boolean;
     FFindInFilesThread: TFindInFilesThread;
+    FImageListCount: Integer;
+    FNoIni: Boolean;
+    FOutput: TEBOutput;
+    FOutputTreeView: TVirtualDrawTree;
+    FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
-    FOutputTreeView: TVirtualDrawTree;
     function GetActionList: TObjectList<TAction>;
-    function OnCancelSearch: Boolean;
     function GetHighlighterColor: string;
     function GetStringList(APopupMenu: TPopupMenu): TStringList;
+    function OnCancelSearch: Boolean;
     function Processing: Boolean;
-    procedure CreateObjects;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
+    procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
+    procedure GetHighlighterColors;
+    procedure GetHighlighters;
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(ALanguage: string);
@@ -861,9 +863,8 @@ type
     procedure SetImages;
     procedure SetOptions;
     procedure UpdateMenuBarLanguage;
+    procedure UpdatePageControlMargins;
     procedure WriteIniFile;
-    procedure GetHighlighters;
-    procedure GetHighlighterColors;
   public
     procedure CreateFileReopenList;
     procedure SetBookmarks;
@@ -1916,6 +1917,30 @@ procedure TMainForm.ActionToolbarMenuSkinExecute(Sender: TObject);
 begin
   inherited;
   TSkinSelectDialog.ClassShowModal(SkinManager);
+  UpdatePageControlMargins;
+end;
+
+procedure TMainForm.UpdatePageControlMargins;
+begin
+  //PageControlToolbar.AlignWithMargins := SkinManager.ExtendedBorders;
+  if SkinManager.ExtendedBorders then
+    PageControlToolbar.Margins.SetBounds(3, 3, 3, 0)
+  else
+    PageControlToolbar.Margins.SetBounds(0, 3, 0, 0);
+  PageControlDirectory.AlignWithMargins := SkinManager.ExtendedBorders;
+  PageControlDocument.AlignWithMargins := SkinManager.ExtendedBorders;
+  if PanelDirectory.Align = alLeft then
+  begin
+    PageControlDirectory.Margins.SetBounds(3, 0, 0, 0);
+    PageControlDocument.Margins.SetBounds(0, 0, 3, 0)
+  end
+  else
+  begin
+    PageControlDirectory.Margins.SetBounds(0, 0, 3, 0);
+    PageControlDocument.Margins.SetBounds(3, 0, 0, 0)
+  end;
+  PageControlOutput.AlignWithMargins := SkinManager.ExtendedBorders;
+  PageControlOutput.Margins.SetBounds(3, 0, 3, 0);
 end;
 
 procedure TMainForm.ActionToolsCharacterMapExecute(Sender: TObject);
@@ -2831,6 +2856,7 @@ begin
     SkinManager.Brightness := ReadInteger('Options', 'SkinBrightness', 0);
     SkinManager.AnimEffects.BlendOnMoving.Active := ReadBool('Options', 'SkinBlendOnMoving', False);
     SkinManager.ExtendedBorders := ReadBool('Options', 'SkinExtendedBorders', False);
+    UpdatePageControlMargins;
   finally
     Free;
   end;
