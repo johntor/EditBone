@@ -1928,16 +1928,21 @@ begin
     PageControlToolbar.Margins.SetBounds(0, 3, 0, 0);
   PageControlDirectory.AlignWithMargins := SkinManager.ExtendedBorders;
   PageControlDocument.AlignWithMargins := SkinManager.ExtendedBorders;
-  if PanelDirectory.Align = alLeft then
+  if PanelDirectory.Visible then
   begin
-    PageControlDirectory.Margins.SetBounds(3, 0, 0, 0);
-    PageControlDocument.Margins.SetBounds(0, 0, 3, 0)
+    if PanelDirectory.Align = alLeft then
+    begin
+      PageControlDirectory.Margins.SetBounds(3, 0, 0, 0);
+      PageControlDocument.Margins.SetBounds(0, 0, 3, 0)
+    end
+    else
+    begin
+      PageControlDirectory.Margins.SetBounds(0, 0, 3, 0);
+      PageControlDocument.Margins.SetBounds(3, 0, 0, 0)
+    end;
   end
   else
-  begin
-    PageControlDirectory.Margins.SetBounds(0, 0, 3, 0);
-    PageControlDocument.Margins.SetBounds(3, 0, 0, 0)
-  end;
+    PageControlDocument.Margins.SetBounds(3, 0, 3, 0);
   PageControlOutput.AlignWithMargins := SkinManager.ExtendedBorders;
   PageControlOutput.Margins.SetBounds(3, 0, 3, 0);
 end;
@@ -1961,6 +1966,7 @@ begin
     else
       SplitterVertical.Hide;
     Visible := not Visible;
+    UpdatePageControlMargins;
   end;
 end;
 
