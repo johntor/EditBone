@@ -1046,19 +1046,36 @@ begin
   CreateFileReopenList;
 end;
 
-
-
 procedure TMainForm.ActionFileReopenExecute(Sender: TObject);
 begin
   DropdownMenuPopup(SpeedButtonFileReopen);
+end;
+
+function IsCtrlDown: Boolean;
+var
+  LKeyboardState: TKeyboardState;
+begin
+  GetKeyboardState(LKeyboardState);
+  Result := (LKeyboardState[VK_CONTROL] and 128) <> 0;
+end;
+
+function IsShiftDown: Boolean;
+var
+  LKeyboardState: TKeyboardState;
+begin
+  GetKeyboardState(LKeyboardState);
+  Result := (LKeyboardState[VK_SHIFT] and 128) <> 0;
 end;
 
 procedure TMainForm.DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
 var
   LPoint: TPoint;
 begin
-  LPoint := ASpeedButton.ClientToScreen(Point(0, ASpeedButton.Height));
-  ASpeedButton.DropdownMenu.Popup(LPoint.X, LPoint.Y);
+  if not IsCtrlDown and not IsShiftDown then
+  begin
+    LPoint := ASpeedButton.ClientToScreen(Point(0, ASpeedButton.Height));
+    ASpeedButton.DropdownMenu.Popup(LPoint.X, LPoint.Y);
+  end;
 end;
 
 procedure TMainForm.ActionOutputCloseAllOtherPagesExecute(Sender: TObject);
