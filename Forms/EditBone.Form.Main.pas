@@ -2321,23 +2321,23 @@ begin
     if ActiveDocumentFound and OptionsContainer.StatusBarShowModified then
     begin
       InfoText := FDocument.GetModifiedInfo;
-      if StatusBar.Panels[3].Text <> InfoText then
-        StatusBar.Panels[3].Text := InfoText;
+      if StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text <> InfoText then
+        StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := InfoText;
     end
     else
-      StatusBar.Panels[3].Text := '';
+      StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := '';
     GetKeyboardState(KeyState);
     if OptionsContainer.StatusBarShowKeyState then
     begin
       if KeyState[VK_INSERT] = 0 then
-        if StatusBar.Panels[2].Text <> LanguageDataModule.GetConstant('Insert') then
-          StatusBar.Panels[2].Text := LanguageDataModule.GetConstant('Insert');
+        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Insert') then
+          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Insert');
       if KeyState[VK_INSERT] = 1 then
-        if StatusBar.Panels[2].Text <> LanguageDataModule.GetConstant('Overwrite') then
-          StatusBar.Panels[2].Text := LanguageDataModule.GetConstant('Overwrite');
+        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Overwrite') then
+          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Overwrite');
     end
     else
-      StatusBar.Panels[2].Text := '';
+      StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := '';
     { Macro }
     ActionMacroRecord.Enabled := ActiveDocumentFound;
     ActionMacroPause.Enabled := ActiveDocumentFound;
@@ -2639,32 +2639,32 @@ begin
   { StatusBar }
   // TODO: use consts instead of numbers
   if OptionsContainer.StatusBarShowMacro then
-    StatusBar.Panels[0].Width := 60
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 60
   else
-    StatusBar.Panels[0].Width := 0;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 0;
   SpeedButtonMacroPlay.Visible := OptionsContainer.StatusBarShowMacro;
   SpeedButtonMacroRecordPause.Visible := OptionsContainer.StatusBarShowMacro;
   SpeedButtonMacroStop.Visible := OptionsContainer.StatusBarShowMacro;
 
   if OptionsContainer.StatusBarShowCaretPosition then
-    StatusBar.Panels[1].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 90
   else
-    StatusBar.Panels[1].Width := 0;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 0;
 
   if OptionsContainer.StatusBarShowKeyState then
-    StatusBar.Panels[2].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 90
   else
-    StatusBar.Panels[2].Width := 0;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 0;
 
   if OptionsContainer.StatusBarShowModified then
   begin
-    StatusBar.Panels[3].Width := EDITBONE_STATUS_BAR_PANEL_WIDTH;
-    PanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[3].Text) + 10;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := EDITBONE_STATUS_BAR_PANEL_WIDTH;
+    PanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text) + 10;
     if PanelWidth > EDITBONE_STATUS_BAR_PANEL_WIDTH then
-      StatusBar.Panels[3].Width := PanelWidth;
+      StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := PanelWidth;
   end
   else
-    StatusBar.Panels[3].Width := 0;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := 0;
 
   OptionsContainer.AssignTo(StatusBar);
   { Output }
@@ -3075,7 +3075,7 @@ procedure TMainForm.FileTreeViewClickActionExecute(Sender: TObject);
 begin
   if Assigned(FDirectory) then
   begin
-    StatusBar.Panels[4].Text := FDirectory.SelectedFile;
+    StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := FDirectory.SelectedFile;
     ActionViewFiles.Enabled := FDirectory.IsAnyDirectory and (FDirectory.SelectedPath <> '');
   end;
 end;
@@ -3120,12 +3120,12 @@ begin
     begin
       Screen.Cursor := crHourGlass;
       try
-        StatusBar.Panels[4].Text := LanguageDataModule.GetConstant('CountingFiles');
+        StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := LanguageDataModule.GetConstant('CountingFiles');
         Application.ProcessMessages;
         LCount := CountFilesInFolder(FolderText);
       finally
         Screen.Cursor := crDefault;
-        StatusBar.Panels[4].Text := '';
+        StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := '';
       end;
       ProgressBar.Show(LCount);
       FStopWatch.Reset;
@@ -3159,13 +3159,13 @@ begin
     begin
       FOutput.AddTreeViewLine(FOutputTreeView, '', -1, 0,
         Format(LanguageDataModule.GetMessage('CannotFindString'), [FFindInFilesThread.FindWhatText]));
-      StatusBar.Panels[3].Text := '';
+      StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := '';
     end;
     if StrToInt(FormatDateTime('n', FStopWatch.ElapsedMilliseconds / MSecsPerDay)) < 1 then
       TimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
     else
       TimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
-    StatusBar.Panels[4].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, TimeDifference])
+    StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, TimeDifference])
   end;
   FOutput.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
   FOutput.ProcessingTabSheet := False;
