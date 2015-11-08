@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.StdCtrls, Vcl.ActnList, System.Actions, BCEditor.Editor,
-  BCControls.ComboBox, sComboBox, sFontCtrls, BCControls.Panel, sPanel, BCControls.Statusbar, sStatusBar;
+  BCControls.ComboBox, sComboBox, sFontCtrls, BCControls.Panel, sPanel, BCControls.Statusbar, sStatusBar, JvExGrids,
+  JvStringGrid;
 
 const
   WM_AFTER_SHOW = WM_USER + 301; // custom message

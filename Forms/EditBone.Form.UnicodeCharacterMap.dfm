@@ -66,16 +66,16 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
   end
   object ComboBoxFont: TBCFontComboBox
     AlignWithMargins = True
-    Left = 0
+    Left = 3
     Top = 6
-    Width = 387
+    Width = 381
     Height = 20
-    Margins.Left = 0
     Margins.Top = 6
-    Margins.Right = 0
     Margins.Bottom = 2
     Align = alTop
     Alignment = taLeftJustify
+    BoundLabel.Indent = 4
+    BoundLabel.Layout = sclTopLeft
     SkinData.SkinSection = 'COMBOBOX'
     VerticalAlignment = taAlignTop
     Font.Charset = DEFAULT_CHARSET
@@ -90,13 +90,10 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
   end
   object StringGridCharacter: TStringGrid
     AlignWithMargins = True
-    Left = 0
+    Left = 3
     Top = 31
-    Width = 387
-    Height = 347
-    Margins.Left = 0
-    Margins.Right = 0
-    Margins.Bottom = 5
+    Width = 381
+    Height = 349
     Align = alClient
     ColCount = 20
     DefaultColWidth = 19
@@ -104,7 +101,7 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
     FixedCols = 0
     RowCount = 3277
     FixedRows = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goRowSizing, goThumbTracking]
     ScrollBars = ssVertical
     TabOrder = 2
     OnClick = StringGridCharacterClick
