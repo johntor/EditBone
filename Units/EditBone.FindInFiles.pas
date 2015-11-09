@@ -22,7 +22,6 @@ type
     FFolderText: string;
     FSearchCaseSensitive: Boolean;
     FLookInSubfolders: Boolean;
-    function GetFiles(const Path, Masks: string): TStringDynArray;
     function GetStringList(AFilename: string): TStringList;
     procedure FindInFiles(AFolderText: String);
   public
@@ -40,7 +39,7 @@ implementation
 
 uses
   Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms, System.Masks,
-  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, System.IOUtils, System.StrUtils;
+  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, System.IOUtils, System.StrUtils, BCCommon.FileUtils;
 
 procedure TFindInFilesThread.Execute;
 begin
@@ -69,31 +68,6 @@ begin
   FCount := 0;
 end;
 
-function TFindInFilesThread.GetFiles(const Path, Masks: string): TStringDynArray;
-var
-  MaskArray: TStringDynArray;
-  Predicate: TDirectory.TFilterPredicate;
-  LSearchOption: TSearchOption;
-begin
-  if FLookInSubfolders then
-    LSearchOption := System.IOUtils.TSearchOption.soAllDirectories
-  else
-    LSearchOption := System.IOUtils.TSearchOption.soTopDirectoryOnly;
-
-  MaskArray := SplitString(Masks, ';');
-  Predicate := function(const Path: string; const SearchRec: TSearchRec): Boolean
-    var
-      Mask: string;
-    begin
-      for Mask in MaskArray do
-        if MatchesMask(SearchRec.Name, Mask) then
-          Exit(True);
-      Exit(False);
-    end;
-  Result := TDirectory.GetFiles(Path, LSearchOption, Predicate);
-end;
-
-{ Recursive method to find files. }
 procedure TFindInFilesThread.FindInFiles(AFolderText: String);
 var
   LTextLine: string;
@@ -102,7 +76,7 @@ var
   LStringList: TStringList;
   LTextPtr, LStartTextPtr, LFindWhatTextPtr, LBookmarkTextPtr: PChar;
 begin
-  for FName in Self.GetFiles(AFolderText, FFileTypeText) do
+  for FName in BCCommon.FileUtils.GetFiles(AFolderText, FFileTypeText, FLookInSubfolders) do
     if (FFileTypeText = '*.*') and IsExtInFileType(ExtractFileExt(FName), FFileExtensions) or
       IsExtInFileType(ExtractFileExt(FName), FFileTypeText) then
     begin

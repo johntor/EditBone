@@ -8,12 +8,10 @@ uses
   sSkinProvider, BCComponents.SkinProvider, acTitleBar, BCComponents.TitleBar, sSkinManager, BCComponents.SkinManager,
   Vcl.ComCtrls, sStatusBar, BCControls.StatusBar, Vcl.ExtCtrls, sPanel, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
-  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
-  Vcl.ActnMan, Vcl.ActnMenus, BCComponents.DragDrop, System.Diagnostics, EditBone.Output,
-  Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, Vcl.ImgList,
+  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, Vcl.ActnMan, Vcl.ActnMenus,
+  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, BCControls.ComboBox, Vcl.DBCtrls,
-  sLabel;
+  System.Generics.Collections, BCControls.ComboBox, Vcl.DBCtrls, sLabel;
 
 type
   TMainForm = class(TBCBaseForm)
@@ -3136,10 +3134,11 @@ begin
     if ShowModal = mrOk then
     begin
       Screen.Cursor := crHourGlass;
+      LFileExtensions := GetFileExtensions(OptionsContainer.SupportedFileExtensions);
       try
         StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := LanguageDataModule.GetConstant('CountingFiles');
         Application.ProcessMessages;
-        LCount := CountFilesInFolder(FolderText);
+        LCount := CountFilesInFolder(FolderText, FileTypeText, LFileExtensions);
       finally
         Screen.Cursor := crDefault;
         StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := '';
@@ -3152,7 +3151,6 @@ begin
       PanelOutput.Visible := True;
       PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
       Application.ProcessMessages;
-      LFileExtensions := GetFileExtensions(OptionsContainer.SupportedFileExtensions);
       FFindInFilesThread := TFindInFilesThread.Create(FindWhatText, FileTypeText, FolderText, SearchCaseSensitive,
         LookInSubfolders, LFileExtensions);
       FFindInFilesThread.OnTerminate := OnTerminateFindInFiles;
