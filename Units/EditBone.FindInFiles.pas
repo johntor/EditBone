@@ -77,6 +77,13 @@ var
   LTextPtr, LStartTextPtr, LFindWhatTextPtr, LBookmarkTextPtr: PChar;
 begin
   for FName in BCCommon.FileUtils.GetFiles(AFolderText, FFileTypeText, FLookInSubfolders) do
+  begin
+    Application.ProcessMessages;
+    if Assigned(FOnCancelSearch) and FOnCancelSearch then
+    begin
+      Terminate;
+      Exit;
+    end;
     if (FFileTypeText = '*.*') and IsExtInFileType(ExtractFileExt(FName), FFileExtensions) or
       IsExtInFileType(ExtractFileExt(FName), FFileTypeText) then
     begin
@@ -140,6 +147,7 @@ begin
         LStringList.Free;
       end;
     end;
+  end;
 end;
 
 function TFindInFilesThread.GetStringList(AFilename: string): TStringList;
