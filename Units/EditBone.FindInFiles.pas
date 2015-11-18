@@ -79,73 +79,65 @@ begin
   for FName in BCCommon.FileUtils.GetFiles(AFolderText, FFileTypeText, FLookInSubfolders) do
   begin
     Application.ProcessMessages;
+
     if Assigned(FOnCancelSearch) and FOnCancelSearch then
     begin
       Terminate;
       Exit;
     end;
-    if (FFileTypeText = '*.*') and IsExtInFileType(ExtractFileExt(FName), FFileExtensions) or
-      IsExtInFileType(ExtractFileExt(FName), FFileTypeText) then
-    begin
-      if Assigned(FOnProgressBarStep) then
-        FOnProgressBarStep(Self);
-{$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-      LStringList := GetStringList(FName);
-{$WARNINGS ON}
+
+    if Assigned(FOnProgressBarStep) then
+      FOnProgressBarStep(Self);
+
+    LStringList := GetStringList(FName);
+    try
       try
-        try
-          if Trim(LStringList.Text) <> '' then
-            for i := 0 to LStringList.Count - 1 do
+        if Trim(LStringList.Text) <> '' then
+          for i := 0 to LStringList.Count - 1 do
+          begin
+            LTextLine := LStringList.Strings[i];
+            if not FSearchCaseSensitive then
+              LTextLine := UpperCase(LTextLine);
+            LStartTextPtr := PChar(LTextLine);
+            LTextPtr := LStartTextPtr;
+            while LTextPtr^ <> EDITBONE_NONE_CHAR do
             begin
-              LTextLine := LStringList.Strings[i];
-              if not FSearchCaseSensitive then
-                LTextLine := UpperCase(LTextLine);
-              LStartTextPtr := PChar(LTextLine);
-              LTextPtr := LStartTextPtr;
-              while LTextPtr^ <> EDITBONE_NONE_CHAR do
+              if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
               begin
-                if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
+                LFindWhatTextPtr := PChar(FFindWhatSearchText);
+                LBookmarkTextPtr := LTextPtr;
+                { check if the keyword found }
+                while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and
+                  (LTextPtr^ = LFindWhatTextPtr^) do
                 begin
-                  LFindWhatTextPtr := PChar(FFindWhatSearchText);
-                  LBookmarkTextPtr := LTextPtr;
-                  { check if the keyword found }
-                  while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and
-                    (LTextPtr^ = LFindWhatTextPtr^) do
-                  begin
-                    Inc(LTextPtr);
-                    Inc(LFindWhatTextPtr);
-                  end;
-                  if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
-                  begin
-                    Inc(FCount);
-                    if Assigned(FOnCancelSearch) and FOnCancelSearch then
-                    begin
-                      Terminate;
-                      Exit;
-                    end;
-{$WARNINGS OFF} { IncludeTrailingBackslash is specific to a platform }
-                    if Assigned(FOnAddTreeViewLine) then
-                      FOnAddTreeViewLine(Self, FName, i, LBookmarkTextPtr - LStartTextPtr + 1, LStringList.Strings[i],
-                        FFindWhatOriginalText);
-{$WARNINGS ON}
-                  end
-                  else
-                    LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
+                  Inc(LTextPtr);
+                  Inc(LFindWhatTextPtr);
                 end;
-                Inc(LTextPtr);
+                if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
+                begin
+                  Inc(FCount);
+                  if Assigned(FOnCancelSearch) and FOnCancelSearch then
+                  begin
+                    Terminate;
+                    Exit;
+                  end;
+                  if Assigned(FOnAddTreeViewLine) then
+                    FOnAddTreeViewLine(Self, FName, i, LBookmarkTextPtr - LStartTextPtr + 1, LStringList.Strings[i],
+                      FFindWhatOriginalText);
+                end
+                else
+                  LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
               end;
-            end
-        except
-{$WARNINGS OFF}
-          { IncludeTrailingBackslash is specific to a platform }
-          if Assigned(FOnAddTreeViewLine) then
-            FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
-              [FName]), '');
-{$WARNINGS ON}
-        end;
-      finally
-        LStringList.Free;
+              Inc(LTextPtr);
+            end;
+          end
+      except
+        if Assigned(FOnAddTreeViewLine) then
+          FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
+            [FName]), '');
       end;
+    finally
+      LStringList.Free;
     end;
   end;
 end;
@@ -154,7 +146,7 @@ function TFindInFilesThread.GetStringList(AFilename: string): TStringList;
 var
   LFileStream: TFileStream;
   LBuffer: TBytes;
-  WithBom: Boolean;
+  LWithBom: Boolean;
   LEncoding: System.SysUtils.TEncoding;
 begin
   Result := TStringList.Create;
@@ -162,9 +154,9 @@ begin
   LFileStream := TFileStream.Create(AFilename, fmOpenRead);
   try
     // Identify encoding
-    if IsUTF8(LFileStream, WithBom) then
+    if IsUTF8(LFileStream, LWithBom) then
     begin
-      if WithBom then
+      if LWithBom then
         LEncoding := TEncoding.UTF8
       else
         LEncoding := BCEditor.Encoding.TEncoding.UTF8WithoutBOM;
