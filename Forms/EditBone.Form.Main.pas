@@ -851,13 +851,13 @@ type
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
-    procedure GetHighlighterColors;
-    procedure GetHighlighters;
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(ALanguage: string);
     procedure SearchFindInFiles(AFolder: string = '');
     procedure SetFields;
+    procedure SetHighlighters;
+    procedure SetHighlighterColors;
     procedure SetImages;
     procedure SetOptions;
     procedure UpdateMenuBarLanguage;
@@ -2593,8 +2593,8 @@ begin
   FSQLFormatterDLLFound := FileExists(GetSQLFormatterDLLFilename);
 
   CreateLanguageMenu(MenuItemToolbarMenuLanguage);
-  GetHighlighters;
-  GetHighlighterColors;
+  SetHighlighters;
+  SetHighlighterColors;
 
   OptionsContainer.EncodingStrings := GetStringList(PopupMenuEncoding);
   OptionsContainer.HighlighterStrings := GetStringList(PopupMenuHighlighters);
@@ -3236,16 +3236,14 @@ begin
   end;
 end;
 
-procedure TMainForm.GetHighlighters;
+procedure TMainForm.SetHighlighters;
 var
-  i: Integer;
   LFileName, LName: string;
   LMenuItem, LSubMenuItem: TMenuItem;
   LAction: TAction;
 begin
   PopupMenuHighlighters.Items.Clear;
 
-  i := 0;
   for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Highlighters\', '*.json', False) do
   begin
     LName := ChangeFileExt(ExtractFileName(LFileName), '');
@@ -3266,42 +3264,29 @@ begin
     LSubMenuItem.Action := LAction;
     LSubMenuItem.RadioItem := True;
     LSubMenuItem.AutoCheck := True;
-    if (i <> 0) and (i mod 40 = 0) then
-      LSubMenuItem.Break := mbBreak;
-    Inc(i);
     LMenuItem.Add(LSubMenuItem);
   end;
 end;
 
-procedure TMainForm.GetHighlighterColors;
+procedure TMainForm.SetHighlighterColors;
 var
-  FindFileHandle: THandle;
-  Win32FindData: TWin32FindData;
-  FileName: string;
+  LFileName, LName: string;
   LMenuItem: TMenuItem;
   LAction: TAction;
 begin
   PopupMenuColors.Items.Clear;
-{$WARNINGS OFF}
-  FindFileHandle := FindFirstFile(PChar(IncludeTrailingBackSlash(ExtractFilePath(Application.ExeName)) +
-    'Colors\*.json'), Win32FindData);
-{$WARNINGS ON}
-  if FindFileHandle <> INVALID_HANDLE_VALUE then
-  try
-    repeat
-      FileName := ExtractFileName(StrPas(Win32FindData.cFileName));
-      FileName := Copy(FileName, 1, Pos('.', FileName) - 1);
-      LAction := TAction.Create(Self);
-      LAction.Caption := FileName;
-      LAction.OnExecute := ActionSelectHighlighterColorExecute;
-      LMenuItem := TMenuItem.Create(PopupMenuColors);
-      LMenuItem.Action := LAction;
-      LMenuItem.RadioItem := True;
-      LMenuItem.AutoCheck := True;
-      PopupMenuColors.Items.Add(LMenuItem);
-    until not FindNextFile(FindFileHandle, Win32FindData);
-  finally
-    Winapi.Windows.FindClose(FindFileHandle);
+  for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Colors\', '*.json', False) do
+  begin
+    LName := ChangeFileExt(ExtractFileName(LFileName), '');
+
+    LAction := TAction.Create(Self);
+    LAction.Caption := LName;
+    LAction.OnExecute := ActionSelectHighlighterColorExecute;
+    LMenuItem := TMenuItem.Create(PopupMenuColors);
+    LMenuItem.Action := LAction;
+    LMenuItem.RadioItem := True;
+    LMenuItem.AutoCheck := True;
+    PopupMenuColors.Items.Add(LMenuItem);
   end;
 end;
 
