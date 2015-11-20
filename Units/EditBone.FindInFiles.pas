@@ -93,44 +93,44 @@ begin
     try
       try
         if Trim(LStringList.Text) <> '' then
-          for i := 0 to LStringList.Count - 1 do
+        for i := 0 to LStringList.Count - 1 do
+        begin
+          LTextLine := LStringList.Strings[i];
+          if not FSearchCaseSensitive then
+            LTextLine := UpperCase(LTextLine);
+          LStartTextPtr := PChar(LTextLine);
+          LTextPtr := LStartTextPtr;
+          while LTextPtr^ <> EDITBONE_NONE_CHAR do
           begin
-            LTextLine := LStringList.Strings[i];
-            if not FSearchCaseSensitive then
-              LTextLine := UpperCase(LTextLine);
-            LStartTextPtr := PChar(LTextLine);
-            LTextPtr := LStartTextPtr;
-            while LTextPtr^ <> EDITBONE_NONE_CHAR do
+            if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
             begin
-              if LTextPtr^ = PChar(FFindWhatSearchText)^ then { if the first character is a match }
+              LFindWhatTextPtr := PChar(FFindWhatSearchText);
+              LBookmarkTextPtr := LTextPtr;
+              { check if the keyword found }
+              while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and
+                (LTextPtr^ = LFindWhatTextPtr^) do
               begin
-                LFindWhatTextPtr := PChar(FFindWhatSearchText);
-                LBookmarkTextPtr := LTextPtr;
-                { check if the keyword found }
-                while (LTextPtr^ <> EDITBONE_NONE_CHAR) and (LFindWhatTextPtr^ <> EDITBONE_NONE_CHAR) and
-                  (LTextPtr^ = LFindWhatTextPtr^) do
-                begin
-                  Inc(LTextPtr);
-                  Inc(LFindWhatTextPtr);
-                end;
-                if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
-                begin
-                  Inc(FCount);
-                  if Assigned(FOnCancelSearch) and FOnCancelSearch then
-                  begin
-                    Terminate;
-                    Exit;
-                  end;
-                  if Assigned(FOnAddTreeViewLine) then
-                    FOnAddTreeViewLine(Self, FName, i, LBookmarkTextPtr - LStartTextPtr + 1, LStringList.Strings[i],
-                      FFindWhatOriginalText);
-                end
-                else
-                  LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
+                Inc(LTextPtr);
+                Inc(LFindWhatTextPtr);
               end;
-              Inc(LTextPtr);
+              if LFindWhatTextPtr^ = EDITBONE_NONE_CHAR then
+              begin
+                Inc(FCount);
+                if Assigned(FOnCancelSearch) and FOnCancelSearch then
+                begin
+                  Terminate;
+                  Exit;
+                end;
+                if Assigned(FOnAddTreeViewLine) then
+                  FOnAddTreeViewLine(Self, FName, i, LBookmarkTextPtr - LStartTextPtr + 1, LStringList.Strings[i],
+                    FFindWhatOriginalText);
+              end
+              else
+                LTextPtr := LBookmarkTextPtr; { not found, return pointer back }
             end;
-          end
+            Inc(LTextPtr);
+          end;
+        end
       except
         if Assigned(FOnAddTreeViewLine) then
           FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),

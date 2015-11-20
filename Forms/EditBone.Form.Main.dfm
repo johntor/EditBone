@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetEdit
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3362,7 +3362,7 @@ inherited MainForm: TMainForm
     Top = 518
   end
   object PopupMenuHighlighters: TPopupMenu [18]
-    Left = 800
+    Left = 804
     Top = 584
   end
   object PopupMenuEncoding: TPopupMenu [19]
@@ -3371,35 +3371,42 @@ inherited MainForm: TMainForm
     object MenuItemEncodingANSI: TMenuItem
       Tag = 1
       Action = ActionEncodingANSI
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingASCII: TMenuItem
       Action = ActionEncodingASCII
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingBigEndianUnicode: TMenuItem
       Tag = 2
       Action = ActionEncodingBigEndianUnicode
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingUnicode: TMenuItem
       Tag = 3
       Action = ActionEncodingUnicode
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingUTF7: TMenuItem
       Tag = 4
       Action = ActionEncodingUTF7
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingUTF8: TMenuItem
       Tag = 5
       Action = ActionEncodingUTF8
+      GroupIndex = 1
       RadioItem = True
     end
     object MenuItemEncodingUTF8WithoutBOM: TMenuItem
       Tag = 6
       Action = ActionEncodingUTF8WithoutBOM
+      GroupIndex = 1
       RadioItem = True
     end
   end

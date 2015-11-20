@@ -2824,10 +2824,18 @@ end;
 procedure TMainForm.TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LMenuItem: TMenuItem;
+  LTitleCaption: string;
 begin
-  LMenuItem := PopupMenuHighlighters.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
+  LTitleCaption := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption;
+  LMenuItem := PopupMenuHighlighters.Items.Find(LTitleCaption[1]);
   if Assigned(LMenuItem) then
+  begin
     LMenuItem.Checked := True;
+
+    LMenuItem := LMenuItem.Find(LTitleCaption);
+    if Assigned(LMenuItem) then
+      LMenuItem.Checked := True;
+  end;
 end;
 
 procedure TMainForm.TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -3231,38 +3239,37 @@ end;
 procedure TMainForm.GetHighlighters;
 var
   i: Integer;
-  FindFileHandle: THandle;
-  Win32FindData: TWin32FindData;
-  FileName: string;
-  LMenuItem: TMenuItem;
+  LFileName, LName: string;
+  LMenuItem, LSubMenuItem: TMenuItem;
   LAction: TAction;
 begin
   PopupMenuHighlighters.Items.Clear;
-{$WARNINGS OFF}
-  FindFileHandle := FindFirstFile(PChar(IncludeTrailingBackSlash(ExtractFilePath(Application.ExeName)) +
-    'Highlighters\*.json'), Win32FindData);
-{$WARNINGS ON}
-  if FindFileHandle <> INVALID_HANDLE_VALUE then
-  try
-    i := 0;
-    repeat
-      FileName := ExtractFileName(StrPas(Win32FindData.cFileName));
-      FileName := Copy(FileName, 1, Pos('.', FileName) - 1);
 
-      LAction := TAction.Create(Self);
-      LAction.Caption := FileName;
-      LAction.OnExecute := ActionSelectHighlighterExecute;
+  i := 0;
+  for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Highlighters\', '*.json', False) do
+  begin
+    LName := ChangeFileExt(ExtractFileName(LFileName), '');
+
+    LMenuItem := PopupMenuHighlighters.Items.Find(LName[1]);
+    if not Assigned(LMenuItem) then
+    begin
       LMenuItem := TMenuItem.Create(PopupMenuHighlighters);
-      LMenuItem.Action := LAction;
+      LMenuItem.Caption := LName[1];
       LMenuItem.RadioItem := True;
-      LMenuItem.AutoCheck := True;
-      if (i <> 0) and (i mod 40 = 0) then
-        LMenuItem.Break := mbBreak;
-      Inc(i);
       PopupMenuHighlighters.Items.Add(LMenuItem);
-    until not FindNextFile(FindFileHandle, Win32FindData);
-  finally
-    Winapi.Windows.FindClose(FindFileHandle);
+    end;
+
+    LAction := TAction.Create(Self);
+    LAction.Caption := LName;
+    LAction.OnExecute := ActionSelectHighlighterExecute;
+    LSubMenuItem := TMenuItem.Create(PopupMenuHighlighters);
+    LSubMenuItem.Action := LAction;
+    LSubMenuItem.RadioItem := True;
+    LSubMenuItem.AutoCheck := True;
+    if (i <> 0) and (i mod 40 = 0) then
+      LSubMenuItem.Break := mbBreak;
+    Inc(i);
+    LMenuItem.Add(LSubMenuItem);
   end;
 end;
 
