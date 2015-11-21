@@ -3,10 +3,11 @@ unit EditBone.Form.Options;
 interface
 
 uses
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.FileUtils, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.FileUtils, Vcl.StdCtrls,
   System.Classes, System.SysUtils, Vcl.ActnList, BCCommon.Images, BCCommon.Frames.Options.Editor.Color,
-  Vcl.ActnMenus, System.Actions, VirtualTrees, BCCommon.Options.Container, System.Generics.Collections,
-  sSkinProvider, sScrollBox, BCControls.ScrollBox, BCControls.Splitter, sSplitter, sPanel, BCControls.Panel;
+  VirtualTrees, BCCommon.Options.Container, System.Generics.Collections,
+  sSkinProvider, BCControls.ScrollBox, BCControls.Splitter, BCControls.Panel, System.Actions, sScrollBox, Vcl.ExtCtrls,
+  sSplitter, sPanel;
 
 type
   POptionsRec = ^TOptionsRec;
@@ -92,7 +93,7 @@ implementation
 {$R *.dfm}
 
 uses
-  BCCommon.Language.Strings, System.IniFiles,  BCCommon.Language.Utils, BCCommon.Utils, Winapi.Windows,
+  System.IniFiles,  BCCommon.Language.Utils, BCCommon.Utils, Winapi.Windows,
   System.Types, BCCommon.Frames.Options.Editor.Minimap, BCCommon.Frames.Options.Editor.Scroll,
   BCCommon.Frames.Options.Editor.Selection, BCCommon.Frames.Options.Editor.SpecialChars,
   BCCommon.Frames.Options.Editor.Tabulator, EditBone.Frame.Options.Editor.Defaults,

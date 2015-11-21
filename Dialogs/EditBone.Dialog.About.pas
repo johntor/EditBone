@@ -3,9 +3,9 @@ unit EditBone.Dialog.About;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Graphics, Vcl.Forms, Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons,
-  Vcl.ExtCtrls, Vcl.Imaging.pngimage, BCCommon.Dialogs.Base, BCControls.Panel, sPanel, sLabel,
-  acImage, BCControls.Labels;
+  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Graphics, Vcl.Forms, Vcl.Controls, Vcl.StdCtrls,
+  Vcl.ExtCtrls, BCCommon.Dialogs.Base, BCControls.Panel, sLabel,
+  acImage, BCControls.Labels, Vcl.Imaging.pngimage, sPanel;
 
 type
   TAboutDialog = class(TBCBaseDialog)

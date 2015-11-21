@@ -2,8 +2,6 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
   Width = 190
   Height = 171
   Visible = False
-  ExplicitWidth = 190
-  ExplicitHeight = 171
   object Panel: TBCPanel [0]
     AlignWithMargins = True
     Left = 4
@@ -32,20 +30,14 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
       BoundLabel.Active = True
       BoundLabel.Caption = 'Color'
       BoundLabel.Indent = 4
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
       BoundLabel.Layout = sclTopLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       DropDownCount = 9
       SkinData.SkinSection = 'COMBOBOX'
       VerticalAlignment = taAlignTop
       Style = csOwnerDrawFixed
       ItemIndex = -1
       TabOrder = 0
+      UseMouseWheel = False
     end
     object ComboBoxDefaultEncoding: TBCComboBox
       Left = 0
@@ -60,14 +52,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
       BoundLabel.Active = True
       BoundLabel.Caption = 'Encoding'
       BoundLabel.Indent = 4
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
       BoundLabel.Layout = sclTopLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       DropDownCount = 9
       SkinData.SkinSection = 'COMBOBOX'
       VerticalAlignment = taAlignTop
@@ -82,6 +67,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
         'UTF-7'
         'UTF-8'
         'UTF-8 Without BOM')
+      UseMouseWheel = False
     end
     object ComboBoxDefaultHighlighter: TBCComboBox
       Left = 0
@@ -96,14 +82,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
       BoundLabel.Active = True
       BoundLabel.Caption = 'Highlighter '
       BoundLabel.Indent = 4
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
       BoundLabel.Layout = sclTopLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       DropDownCount = 9
       SkinData.SkinSection = 'COMBOBOX'
       VerticalAlignment = taAlignTop
@@ -172,6 +151,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
         'x86 Assembly'
         'XML'
         'YAML')
+      UseMouseWheel = False
     end
     object ComboBoxDefaultSQLHighlighter: TBCComboBox
       Left = 0
@@ -186,14 +166,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
       BoundLabel.Active = True
       BoundLabel.Caption = 'SQL highlighter '
       BoundLabel.Indent = 4
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
       BoundLabel.Layout = sclTopLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       DropDownCount = 9
       SkinData.SkinSection = 'COMBOBOX'
       VerticalAlignment = taAlignTop
@@ -262,6 +235,7 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
         'x86 Assembly'
         'XML'
         'YAML')
+      UseMouseWheel = False
     end
   end
   inherited FrameAdapter: TsFrameAdapter

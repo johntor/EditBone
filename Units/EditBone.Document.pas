@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
-  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons, Vcl.ActnList, System.Actions,
-  BCControls.ProgressBar, Vcl.ActnMan, BCControls.Panel, sLabel, sPageControl, BCEditor.Types, BCControls.StatusBar,
-  BCEditor.MacroRecorder, BCEditor.Print, Vcl.PlatformDefaultStyleActnCtrls, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
+  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons, Vcl.ActnList,
+  BCControls.ProgressBar, BCControls.Panel, sLabel, sPageControl, BCEditor.Types, BCControls.StatusBar,
+  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
   BCEditor.Print.Types, EditBone.XMLTree, BCControls.Splitter, BCControls.ComboBox, System.Generics.Collections,
   BCComponents.SkinManager, BCControls.Labels;
 
@@ -215,7 +215,7 @@ implementation
 
 uses
   Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialogs.ConfirmReplace,
-  Vcl.ActnMenus, System.Types, System.Math, BigIni, Vcl.GraphUtil, BCCommon.Language.Strings, VirtualTrees,
+  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,
   BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace, BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils,
   BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options, BCCommon.Images, System.IniFiles,
   BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images, BCControls.SpeedButton,

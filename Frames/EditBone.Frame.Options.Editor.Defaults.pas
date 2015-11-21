@@ -3,8 +3,9 @@ unit EditBone.Frame.Options.Editor.Defaults;
 interface
 
 uses
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.ComboBox, Vcl.ExtCtrls,
-  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControls.Panel, sPanel, sFrameAdapter;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.ComboBox,
+  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControls.Panel, Vcl.ExtCtrls, sPanel,
+  sFrameAdapter;
 
 type
   TOptionsEditorDefaultsFrame = class(TBCOptionsBaseFrame)
@@ -30,7 +31,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.Windows, System.SysUtils, BCCommon.Language.Strings;
+  Winapi.Windows, System.SysUtils;
 
 var
   FOptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame;

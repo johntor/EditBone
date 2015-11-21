@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ActnList,
-  Vcl.ComCtrls, Vcl.ExtCtrls, VirtualTrees, Vcl.AppEvnts, BCControls.Edit,
-  System.Actions, BCCommon.Images, BCControls.Panel, sPanel, Vcl.Dialogs, sDialogs, BCControls.Statusbar,
-  sStatusBar, sSkinProvider, Vcl.Buttons, sSpeedButton, BCControls.SpeedButton;
+  Vcl.ComCtrls, VirtualTrees, Vcl.AppEvnts, BCControls.Edit,
+  System.Actions, BCCommon.Images, BCControls.Panel, Vcl.Dialogs, sDialogs, BCControls.Statusbar,
+  sSkinProvider, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton, Vcl.ExtCtrls, sPanel, sStatusBar;
 
 type
   TValueType = (vtString, vtPickString);

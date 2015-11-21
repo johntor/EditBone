@@ -4,9 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.Dialogs.Base, Vcl.StdCtrls, BCControls.Edit,
-  Vcl.ActnList, Vcl.ExtCtrls, Vcl.Buttons, System.Actions, BCControls.ComboBox,
-  sComboBox, sEdit, sSpeedButton, BCControls.SpeedButton, BCControls.Panel,
-  sPanel, sGroupBox, BCControls.GroupBox, sLabel, acSlider;
+  Vcl.ActnList, BCControls.ComboBox,
+  sComboBox, BCControls.SpeedButton, BCControls.Panel,
+  BCControls.GroupBox, sLabel, acSlider, System.Actions, sGroupBox, sEdit, Vcl.Buttons, sSpeedButton, Vcl.ExtCtrls,
+  sPanel;
 
 type
   TDirectoryTabDialog = class(TBCBaseDialog)

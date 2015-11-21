@@ -195,6 +195,7 @@ inherited DirectoryTabDialog: TDirectoryTabDialog
         'Hide'
         'Bottom'
         'Top')
+      UseMouseWheel = False
     end
     object ComboBoxFileMask: TBCComboBox
       AlignWithMargins = True
@@ -220,6 +221,7 @@ inherited DirectoryTabDialog: TDirectoryTabDialog
         'Hide'
         'Bottom'
         'Top')
+      UseMouseWheel = False
     end
     object SliderExcludeOtherBranches: TsSlider
       Left = 177

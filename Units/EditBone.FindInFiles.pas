@@ -38,8 +38,8 @@ type
 implementation
 
 uses
-  Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms, System.Masks,
-  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, System.IOUtils, System.StrUtils, BCCommon.FileUtils;
+  Winapi.Windows, System.SysUtils, BCControls.Utils, BCCommon.Language.Strings, Vcl.Forms,
+  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, BCCommon.FileUtils;
 
 procedure TFindInFilesThread.Execute;
 begin

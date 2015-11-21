@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
-  BCControls.FileControl, Vcl.ImgList, Vcl.ActnList, Vcl.Buttons, Vcl.Menus, BCControls.PageControl, VirtualTrees,
-  System.Actions, BCCommon.Forms.SearchForFiles, BCCommon.Images, sPageControl,
-  Vcl.PlatformDefaultStyleActnCtrls, BCControls.ImageList,
+  BCControls.FileControl, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, VirtualTrees,
+  BCCommon.Forms.SearchForFiles, sPageControl,
+  BCControls.ImageList,
   BCComponents.SkinManager;
 
 type
@@ -74,7 +74,7 @@ implementation
 
 uses
   EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControls.Utils,
-  System.Math, BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base,
+  BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base,
   Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControls.Panel;
 
 destructor TEBDirectory.Destroy;

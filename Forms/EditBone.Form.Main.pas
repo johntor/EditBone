@@ -4,14 +4,14 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.AppEvnts, Vcl.Menus,
-  sSkinProvider, BCComponents.SkinProvider, acTitleBar, BCComponents.TitleBar, sSkinManager, BCComponents.SkinManager,
-  Vcl.ComCtrls, sStatusBar, BCControls.StatusBar, Vcl.ExtCtrls, sPanel, BCControls.Panel, sSplitter, BCControls.Splitter,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
+  sSkinProvider, acTitleBar, sSkinManager,
+  Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
-  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, Vcl.ActnMan, Vcl.ActnMenus,
-  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, Vcl.PlatformDefaultStyleActnCtrls, JvAppInst, Vcl.ImgList,
+  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
+  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, BCControls.ComboBox, Vcl.DBCtrls, sLabel;
+  System.Generics.Collections, BCControls.ComboBox;
 
 type
   TMainForm = class(TBCBaseForm)

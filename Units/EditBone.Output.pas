@@ -3,9 +3,9 @@ unit EditBone.Output;
 interface
 
 uses
-  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Buttons, Vcl.ComCtrls,
-  Vcl.ActnList, VirtualTrees, Vcl.PlatformDefaultStyleActnCtrls, BCComponents.SkinManager,
-  BCControls.PageControl, System.Actions, BCCommon.Images, sPageControl;
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
+  VirtualTrees, BCComponents.SkinManager,
+  BCControls.PageControl, BCCommon.Images, sPageControl;
 
 type
   TOpenAllEvent = procedure(var FileNames: TStrings);
@@ -58,7 +58,7 @@ type
 implementation
 
 uses
-  EditBone.Types, BCCommon.Options.Container, System.Math, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
+  EditBone.Types, BCCommon.Options.Container, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
   BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types,
   BCControls.Panel;
 

@@ -4,8 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Types, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  BCControls.Edit, BCCommon.Options.Container, BCCommon.Frames.Options.Base, VirtualTrees, BCControls.Panel, sEdit,
-  Vcl.ExtCtrls, sPanel, sFrameAdapter;
+  BCControls.Edit, BCCommon.Options.Container, BCCommon.Frames.Options.Base, VirtualTrees, BCControls.Panel,
+  sFrameAdapter, sEdit, Vcl.ExtCtrls, sPanel;
 
 type
   TOptionsFileTypesFrame = class(TBCOptionsBaseFrame)

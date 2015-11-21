@@ -170,8 +170,8 @@ object LanguageEditorForm: TLanguageEditorForm
       ParentFont = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 1
       Images = ImagesDataModule.ImageList
+      ImageIndex = 1
     end
     object SpeedButtonNew: TBCSpeedButton
       Left = 2
@@ -190,8 +190,8 @@ object LanguageEditorForm: TLanguageEditorForm
       ParentFont = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 0
       Images = ImagesDataModule.ImageList
+      ImageIndex = 0
     end
     object SpeedButtonDivider1: TBCSpeedButton
       AlignWithMargins = True
@@ -233,8 +233,8 @@ object LanguageEditorForm: TLanguageEditorForm
       ParentFont = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 3
       Images = ImagesDataModule.ImageList
+      ImageIndex = 3
     end
     object SpeedButtonDivider2: TBCSpeedButton
       AlignWithMargins = True
@@ -276,8 +276,8 @@ object LanguageEditorForm: TLanguageEditorForm
       ParentFont = False
       ButtonStyle = tbsTextButton
       SkinData.SkinSection = 'TOOLBUTTON'
-      ImageIndex = 11
       Images = ImagesDataModule.ImageList
+      ImageIndex = 11
     end
   end
   object ActionList: TActionList
