@@ -11,7 +11,8 @@ uses
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
   BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, BCControls.ComboBox;
+  System.Generics.Collections, BCControls.ComboBox, sPanel, Vcl.AppEvnts, BCComponents.SkinProvider,
+  BCComponents.TitleBar, BCComponents.SkinManager, sStatusBar;
 
 type
   TMainForm = class(TBCBaseForm)
