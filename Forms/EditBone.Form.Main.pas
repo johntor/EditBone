@@ -2571,11 +2571,15 @@ end;
 
 function TMainForm.GetStringList(APopupMenu: TPopupMenu): TStringList;
 var
-  i: Integer;
+  i, j: Integer;
 begin
   Result := TStringList.Create;
   for i := 0 to APopupMenu.Items.Count - 1 do
-    Result.Add(APopupMenu.Items[i].Caption);
+    if APopupMenu.Items[i].Count > 0 then
+    for j := 0 to APopupMenu.Items[i].Count - 1 do
+      Result.Add(APopupMenu.Items[i].Items[j].Caption)
+    else
+      Result.Add(APopupMenu.Items[i].Caption);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
