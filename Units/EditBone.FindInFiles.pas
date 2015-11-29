@@ -23,9 +23,9 @@ type
     FSearchCaseSensitive: Boolean;
     FLookInSubfolders: Boolean;
     function GetStringList(AFilename: string): TStringList;
-    procedure FindInFiles(AFolderText: String);
+    procedure FindInFiles(AFolderText: string);
   public
-    constructor Create(AFindWhatText, AFileTypeText, AFolderText: String;
+    constructor Create(AFindWhatText, AFileTypeText, AFolderText: string;
       ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string); overload;
     procedure Execute; override;
     property Count: Integer read FCount;
@@ -50,7 +50,7 @@ begin
     end);
 end;
 
-constructor TFindInFilesThread.Create(AFindWhatText, AFileTypeText, AFolderText: String;
+constructor TFindInFilesThread.Create(AFindWhatText, AFileTypeText, AFolderText: string;
   ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string);
 begin
   inherited Create(True);
@@ -68,7 +68,7 @@ begin
   FCount := 0;
 end;
 
-procedure TFindInFilesThread.FindInFiles(AFolderText: String);
+procedure TFindInFilesThread.FindInFiles(AFolderText: string);
 var
   LTextLine: string;
   FName: string;
