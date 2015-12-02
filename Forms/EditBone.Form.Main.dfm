@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetEdit
+      ActivePage = TabSheetFile
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3047,12 +3047,12 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 20
+        Height = 21
         Index = 1
         Name = 'TitleBarItemCaption'
         ShowHint = False
         Style = bsInfo
-        Width = 55
+        Width = 53
       end
       item
         Align = tbaRight
@@ -3063,12 +3063,12 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 21
+        Height = 22
         Index = 2
         Name = 'TitleBarItemFileName'
         ShowHint = False
         Style = bsMenu
-        Width = 34
+        Width = 33
       end
       item
         Align = tbaRight
@@ -3092,12 +3092,12 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 21
+        Height = 22
         Index = 4
         Name = 'TitleBarItemEncoding'
         ShowHint = False
         Style = bsMenu
-        Width = 57
+        Width = 56
         OnMouseDown = TitleBarItemsEncodingMouseDown
       end
       item
@@ -3122,12 +3122,12 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 21
+        Height = 22
         Index = 6
         Name = 'TitleBarItemHighlighter'
         ShowHint = False
         Style = bsMenu
-        Width = 56
+        Width = 52
         OnMouseDown = TitleBarItemsHighlighterMouseDown
       end
       item
@@ -3152,12 +3152,12 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 21
+        Height = 22
         Index = 8
         Name = 'TitleBarItemColors'
         ShowHint = False
         Style = bsMenu
-        Width = 69
+        Width = 68
         OnMouseDown = TitleBarItemsColorsMouseDown
       end
       item
