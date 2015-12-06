@@ -986,6 +986,8 @@ end;
 procedure TMainForm.SelectedFileClick(var APageIndex: Integer);
 begin
   PageControlDocument.ActivePageIndex := APageIndex;
+  FPopupFilesForm.Visible := False;
+  FPopupFilesForm := nil;
 end;
 
 function TMainForm.Processing: Boolean;
