@@ -2878,6 +2878,7 @@ begin
     Inc(LPoint.X, LRect.Left);
     FPopupFilesForm.Left := LPoint.X;
     FPopupFilesForm.Top := LPoint.Y;
+
     SetWindowPos(FPopupFilesForm.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
     SendMessage(Handle, WM_SETREDRAW, Integer(False), 0); { avoid flickering }
     LFiles := GetFiles;
