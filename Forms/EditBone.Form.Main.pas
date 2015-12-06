@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
-  sSkinProvider, acTitleBar, sSkinManager,
+  sSkinProvider, acTitleBar, sSkinManager, BCCommon.Form.Popup.Files,
   Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
@@ -408,7 +408,6 @@ type
     MenuItemPopupMenuDocumentDivider3: TMenuItem;
     MenuItemPopupMenuDocumentDivider4: TMenuItem;
     MenuItemPopupMenuDocumentDivider5: TMenuItem;
-    MenuItemPopupMenuOpenFilesDummy: TMenuItem;
     MenuItemProperties: TMenuItem;
     MenuItemRedo: TMenuItem;
     MenuItemRefresh: TMenuItem;
@@ -509,7 +508,6 @@ type
     PopupMenuFileReopen: TPopupMenu;
     PopupMenuFileTreeView: TPopupMenu;
     PopupMenuHighlighters: TPopupMenu;
-    PopupMenuOpenFiles: TPopupMenu;
     PopupMenuOutput: TPopupMenu;
     PopupMenuSearchGotoBookmarks: TPopupMenu;
     PopupMenuSearchToggleBookmarks: TPopupMenu;
@@ -810,7 +808,7 @@ type
     procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
     procedure OnProgressBarStepFindInFiles(Sender: TObject);
     procedure OnTerminateFindInFiles(Sender: TObject);
-    procedure OpenFilesMenuClick(Sender: TObject);
+    procedure SelectedFileClick(var APageIndex: Integer);
     procedure OutputDblClickActionExecute(Sender: TObject);
     procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
     procedure PageControlDirectoryDblClick(Sender: TObject);
@@ -823,7 +821,6 @@ type
     procedure PageControlOutputDblClick(Sender: TObject);
     procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupMenuFileTreeViewPopup(Sender: TObject);
-    procedure PopupMenuOpenFilesPopup(Sender: TObject);
     procedure SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string; var Glyph: TBitmap; var LineVisible: Boolean);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
@@ -832,6 +829,7 @@ type
     procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure TitleBarItems2Click(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -840,6 +838,7 @@ type
     FNoIni: Boolean;
     FOutput: TEBOutput;
     FOutputTreeView: TVirtualDrawTree;
+    FPopupFilesForm: TPopupFilesForm;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
@@ -984,37 +983,9 @@ begin
   ActionDirectoryProperties.Enabled := FileExists(FDirectory.SelectedFile);
 end;
 
-procedure TMainForm.PopupMenuOpenFilesPopup(Sender: TObject);
-var
-  i: Integer;
-  LEditor: TBCEditor;
-  LMenuItem: TMenuItem;
+procedure TMainForm.SelectedFileClick(var APageIndex: Integer);
 begin
-  inherited;
-  PopupMenuOpenFiles.Items.Clear;
-  for i := 0 to PageControlDocument.PageCount - 1 do
-  begin
-    LEditor := FDocument.GetEditor(PageControlDocument.Pages[i]);
-    if Assigned(LEditor) then
-    begin
-      LMenuItem := PopupMenuOpenFiles.CreateMenuItem;
-      if LEditor.FileName <> '' then
-        LMenuItem.Caption := LEditor.FileName
-      else
-        LMenuItem.Caption := PageControlDocument.Pages[i].Caption;
-      LMenuItem.Tag := i;
-      LMenuItem.OnClick := OpenFilesMenuClick;
-      LMenuItem.RadioItem := True;
-      LMenuItem.Checked := LMenuItem.Caption = TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption;
-      PopupMenuOpenFiles.Items.Add(LMenuItem);
-    end;
-  end;
-  SkinManager.SkinableMenus.HookPopupMenu(PopupMenuOpenFiles, True);
-end;
-
-procedure TMainForm.OpenFilesMenuClick(Sender: TObject);
-begin
-  PageControlDocument.ActivePageIndex := TMenuItem(Sender).Tag;
+  PageControlDocument.ActivePageIndex := APageIndex;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -2246,17 +2217,17 @@ begin
     if LActiveDocumentName = '' then
       LActiveDocumentName := FDocument.ActiveTabSheetCaption;
 
-    if LActiveDocumentName = '' then
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
-    else
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
+    //if LActiveDocumentName = '' then
+    //  TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
+    //else
+    //  TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
 
-    LActiveFileName := FDocument.ActiveFileName;
+    LActiveFileName := FDocument.ActiveDocumentName;
     if LActiveFileName = '' then
       LActiveFileName := FDocument.ActiveTabSheetCaption;
 
     TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveFileName <> '';
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := LActiveFileName;
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveFileName + ']';
 
     ActionFileProperties.Enabled := ActiveDocumentFound and (LActiveDocumentName <> '');
 
@@ -2859,6 +2830,67 @@ begin
   end;
 end;
 
+procedure TMainForm.TitleBarItems2Click(Sender: TObject);
+var
+  LPoint: TPoint;
+  LRect: TRect;
+  LFiles: TStrings;
+
+  function GetFiles: TStrings;
+  var
+    i: Integer;
+    LEditor: TBCEditor;
+  begin
+    Result := TStringList.Create;
+    for i := 0 to PageControlDocument.PageCount - 1 do
+    begin
+      LEditor := FDocument.GetEditor(PageControlDocument.Pages[i]);
+      if Assigned(LEditor) then
+      begin
+        if LEditor.FileName <> '' then
+          Result.AddObject(LEditor.DocumentName, TObject(i))
+        else
+          Result.AddObject(PageControlDocument.Pages[i].Caption, TObject(i));
+      end;
+    end;
+  end;
+
+begin
+  inherited;
+
+  if Assigned(FPopupFilesForm) then
+  begin
+    FPopupFilesForm.Visible := False;
+    FPopupFilesForm := nil;
+  end
+  else
+  begin
+    FPopupFilesForm := TPopupFilesForm.Create(Self);
+    FPopupFilesForm.PopupParent := Self;
+    FPopupFilesForm.Position := poDesigned;
+    FPopupFilesForm.OnSelectFile := SelectedFileClick;
+    LPoint.X := TitleBar.Items[2].Rect.Left;
+    LPoint.Y := TitleBar.Items[2].Rect.Bottom;
+    GetWindowRect(Handle, LRect);
+    Inc(LPoint.Y, LRect.Top);
+    Inc(LPoint.X, LRect.Left);
+    FPopupFilesForm.Left := LPoint.X;
+    FPopupFilesForm.Top := LPoint.Y;
+    SetWindowPos(FPopupFilesForm.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+    SendMessage(Handle, WM_SETREDRAW, Integer(False), 0); { avoid flickering }
+    LFiles := GetFiles;
+    try
+      FPopupFilesForm.Execute(LFiles, TitleBar.Items[2].Caption);
+    finally
+      LFiles.Free;
+    end;
+    SendMessage(Handle, WM_SETREDRAW, Integer(True), 0);
+    while Assigned(FPopupFilesForm) and FPopupFilesForm.Visible do
+      Application.HandleMessage;
+    FPopupFilesForm := nil;
+  end;
+end;
+
 procedure TMainForm.TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   LMenuItem: TMenuItem;
@@ -3351,7 +3383,6 @@ begin
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;
   end;
 end;
-
 
 {
 procedure TMainForm.ToolsDuplicateCheckerActionExecute(Sender: TObject);

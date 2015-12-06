@@ -2,7 +2,7 @@ program EditBone;
 								  
 uses
   {$ifdef DEBUG}
-  FastMM4,
+  //FastMM4,
   {$endif }
   Vcl.Forms,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
