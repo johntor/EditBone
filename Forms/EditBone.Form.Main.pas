@@ -2868,26 +2868,40 @@ begin
   else
   begin
     FPopupFilesForm := TPopupFilesForm.Create(Self);
+    FPopupFilesForm.Width := 0;
+    FPopupFilesForm.Height := 0;
     FPopupFilesForm.PopupParent := Self;
     FPopupFilesForm.Position := poDesigned;
     FPopupFilesForm.OnSelectFile := SelectedFileClick;
     LPoint.X := TitleBar.Items[2].Rect.Left;
     LPoint.Y := TitleBar.Items[2].Rect.Bottom;
-    GetWindowRect(Handle, LRect);
-    Inc(LPoint.Y, LRect.Top);
-    Inc(LPoint.X, LRect.Left);
+
+    if Assigned(TitleBar.Items[2].ExtForm) then
+    begin
+      Inc(LPoint.X, TitleBar.Items[2].ExtForm.Left);
+      Inc(LPoint.Y, TitleBar.Items[2].ExtForm.Top);
+    end
+    else begin
+      GetWindowRect(Handle, LRect);
+      Inc(LPoint.Y, LRect.Top);
+      Inc(LPoint.X, LRect.Left);
+    end;
+
     FPopupFilesForm.Left := LPoint.X;
     FPopupFilesForm.Top := LPoint.Y;
 
     SetWindowPos(FPopupFilesForm.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
-    SendMessage(Handle, WM_SETREDRAW, Integer(False), 0); { avoid flickering }
+    if not SkinManager.ExtendedBorders then
+      SendMessage(Handle, WM_SETREDRAW, 0, 0); { avoid flickering }
     LFiles := GetFiles;
     try
       FPopupFilesForm.Execute(LFiles, TitleBar.Items[2].Caption);
     finally
       LFiles.Free;
     end;
-    SendMessage(Handle, WM_SETREDRAW, Integer(True), 0);
+    if not SkinManager.ExtendedBorders then
+      SendMessage(Handle, WM_SETREDRAW, 1, 0);
+
     while Assigned(FPopupFilesForm) and FPopupFilesForm.Visible do
       Application.HandleMessage;
     FPopupFilesForm := nil;
