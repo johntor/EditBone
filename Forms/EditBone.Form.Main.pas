@@ -651,6 +651,7 @@ type
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
     Timer: TTimer;
+    PopupMenuDummy: TPopupMenu;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -2219,10 +2220,10 @@ begin
     if LActiveDocumentName = '' then
       LActiveDocumentName := FDocument.ActiveTabSheetCaption;
 
-    //if LActiveDocumentName = '' then
-    //  TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
-    //else
-    //  TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Format(Application.Title + EDITBONE_MAIN_CAPTION_DOCUMENT, [LActiveDocumentName]);
+    if LActiveDocumentName = '' then
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
+    else
+      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title + '  -';
 
     LActiveFileName := FDocument.ActiveDocumentName;
     if LActiveFileName = '' then
