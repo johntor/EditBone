@@ -2927,7 +2927,7 @@ begin
   try
     { Options }
     StatusBar.Visible := ReadBool('Options', 'ShowStatusbar', True);
-    PanelDirectory.Visible := ReadBool('Options', 'ShowDirectory', True);
+    PanelDirectory.Visible := ReadBool('Options', 'ShowDirectory', False);
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ReadBool('Options', 'ShowEncodingSelection', True);
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ReadBool('Options', 'ShowHighlighterSelection', True);
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ReadBool('Options', 'ShowHighlighterColorSelection', True);
