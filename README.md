@@ -31,6 +31,6 @@ Version 10.0.0 beta released. Use the Issues page to report bugs or send them di
 
 <h3>Screenshots</h3>
 
-![editbone1](https://cloud.githubusercontent.com/assets/11475177/8513387/02cb75fe-2372-11e5-8d65-916e09254e27.png)
-![editbone2](https://cloud.githubusercontent.com/assets/11475177/8513386/02c39ef6-2372-11e5-9d17-0a6d2aa319bd.png)
-![editbone3](https://cloud.githubusercontent.com/assets/11475177/8513404/e868c012-2372-11e5-8896-5dd42a8710b5.png)
+![editbone1](https://cloud.githubusercontent.com/assets/11475177/11635756/4a4faf48-9d21-11e5-9d45-cfa6239c5e38.png)
+![editbone2](https://cloud.githubusercontent.com/assets/11475177/11635757/4a58ec3e-9d21-11e5-8fb6-24945b5c740c.png)
+![editbone3](https://cloud.githubusercontent.com/assets/11475177/11635755/4a14f218-9d21-11e5-9941-2d613a27c3a9.png)
