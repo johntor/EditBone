@@ -2891,16 +2891,14 @@ begin
     FPopupFilesForm.Top := LPoint.Y;
 
     SetWindowPos(FPopupFilesForm.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
-    if not SkinManager.ExtendedBorders then
-      SendMessage(Handle, WM_SETREDRAW, 0, 0); { avoid flickering }
+    LockWindowUpdate(Handle);
     LFiles := GetFiles;
     try
       FPopupFilesForm.Execute(LFiles, TitleBar.Items[2].Caption);
     finally
       LFiles.Free;
     end;
-    if not SkinManager.ExtendedBorders then
-      SendMessage(Handle, WM_SETREDRAW, 1, 0);
+    LockWindowUpdate(0);
 
     while Assigned(FPopupFilesForm) and FPopupFilesForm.Visible do
       Application.HandleMessage;
