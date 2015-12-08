@@ -251,8 +251,9 @@ begin
   if i <= 65535 then
   begin
     s := IntToHex(i, 1);
-    for i := 0 to 3 - Length(s) do
-      s := '0' + s;
+    //for i := 0 to 3 - Length(s) do
+    //  s := '0' + s;
+    s := StringOfChar('0', 4 - Length(s)) + s;
     s := 'U+' + s;
   end;
   StatusBar.Panels[0].Text := s;

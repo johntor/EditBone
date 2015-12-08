@@ -62,12 +62,12 @@ type
     FLanguageFileName: string;
     function GetCaption: string;
     function GetModifiedInfo: string;
-    function SaveAs(FileName: string): Boolean;
-    procedure AddTreeNode(NodeText: string; TranslationNeeded: Boolean);
-    procedure LoadLanguageFile(FileName: string);
+    function SaveAs(const FileName: string): Boolean;
+    procedure AddTreeNode(const NodeText: string; TranslationNeeded: Boolean);
+    procedure LoadLanguageFile(const FileName: string);
     procedure ReadIniFile;
     procedure Save;
-    procedure SaveToFile(FileName: string);
+    procedure SaveToFile(const FileName: string);
     procedure WriteIniFile;
   public
     procedure Open;
@@ -236,7 +236,7 @@ begin
   end;
 end;
 
-procedure TLanguageEditorForm.SaveToFile(FileName: string);
+procedure TLanguageEditorForm.SaveToFile(const FileName: string);
 var
   Node, ChildNode: PVirtualNode;
   Data, ChildData: PObjectNodeRec;
@@ -281,7 +281,7 @@ begin
   end;
 end;
 
-function TLanguageEditorForm.SaveAs(FileName: string): Boolean;
+function TLanguageEditorForm.SaveAs(const FileName: string): Boolean;
 begin
   SaveDialog.InitialDir := ExtractFilePath(FileName);
   SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Language'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
@@ -382,9 +382,8 @@ begin
 
     if Length(S) > 0 then
     begin
-      with R do
-        if (NodeWidth - 2 * Margin) > (Right - Left) then
-          S := ShortenString(Canvas.Handle, S, Right - Left);
+      if (NodeWidth - 2 * Margin) > (R.Right - R.Left) then
+        S := ShortenString(Canvas.Handle, S, R.Right - R.Left);
 
       Format := DT_TOP or DT_LEFT or DT_VCENTER or DT_SINGLELINE;
 
@@ -464,7 +463,7 @@ begin
     Include(InitialStates, ivsHasChildren);
 end;
 
-procedure TLanguageEditorForm.AddTreeNode(NodeText: string; TranslationNeeded: Boolean);
+procedure TLanguageEditorForm.AddTreeNode(const NodeText: string; TranslationNeeded: Boolean);
 var
   RootNode: PVirtualNode;
   Data: PObjectNodeRec;
@@ -497,7 +496,7 @@ begin
   Data.Level := 0;
 end;
 
-procedure TLanguageEditorForm.LoadLanguageFile(FileName: string);
+procedure TLanguageEditorForm.LoadLanguageFile(const FileName: string);
 var
   i, j: Integer;
   SectionStringList, StringList: TStringList;

@@ -52,8 +52,9 @@ type
     FSkinManager: TBCSkinManager;
     FStatusBar: TBCStatusBar;
     FTabSheetNew: TTabSheet;
-    function CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
-    function FindOpenFile(FileName: string): TBCEditor;
+    function CreateNewTabSheet(const AFileName: string = ''; AShowMinimap: Boolean = False;
+      const AHighlighter: string = ''; const AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
+    function FindOpenFile(const FileName: string): TBCEditor;
     function GetActiveDocumentFound: Boolean;
     function GetActiveDocumentModified: Boolean;
     function GetActiveDocumentName: string;
@@ -77,11 +78,11 @@ type
     function GetXMLTreeVisible: Boolean;
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
     function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
-    procedure AddToReopenFiles(FileName: string);
+    procedure AddToReopenFiles(const FileName: string);
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure SelectHighlighter(AEditor: TBCEditor; FileName: string);
+    procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
     procedure SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
@@ -140,9 +141,11 @@ type
     procedure LoadMacro;
     procedure New;
     procedure NextPage;
-    procedure Open(FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0; StartUp: Boolean = False; ShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True); overload;
-    procedure Open(Filename: string; ALine: Integer; AChar: Integer); overload;
-    procedure Open(Filename: string; ASetActivePage: Boolean); overload;
+    procedure Open(const FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0;
+      StartUp: Boolean = False; ShowMinimap: Boolean = False; const AHighlighter: string = ''; const AColor: string = '';
+      ASetActivePage: Boolean = True); overload;
+    procedure Open(const Filename: string; ALine: Integer; AChar: Integer); overload;
+    procedure Open(const Filename: string; ASetActivePage: Boolean); overload;
     procedure Paste;
     procedure PlaybackMacro;
     procedure PreviousPage;
@@ -160,8 +163,8 @@ type
     procedure SelectAll;
     procedure SelectForCompare;
     procedure SetEncoding(AEditor: TBCEditor; Value: Integer);
-    procedure SetHighlighter(AEditor: TBCEditor; AHighlighterName: string);
-    procedure SetHighlighterColor(AEditor: TBCEditor; AColorName: string);
+    procedure SetHighlighter(AEditor: TBCEditor; const AHighlighterName: string);
+    procedure SetHighlighterColor(AEditor: TBCEditor; const AColorName: string);
     procedure SetOptions;
     procedure ShowInfo;
     procedure Sort(ASortOrder: TBCEditorSortOrder = soToggle);
@@ -380,14 +383,14 @@ begin
     OnKeyDown := ComboBoxKeyDown;
     OnMouseWheel := ComboBoxMouseWheel;
     LItems := TStringList.Create;
-    with TIniFile.Create(GetIniFilename) do
-    try
-      ReadSectionValues('SearchItems', LItems);
-      InsertItemsToComboBox(LItems, LComboBoxSearchText);
-    finally
-      LItems.Free;
-      Free;
-    end;
+  end;
+  with TIniFile.Create(GetIniFilename) do
+  try
+    ReadSectionValues('SearchItems', LItems);
+    InsertItemsToComboBox(LItems, LComboBoxSearchText);
+  finally
+    LItems.Free;
+    Free;
   end;
   LSplitter := TBCSplitter.Create(ATabSheet);
   with LSplitter do
@@ -504,8 +507,8 @@ begin
   end;
 end;
 
-function TEBDocument.CreateNewTabSheet(AFileName: string = ''; AShowMinimap: Boolean = False;
-  AHighlighter: string = ''; AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
+function TEBDocument.CreateNewTabSheet(const AFileName: string = ''; AShowMinimap: Boolean = False;
+  const AHighlighter: string = ''; const AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
 var
   LTabSheet: TsTabSheet;
   LEditor: TBCEditor;
@@ -798,12 +801,13 @@ procedure TEBDocument.SelectForCompare;
 {var
   Editor: TBCEditor;   }
 begin
+  // TODO
   {Editor := GetActiveEditor;
   if Assigned(Editor) then
     CompareFiles(Editor.DocumentName);  }
 end;
 
-function TEBDocument.FindOpenFile(FileName: string): TBCEditor;
+function TEBDocument.FindOpenFile(const FileName: string): TBCEditor;
 var
   i: Integer;
   Editor: TBCEditor;
@@ -857,7 +861,7 @@ begin
   end;
 end;
 
-procedure TEBDocument.AddToReopenFiles(FileName: string);
+procedure TEBDocument.AddToReopenFiles(const FileName: string);
 var
   i: Integer;
   Files: TStrings;
@@ -900,18 +904,18 @@ begin
   end;
 end;
 
-procedure TEBDocument.Open(Filename: string; ASetActivePage: Boolean);
+procedure TEBDocument.Open(const Filename: string; ASetActivePage: Boolean);
 begin
   Open(Filename, nil, 0, 0, False, False, '', '', ASetActivePage);
 end;
 
-procedure TEBDocument.Open(Filename: string; ALine: Integer; AChar: Integer);
+procedure TEBDocument.Open(const Filename: string; ALine: Integer; AChar: Integer);
 begin
   Open(Filename, nil, ALine, AChar);
 end;
 
-procedure TEBDocument.Open(FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0;
-  StartUp: Boolean = False; ShowMinimap: Boolean = False; AHighlighter: string = ''; AColor: string = '';
+procedure TEBDocument.Open(const FileName: string = ''; Bookmarks: TStrings = nil; ALine: Integer = 0; AChar: Integer = 0;
+  StartUp: Boolean = False; ShowMinimap: Boolean = False; const AHighlighter: string = ''; const AColor: string = '';
   ASetActivePage: Boolean = True);
 var
   i: Integer;
@@ -2571,7 +2575,7 @@ begin
       Result := Editor.MacroRecorder.State = msRecording
 end;
 
-procedure TEBDocument.SetHighlighter(AEditor: TBCEditor; AHighlighterName: string);
+procedure TEBDocument.SetHighlighter(AEditor: TBCEditor; const AHighlighterName: string);
 begin
   if Assigned(AEditor) then
   with AEditor do
@@ -2638,7 +2642,7 @@ begin
   Editor.Highlighter.UpdateColors;
 end;
 
-procedure TEBDocument.SetHighlighterColor(AEditor: TBCEditor; AColorName: string);
+procedure TEBDocument.SetHighlighterColor(AEditor: TBCEditor; const AColorName: string);
 begin
   if Assigned(AEditor) then
   with AEditor do
@@ -2962,7 +2966,7 @@ begin
     Result := Assigned(LEditor.Highlighter) and (Pos('SQL', UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName))) <> 0)
 end;
 
-procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; FileName: string);
+procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; const FileName: string);
 var
   Ext, ItemString, Token: string;
   i: Integer;

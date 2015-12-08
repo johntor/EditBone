@@ -29,14 +29,15 @@ type
     FSkinManager: TBCSkinManager;
     function GetIsAnyOutput: Boolean;
     function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
-    function TabFound(TabCaption: string): Boolean;
+    function TabFound(const TabCaption: string): Boolean;
     function CheckCancel(ATabIndex: Integer = -1): Boolean;
   public
     constructor Create(AOwner: TBCPageControl);
     function CloseTabSheet(AFreePage: Boolean = True; ATabIndex: Integer = -1): Boolean;
     function SelectedLine(var Filename: string; var Ln: LongWord; var Ch: LongWord): Boolean;
-    function AddTreeView(TabCaption: string): TVirtualDrawTree;
-    procedure AddTreeViewLine(OutputTreeView: TVirtualDrawTree; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
+    function AddTreeView(const TabCaption: string): TVirtualDrawTree;
+    procedure AddTreeViewLine(OutputTreeView: TVirtualDrawTree; const Filename: WideString; Ln, Ch: LongInt;
+      const Text: WideString; const SearchString: WideString = '');
     procedure ReadOutputFile;
     procedure SetOptions;
     procedure WriteOutputFile;
@@ -111,7 +112,7 @@ begin
   end;
 end;
 
-function TEBOutput.TabFound(TabCaption: string): Boolean;
+function TEBOutput.TabFound(const TabCaption: string): Boolean;
 var
   i: Integer;
 begin
@@ -126,7 +127,7 @@ begin
     end;
 end;
 
-function TEBOutput.AddTreeView(TabCaption: string): TVirtualDrawTree;
+function TEBOutput.AddTreeView(const TabCaption: string): TVirtualDrawTree;
 var
   LTabSheet: TsTabSheet;
   LVirtualDrawTree: TVirtualDrawTree;
@@ -316,8 +317,8 @@ begin
   inherited;
 end;
 
-procedure TEBOutput.AddTreeViewLine(OutputTreeView: TVirtualDrawTree; Filename: WideString; Ln, Ch: LongInt;
-  Text: WideString; SearchString: WideString);
+procedure TEBOutput.AddTreeViewLine(OutputTreeView: TVirtualDrawTree; const Filename: WideString; Ln, Ch: LongInt;
+  const Text: WideString; const SearchString: WideString);
 var
   Node, LastNode: PVirtualNode;
   NodeData: POutputRec;

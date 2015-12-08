@@ -38,10 +38,10 @@ type
     function GetShowFileType: Byte;
     function GetTabName: string;
     procedure SetExcludeOtherBranches(Value: Boolean);
-    procedure SetRootDirectory(Value: string);
+    procedure SetRootDirectory(const Value: string);
     procedure SetShowDrives(Value: Byte);
     procedure SetShowFileType(Value: Byte);
-    procedure SetTabName(Value: string);
+    procedure SetTabName(const Value: string);
   public
     function Open(DialogType: TDialogType): Boolean;
     property ExcludeOtherBranches: Boolean read GetExcludeOtherBranches write SetExcludeOtherBranches;
@@ -113,7 +113,7 @@ begin
   Result := EditTabName.Text;
 end;
 
-procedure TDirectoryTabDialog.SetTabName(Value: string);
+procedure TDirectoryTabDialog.SetTabName(const Value: string);
 begin
   EditTabName.Text := Value;
 end;
@@ -130,7 +130,7 @@ begin
   Result := EditRootDirectory.Text;
 end;
 
-procedure TDirectoryTabDialog.SetRootDirectory(Value: string);
+procedure TDirectoryTabDialog.SetRootDirectory(const Value: string);
 begin
   EditRootDirectory.Text := Value;
 end;

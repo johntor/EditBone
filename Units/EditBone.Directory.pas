@@ -28,7 +28,7 @@ type
     function GetFileTypePanelOrientation(ATabSheet: TTabSheet = nil): Byte;
     function GetDriveComboBox(ATabSheet: TTabSheet): TBCDriveComboBox;
     function GetFileTypeComboBox(ATabSheet: TTabSheet): TBCFileTypeComboBox;
-    function GetActiveExcludeOtherBranches: Boolean;
+    function GetExcludeOtherBranches: Boolean;
     function GetFileTreeView(ATabSheet: TTabSheet = nil): TBCFileTreeView;
     function GetFileType(ATabSheet: TTabSheet): string;
     function GetIsAnyDirectory: Boolean;
@@ -36,7 +36,7 @@ type
     function GetSelectedPath: string;
     procedure CreateImageList;
     procedure SetDrivesPanelOrientation(ShowDrives: Byte; ADriveComboBox: TBCDriveComboBox = nil);
-    procedure SetFileTypePanelOrientation(ShowFileType: Byte; FileType: string = '';
+    procedure SetFileTypePanelOrientation(ShowFileType: Byte; const FileType: string = '';
       AFileTypeComboBox: TBCFileTypeComboBox = nil);
   public
     constructor Create(AOwner: TBCPageControl);
@@ -49,16 +49,17 @@ type
     procedure DeleteSelected;
     procedure EditDirectory;
     procedure FileProperties;
-    procedure OpenDirectory(TabName: string; RootDirectory: string; LastPath: string; ShowDrives: Byte; ExcludeOtherBranches: Boolean; ShowFileType: Byte; FileType: string); overload;
+    procedure OpenDirectory(const TabName: string; const RootDirectory: string; const LastPath: string;
+      ShowDrives: Byte; ExcludeOtherBranches: Boolean; ShowFileType: Byte; FileType: string); overload;
     procedure OpenDirectory; overload;
-    procedure OpenPath(RootDirectory: string; LastPath: string; ExcludeOtherBranches: Boolean = False);
+    procedure OpenPath(const RootDirectory: string; const LastPath: string; ExcludeOtherBranches: Boolean = False);
     procedure Paste;
     procedure ReadIniFile;
     procedure Refresh;
     procedure Rename;
     procedure SetOptions;
     procedure WriteIniFile;
-    property ExcludeOtherBranches: Boolean read GetActiveExcludeOtherBranches;
+    property ExcludeOtherBranches: Boolean read GetExcludeOtherBranches;
     property IsAnyDirectory: Boolean read GetIsAnyDirectory;
     property OnFileTreeViewClick: TNotifyEvent read FFileTreeViewClick write FFileTreeViewClick;
     property OnFileTreeViewDblClick: TNotifyEvent read FFileTreeViewDblClick write FFileTreeViewDblClick;
@@ -282,7 +283,7 @@ begin
   end;
 end;
 
-procedure TEBDirectory.SetFileTypePanelOrientation(ShowFileType: Byte; FileType: string;
+procedure TEBDirectory.SetFileTypePanelOrientation(ShowFileType: Byte; const FileType: string;
   AFileTypeComboBox: TBCFileTypeComboBox);
 var
   LFileTypeComboBox: TBCFileTypeComboBox;
@@ -332,7 +333,7 @@ begin
     end;
 end;
 
-function TEBDirectory.GetActiveExcludeOtherBranches: Boolean;
+function TEBDirectory.GetExcludeOtherBranches: Boolean;
 var
   LFileTreeView: TBCFileTreeView;
 begin
@@ -577,7 +578,7 @@ begin
     LFileTreeView.RenameSelectedNode;
 end;
 
-procedure TEBDirectory.OpenPath(RootDirectory: string; LastPath: string; ExcludeOtherBranches: Boolean);
+procedure TEBDirectory.OpenPath(const RootDirectory: string; const LastPath: string; ExcludeOtherBranches: Boolean);
 var
   LFileTreeView: TBCFileTreeView;
 begin
@@ -601,7 +602,7 @@ begin
   end;
 end;
 
-procedure TEBDirectory.OpenDirectory(TabName: string; RootDirectory: string; LastPath: string; ShowDrives: Byte;
+procedure TEBDirectory.OpenDirectory(const TabName: string; const RootDirectory: string; const LastPath: string; ShowDrives: Byte;
   ExcludeOtherBranches: Boolean; ShowFileType: Byte; FileType: string);
 var
   LTabSheet: TsTabSheet;

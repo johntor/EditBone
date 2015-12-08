@@ -42,7 +42,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure LoadFromXML(AXML: string);
+    procedure LoadFromXML(const AXML: string);
     property ProgressBar: TBCProgressBar read FProgressBar write FProgressBar;
     property Editor: TBCEditor read FEditor write FEditor;
     property SkinData: TsCtrlSkinData read FCommonData write FCommonData;
@@ -86,7 +86,7 @@ begin
   end;
 end;
 
-procedure TEBXMLTree.LoadFromXML(AXML: string);
+procedure TEBXMLTree.LoadFromXML(const AXML: string);
 var
   LLine: Integer;
   LNode: PVirtualNode;
@@ -467,11 +467,8 @@ begin
 
     if Length(S) > 0 then
     begin
-      with R do
-      begin
-        if (NodeWidth - 2 * Margin) > (Right - Left) then
-          S := ShortenString(Canvas.Handle, S, Right - Left);
-      end;
+      if (NodeWidth - 2 * Margin) > (R.Right - R.Left) then
+        S := ShortenString(Canvas.Handle, S, R.Right - R.Left);
       Format := DT_TOP or DT_LEFT or DT_VCENTER or DT_SINGLELINE;
       DrawText(Canvas.Handle, S, Length(S), R, Format);
     end;

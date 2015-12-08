@@ -854,8 +854,8 @@ type
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
-    procedure ReadLanguageFile(ALanguage: string);
-    procedure SearchFindInFiles(AFolder: string = '');
+    procedure ReadLanguageFile(const ALanguage: string);
+    procedure SearchFindInFiles(const AFolder: string = '');
     procedure SetFields;
     procedure SetHighlighters;
     procedure SetHighlighterColors;
@@ -1721,6 +1721,7 @@ end;
 
 procedure TMainForm.ActionToolsCompareFilesExecute(Sender: TObject);
 begin
+  // TODO
   //FDocument.CompareFiles;
 end;
 
@@ -2449,7 +2450,7 @@ begin
   Self.ReadLanguageFile(LCaption);
 end;
 
-procedure TMainForm.ReadLanguageFile(ALanguage: string);
+procedure TMainForm.ReadLanguageFile(const ALanguage: string);
 begin
   if ALanguage = '' then
     Exit;
@@ -2483,7 +2484,6 @@ procedure TMainForm.UpdateMenuBarLanguage;
         begin
           { Menubar items are not updated, if the action is not set }
           LAction := LSpeedButton.Action;
-          LSpeedButton.Action := nil;
           LSpeedButton.Action := LAction;
 
           s := LSpeedButton.Caption;
@@ -3193,7 +3193,7 @@ begin
   ProgressBar.StepIt;
 end;
 
-procedure TMainForm.SearchFindInFiles(AFolder: string = '');
+procedure TMainForm.SearchFindInFiles(const AFolder: string = '');
 var
   LEditor: TBCEditor;
   LFileExtensions: string;

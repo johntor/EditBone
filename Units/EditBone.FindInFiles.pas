@@ -22,11 +22,11 @@ type
     FFolderText: string;
     FSearchCaseSensitive: Boolean;
     FLookInSubfolders: Boolean;
-    function GetStringList(AFilename: string): TStringList;
-    procedure FindInFiles(AFolderText: string);
+    function GetStringList(const AFilename: string): TStringList;
+    procedure FindInFiles(const AFolderText: string);
   public
-    constructor Create(AFindWhatText, AFileTypeText, AFolderText: string;
-      ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string); overload;
+    constructor Create(const AFindWhatText, AFileTypeText, AFolderText: string;
+      ASearchCaseSensitive, ALookInSubfolders: Boolean; const AFileExtensions: string); overload;
     procedure Execute; override;
     property Count: Integer read FCount;
     property FindWhatText: string read FFindWhatOriginalText;
@@ -50,8 +50,8 @@ begin
     end);
 end;
 
-constructor TFindInFilesThread.Create(AFindWhatText, AFileTypeText, AFolderText: string;
-  ASearchCaseSensitive, ALookInSubfolders: Boolean; AFileExtensions: string);
+constructor TFindInFilesThread.Create(const AFindWhatText, AFileTypeText, AFolderText: string;
+  ASearchCaseSensitive, ALookInSubfolders: Boolean; const AFileExtensions: string);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
@@ -68,7 +68,7 @@ begin
   FCount := 0;
 end;
 
-procedure TFindInFilesThread.FindInFiles(AFolderText: string);
+procedure TFindInFilesThread.FindInFiles(const AFolderText: string);
 var
   LTextLine: string;
   FName: string;
@@ -142,7 +142,7 @@ begin
   end;
 end;
 
-function TFindInFilesThread.GetStringList(AFilename: string): TStringList;
+function TFindInFilesThread.GetStringList(const AFilename: string): TStringList;
 var
   LFileStream: TFileStream;
   LBuffer: TBytes;
