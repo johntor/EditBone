@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetView
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText

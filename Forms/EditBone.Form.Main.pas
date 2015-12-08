@@ -1977,11 +1977,17 @@ begin
 end;
 
 procedure TMainForm.ActionViewFilesExecute(Sender: TObject);
+var
+  LSelectedPath: string;
 begin
   with SearchForFilesForm do
   begin
     OnOpenFile := DoSearchForFilesOpenFile;
-    Open(FDirectory.SelectedPath);
+    LSelectedPath := FDirectory.SelectedPath;
+    if Length(LSelectedPath) > 4 then
+      Open(LSelectedPath)
+    else
+      ShowMessage(LanguageDataModule.GetMessage('SelectFilePathFromDirectory'))
   end;
 end;
 
@@ -2307,7 +2313,6 @@ begin
 
     ActionViewEditDirectory.Enabled := PanelDirectory.Visible;
     ActionViewCloseDirectory.Enabled := PanelDirectory.Visible;
-    //ActionViewFiles.Enabled := FDirectory.IsAnyDirectory and (FDirectory.SelectedPath <> '');
 
     if ActiveDocumentFound and OptionsContainer.StatusBarShowModified then
     begin
@@ -3166,10 +3171,7 @@ end;
 procedure TMainForm.FileTreeViewClickActionExecute(Sender: TObject);
 begin
   if Assigned(FDirectory) then
-  begin
     StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := FDirectory.SelectedFile;
-    ActionViewFiles.Enabled := FDirectory.IsAnyDirectory and (FDirectory.SelectedPath <> '');
-  end;
 end;
 
 procedure TMainForm.FileTreeViewDblClickActionExecute(Sender: TObject);
