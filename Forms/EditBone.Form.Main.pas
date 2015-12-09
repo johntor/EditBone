@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
-  sSkinProvider, acTitleBar, sSkinManager, BCCommon.Form.Popup.Files,
+  sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files,
   Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
@@ -839,7 +839,7 @@ type
     FNoIni: Boolean;
     FOutput: TEBOutput;
     FOutputTreeView: TVirtualDrawTree;
-    FPopupFilesForm: TPopupFilesForm;
+    FPopupFilesDialog: TPopupFilesDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
@@ -987,8 +987,8 @@ end;
 procedure TMainForm.SelectedFileClick(var APageIndex: Integer);
 begin
   PageControlDocument.ActivePageIndex := APageIndex;
-  FPopupFilesForm.Visible := False;
-  FPopupFilesForm := nil;
+  FPopupFilesDialog.Visible := False;
+  FPopupFilesDialog := nil;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -2866,19 +2866,19 @@ var
 begin
   inherited;
 
-  if Assigned(FPopupFilesForm) then
+  if Assigned(FPopupFilesDialog) then
   begin
-    FPopupFilesForm.Visible := False;
-    FPopupFilesForm := nil;
+    FPopupFilesDialog.Visible := False;
+    FPopupFilesDialog := nil;
   end
   else
   begin
-    FPopupFilesForm := TPopupFilesForm.Create(Self);
-    FPopupFilesForm.Width := 0;
-    FPopupFilesForm.Height := 0;
-    FPopupFilesForm.PopupParent := Self;
-    FPopupFilesForm.Position := poDesigned;
-    FPopupFilesForm.OnSelectFile := SelectedFileClick;
+    FPopupFilesDialog := TPopupFilesDialog.Create(Self);
+    FPopupFilesDialog.Width := 0;
+    FPopupFilesDialog.Height := 0;
+    FPopupFilesDialog.PopupParent := Self;
+    FPopupFilesDialog.Position := poDesigned;
+    FPopupFilesDialog.OnSelectFile := SelectedFileClick;
     LPoint.X := TitleBar.Items[2].Rect.Left;
     LPoint.Y := TitleBar.Items[2].Rect.Bottom;
 
@@ -2893,26 +2893,26 @@ begin
       Inc(LPoint.X, LRect.Left);
     end;
 
-    FPopupFilesForm.Left := LPoint.X;
-    FPopupFilesForm.Top := LPoint.Y;
+    FPopupFilesDialog.Left := LPoint.X;
+    FPopupFilesDialog.Top := LPoint.Y;
 
-    SetWindowPos(FPopupFilesForm.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+    SetWindowPos(FPopupFilesDialog.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
 
     SkinProvider.SkinData.BeginUpdate;
     SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
 
     LFiles := GetFiles;
     try
-      FPopupFilesForm.Execute(LFiles, TitleBar.Items[2].Caption);
+      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[2].Caption);
     finally
       LFiles.Free;
     end;
     SkinProvider.SkinData.EndUpdate;
     SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
 
-    while Assigned(FPopupFilesForm) and FPopupFilesForm.Visible do
+    while Assigned(FPopupFilesDialog) and FPopupFilesDialog.Visible do
       Application.HandleMessage;
-    FPopupFilesForm := nil;
+    FPopupFilesDialog := nil;
   end;
 end;
 
