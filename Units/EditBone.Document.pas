@@ -1434,21 +1434,14 @@ begin
 end;
 
 function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
-var
-  LSearchPanel: TBCPanel;
 begin
   Result := False;
   if not OptionsContainer.DocumentSpecificSearch then
-  begin
-    LSearchPanel := GetActiveSearchPanel;
-    if Assigned(LSearchPanel) then
-      if not LSearchPanel.Visible then
-        if AEditor.Search.SearchText <> OptionsContainer.DocumentSpecificSearchText then
-        begin
-          AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
-          Result := True;
-        end;
-  end;
+    if AEditor.Search.SearchText <> OptionsContainer.DocumentSpecificSearchText then
+    begin
+      AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
+      Result := True;
+    end;
 end;
 
 procedure TEBDocument.FindNext;
