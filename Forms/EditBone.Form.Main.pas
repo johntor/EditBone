@@ -1470,12 +1470,17 @@ begin
 end;
 
 procedure TMainForm.ActionFileSelectFromDirectoryExecute(Sender: TObject);
+var
+  LActiveDocumentName: string;
 begin
   if FDocument.ActiveDocumentName <> '' then
     if Assigned(FDirectory) then
       if FDirectory.IsAnyDirectory then
-        FDirectory.OpenPath(ExtractFileDrive(FDocument.ActiveDocumentName), FormatFileName(FDocument.ActiveDocumentName),
+      begin
+        LActiveDocumentName := FDocument.ActiveDocumentName;
+        FDirectory.OpenPath(ExtractFileDrive(LActiveDocumentName), FormatFileName(LActiveDocumentName),
           FDirectory.ExcludeOtherBranches);
+      end
 end;
 
 procedure TMainForm.ActionHelpAboutEditBoneExecute(Sender: TObject);
@@ -2184,22 +2189,68 @@ end;
 
 procedure TMainForm.SetFields;
 var
-  LActiveDocumentName, LActiveFileName: string;
-  ActiveDocumentFound: Boolean;
-  InfoText: string;
-  KeyState: TKeyboardState;
-  SelectionFound: Boolean;
-  IsSQLDocument: Boolean;
-  IsXMLDocument: Boolean;
-  IsJSONDocument: Boolean;
+  LActiveEditor, LActiveSplitEditor: TBCEditor;
+  LActiveDocumentName: string;
+  LActiveDocumentFound, LActiveSplitDocumentFound: Boolean;
+  LInfoText: string;
+  LKeyState: TKeyboardState;
+  LSelectionAvailable: Boolean;
+  LIsSQLDocument: Boolean;
+  LIsXMLDocument: Boolean;
+  LIsJSONDocument: Boolean;
+  LSelectionModeChecked: Boolean;
+  LMinimapVisible: Boolean;
+  LSearchEnabled: Boolean;
+  LIsRecordingMacro: Boolean;
+  LIsRecordingStopped: Boolean;
 begin
   FProcessingEventHandler := True;
   try
-    ActiveDocumentFound := FDocument.ActiveDocumentFound;
-    SelectionFound := FDocument.SelectionFound;
-    IsSQLDocument := FDocument.IsSQLDocument;
-    IsXMLDocument := FDocument.IsXMLDocument;
-    IsJSONDocument := FDocument.IsJSONDocument;
+    LActiveEditor := nil;
+    LActiveSplitEditor := nil;
+    if Assigned(PageControlDocument.ActivePage) then
+    begin
+      LActiveEditor := FDocument.GetActiveEditor;
+      LActiveSplitEditor := FDocument.GetActiveSplitEditor;
+    end;
+    LActiveDocumentFound := Assigned(LActiveEditor);
+    LActiveSplitDocumentFound := Assigned(LActiveSplitEditor);
+
+    LSelectionAvailable := False;
+    LIsSQLDocument := False;
+    LIsXMLDocument := False;
+    LIsJSONDocument := False;
+    LActiveDocumentName := '';
+    LSelectionModeChecked := False;
+    LMinimapVisible := False;
+    LSearchEnabled := False;
+    LIsRecordingMacro := False;
+    LIsRecordingStopped := False;
+    if LActiveDocumentFound then
+    begin
+      LSelectionAvailable := LActiveEditor.SelectionAvailable;
+      LIsSQLDocument := LActiveEditor.Tag = EXTENSION_SQL;
+      LIsXMLDocument := LActiveEditor.Tag = EXTENSION_XML;
+      LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
+      LMinimapVisible := LActiveEditor.Minimap.Visible;
+      LSearchEnabled := LActiveEditor.Search.Enabled;
+
+      if Assigned(LActiveEditor.MacroRecorder) then
+      begin
+        LIsRecordingMacro := LActiveEditor.MacroRecorder.State = msRecording;
+        LIsRecordingStopped := LActiveEditor.MacroRecorder.State = msStopped;
+      end;
+
+      if LActiveEditor.DocumentName <> '' then
+        LActiveDocumentName := FormatFileName(LActiveEditor.DocumentName, LActiveEditor.Modified);
+
+      if LActiveDocumentName = '' then
+        LActiveDocumentName := FDocument.ActiveTabSheetCaption;
+
+      LSelectionModeChecked := LActiveEditor.Selection.Mode = smColumn;
+    end;
+    if LActiveSplitDocumentFound then
+      LSelectionAvailable := LSelectionAvailable or LActiveSplitEditor.SelectionAvailable;
 
     ActionViewMainMenu.Checked := Assigned(Menu);
     ActionViewToolbar.Checked := PanelToolbar.Visible;
@@ -2211,7 +2262,6 @@ begin
     SplitterHorizontal.Visible := PanelOutput.Visible;
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
-
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ActionViewEncodingSelection.Checked;
     TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ActionViewHighlighterSelection.Checked;
@@ -2219,93 +2269,85 @@ begin
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ActionViewColorSelection.Checked;
     TitleBar.Items[EDITBONE_TITLE_BAR_SPACING4].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
 
-    ActionViewXMLTree.Enabled := ActiveDocumentFound and IsXMLDocument;
+    ActionViewXMLTree.Enabled := LActiveDocumentFound and LIsXMLDocument;
     if ActionViewXMLTree.Enabled then
-     ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
-
-    LActiveDocumentName := FDocument.ActiveDocumentName;
-    if LActiveDocumentName = '' then
-      LActiveDocumentName := FDocument.ActiveTabSheetCaption;
+      ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
 
     if LActiveDocumentName = '' then
       TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
     else
       TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title + '  -';
 
-    LActiveFileName := FDocument.ActiveDocumentName;
-    if LActiveFileName = '' then
-      LActiveFileName := FDocument.ActiveTabSheetCaption;
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveDocumentName <> '';
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveDocumentName + ']';
 
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveFileName <> '';
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveFileName + ']';
-
-    ActionFileProperties.Enabled := ActiveDocumentFound and (LActiveDocumentName <> '');
+    ActionFileProperties.Enabled := LActiveDocumentFound and (LActiveDocumentName <> '');
 
     ActionFileReopen.Enabled := PopupMenuFileReopen.Items.Count > 0;
-    ActionFileClose.Enabled := FDocument.OpenTabSheetCount > 0;
+    ActionFileClose.Enabled := PageControlDocument.PageCount > 1;
     ActionFileCloseAll.Enabled := ActionFileClose.Enabled;
     ActionFileCloseAllOther.Enabled := ActionFileClose.Enabled;
-    ActionViewNextPage.Enabled := FDocument.OpenTabSheetCount > 1;
+    ActionViewNextPage.Enabled := PageControlDocument.PageCount > 2;
     ActionViewPreviousPage.Enabled := ActionViewNextPage.Enabled;
-    ActionFileSaveAs.Enabled := ActionFileClose.Enabled and ActiveDocumentFound;
-    ActionFileSave.Enabled := FDocument.ActiveDocumentModified and ActiveDocumentFound;
-    ActionFileSaveAll.Enabled := FDocument.ModifiedDocuments and ActiveDocumentFound;
-    ActionFilePrint.Enabled := ActionFileClose.Enabled and ActiveDocumentFound;
-    ActionFilePrintPreview.Enabled := ActionFileClose.Enabled and ActiveDocumentFound;
-    ActionFileSelectFromDirectory.Enabled := PanelDirectory.Visible and ActiveDocumentFound and FDirectory.IsAnyDirectory;
-    ActionEditUndo.Enabled := ActionFileClose.Enabled and FDocument.CanUndo and ActiveDocumentFound;
-    ActionEditRedo.Enabled := ActionFileClose.Enabled and FDocument.CanRedo and ActiveDocumentFound;
-    ActionEditCut.Enabled := SelectionFound and ActiveDocumentFound;
-    ActionEditCopy.Enabled := ActionEditCut.Enabled and ActiveDocumentFound;
-    ActionEditSelectAll.Enabled := ActiveDocumentFound;
-    ActionEditIndentIncrease.Enabled := SelectionFound;
-    ActionEditIndentDecrease.Enabled := SelectionFound;
-    ActionEditToggleCase.Enabled := SelectionFound;
-    ActionEditInsertTag.Enabled := ActiveDocumentFound;
-    ActionEditInsertDateTime.Enabled := ActiveDocumentFound;
-    ActionEditInsertLine.Enabled := ActiveDocumentFound;
-    ActionEditDeleteWord.Enabled := ActiveDocumentFound;
-    ActionEditDeleteLine.Enabled := ActiveDocumentFound;
-    ActionEditDeleteEndOfLine.Enabled := ActiveDocumentFound;
+    ActionFileSaveAs.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
+    ActionFileSave.Enabled := FDocument.ActiveDocumentModified and LActiveDocumentFound;
+    ActionFileSaveAll.Enabled := FDocument.ModifiedDocuments and LActiveDocumentFound;
+    ActionFilePrint.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
+    ActionFilePrintPreview.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
+    ActionFileSelectFromDirectory.Enabled := PanelDirectory.Visible and LActiveDocumentFound and ActionViewDirectory.Enabled;
+    ActionEditUndo.Enabled := ActionFileClose.Enabled and FDocument.CanUndo and LActiveDocumentFound;
+    ActionEditRedo.Enabled := ActionFileClose.Enabled and FDocument.CanRedo and LActiveDocumentFound;
+    ActionEditCut.Enabled := LSelectionAvailable and LActiveDocumentFound;
+    ActionEditCopy.Enabled := ActionEditCut.Enabled and LActiveDocumentFound;
+    ActionEditSelectAll.Enabled := LActiveDocumentFound;
+    ActionEditIndentIncrease.Enabled := LSelectionAvailable;
+    ActionEditIndentDecrease.Enabled := LSelectionAvailable;
+    ActionEditToggleCase.Enabled := LSelectionAvailable;
+    ActionEditInsertTag.Enabled := LActiveDocumentFound;
+    ActionEditInsertDateTime.Enabled := LActiveDocumentFound;
+    ActionEditInsertLine.Enabled := LActiveDocumentFound;
+    ActionEditDeleteWord.Enabled := LActiveDocumentFound;
+    ActionEditDeleteLine.Enabled := LActiveDocumentFound;
+    ActionEditDeleteEndOfLine.Enabled := LActiveDocumentFound;
 
-    ActionEditPaste.Enabled := Clipboard.HasFormat(CF_TEXT) and ActiveDocumentFound;
+    ActionEditPaste.Enabled := Clipboard.HasFormat(CF_TEXT) and LActiveDocumentFound;
 
-    ActionViewSelectionMode.Enabled := ActiveDocumentFound;
-    ActionViewSelectionMode.Checked := ActiveDocumentFound and FDocument.SelectionModeChecked;
-    ActionViewSplit.Enabled := ActiveDocumentFound;
-    ActionViewSplit.Checked := ActiveDocumentFound and FDocument.SplitChecked;
-    ActionViewMinimap.Enabled := ActiveDocumentFound;
-    ActionViewMinimap.Checked := ActiveDocumentFound and FDocument.MinimapChecked;
+    ActionViewSelectionMode.Enabled := LActiveDocumentFound;
+    ActionViewSelectionMode.Checked := LActiveDocumentFound and LSelectionModeChecked;
+    ActionViewSplit.Enabled := LActiveDocumentFound;
+    ActionViewSplit.Checked := LActiveSplitDocumentFound;
+    ActionViewMinimap.Enabled := LActiveDocumentFound;
+    ActionViewMinimap.Checked := LActiveDocumentFound and LMinimapVisible;
 
-    ActionSearchSearch.Enabled := ActiveDocumentFound;
-    ActionSearchSearchButton.Enabled := ActiveDocumentFound;
-    ActionSearchSearchButton.Checked := ActiveDocumentFound and FDocument.SearchChecked;
-    ActionSearchGotoLine.Enabled := ActiveDocumentFound;
-    ActionSearchReplace.Enabled := ActiveDocumentFound;
+    ActionSearchSearch.Enabled := LActiveDocumentFound;
+    ActionSearchSearchButton.Enabled := LActiveDocumentFound;
+    ActionSearchSearchButton.Checked := LActiveDocumentFound and LSearchEnabled;
+    ActionSearchGotoLine.Enabled := LActiveDocumentFound;
+    ActionSearchReplace.Enabled := LActiveDocumentFound;
     ActionSearchFindInFiles.Enabled := Assigned(FOutput) and not FOutput.ProcessingTabSheet;
-    ActionSearchFindNext.Enabled := ActiveDocumentFound;
-    ActionSearchFindPrevious.Enabled := ActiveDocumentFound;
-    ActionSearchToggleBookmark.Enabled := OptionsContainer.LeftMarginShowBookmarks and ActiveDocumentFound;
+    ActionSearchFindNext.Enabled := LActiveDocumentFound;
+    ActionSearchFindPrevious.Enabled := LActiveDocumentFound;
+    ActionSearchToggleBookmark.Enabled := OptionsContainer.LeftMarginShowBookmarks and LActiveDocumentFound;
     ActionSearchToggleBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
     ActionSearchGotoBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
     ActionSearchClearBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
 
-    ActionViewWordWrap.Enabled := ActiveDocumentFound;
-    ActionViewLineNumbers.Enabled := Assigned(FDocument) and (FDocument.OpenTabSheetCount > 0);
+    ActionViewWordWrap.Enabled := LActiveDocumentFound;
+    ActionViewLineNumbers.Enabled := Assigned(FDocument) and (PageControlDocument.PageCount > 1);
     ActionViewSpecialChars.Enabled := ActionViewLineNumbers.Enabled;
-    ActionDocumentInfo.Enabled := ActiveDocumentFound;
+    ActionDocumentInfo.Enabled := LActiveDocumentFound;
     ActionToolsSelectForCompare.Enabled := False; // TODO: not implemented ActiveDocumentFound and not FDocument.ActiveDocumentModified;
     ActionToolsCompareFiles.Enabled := False; // TODO: not implemented
-    ActionDocumentFormatJSON.Enabled := ActiveDocumentFound and IsJSONDocument;
-    ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and ActiveDocumentFound and IsSQLDocument;
-    ActionDocumentFormatXML.Enabled := ActiveDocumentFound and IsXMLDocument;
+    ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
+    ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
+    ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
 
     ActionViewOutput.Enabled := FOutput.IsAnyOutput;
     if not ActionViewOutput.Enabled then { if there's no output then hide panel }
       PanelOutput.Visible := False;
 
     if OptionsContainer.DirAutoHide then
-      if not FDirectory.IsAnyDirectory then
+      if not ActionViewDirectory.Enabled then
       begin
         SplitterVertical.Visible := False;
         PanelDirectory.Visible := False;
@@ -2314,32 +2356,32 @@ begin
     ActionViewEditDirectory.Enabled := PanelDirectory.Visible;
     ActionViewCloseDirectory.Enabled := PanelDirectory.Visible;
 
-    if ActiveDocumentFound and OptionsContainer.StatusBarShowModified then
+    if LActiveDocumentFound and OptionsContainer.StatusBarShowModified then
     begin
-      InfoText := FDocument.GetModifiedInfo;
-      if StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text <> InfoText then
-        StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := InfoText;
+      LInfoText := FDocument.GetModifiedInfo;
+      if StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text <> LInfoText then
+        StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := LInfoText;
     end
     else
       StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := '';
-    GetKeyboardState(KeyState);
+    GetKeyboardState(LKeyState);
     if OptionsContainer.StatusBarShowKeyState then
     begin
-      if KeyState[VK_INSERT] = 0 then
+      if LKeyState[VK_INSERT] = 0 then
         if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Insert') then
           StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Insert');
-      if KeyState[VK_INSERT] = 1 then
+      if LKeyState[VK_INSERT] = 1 then
         if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Overwrite') then
           StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Overwrite');
     end
     else
       StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := '';
     { Macro }
-    ActionMacroRecord.Enabled := ActiveDocumentFound;
-    ActionMacroPause.Enabled := ActiveDocumentFound;
-    ActionMacroStop.Enabled := ActiveDocumentFound and FDocument.IsRecordingMacro;
-    ActionMacroPlayback.Enabled := ActiveDocumentFound and FDocument.IsMacroStopped;
-    ActionMacroOpen.Enabled := ActiveDocumentFound;
+    ActionMacroRecord.Enabled := LActiveDocumentFound;
+    ActionMacroPause.Enabled := LActiveDocumentFound;
+    ActionMacroStop.Enabled := LActiveDocumentFound and LIsRecordingMacro;
+    ActionMacroPlayback.Enabled := LActiveDocumentFound and LIsRecordingStopped;
+    ActionMacroOpen.Enabled := LActiveDocumentFound;
     ActionMacroSaveAs.Enabled := ActionMacroPlayback.Enabled;
     TitleBar.Items[EDITBONE_TITLE_BAR_MENU].Visible := not PanelMenubar.Visible;
     FProcessingEventHandler := False;
@@ -2887,7 +2929,8 @@ begin
       Inc(LPoint.X, TitleBar.Items[2].ExtForm.Left);
       Inc(LPoint.Y, TitleBar.Items[2].ExtForm.Top);
     end
-    else begin
+    else
+    begin
       GetWindowRect(Handle, LRect);
       Inc(LPoint.Y, LRect.Top);
       Inc(LPoint.X, LRect.Left);
@@ -3380,24 +3423,24 @@ begin
   begin
     { Encoding }
     if LEditor.Encoding = TEncoding.ASCII then
-      LCaption := 'ASCII'
+      LCaption := ENCODING_ASCII_CAPTION
     else
     if LEditor.Encoding = TEncoding.BigEndianUnicode then
-      LCaption := 'Big Endian Unicode'
+      LCaption := ENCODING_BIG_ENDIAN_UNICODE_CAPTION
     else
     if LEditor.Encoding = TEncoding.Unicode then
-      LCaption := 'Unicode'
+      LCaption := ENCODING_UNICODE_CAPTION
     else
     if LEditor.Encoding = TEncoding.UTF7 then
-      LCaption := 'UTF-7'
+      LCaption := ENCODING_UTF7_CAPTION
     else
     if LEditor.Encoding = TEncoding.UTF8 then
-      LCaption := 'UTF-8'
+      LCaption := ENCODING_UTF8_CAPTION
     else
     if LEditor.Encoding = BCEditor.Encoding.TEncoding.UTF8WithoutBOM then
-      LCaption := 'UTF-8 without BOM'
+      LCaption := ENCODING_UTF_WITHOUT_BOM_CAPTION
     else
-      LCaption := 'ANSI';
+      LCaption := ENCODING_ANSI_CAPTION;
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := LCaption;
     { Highlighter }
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;

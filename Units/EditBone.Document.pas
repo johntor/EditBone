@@ -55,7 +55,6 @@ type
     function CreateNewTabSheet(const AFileName: string = ''; AShowMinimap: Boolean = False;
       const AHighlighter: string = ''; const AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
     function FindOpenFile(const FileName: string): TBCEditor;
-    function GetActiveDocumentFound: Boolean;
     function GetActiveDocumentModified: Boolean;
     function GetActiveDocumentName: string;
     function GetActiveFileName: string;
@@ -66,13 +65,8 @@ type
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
     function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
-    function GetMinimapChecked: Boolean;
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
-    function GetOpenTabSheetCount: Integer;
     function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
-    function GetSelectionFound: Boolean;
-    function GetSelectionModeChecked: Boolean;
-    function GetSplitChecked: Boolean;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
     function GetXMLTree(const ATabSheet: TTabSheet): TEBXMLTree;
     function GetXMLTreeVisible: Boolean;
@@ -99,15 +93,9 @@ type
     function GetEditor(const ATabSheet: TTabSheet; const ATag: Integer = EDITBONE_DOCUMENT_EDITOR_TAG): TBCEditor;
     function GetMacroRecordPauseImageIndex: Integer;
     function GetModifiedInfo: string;
-    function IsJSONDocument: Boolean;
-    function IsMacroStopped: Boolean;
-    function IsRecordingMacro: Boolean;
-    function IsSQLDocument: Boolean;
-    function IsXMLDocument: Boolean;
     function Options(AActionList: TActionList): Boolean;
     function ReadIniOpenFiles: Boolean;
     function SaveAs: string;
-    function SearchChecked: Boolean;
     function ToggleLineNumbers: Boolean;
     function ToggleSearch(AShowPanel: Boolean = False): Boolean;
     function ToggleSpecialChars: Boolean;
@@ -182,7 +170,6 @@ type
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
     property ActionSearchTextItems: TAction read FActionSearchTextItems write FActionSearchTextItems;
-    property ActiveDocumentFound: Boolean read GetActiveDocumentFound;
     property ActiveDocumentModified: Boolean read GetActiveDocumentModified;
     property ActiveDocumentName: string read GetActiveDocumentName;
     property ActiveFileName: string read GetActiveFileName;
@@ -192,22 +179,17 @@ type
     property CaretInfo: string read FCaretInfo;
     property CreateFileReopenList: TEBCreateFileReopenList read FCreateFileReopenList write FCreateFileReopenList;
     property GetActionList: TEBGetActionList read FGetActionList write FGetActionList;
-    property MinimapChecked: Boolean read GetMinimapChecked;
     property ModifiedDocuments: Boolean read FModifiedDocuments write FModifiedDocuments;
     property OpenDialog: TOpenDialog read FOpenDialog write FOpenDialog;
-    property OpenTabSheetCount: Integer read GetOpenTabSheetCount;
     property PageControl: TBCPageControl read FPageControl;
     property PopupMenuEditor: TPopupMenu read FPopupMenuEditor write FPopupMenuEditor;
     property PopupMenuXMLTree: TPopupMenu read FPopupMenuXMLTree write FPopupMenuXMLTree;
     property Processing: Boolean read FProcessing;
     property ProgressBar: TBCProgressBar read FProgressBar write FProgressBar;
     property SaveDialog: TSaveDialog read FSaveDialog write FSaveDialog;
-    property SelectionFound: Boolean read GetSelectionFound;
-    property SelectionModeChecked: Boolean read GetSelectionModeChecked;
     property SetBookmarks: TEBSetBookmarks read FSetBookmarks write FSetBookmarks;
     property SetTitleBarMenus: TEBSetTitleBarMenus read FSetTitleBarMenus write FSetTitleBarMenus;
     property SkinManager: TBCSkinManager read FSkinManager write FSkinManager;
-    property SplitChecked: Boolean read GetSplitChecked;
     property StatusBar: TBCStatusBar write FStatusBar;
     property XMLTreeVisible: Boolean read GetXMLTreeVisible;
   end;
@@ -512,6 +494,7 @@ function TEBDocument.CreateNewTabSheet(const AFileName: string = ''; AShowMinima
 var
   LTabSheet: TsTabSheet;
   LEditor: TBCEditor;
+  LExtension: string;
 begin
   FProcessing := True;
 
@@ -575,6 +558,16 @@ begin
     else
       SetHighlighterColor(LEditor, OptionsContainer.DefaultColor);
     LEditor.LoadFromFile(AFileName);
+
+    LExtension := UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName));
+    if Pos('JSON', LExtension) <> 0 then
+      LEditor.Tag := EXTENSION_JSON
+    else
+    if Pos('XML', LExtension) <> 0 then
+      LEditor.Tag := EXTENSION_XML
+    else
+    if Pos('SQL', LExtension) <> 0 then
+      LEditor.Tag := EXTENSION_SQL;
   end
   else
   begin
@@ -1438,16 +1431,6 @@ begin
   end;
 end;
 
-function TEBDocument.SearchChecked: Boolean;
-var
-  LSearchPanel: TBCPanel;
-begin
-  Result := False;
-  LSearchPanel := GetActiveSearchPanel;
-  if Assigned(LSearchPanel) then
-    Result := LSearchPanel.Visible;
-end;
-
 function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
 var
   LSearchPanel: TBCPanel;
@@ -1592,16 +1575,6 @@ begin
     //if PageControl.Pages[i].Components[0] is TCompareFrame then
     //  Result := TCompareFrame(PageControl.Pages[i].Components[0]).ToggleSpecialChars
   end;
-end;
-
-function TEBDocument.GetSelectionModeChecked: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := LEditor.Selection.Mode = smColumn;
 end;
 
 procedure TEBDocument.ToggleSelectionMode;
@@ -2130,19 +2103,6 @@ begin
       Result := PageControl.ActivePage.Caption;
 end;
 
-function TEBDocument.GetActiveDocumentFound: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-
-  if Assigned(PageControl.ActivePage) then
-  begin
-    LEditor := GetActiveEditor;
-    Result := Assigned(LEditor);
-  end;
-end;
-
 function TEBDocument.GetActiveDocumentName: string;
 var
   LEditor: TBCEditor;
@@ -2170,11 +2130,6 @@ begin
   end;
 end;
 
-function TEBDocument.GetOpenTabSheetCount: Integer;
-begin
-  Result := PageControl.PageCount - 1;
-end;
-
 function TEBDocument.GetModifiedDocuments(CheckActive: Boolean): Boolean;
 var
   i: Integer;
@@ -2193,20 +2148,6 @@ begin
       end;
   end;
   Result := False;
-end;
-
-function TEBDocument.GetSelectionFound: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := LEditor.SelectionAvailable;
-
-  LEditor := GetActiveSplitEditor;
-  if Assigned(LEditor) then
-    Result := Result or LEditor.SelectionAvailable;
 end;
 
 function TEBDocument.GetCanUndo: Boolean;
@@ -2564,17 +2505,6 @@ begin
         Result := IMAGE_INDEX_PAUSE
 end;
 
-function TEBDocument.IsRecordingMacro: Boolean;
-var
-  Editor: TBCEditor;
-begin
-  Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    if Assigned(Editor.MacroRecorder) then
-      Result := Editor.MacroRecorder.State = msRecording
-end;
-
 procedure TEBDocument.SetHighlighter(AEditor: TBCEditor; const AHighlighterName: string);
 begin
   if Assigned(AEditor) then
@@ -2651,17 +2581,6 @@ begin
     SetSkinColors(AEditor);
     Invalidate;
   end;
-end;
-
-function TEBDocument.IsMacroStopped: Boolean;
-var
-  Editor: TBCEditor;
-begin
-  Result := False;
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    if Assigned(Editor.MacroRecorder) then
-      Result := Editor.MacroRecorder.State = msStopped
 end;
 
 procedure TEBDocument.RecordMacro;
@@ -2786,26 +2705,6 @@ begin
   end;
 end;
 
-function TEBDocument.GetSplitChecked: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetEditor(PageControl.ActivePage, EDITBONE_DOCUMENT_SPLIT_EDITOR_TAG);
-  if Assigned(LEditor) then
-    Result := LEditor.Visible;
-end;
-
-function TEBDocument.GetMinimapChecked: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := LEditor.Minimap.Visible;
-end;
-
 procedure TEBDocument.ToggleSplit;
 var
   LEditor, LSplitEditor: TBCEditor;
@@ -2864,37 +2763,6 @@ begin
   ToggleMinimap(GetActiveSplitEditor);
 end;
 
-{function TEBDocument.IsCompareFilesActivePage: Boolean;
-begin
-  Result := Assigned(PageControl.ActivePage) and (PageControl.ActivePage.ImageIndex = FCompareImageIndex);
-end; }
-
-(*procedure TEBDocument.UpdateLanguage(SelectedLanguage: string);
-var
-  i: Integer;
-  CompareFrame: TCompareFrame;
-  DocTabSheetFrame: TDocTabSheetFrame;
-begin
-  BCCommon.Language.Utils.UpdateLanguage(TForm(Self), SelectedLanguage);
-
-  { compare frames }
-  for i := 0 to PageControl.PageCount - 2 do
-  begin
-    if PageControl.Pages[i].ImageIndex = FCompareImageIndex then
-    begin
-      CompareFrame := GetCompareFrame(PageControl.Pages[i]);
-      if Assigned(CompareFrame) then
-        CompareFrame.UpdateLanguage(SelectedLanguage);
-    end
-    else
-    begin
-      DocTabSheetFrame := GetDocTabSheetFrame(PageControl.ActivePage);
-      if Assigned(DocTabSheetFrame) then
-        DocTabSheetFrame.UpdateLanguage(SelectedLanguage);
-    end;
-  end;
-end;  *)
-
 procedure TEBDocument.FormatXML;
 var
   LEditor: TBCEditor;
@@ -2934,36 +2802,6 @@ begin
       LEditor.Text := BCCommon.StringUtils.FormatJSON(LEditor.Text, AIndentSize);
       LEditor.CaretZero;
     end;
-end;
-
-function TEBDocument.IsJSONDocument: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := Assigned(LEditor.Highlighter) and (Pos('JSON', UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName))) <> 0)
-end;
-
-function TEBDocument.IsXMLDocument: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := Assigned(LEditor.Highlighter) and (Pos('XML', UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName))) <> 0)
-end;
-
-function TEBDocument.IsSQLDocument: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  Result := False;
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    Result := Assigned(LEditor.Highlighter) and (Pos('SQL', UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName))) <> 0)
 end;
 
 procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; const FileName: string);

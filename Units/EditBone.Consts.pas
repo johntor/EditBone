@@ -39,6 +39,10 @@ const
   EDITBONE_TITLE_BAR_COLORS = 8;
   EDITBONE_TITLE_BAR_SPACING4 = 9;
 
+  EXTENSION_JSON = 1;
+  EXTENSION_XML = 2;
+  EXTENSION_SQL = 3;
+
 implementation
 
 end.
