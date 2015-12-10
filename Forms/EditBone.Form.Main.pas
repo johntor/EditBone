@@ -2229,9 +2229,9 @@ begin
     if LActiveDocumentFound then
     begin
       LSelectionAvailable := LActiveEditor.SelectionAvailable;
-      LIsSQLDocument := LActiveEditor.Tag = EXTENSION_SQL;
-      LIsXMLDocument := LActiveEditor.Tag = EXTENSION_XML;
-      LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
+      LIsSQLDocument := LActiveEditor.ExtraTag = EXTENSION_SQL;
+      LIsXMLDocument := LActiveEditor.ExtraTag = EXTENSION_XML;
+      LIsJSONDocument := LActiveEditor.ExtraTag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
 
       LSearchEnabled := LActiveEditor.Search.Visible;

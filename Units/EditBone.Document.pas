@@ -562,14 +562,15 @@ begin
     LEditor.LoadFromFile(AFileName);
 
     LExtension := UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName));
+
     if Pos('JSON', LExtension) <> 0 then
-      LEditor.Tag := EXTENSION_JSON
+      LEditor.ExtraTag := EXTENSION_JSON
     else
     if Pos('XML', LExtension) <> 0 then
-      LEditor.Tag := EXTENSION_XML
+      LEditor.ExtraTag := EXTENSION_XML
     else
     if Pos('SQL', LExtension) <> 0 then
-      LEditor.Tag := EXTENSION_SQL;
+      LEditor.ExtraTag := EXTENSION_SQL;
   end
   else
   begin
