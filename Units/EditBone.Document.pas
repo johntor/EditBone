@@ -96,6 +96,7 @@ type
     function Options(AActionList: TActionList): Boolean;
     function ReadIniOpenFiles: Boolean;
     function SaveAs: string;
+    function SearchPanelVisible: Boolean;
     function ToggleLineNumbers: Boolean;
     function ToggleSearch(AShowPanel: Boolean = False): Boolean;
     function ToggleSpecialChars: Boolean;
@@ -541,6 +542,7 @@ begin
     OnDropFiles := DropFiles;
     PopupMenu := FPopupMenuEditor;
     Tag := EDITBONE_DOCUMENT_EDITOR_TAG;
+    Search.Visible := OptionsContainer.SearchVisible;
   end;
   OptionsContainer.AssignTo(LEditor);
   LEditor.Minimap.Visible := LEditor.Minimap.Visible or AShowMinimap;
@@ -1408,19 +1410,19 @@ begin
   LSearchPanel := GetActiveSearchPanel;
   if Assigned(LSearchPanel) then
   begin
-    if not LSearchPanel.Visible then
-    begin
-      LEditor := GetActiveEditor;
-      if Assigned(LEditor) then
-        ReadSearchOptions;
-    end;
-
     if AShowPanel then
       LSearchPanel.Visible := True
     else
       LSearchPanel.Visible := not LSearchPanel.Visible;
 
+    LEditor := GetActiveEditor;
+    LEditor.Search.Visible := LSearchPanel.Visible;
+
+    if LSearchPanel.Visible then
+      ReadSearchOptions;
+
     Result := LSearchPanel.Visible;
+
     if Result then
     begin
       LComboBoxSearchText := GetActiveComboBoxSearchText;
@@ -1973,13 +1975,27 @@ begin
   end;
 end;
 
+function TEBDocument.SearchPanelVisible: Boolean;
+var
+  LPanel: TBCPanel;
+begin
+  Result := False;
+  LPanel := GetActiveSearchPanel;
+  if Assigned(LPanel) then
+    Result := LPanel.Visible;
+end;
+
 procedure TEBDocument.SearchClose;
 var
   LPanel: TBCPanel;
+  LEditor: TBCEditor;
 begin
   LPanel := GetActiveSearchPanel;
   if Assigned(LPanel) then
     LPanel.Visible := False;
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.Search.Visible := False;
 end;
 
 function TEBDocument.GetActiveSearchPanel: TBCPanel;

@@ -2233,7 +2233,8 @@ begin
       LIsXMLDocument := LActiveEditor.Tag = EXTENSION_XML;
       LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
-      LSearchEnabled := LActiveEditor.Search.Enabled;
+
+      LSearchEnabled := LActiveEditor.Search.Visible;
 
       if Assigned(LActiveEditor.MacroRecorder) then
       begin
