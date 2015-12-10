@@ -105,21 +105,22 @@ end;
 procedure TOptionsFileTypesFrame.PutData;
 var
   i: Integer;
-  FileType: string;
-  Node: PVirtualNode;
-  Data: PTreeData;
+  LFileType: string;
+  LNode: PVirtualNode;
+  LData: PTreeData;
+  LLanguageText: string;
 begin
   OptionsContainer.FileTypes.Clear;
-  Node := VirtualDrawTree.GetFirst;
+  LNode := VirtualDrawTree.GetFirst;
   i := 0;
-  while Assigned(Node) do
+  while Assigned(LNode) do
   begin
-    Data := VirtualDrawTree.GetNodeData(Node);
-    FileType := Trim(Copy(LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text, 0,
-      Pos('(', LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text) - 1));
-    OptionsContainer.FileTypes.Add(Format('%s (%s)', [
-      FileType, StringBetween(Data^.FileType, '(', ')')]));
-    Node := VirtualDrawTree.GetNext(Node);
+    LData := VirtualDrawTree.GetNodeData(LNode);
+    LLanguageText := LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text;
+    LFileType := Trim(Copy(LLanguageText, 0, Pos('(', LLanguageText) - 1));
+    LFileType := Format('%s (%s)', [LFileType, StringBetween(LData^.FileType, '(', ')')]);
+    OptionsContainer.FileTypes.Add(LFileType);
+    LNode := VirtualDrawTree.GetNext(LNode);
     Inc(i);
   end;
 end;

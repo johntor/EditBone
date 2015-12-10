@@ -1711,6 +1711,7 @@ var
   LFileType: string;
   LEditor: TBCEditor;
   LTextCaretPosition: TBCEditorTextPosition;
+  LLanguageItem: string;
 begin
   with TBigIniFile.Create(GetIniFilename) do
   try
@@ -1745,10 +1746,10 @@ begin
     { FileTypes }
     for i := 0 to OptionsContainer.FileTypes.Count - 1 do
     begin
-      LFileType := Trim(System.Copy(LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text,
-        0, Pos('(', LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text) - 1));
-      WriteString('FileTypes', IntToStr(i),
-        Format('%s (%s)', [LFileType, StringBetween(OptionsContainer.FileTypes.Strings[i], '(', ')')]));
+      LLanguageItem := LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text;
+      LFileType := Trim(System.Copy(LLanguageItem, 0, Pos('(', LLanguageItem) - 1));
+      LFileType := Format('%s (%s)', [LFileType, StringBetween(OptionsContainer.FileTypes.Strings[i], '(', ')')]);
+      WriteString('FileTypes', IntToStr(i), LFileType);
     end;
   finally
     Free;
@@ -2813,7 +2814,7 @@ begin
 
   for i := 0 to OptionsContainer.FileTypes.Count - 1 do
   begin
-    ItemString := StringBetween(OptionsContainer.FileTypes.Values[OptionsContainer.FileTypes.Names[i]], '(', ')');
+    ItemString := StringBetween(OptionsContainer.FileTypes.ValueFromIndex[i], '(', ')');
     while ItemString <> '' do
     begin
       Token := GetNextToken(';', ItemString);
