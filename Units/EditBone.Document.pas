@@ -2710,7 +2710,7 @@ begin
         Encoding := TEncoding.UTF7;
       ENCODING_UTF8:
         Encoding := TEncoding.UTF8;
-      ENCODING_UTF_WITHOUT_BOM:
+      ENCODING_UTF8_WITHOUT_BOM:
         Encoding := TEncoding.UTF8WithoutBOM;
     end;
   end;

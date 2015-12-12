@@ -59,14 +59,6 @@ inherited OptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame
       Style = csOwnerDrawFixed
       ItemIndex = -1
       TabOrder = 1
-      Items.Strings = (
-        'ASCII'
-        'ANSI'
-        'Big Endian Unicode'
-        'Unicode '
-        'UTF-7'
-        'UTF-8'
-        'UTF-8 Without BOM')
       UseMouseWheel = False
     end
     object ComboBoxDefaultHighlighter: TBCComboBox

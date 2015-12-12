@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Types, BCControls.Utils, BCCommon.Consts, sGraphUtils, sVclUtils, sDefaults, System.Math;
+  System.Types, BCControls.Utils, EditBone.Consts, sGraphUtils, sVclUtils, sDefaults, System.Math;
 
 type
   PSearchRec = ^TSearchRec;
@@ -58,30 +58,34 @@ var
   NodeData: PSearchRec;
   LWidth, LMaxWidth: Integer;
 
-  procedure AddEncoding(AId: Integer; AName: string);
+  procedure AddEncoding(AId: Integer);
+  var
+    LName: string;
   begin
+    LName := ENCODING_CAPTIONS[AId];
+
     Node := VirtualDrawTree.AddChild(nil);
     NodeData := VirtualDrawTree.GetNodeData(Node);
 
-    LWidth := VirtualDrawTree.Canvas.TextWidth(AName);
+    LWidth := VirtualDrawTree.Canvas.TextWidth(LName);
     if LWidth > LMaxWidth then
       LMaxWidth := LWidth;
 
     NodeData.Id := AId;
-    NodeData.Name := AName;
-    VirtualDrawTree.Selected[Node] := ASelectedEncoding = AName;
+    NodeData.Name := LName;
+    VirtualDrawTree.Selected[Node] := ASelectedEncoding = LName;
   end;
 
 begin
   LMaxWidth := 0;
 
-  AddEncoding(ENCODING_ANSI, ENCODING_ANSI_CAPTION);
-  AddEncoding(ENCODING_ASCII, ENCODING_ASCII_CAPTION);
-  AddEncoding(ENCODING_BIG_ENDIAN_UNICODE, ENCODING_BIG_ENDIAN_UNICODE_CAPTION);
-  AddEncoding(ENCODING_UNICODE, ENCODING_UNICODE_CAPTION);
-  AddEncoding(ENCODING_UTF7, ENCODING_UTF7_CAPTION);
-  AddEncoding(ENCODING_UTF8, ENCODING_UTF8_CAPTION);
-  AddEncoding(ENCODING_UTF_WITHOUT_BOM, ENCODING_UTF_WITHOUT_BOM_CAPTION);
+  AddEncoding(ENCODING_ANSI);
+  AddEncoding(ENCODING_ASCII);
+  AddEncoding(ENCODING_BIG_ENDIAN_UNICODE);
+  AddEncoding(ENCODING_UNICODE);
+  AddEncoding(ENCODING_UTF7);
+  AddEncoding(ENCODING_UTF8);
+  AddEncoding(ENCODING_UTF8_WITHOUT_BOM);
 
   VirtualDrawTree.Invalidate;
 

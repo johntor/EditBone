@@ -3447,33 +3447,13 @@ end;
 
 procedure TMainForm.SetTitleBarMenus;
 var
-  LCaption: string;
   LEditor: TBCEditor;
 begin
   LEditor := FDocument.GetActiveEditor;
   if Assigned(LEditor) then
   begin
     { Encoding }
-    if LEditor.Encoding = TEncoding.ASCII then
-      LCaption := ENCODING_ASCII_CAPTION
-    else
-    if LEditor.Encoding = TEncoding.BigEndianUnicode then
-      LCaption := ENCODING_BIG_ENDIAN_UNICODE_CAPTION
-    else
-    if LEditor.Encoding = TEncoding.Unicode then
-      LCaption := ENCODING_UNICODE_CAPTION
-    else
-    if LEditor.Encoding = TEncoding.UTF7 then
-      LCaption := ENCODING_UTF7_CAPTION
-    else
-    if LEditor.Encoding = TEncoding.UTF8 then
-      LCaption := ENCODING_UTF8_CAPTION
-    else
-    if LEditor.Encoding = BCEditor.Encoding.TEncoding.UTF8WithoutBOM then
-      LCaption := ENCODING_UTF_WITHOUT_BOM_CAPTION
-    else
-      LCaption := ENCODING_ANSI_CAPTION;
-    TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := LCaption;
+    TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := EncodingToText(LEditor.Encoding);
     { Highlighter }
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
     { Color }
