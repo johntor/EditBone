@@ -8,10 +8,10 @@ uses
   System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList;
 
 type
-  TSelectFileEvent = procedure(var APageIndex: Integer) of object;
+  TSelectFileEvent = procedure(APageIndex: Integer) of object;
 
   TPopupFilesDialog = class(TForm)
-    VirtualDrawTreeSearch: TVirtualDrawTree;
+    VirtualDrawTree: TVirtualDrawTree;
     SkinProvider: TsSkinProvider;
     ButtonedEdit: TBCButtonedEdit;
     ActionList: TActionList;
@@ -21,14 +21,14 @@ type
     procedure FormShow(Sender: TObject);
     procedure ActionClearExecute(Sender: TObject);
     procedure ActionSearchExecute(Sender: TObject);
-    procedure VirtualDrawTreeSearchCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode;
+    procedure VirtualDrawTreeCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode;
       Column: TColumnIndex; var Result: Integer);
-    procedure VirtualDrawTreeSearchDblClick(Sender: TObject);
-    procedure VirtualDrawTreeSearchDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
-    procedure VirtualDrawTreeSearchFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeSearchGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
+    procedure VirtualDrawTreeDblClick(Sender: TObject);
+    procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
+    procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
       Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
-    procedure VirtualDrawTreeSearchGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
+    procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; var NodeWidth: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -61,22 +61,22 @@ procedure TPopupFilesDialog.FormCreate(Sender: TObject);
 var
   SysImageList: THandle;
 begin
-  VirtualDrawTreeSearch.NodeDataSize := SizeOf(TSearchRec);
-  VirtualDrawTreeSearch.Images := TImageList.Create(Self);
+  VirtualDrawTree.NodeDataSize := SizeOf(TSearchRec);
+  VirtualDrawTree.Images := TImageList.Create(Self);
   SysImageList := GetSysImageList;
   if SysImageList <> 0 then
   begin
-    VirtualDrawTreeSearch.Images.Handle := SysImageList;
-    VirtualDrawTreeSearch.Images.BkColor := clNone;
-    VirtualDrawTreeSearch.Images.ShareImages := True;
+    VirtualDrawTree.Images.Handle := SysImageList;
+    VirtualDrawTree.Images.BkColor := clNone;
+    VirtualDrawTree.Images.ShareImages := True;
   end;
 end;
 
 procedure TPopupFilesDialog.Execute(AFiles: TStrings; ASelectedFile: string);
 var
   i: Integer;
-  Node: PVirtualNode;
-  NodeData: PSearchRec;
+  LNode: PVirtualNode;
+  LNodeData: PSearchRec;
   LFileName, LSelectedFile: string;
   LWidth, LMaxWidth: Integer;
 begin
@@ -84,34 +84,38 @@ begin
   LSelectedFile := Copy(ASelectedFile, 2, Length(ASelectedFile) - 2); { Remove [] }
   for i := 0 to AFiles.Count - 1 do
   begin
-    Node := VirtualDrawTreeSearch.AddChild(nil);
-    NodeData := VirtualDrawTreeSearch.GetNodeData(Node);
+    LNode := VirtualDrawTree.AddChild(nil);
+    LNodeData := VirtualDrawTree.GetNodeData(LNode);
     LFileName := AFiles[i];
 
-    LWidth := VirtualDrawTreeSearch.Canvas.TextWidth(LFileName);
+    LWidth := VirtualDrawTree.Canvas.TextWidth(LFileName);
     if LWidth > LMaxWidth then
       LMaxWidth := LWidth;
 
-    NodeData.FileName := ExtractFileName(LFileName);
-    NodeData.FilePath := ExtractFilePath(LFileName);
-    NodeData.ImageIndex := GetIconIndex(LFileName);
-    if NodeData.ImageIndex = -1 then
-      NodeData.ImageIndex := 0;
-    NodeData.PageIndex := Integer(AFiles.Objects[i]);
-    VirtualDrawTreeSearch.Selected[Node] := LSelectedFile = LFileName;
+    LNodeData.FileName := ExtractFileName(LFileName);
+    LNodeData.FilePath := ExtractFilePath(LFileName);
+    LNodeData.ImageIndex := GetIconIndex(LFileName);
+    if LNodeData.ImageIndex = -1 then
+      LNodeData.ImageIndex := 0;
+    LNodeData.PageIndex := Integer(AFiles.Objects[i]);
+    VirtualDrawTree.Selected[LNode] := LSelectedFile = LFileName;
   end;
-  {$WARNINGS ON}
-  VirtualDrawTreeSearch.Sort(nil, 0, sdAscending, False);
-  VirtualDrawTreeSearch.Invalidate;
+  for LNode in VirtualDrawTree.SelectedNodes(False) do
+    VirtualDrawTree.ScrollIntoView(LNode, True, False);
+
+  VirtualDrawTree.Sort(nil, 0, sdAscending, False);
+  VirtualDrawTree.Invalidate;
   Width := LMaxWidth + 80;
-  Height := Min(Integer(VirtualDrawTreeSearch.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height + 13, TForm(Self.PopupParent).Height);
+  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height +
+    VirtualDrawTree.Margins.Top + VirtualDrawTree.Margins.Bottom + ButtonedEdit.Margins.Top +
+    ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
 
   Visible := True;
 end;
 
 procedure TPopupFilesDialog.FormDestroy(Sender: TObject);
 begin
-  VirtualDrawTreeSearch.Images.Free;
+  VirtualDrawTree.Images.Free;
 end;
 
 procedure TPopupFilesDialog.FormShow(Sender: TObject);
@@ -119,15 +123,15 @@ begin
   ButtonedEdit.SetFocus;
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode;
+procedure TPopupFilesDialog.VirtualDrawTreeCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode;
   Column: TColumnIndex; var Result: Integer);
 var
   Data1, Data2: PSearchRec;
 begin
   if Result = 0 then
   begin
-    Data1 := VirtualDrawTreeSearch.GetNodeData(Node1);
-    Data2 := VirtualDrawTreeSearch.GetNodeData(Node2);
+    Data1 := VirtualDrawTree.GetNodeData(Node1);
+    Data2 := VirtualDrawTree.GetNodeData(Node2);
 
     Result := -1;
 
@@ -138,19 +142,19 @@ begin
   end;
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchDblClick(Sender: TObject);
+procedure TPopupFilesDialog.VirtualDrawTreeDblClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PSearchRec;
 begin
-  Node := VirtualDrawTreeSearch.GetFirstSelected;
-  Data := VirtualDrawTreeSearch.GetNodeData(Node);
+  Node := VirtualDrawTree.GetFirstSelected;
+  Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
     if Assigned(FSelectFile) then
       FSelectFile(Data.PageIndex);
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
+procedure TPopupFilesDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
 var
   Data: PSearchRec;
   S: string;
@@ -224,7 +228,7 @@ var
   CurNode: PVirtualNode;
   Data: PSearchRec;
 begin
-  with VirtualDrawTreeSearch do
+  with VirtualDrawTree do
   begin
     CurNode := GetFirst;
     while Assigned(CurNode) do
@@ -236,7 +240,7 @@ begin
   end;
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TPopupFilesDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   Data: PSearchRec;
 begin
@@ -245,17 +249,17 @@ begin
   inherited;
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode;
+procedure TPopupFilesDialog.VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode;
   Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
 var
   Data: PSearchRec;
 begin
-  Data := VirtualDrawTreeSearch.GetNodeData(Node);
+  Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
     ImageIndex := Data.ImageIndex;
 end;
 
-procedure TPopupFilesDialog.VirtualDrawTreeSearchGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
+procedure TPopupFilesDialog.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
   Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
   Data: PSearchRec;

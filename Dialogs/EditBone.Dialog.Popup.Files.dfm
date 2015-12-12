@@ -19,7 +19,7 @@ object PopupFilesDialog: TPopupFilesDialog
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object VirtualDrawTreeSearch: TVirtualDrawTree
+  object VirtualDrawTree: TVirtualDrawTree
     AlignWithMargins = True
     Left = 3
     Top = 27
@@ -39,12 +39,12 @@ object PopupFilesDialog: TPopupFilesDialog
     TreeOptions.MiscOptions = [toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.PaintOptions = [toHideFocusRect, toShowRoot, toThemeAware]
     TreeOptions.SelectionOptions = [toFullRowSelect]
-    OnCompareNodes = VirtualDrawTreeSearchCompareNodes
-    OnDblClick = VirtualDrawTreeSearchDblClick
-    OnDrawNode = VirtualDrawTreeSearchDrawNode
-    OnFreeNode = VirtualDrawTreeSearchFreeNode
-    OnGetImageIndex = VirtualDrawTreeSearchGetImageIndex
-    OnGetNodeWidth = VirtualDrawTreeSearchGetNodeWidth
+    OnCompareNodes = VirtualDrawTreeCompareNodes
+    OnDblClick = VirtualDrawTreeDblClick
+    OnDrawNode = VirtualDrawTreeDrawNode
+    OnFreeNode = VirtualDrawTreeFreeNode
+    OnGetImageIndex = VirtualDrawTreeGetImageIndex
+    OnGetNodeWidth = VirtualDrawTreeGetNodeWidth
     Columns = <>
   end
   object ButtonedEdit: TBCButtonedEdit
@@ -66,6 +66,7 @@ object PopupFilesDialog: TPopupFilesDialog
     OnRightButtonClick = ActionClearExecute
   end
   object SkinProvider: TsSkinProvider
+    AllowExtBorders = False
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
     AddedTitle.Font.Height = -11

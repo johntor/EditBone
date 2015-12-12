@@ -8,7 +8,7 @@ uses
   sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files,
   Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
-  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types,
+  EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
   BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList,
   acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
   System.Generics.Collections, BCControls.ComboBox, sPanel, Vcl.AppEvnts, BCComponents.SkinProvider,
@@ -227,13 +227,6 @@ type
     MenuItemEditInsertTags: TMenuItem;
     MenuItemEditSortAscending: TMenuItem;
     MenuItemEditSortDescending: TMenuItem;
-    MenuItemEncodingANSI: TMenuItem;
-    MenuItemEncodingASCII: TMenuItem;
-    MenuItemEncodingBigEndianUnicode: TMenuItem;
-    MenuItemEncodingUnicode: TMenuItem;
-    MenuItemEncodingUTF7: TMenuItem;
-    MenuItemEncodingUTF8: TMenuItem;
-    MenuItemEncodingUTF8WithoutBOM: TMenuItem;
     MenuItemFileClose: TMenuItem;
     MenuItemFileCloseAll: TMenuItem;
     MenuItemFileCloseAllOther: TMenuItem;
@@ -504,7 +497,6 @@ type
     PopupMenuEditInsert: TPopupMenu;
     PopupMenuEditor: TPopupMenu;
     PopupMenuEditSort: TPopupMenu;
-    PopupMenuEncoding: TPopupMenu;
     PopupMenuFileReopen: TPopupMenu;
     PopupMenuFileTreeView: TPopupMenu;
     PopupMenuHighlighters: TPopupMenu;
@@ -751,7 +743,6 @@ type
     procedure ActionSearchTextItemsExecute(Sender: TObject);
     procedure ActionSearchToggleBookmarkExecute(Sender: TObject);
     procedure ActionSearchToggleBookmarksExecute(Sender: TObject);
-    procedure ActionSelectEncodingExecute(Sender: TObject);
     procedure ActionSelectHighlighterColorExecute(Sender: TObject);
     procedure ActionSelectHighlighterExecute(Sender: TObject);
     procedure ActionSelectionBoxDownExecute(Sender: TObject);
@@ -809,7 +800,8 @@ type
     procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
     procedure OnProgressBarStepFindInFiles(Sender: TObject);
     procedure OnTerminateFindInFiles(Sender: TObject);
-    procedure SelectedFileClick(var APageIndex: Integer);
+    procedure SelectedEncodingClick(AId: Integer);
+    procedure SelectedFileClick(APageIndex: Integer);
     procedure OutputDblClickActionExecute(Sender: TObject);
     procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
     procedure PageControlDirectoryDblClick(Sender: TObject);
@@ -828,9 +820,9 @@ type
     procedure TabSheetOpenClickBtn(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
     procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItems2Click(Sender: TObject);
+    procedure TitleBarItems4Click(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -839,6 +831,7 @@ type
     FNoIni: Boolean;
     FOutput: TEBOutput;
     FOutputTreeView: TVirtualDrawTree;
+    FPopupEncodingDialog: TPopupEncodingDialog;
     FPopupFilesDialog: TPopupFilesDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
@@ -984,11 +977,19 @@ begin
   ActionDirectoryProperties.Enabled := FileExists(FDirectory.SelectedFile);
 end;
 
-procedure TMainForm.SelectedFileClick(var APageIndex: Integer);
+procedure TMainForm.SelectedFileClick(APageIndex: Integer);
 begin
   PageControlDocument.ActivePageIndex := APageIndex;
   FPopupFilesDialog.Visible := False;
   FPopupFilesDialog := nil;
+end;
+
+procedure TMainForm.SelectedEncodingClick(AId: Integer);
+begin
+  FDocument.SetEncoding(FDocument.GetActiveEditor, AId);
+  SetTitleBarMenus;
+  FPopupEncodingDialog.Visible := False;
+  FPopupEncodingDialog := nil;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -1601,13 +1602,6 @@ procedure TMainForm.ActionOutputSelectAllExecute(Sender: TObject);
 begin
   inherited;
   FOutput.SetCheckedState(csCheckedNormal);
-end;
-
-procedure TMainForm.ActionSelectEncodingExecute(Sender: TObject);
-begin
-  TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := TAction(Sender).Caption;
-  TAction(Sender).Checked := True;
-  FDocument.SetEncoding(FDocument.GetActiveEditor, TAction(Sender).Tag);
 end;
 
 procedure TMainForm.ActionSelectHighlighterColorExecute(Sender: TObject);
@@ -2623,7 +2617,6 @@ begin
   SetHighlighters;
   SetHighlighterColors;
 
-  OptionsContainer.EncodingStrings := GetStringList(PopupMenuEncoding);
   OptionsContainer.HighlighterStrings := GetStringList(PopupMenuHighlighters);
   OptionsContainer.ColorStrings := GetStringList(PopupMenuColors);
 
@@ -2787,12 +2780,6 @@ begin
     Caption := LanguageDataModule.GetConstant('Color');
   end
   else
-  if FirstItem = PopupMenuEncoding.Items[0] then
-  begin
-    LineVisible := True;
-    Caption := LanguageDataModule.GetConstant('Encoding');
-  end
-  else
     LineVisible := False;
 end;
 
@@ -2837,15 +2824,6 @@ begin
   inherited;
   // TODO: refactor
   FDocument.CheckFileDateTimes;
-end;
-
-procedure TMainForm.TitleBarItemsEncodingMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var
-  LMenuItem: TMenuItem;
-begin
-  LMenuItem := PopupMenuEncoding.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
-  if Assigned(LMenuItem) then
-    LMenuItem.Checked := True;
 end;
 
 procedure TMainForm.TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -2957,6 +2935,59 @@ begin
     while Assigned(FPopupFilesDialog) and FPopupFilesDialog.Visible do
       Application.HandleMessage;
     FPopupFilesDialog := nil;
+  end;
+end;
+
+procedure TMainForm.TitleBarItems4Click(Sender: TObject);
+var
+  LPoint: TPoint;
+  LRect: TRect;
+begin
+  inherited;
+  if Assigned(FPopupEncodingDialog) then
+  begin
+    FPopupEncodingDialog.Visible := False;
+    FPopupEncodingDialog := nil;
+  end
+  else
+  begin
+    FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
+    FPopupEncodingDialog.Width := 0;
+    FPopupEncodingDialog.Height := 0;
+    FPopupEncodingDialog.PopupParent := Self;
+    FPopupEncodingDialog.Position := poDesigned;
+    FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
+    LPoint.X := TitleBar.Items[4].Rect.Left;
+    LPoint.Y := TitleBar.Items[4].Rect.Bottom;
+
+    if Assigned(TitleBar.Items[4].ExtForm) then
+    begin
+      Inc(LPoint.X, TitleBar.Items[4].ExtForm.Left);
+      Inc(LPoint.Y, TitleBar.Items[4].ExtForm.Top);
+    end
+    else
+    begin
+      GetWindowRect(Handle, LRect);
+      Inc(LPoint.Y, LRect.Top);
+      Inc(LPoint.X, LRect.Left);
+    end;
+
+    FPopupEncodingDialog.Left := LPoint.X;
+    FPopupEncodingDialog.Top := LPoint.Y;
+
+    SetWindowPos(FPopupEncodingDialog.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+
+    SkinProvider.SkinData.BeginUpdate;
+    SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
+
+    FPopupEncodingDialog.Execute(TitleBar.Items[4].Caption);
+
+    SkinProvider.SkinData.EndUpdate;
+    SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
+
+    while Assigned(FPopupEncodingDialog) and FPopupEncodingDialog.Visible do
+      Application.HandleMessage;
+    FPopupEncodingDialog := nil;
   end;
 end;
 

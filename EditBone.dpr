@@ -2,7 +2,6 @@ program EditBone;
 								  
 uses
   {$ifdef DEBUG}
-  //FastMM4,
   {$endif }
   Vcl.Forms,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
@@ -26,7 +25,9 @@ uses
   EditBone.Types in 'Units\EditBone.Types.pas',
   EditBone.XMLTree in 'Units\EditBone.XMLTree.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog},
+  EditBone.Dialog.Popup.Encoding in 'Dialogs\EditBone.Dialog.Popup.Encoding.pas' {PopupEncodingDialog};
 
 {$R *.res}
 

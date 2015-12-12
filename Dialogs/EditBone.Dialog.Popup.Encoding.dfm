@@ -15,9 +15,10 @@ object PopupEncodingDialog: TPopupEncodingDialog
   OldCreateOrder = False
   PopupMode = pmExplicit
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object VirtualDrawTreeSearch: TVirtualDrawTree
+  object VirtualDrawTree: TVirtualDrawTree
     AlignWithMargins = True
     Left = 3
     Top = 3
@@ -36,13 +37,14 @@ object PopupEncodingDialog: TPopupEncodingDialog
     TreeOptions.MiscOptions = [toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.PaintOptions = [toHideFocusRect, toShowRoot, toThemeAware]
     TreeOptions.SelectionOptions = [toFullRowSelect]
-    OnDblClick = VirtualDrawTreeSearchDblClick
-    OnDrawNode = VirtualDrawTreeSearchDrawNode
-    OnFreeNode = VirtualDrawTreeSearchFreeNode
-    OnGetNodeWidth = VirtualDrawTreeSearchGetNodeWidth
+    OnDblClick = VirtualDrawTreeDblClick
+    OnDrawNode = VirtualDrawTreeDrawNode
+    OnFreeNode = VirtualDrawTreeFreeNode
+    OnGetNodeWidth = VirtualDrawTreeGetNodeWidth
     Columns = <>
   end
   object SkinProvider: TsSkinProvider
+    AllowExtBorders = False
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
     AddedTitle.Font.Height = -11

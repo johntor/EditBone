@@ -8,17 +8,18 @@ uses
   System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList;
 
 type
-  TSelectEncodingEvent = procedure(var AId: Integer) of object;
+  TSelectEncodingEvent = procedure(AId: Integer) of object;
 
   TPopupEncodingDialog = class(TForm)
-    VirtualDrawTreeSearch: TVirtualDrawTree;
+    VirtualDrawTree: TVirtualDrawTree;
     SkinProvider: TsSkinProvider;
-    procedure VirtualDrawTreeSearchDblClick(Sender: TObject);
-    procedure VirtualDrawTreeSearchDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
-    procedure VirtualDrawTreeSearchFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeSearchGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
+    procedure VirtualDrawTreeDblClick(Sender: TObject);
+    procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
+    procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; var NodeWidth: Integer);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FSelectEncoding: TSelectEncodingEvent;
     procedure WMActivate(var AMessage: TWMActivate); message WM_ACTIVATE;
@@ -43,7 +44,12 @@ type
 
 procedure TPopupEncodingDialog.FormCreate(Sender: TObject);
 begin
-  VirtualDrawTreeSearch.NodeDataSize := SizeOf(TSearchRec);
+  VirtualDrawTree.NodeDataSize := SizeOf(TSearchRec);
+end;
+
+procedure TPopupEncodingDialog.FormShow(Sender: TObject);
+begin
+   VirtualDrawTree.SetFocus;
 end;
 
 procedure TPopupEncodingDialog.Execute(ASelectedEncoding: string);
@@ -54,16 +60,16 @@ var
 
   procedure AddEncoding(AId: Integer; AName: string);
   begin
-    Node := VirtualDrawTreeSearch.AddChild(nil);
-    NodeData := VirtualDrawTreeSearch.GetNodeData(Node);
+    Node := VirtualDrawTree.AddChild(nil);
+    NodeData := VirtualDrawTree.GetNodeData(Node);
 
-    LWidth := VirtualDrawTreeSearch.Canvas.TextWidth(AName);
+    LWidth := VirtualDrawTree.Canvas.TextWidth(AName);
     if LWidth > LMaxWidth then
       LMaxWidth := LWidth;
 
     NodeData.Id := AId;
     NodeData.Name := AName;
-    VirtualDrawTreeSearch.Selected[Node] := ASelectedEncoding = AName;
+    VirtualDrawTree.Selected[Node] := ASelectedEncoding = AName;
   end;
 
 begin
@@ -77,26 +83,28 @@ begin
   AddEncoding(ENCODING_UTF8, ENCODING_UTF8_CAPTION);
   AddEncoding(ENCODING_UTF_WITHOUT_BOM, ENCODING_UTF_WITHOUT_BOM_CAPTION);
 
-  VirtualDrawTreeSearch.Invalidate;
+  VirtualDrawTree.Invalidate;
+
   Width := LMaxWidth + 80;
-  Height := Min(Integer(VirtualDrawTreeSearch.DefaultNodeHeight) * 7 + 8, TForm(Self.PopupParent).Height);
+  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * 7 + VirtualDrawTree.Margins.Top +
+    VirtualDrawTree.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
 
   Visible := True;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeSearchDblClick(Sender: TObject);
+procedure TPopupEncodingDialog.VirtualDrawTreeDblClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PSearchRec;
 begin
-  Node := VirtualDrawTreeSearch.GetFirstSelected;
-  Data := VirtualDrawTreeSearch.GetNodeData(Node);
+  Node := VirtualDrawTree.GetFirstSelected;
+  Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
     if Assigned(FSelectEncoding) then
       FSelectEncoding(Data.Id);
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeSearchDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
+procedure TPopupEncodingDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
 var
   Data: PSearchRec;
   S: string;
@@ -147,7 +155,7 @@ begin
     Release;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeSearchFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TPopupEncodingDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   Data: PSearchRec;
 begin
@@ -156,7 +164,7 @@ begin
   inherited;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeSearchGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
+procedure TPopupEncodingDialog.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
   Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
   Data: PSearchRec;
