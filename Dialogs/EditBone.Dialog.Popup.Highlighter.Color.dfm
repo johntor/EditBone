@@ -3,9 +3,8 @@ object PopupHighlighterColorDialog: TPopupHighlighterColorDialog
   Top = 0
   BorderIcons = []
   BorderStyle = bsNone
-  BorderWidth = 1
-  ClientHeight = 277
-  ClientWidth = 334
+  ClientHeight = 279
+  ClientWidth = 336
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,11 +19,10 @@ object PopupHighlighterColorDialog: TPopupHighlighterColorDialog
   PixelsPerInch = 96
   TextHeight = 13
   object VirtualDrawTree: TVirtualDrawTree
-    AlignWithMargins = True
-    Left = 3
-    Top = 3
-    Width = 328
-    Height = 271
+    Left = 0
+    Top = 0
+    Width = 336
+    Height = 279
     Align = alClient
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
@@ -46,6 +44,7 @@ object PopupHighlighterColorDialog: TPopupHighlighterColorDialog
   end
   object SkinProvider: TsSkinProvider
     AllowExtBorders = False
+    DrawNonClientArea = False
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
     AddedTitle.Font.Height = -11

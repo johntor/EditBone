@@ -3,9 +3,8 @@ object PopupHighlighterDialog: TPopupHighlighterDialog
   Top = 0
   BorderIcons = []
   BorderStyle = bsNone
-  BorderWidth = 1
-  ClientHeight = 277
-  ClientWidth = 334
+  ClientHeight = 279
+  ClientWidth = 336
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,11 +20,10 @@ object PopupHighlighterDialog: TPopupHighlighterDialog
   PixelsPerInch = 96
   TextHeight = 13
   object VirtualDrawTree: TVirtualDrawTree
-    AlignWithMargins = True
-    Left = 3
-    Top = 27
-    Width = 328
-    Height = 247
+    Left = 0
+    Top = 21
+    Width = 336
+    Height = 258
     Margins.Top = 0
     Align = alClient
     Header.AutoSizeIndex = 0
@@ -48,10 +46,9 @@ object PopupHighlighterDialog: TPopupHighlighterDialog
     Columns = <>
   end
   object ButtonedEdit: TBCButtonedEdit
-    AlignWithMargins = True
-    Left = 3
-    Top = 3
-    Width = 328
+    Left = 0
+    Top = 0
+    Width = 336
     Height = 21
     Align = alTop
     DoubleBuffered = True
@@ -67,6 +64,7 @@ object PopupHighlighterDialog: TPopupHighlighterDialog
   end
   object SkinProvider: TsSkinProvider
     AllowExtBorders = False
+    DrawNonClientArea = False
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
     AddedTitle.Font.Height = -11

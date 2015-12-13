@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, Vcl.StdCtrls, Vcl.ExtCtrls, BCControls.ButtonedEdit, sSkinProvider,
-  System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList;
+  System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList, sPanel, BCControls.Panel;
 
 type
   TSelectHighlighterColorEvent = procedure(AHighlighterColorName: string) of object;
@@ -79,8 +79,7 @@ begin
   VirtualDrawTree.Invalidate;
 
   Width := LMaxWidth + 80;
-  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * 7 + VirtualDrawTree.Margins.Top +
-    VirtualDrawTree.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
+  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * 7 + VirtualDrawTree.BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
 
   SetWindowPos(Handle, HWND_TOPMOST, Left, Top, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
 
