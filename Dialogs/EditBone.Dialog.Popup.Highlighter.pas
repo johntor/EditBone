@@ -8,7 +8,7 @@ uses
   System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList;
 
 type
-  TSelectFileEvent = procedure(APageIndex: Integer) of object;
+  TSelectHighlighterEvent = procedure(AHighlighterName: string) of object;
 
   TPopupHighlighterDialog = class(TForm)
     VirtualDrawTree: TVirtualDrawTree;
@@ -26,19 +26,17 @@ type
     procedure VirtualDrawTreeDblClick(Sender: TObject);
     procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
-      Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; var NodeWidth: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    FSelectFile: TSelectFileEvent;
+    FSelectHighlighter: TSelectHighlighterEvent;
     procedure SetVisibleRows;
     procedure WMActivate(var AMessage: TWMActivate); message WM_ACTIVATE;
   public
-    procedure Execute(AFiles: TStrings; ASelectedFile: string);
-    property OnSelectFile: TSelectFileEvent read FSelectFile write FSelectFile;
+    procedure Execute(AHighlighters: TStrings; ASelectedHighlighter: string);
+    property OnSelectHighlighter: TSelectHighlighterEvent read FSelectHighlighter write FSelectHighlighter;
   end;
 
 implementation
@@ -51,10 +49,7 @@ uses
 type
   PSearchRec = ^TSearchRec;
   TSearchRec = packed record
-    FileName: string;
-    FilePath: string;
-    ImageIndex: Integer;
-    PageIndex: Integer;
+    Name: string;
   end;
 
 procedure TPopupHighlighterDialog.FormCreate(Sender: TObject);
@@ -72,33 +67,27 @@ begin
   end;
 end;
 
-procedure TPopupHighlighterDialog.Execute(AFiles: TStrings; ASelectedFile: string);
+procedure TPopupHighlighterDialog.Execute(AHighlighters: TStrings; ASelectedHighlighter: string);
 var
   i: Integer;
   LNode: PVirtualNode;
   LNodeData: PSearchRec;
-  LFileName, LSelectedFile: string;
+  LHighlighterName: string;
   LWidth, LMaxWidth: Integer;
 begin
   LMaxWidth := 0;
-  LSelectedFile := Copy(ASelectedFile, 2, Length(ASelectedFile) - 2); { Remove [] }
-  for i := 0 to AFiles.Count - 1 do
+  for i := 0 to AHighlighters.Count - 1 do
   begin
     LNode := VirtualDrawTree.AddChild(nil);
     LNodeData := VirtualDrawTree.GetNodeData(LNode);
-    LFileName := AFiles[i];
+    LHighlighterName := AHighlighters[i];
 
-    LWidth := VirtualDrawTree.Canvas.TextWidth(LFileName);
+    LWidth := VirtualDrawTree.Canvas.TextWidth(LHighlighterName);
     if LWidth > LMaxWidth then
       LMaxWidth := LWidth;
 
-    LNodeData.FileName := ExtractFileName(LFileName);
-    LNodeData.FilePath := ExtractFilePath(LFileName);
-    LNodeData.ImageIndex := GetIconIndex(LFileName);
-    if LNodeData.ImageIndex = -1 then
-      LNodeData.ImageIndex := 0;
-    LNodeData.PageIndex := Integer(AFiles.Objects[i]);
-    VirtualDrawTree.Selected[LNode] := LSelectedFile = LFileName;
+    LNodeData.Name := LHighlighterName;
+    VirtualDrawTree.Selected[LNode] := ASelectedHighlighter = LHighlighterName;
   end;
   for LNode in VirtualDrawTree.SelectedNodes(False) do
     VirtualDrawTree.ScrollIntoView(LNode, True, False);
@@ -106,7 +95,7 @@ begin
   VirtualDrawTree.Sort(nil, 0, sdAscending, False);
   VirtualDrawTree.Invalidate;
   Width := LMaxWidth + 80;
-  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height +
+  Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AHighlighters.Count + ButtonedEdit.Height +
     VirtualDrawTree.Margins.Top + VirtualDrawTree.Margins.Bottom + ButtonedEdit.Margins.Top +
     ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
 
@@ -138,7 +127,7 @@ begin
     if not Assigned(Data1) or not Assigned(Data2) then
       Exit;
 
-    Result := AnsiCompareText(Data1.FileName, Data2.FileName);
+    Result := AnsiCompareText(Data1.Name, Data2.Name);
   end;
 end;
 
@@ -150,8 +139,8 @@ begin
   Node := VirtualDrawTree.GetFirstSelected;
   Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
-    if Assigned(FSelectFile) then
-      FSelectFile(Data.PageIndex);
+    if Assigned(FSelectHighlighter) then
+      FSelectHighlighter(Data.Name);
 end;
 
 procedure TPopupHighlighterDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
@@ -183,20 +172,13 @@ begin
     Dec(R.Right);
     Dec(R.Bottom);
 
-    S := Data.Filename;
+    S := Data.Name;
 
     if Length(S) > 0 then
     begin
       Format := DT_TOP or DT_LEFT or DT_VCENTER or DT_SINGLELINE;
 
       DrawText(Canvas.Handle, S, Length(S), R, Format);
-      if Data.FilePath <> '' then
-      begin
-        R.Left := R.Left + Canvas.TextWidth(S);
-        S := System.SysUtils.Format(' (%s)', [Data.FilePath]);
-        Canvas.Font.Color := MixColors(ColorToRGB(Font.Color), GetControlColor(Parent), DefDisabledBlend);
-        DrawText(Canvas.Handle, S, Length(S), R, Format);
-      end;
     end;
   end;
 end;
@@ -234,29 +216,19 @@ begin
     while Assigned(CurNode) do
     begin
       Data := GetNodeData(CurNode);
-      IsVisible[CurNode] := (Pos(UpperCase(ButtonedEdit.Text), UpperCase(Data.FileName)) <> 0) or (ButtonedEdit.Text = '');
+      IsVisible[CurNode] := (Pos(UpperCase(ButtonedEdit.Text), UpperCase(Data.Name)) <> 0) or (ButtonedEdit.Text = '');
       CurNode := CurNode.NextSibling;
-    end;          
+    end;
   end;
-end;             
+end;
 
 procedure TPopupHighlighterDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
-  Data: PSearchRec;   
+  Data: PSearchRec;
 begin
   Data := Sender.GetNodeData(Node);
   Finalize(Data^);
   inherited;
-end;
-
-procedure TPopupHighlighterDialog.VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode;
-  Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
-var
-  Data: PSearchRec;
-begin
-  Data := VirtualDrawTree.GetNodeData(Node);
-  if Assigned(Data) then
-    ImageIndex := Data.ImageIndex;
 end;
 
 procedure TPopupHighlighterDialog.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
@@ -270,7 +242,7 @@ begin
     AMargin := TextMargin;
     Data := GetNodeData(Node);
     if Assigned(Data) then
-      NodeWidth := Canvas.TextWidth(Format('%s (%s)', [Data.FileName, Data.FilePath])) + 2 * AMargin;
+      NodeWidth := Canvas.TextWidth(Data.Name) + 2 * AMargin;
   end;
 end;
 

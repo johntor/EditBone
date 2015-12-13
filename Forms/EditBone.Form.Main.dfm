@@ -3015,6 +3015,7 @@ inherited MainForm: TMainForm
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
     IsDefault = True
+    MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
@@ -3126,6 +3127,7 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 52
+        OnClick = TitleBarItems6Click
       end
       item
         Align = tbaRight

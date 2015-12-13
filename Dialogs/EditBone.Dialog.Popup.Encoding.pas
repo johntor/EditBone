@@ -76,7 +76,7 @@ var
 begin
   LMaxWidth := 0;
 
-  for i := 0 to 6 do
+  for i := Low(ENCODING_CAPTIONS) to High(ENCODING_CAPTIONS) do
     AddEncoding(i, ENCODING_CAPTIONS[i]);
 
   VirtualDrawTree.Invalidate;

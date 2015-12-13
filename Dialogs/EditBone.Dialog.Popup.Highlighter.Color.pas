@@ -62,8 +62,6 @@ var
   var
     LName: string;
   begin
-    //LName := ENCODING_CAPTIONS[AId];
-
     Node := VirtualDrawTree.AddChild(nil);
     NodeData := VirtualDrawTree.GetNodeData(Node);
 

@@ -808,6 +808,7 @@ type
     procedure TimerTimer(Sender: TObject);
     procedure TitleBarItems2Click(Sender: TObject);
     procedure TitleBarItems4Click(Sender: TObject);
+    procedure TitleBarItems6Click(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -824,22 +825,25 @@ type
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
     function GetActionList: TObjectList<TAction>;
-    //function GetHighlighterColor: string;
     function GetHighlighterColors: TStringList;
     function GetHighlighters: TStringList;
+    function GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
     function OnCancelSearch: Boolean;
     function Processing: Boolean;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
+    procedure LockFormPaint;
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(const ALanguage: string);
     procedure SearchFindInFiles(const AFolder: string = '');
+    procedure SetDialogPosition(AHandle: THandle; APoint: TPoint);
     procedure SetFields;
     procedure SetImages;
     procedure SetOptions;
+    procedure UnlockFormPaint;
     procedure UpdateMenuBarLanguage;
     procedure UpdatePageControlMargins;
     procedure WriteIniFile;
@@ -2744,7 +2748,7 @@ begin
 
   CreateFileReopenList;
 
-  PanelOutput.Visible := PageControlDirectory.PageCount > 1;
+  PanelOutput.Visible := PageControlOutput.PageCount > 1;
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
 
@@ -2797,10 +2801,14 @@ begin
   FDocument.CheckFileDateTimes;
 end;
 
+procedure TMainForm.SetDialogPosition(AHandle: THandle; APoint: TPoint);
+begin
+  SetWindowPos(AHandle, HWND_TOPMOST, APoint.X, APoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+end;
+
 procedure TMainForm.TitleBarItems2Click(Sender: TObject);
 var
   LPoint: TPoint;
-  LRect: TRect;
   LFiles: TStrings;
 
   function GetFiles: TStrings;
@@ -2838,37 +2846,24 @@ begin
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.Position := poDesigned;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
-    LPoint.X := TitleBar.Items[2].Rect.Left;
-    LPoint.Y := TitleBar.Items[2].Rect.Bottom;
 
-    if Assigned(TitleBar.Items[2].ExtForm) then
-    begin
-      Inc(LPoint.X, TitleBar.Items[2].ExtForm.Left);
-      Inc(LPoint.Y, TitleBar.Items[2].ExtForm.Top);
-    end
-    else
-    begin
-      GetWindowRect(Handle, LRect);
-      Inc(LPoint.Y, LRect.Top);
-      Inc(LPoint.X, LRect.Left);
-    end;
+    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILE_NAME);
 
     FPopupFilesDialog.Left := LPoint.X;
     FPopupFilesDialog.Top := LPoint.Y;
 
-    SetWindowPos(FPopupFilesDialog.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+    SetDialogPosition(FPopupFilesDialog.Handle, LPoint);
 
-    SkinProvider.SkinData.BeginUpdate;
-    SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
+    LockFormPaint;
 
     LFiles := GetFiles;
     try
-      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[2].Caption);
+      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption);
     finally
       LFiles.Free;
     end;
-    SkinProvider.SkinData.EndUpdate;
-    SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
+
+    UnlockFormPaint;
 
     while Assigned(FPopupFilesDialog) and FPopupFilesDialog.Visible do
       Application.HandleMessage;
@@ -2879,7 +2874,6 @@ end;
 procedure TMainForm.TitleBarItems4Click(Sender: TObject);
 var
   LPoint: TPoint;
-  LRect: TRect;
 begin
   inherited;
   if Assigned(FPopupEncodingDialog) then
@@ -2895,37 +2889,94 @@ begin
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.Position := poDesigned;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
-    LPoint.X := TitleBar.Items[4].Rect.Left;
-    LPoint.Y := TitleBar.Items[4].Rect.Bottom;
 
-    if Assigned(TitleBar.Items[4].ExtForm) then
-    begin
-      Inc(LPoint.X, TitleBar.Items[4].ExtForm.Left);
-      Inc(LPoint.Y, TitleBar.Items[4].ExtForm.Top);
-    end
-    else
-    begin
-      GetWindowRect(Handle, LRect);
-      Inc(LPoint.Y, LRect.Top);
-      Inc(LPoint.X, LRect.Left);
-    end;
+    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_ENCODING);
 
     FPopupEncodingDialog.Left := LPoint.X;
     FPopupEncodingDialog.Top := LPoint.Y;
 
-    SetWindowPos(FPopupEncodingDialog.Handle, HWND_TOPMOST, LPoint.X, LPoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+    SetDialogPosition(FPopupEncodingDialog.Handle, LPoint);
 
-    SkinProvider.SkinData.BeginUpdate;
-    SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
+    LockFormPaint;
 
-    FPopupEncodingDialog.Execute(TitleBar.Items[4].Caption);
+    FPopupEncodingDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
 
-    SkinProvider.SkinData.EndUpdate;
-    SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
+    UnlockFormPaint;
 
     while Assigned(FPopupEncodingDialog) and FPopupEncodingDialog.Visible do
       Application.HandleMessage;
     FPopupEncodingDialog := nil;
+  end;
+end;
+
+function TMainForm.GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
+var
+  LRect: TRect;
+begin
+  Result.X := TitleBar.Items[AIndex].Rect.Left;
+  Result.Y := TitleBar.Items[AIndex].Rect.Bottom;
+
+  if Assigned(TitleBar.Items[AIndex].ExtForm) then
+  begin
+    Inc(Result.X, TitleBar.Items[AIndex].ExtForm.Left);
+    Inc(Result.Y, TitleBar.Items[AIndex].ExtForm.Top);
+  end
+  else
+  begin
+    GetWindowRect(Handle, LRect);
+    Inc(Result.Y, LRect.Top);
+    Inc(Result.X, LRect.Left);
+  end;
+end;
+
+procedure TMainForm.LockFormPaint;
+begin
+  SkinProvider.SkinData.BeginUpdate;
+  SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
+end;
+
+procedure TMainForm.UnlockFormPaint;
+begin
+  SkinProvider.SkinData.EndUpdate;
+  SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
+end;
+
+procedure TMainForm.TitleBarItems6Click(Sender: TObject);
+var
+  LPoint: TPoint;
+begin
+  inherited;
+
+  if Assigned(FPopupHighlighterDialog) then
+  begin
+    FPopupHighlighterDialog.Visible := False;
+    FPopupHighlighterDialog := nil;
+  end
+  else
+  begin
+    FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
+    FPopupHighlighterDialog.Width := 0;
+    FPopupHighlighterDialog.Height := 0;
+    FPopupHighlighterDialog.PopupParent := Self;
+    FPopupHighlighterDialog.Position := poDesigned;
+    FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
+
+    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_HIGHLIGHTER);
+
+    FPopupHighlighterDialog.Left := LPoint.X;
+    FPopupHighlighterDialog.Top := LPoint.Y;
+
+    SetDialogPosition(FPopupHighlighterDialog.Handle, LPoint);
+
+    LockFormPaint;
+
+    FPopupHighlighterDialog.Execute(OptionsContainer.HighlighterStrings, TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
+
+    UnlockFormPaint;
+
+    while Assigned(FPopupHighlighterDialog) and FPopupHighlighterDialog.Visible do
+      Application.HandleMessage;
+    FPopupHighlighterDialog := nil;
   end;
 end;
 

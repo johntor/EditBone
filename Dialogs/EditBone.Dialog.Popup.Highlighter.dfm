@@ -43,7 +43,6 @@ object PopupHighlighterDialog: TPopupHighlighterDialog
     OnDblClick = VirtualDrawTreeDblClick
     OnDrawNode = VirtualDrawTreeDrawNode
     OnFreeNode = VirtualDrawTreeFreeNode
-    OnGetImageIndex = VirtualDrawTreeGetImageIndex
     OnGetNodeWidth = VirtualDrawTreeGetNodeWidth
     Columns = <>
   end

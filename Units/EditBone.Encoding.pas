@@ -53,7 +53,7 @@ var
   i: Integer;
 begin
   AComboBox.Clear;
-  for i := 0 to 6 do
+  for i := Low(ENCODING_CAPTIONS) to High(ENCODING_CAPTIONS) do
     AComboBox.Items.Add(ENCODING_CAPTIONS[i]);
 end;
 
@@ -61,23 +61,21 @@ procedure SetEncoding(AEditor: TBCEditor; Value: Integer);
 begin
   if Assigned(AEditor) then
   with AEditor do
-  begin
-    case Value of
-      ENCODING_ANSI:
-        Encoding := TEncoding.ANSI;
-      ENCODING_ASCII:
-        Encoding := TEncoding.ASCII;
-      ENCODING_BIG_ENDIAN_UNICODE:
-        Encoding := TEncoding.BigEndianUnicode;
-      ENCODING_UNICODE:
-        Encoding := TEncoding.Unicode;
-      ENCODING_UTF7:
-        Encoding := TEncoding.UTF7;
-      ENCODING_UTF8:
-        Encoding := TEncoding.UTF8;
-      ENCODING_UTF8_WITHOUT_BOM:
-        Encoding := TEncoding.UTF8WithoutBOM;
-    end;
+  case Value of
+    ENCODING_ANSI:
+      Encoding := TEncoding.ANSI;
+    ENCODING_ASCII:
+      Encoding := TEncoding.ASCII;
+    ENCODING_BIG_ENDIAN_UNICODE:
+      Encoding := TEncoding.BigEndianUnicode;
+    ENCODING_UNICODE:
+      Encoding := TEncoding.Unicode;
+    ENCODING_UTF7:
+      Encoding := TEncoding.UTF7;
+    ENCODING_UTF8:
+      Encoding := TEncoding.UTF8;
+    ENCODING_UTF8_WITHOUT_BOM:
+      Encoding := TEncoding.UTF8WithoutBOM;
   end;
 end;
 
