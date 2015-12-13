@@ -493,7 +493,6 @@ function TEBDocument.CreateNewTabSheet(const AFileName: string = ''; AShowMinima
 var
   LTabSheet: TsTabSheet;
   LEditor: TBCEditor;
-  LExtension: string;
 begin
   FProcessing := True;
 
@@ -558,17 +557,6 @@ begin
     else
       SetHighlighterColor(LEditor, OptionsContainer.DefaultColor);
     LEditor.LoadFromFile(AFileName);
-
-    LExtension := UpperCase(TPath.GetFileNameWithoutExtension(LEditor.Highlighter.FileName));
-
-    if Pos('JSON', LExtension) <> 0 then
-      LEditor.ExtraTag := EXTENSION_JSON
-    else
-    if Pos('XML', LExtension) <> 0 then
-      LEditor.ExtraTag := EXTENSION_XML
-    else
-    if Pos('SQL', LExtension) <> 0 then
-      LEditor.ExtraTag := EXTENSION_SQL;
   end
   else
   begin
@@ -2524,6 +2512,17 @@ begin
   begin
     Highlighter.LoadFromFile(Format('%s.json', [AHighlighterName]));
     CodeFolding.Visible := OptionsContainer.ShowCodeFolding and (Highlighter.CodeFoldingRangeCount > 0); // (Highlighter.CodeFoldingRegions.Count > 0);
+
+    ExtraTag := 0;
+    if Pos('JSON', AHighlighterName) <> 0 then
+      ExtraTag := EXTENSION_JSON
+    else
+    if Pos('XML', AHighlighterName) <> 0 then
+      ExtraTag := EXTENSION_XML
+    else
+    if Pos('SQL', AHighlighterName) <> 0 then
+      ExtraTag := EXTENSION_SQL;
+
     if CanFocus then
       Invalidate;
   end;
