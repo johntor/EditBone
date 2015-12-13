@@ -8,7 +8,7 @@ uses
   System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList;
 
 type
-  TSelectEncodingEvent = procedure(AId: Integer) of object;
+  TSelectHighlighterColorEvent = procedure(AHighlighterColorName: string) of object;
 
   TPopupHighlighterColorDialog = class(TForm)
     VirtualDrawTree: TVirtualDrawTree;
@@ -21,11 +21,11 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
-    FSelectEncoding: TSelectEncodingEvent;
+    FSelectHighlighterColor: TSelectHighlighterColorEvent;
     procedure WMActivate(var AMessage: TWMActivate); message WM_ACTIVATE;
   public
-    procedure Execute(ASelectedEncoding: string);
-    property OnSelectEncoding: TSelectEncodingEvent read FSelectEncoding write FSelectEncoding;
+    procedure Execute(AHighlighterColors: TStrings; ASelectedHighlighterName: string);
+    property OnSelectHighlighterColor: TSelectHighlighterColorEvent read FSelectHighlighterColor write FSelectHighlighterColor;
   end;
 
 implementation
@@ -38,7 +38,6 @@ uses
 type
   PSearchRec = ^TSearchRec;
   TSearchRec = packed record
-    Id: Integer;
     Name: string;
   end;
 
@@ -52,30 +51,30 @@ begin
    VirtualDrawTree.SetFocus;
 end;
 
-procedure TPopupHighlighterColorDialog.Execute(ASelectedEncoding: string);
+procedure TPopupHighlighterColorDialog.Execute(AHighlighterColors: TStrings; ASelectedHighlighterName: string);
 var
-  Node: PVirtualNode;
-  NodeData: PSearchRec;
+  i: Integer;
+  LNode: PVirtualNode;
+  LNodeData: PSearchRec;
+  LHighlighterColorName: string;
   LWidth, LMaxWidth: Integer;
-
-  procedure AddEncoding(AId: Integer);
-  var
-    LName: string;
-  begin
-    Node := VirtualDrawTree.AddChild(nil);
-    NodeData := VirtualDrawTree.GetNodeData(Node);
-
-    LWidth := VirtualDrawTree.Canvas.TextWidth(LName);
-    if LWidth > LMaxWidth then
-      LMaxWidth := LWidth;
-
-    NodeData.Id := AId;
-    NodeData.Name := LName;
-    VirtualDrawTree.Selected[Node] := ASelectedEncoding = LName;
-  end;
 
 begin
   LMaxWidth := 0;
+
+  for i := 0 to AHighlighterColors.Count - 1 do
+  begin
+    LNode := VirtualDrawTree.AddChild(nil);
+    LNodeData := VirtualDrawTree.GetNodeData(LNode);
+    LHighlighterColorName := AHighlighterColors[i];
+
+    LWidth := VirtualDrawTree.Canvas.TextWidth(LHighlighterColorName);
+    if LWidth > LMaxWidth then
+      LMaxWidth := LWidth;
+
+    LNodeData.Name := LHighlighterColorName;
+    VirtualDrawTree.Selected[LNode] := ASelectedHighlighterName = LHighlighterColorName;
+  end;
 
   VirtualDrawTree.Invalidate;
 
@@ -94,8 +93,8 @@ begin
   Node := VirtualDrawTree.GetFirstSelected;
   Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
-    if Assigned(FSelectEncoding) then
-      FSelectEncoding(Data.Id);
+    if Assigned(FSelectHighlighterColor) then
+      FSelectHighlighterColor(Data.Name);
 end;
 
 procedure TPopupHighlighterColorDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);

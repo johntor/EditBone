@@ -14,6 +14,7 @@ object PopupFilesDialog: TPopupFilesDialog
   Font.Style = []
   OldCreateOrder = False
   PopupMode = pmExplicit
+  Position = poDesigned
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow

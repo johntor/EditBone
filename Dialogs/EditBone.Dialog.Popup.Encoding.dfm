@@ -14,6 +14,7 @@ object PopupEncodingDialog: TPopupEncodingDialog
   Font.Style = []
   OldCreateOrder = False
   PopupMode = pmExplicit
+  Position = poDesigned
   OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96

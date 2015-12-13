@@ -75,7 +75,7 @@ end;
 
 procedure TOptionsEditorDefaultsFrame.Init;
 begin
-  ComboBoxDefaultColor.Items := OptionsContainer.ColorStrings;
+  ComboBoxDefaultColor.Items := OptionsContainer.HighlighterColorStrings;
   AddEncodingItems(ComboBoxDefaultEncoding);;
   ComboBoxDefaultHighlighter.Items := OptionsContainer.HighlighterStrings;
   GetSQLHighlighterItems;

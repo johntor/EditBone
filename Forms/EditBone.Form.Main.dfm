@@ -3157,6 +3157,7 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 68
+        OnClick = TitleBarItems8Click
       end
       item
         Align = tbaRight

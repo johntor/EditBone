@@ -809,6 +809,7 @@ type
     procedure TitleBarItems2Click(Sender: TObject);
     procedure TitleBarItems4Click(Sender: TObject);
     procedure TitleBarItems6Click(Sender: TObject);
+    procedure TitleBarItems8Click(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -984,6 +985,7 @@ end;
 procedure TMainForm.SelectedHighlighterClick(AHighlighterName: string);
 begin
   FDocument.SetHighlighter(FDocument.GetActiveEditor, AHighlighterName);
+  SetTitleBarMenuCaptions;
   FPopupHighlighterDialog.Visible := False;
   FPopupHighlighterDialog := nil;
 end;
@@ -991,6 +993,7 @@ end;
 procedure TMainForm.SelectedHighlighterColorClick(AHighlighterColorName: string);
 begin
   FDocument.SetHighlighterColor(FDocument.GetActiveEditor, AHighlighterColorName);
+  SetTitleBarMenuCaptions;
   FPopupHighlighterColorDialog.Visible := False;
   FPopupHighlighterColorDialog := nil;
 end;
@@ -2613,7 +2616,7 @@ begin
   CreateLanguageMenu(MenuItemToolbarMenuLanguage);
 
   OptionsContainer.HighlighterStrings := GetHighlighters;
-  OptionsContainer.ColorStrings := GetHighlighterColors;
+  OptionsContainer.HighlighterColorStrings := GetHighlighterColors;
 
   MainMenu.Images := ImagesDataModule.ImageListSmall;
   OnSkinChange := ChangeSkin;
@@ -2844,7 +2847,6 @@ begin
     FPopupFilesDialog.Width := 0;
     FPopupFilesDialog.Height := 0;
     FPopupFilesDialog.PopupParent := Self;
-    FPopupFilesDialog.Position := poDesigned;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
 
     LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILE_NAME);
@@ -2887,7 +2889,6 @@ begin
     FPopupEncodingDialog.Width := 0;
     FPopupEncodingDialog.Height := 0;
     FPopupEncodingDialog.PopupParent := Self;
-    FPopupEncodingDialog.Position := poDesigned;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
 
     LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_ENCODING);
@@ -2958,7 +2959,6 @@ begin
     FPopupHighlighterDialog.Width := 0;
     FPopupHighlighterDialog.Height := 0;
     FPopupHighlighterDialog.PopupParent := Self;
-    FPopupHighlighterDialog.Position := poDesigned;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
 
     LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_HIGHLIGHTER);
@@ -2977,6 +2977,43 @@ begin
     while Assigned(FPopupHighlighterDialog) and FPopupHighlighterDialog.Visible do
       Application.HandleMessage;
     FPopupHighlighterDialog := nil;
+  end;
+end;
+
+procedure TMainForm.TitleBarItems8Click(Sender: TObject);
+var
+  LPoint: TPoint;
+begin
+  inherited;
+  if Assigned(FPopupHighlighterColorDialog) then
+  begin
+    FPopupHighlighterColorDialog.Visible := False;
+    FPopupHighlighterColorDialog := nil;
+  end
+  else
+  begin
+    FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
+    FPopupHighlighterColorDialog.Width := 0;
+    FPopupHighlighterColorDialog.Height := 0;
+    FPopupHighlighterColorDialog.PopupParent := Self;
+    FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
+
+    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_COLORS);
+
+    FPopupHighlighterColorDialog.Left := LPoint.X;
+    FPopupHighlighterColorDialog.Top := LPoint.Y;
+
+    SetDialogPosition(FPopupHighlighterColorDialog.Handle, LPoint);
+
+    LockFormPaint;
+
+    FPopupHighlighterColorDialog.Execute(OptionsContainer.HighlighterColorStrings, TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
+
+    UnlockFormPaint;
+
+    while Assigned(FPopupHighlighterColorDialog) and FPopupHighlighterColorDialog.Visible do
+      Application.HandleMessage;
+    FPopupHighlighterColorDialog := nil;
   end;
 end;
 
