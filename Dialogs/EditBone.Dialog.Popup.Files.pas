@@ -75,12 +75,13 @@ end;
 procedure TPopupFilesDialog.Execute(AFiles: TStrings; ASelectedFile: string);
 var
   i: Integer;
-  LNode: PVirtualNode;
+  LNode, LSelectedNode: PVirtualNode;
   LNodeData: PSearchRec;
   LFileName, LSelectedFile: string;
   LWidth, LMaxWidth: Integer;
 begin
   LMaxWidth := 0;
+  LSelectedNode := nil;
   LSelectedFile := Copy(ASelectedFile, 2, Length(ASelectedFile) - 2); { Remove [] }
   for i := 0 to AFiles.Count - 1 do
   begin
@@ -98,17 +99,24 @@ begin
     if LNodeData.ImageIndex = -1 then
       LNodeData.ImageIndex := 0;
     LNodeData.PageIndex := Integer(AFiles.Objects[i]);
-    VirtualDrawTree.Selected[LNode] := LSelectedFile = LFileName;
+
+    if LSelectedFile = LFileName then
+    begin
+      VirtualDrawTree.Selected[LNode] := True;
+      LSelectedNode := LNode;
+    end;
   end;
-  for LNode in VirtualDrawTree.SelectedNodes(False) do
-    VirtualDrawTree.ScrollIntoView(LNode, True, False);
 
   VirtualDrawTree.Sort(nil, 0, sdAscending, False);
   VirtualDrawTree.Invalidate;
+
+  if Assigned(LSelectedNode) then
+    VirtualDrawTree.ScrollIntoView(LSelectedNode, True);
+
   Width := LMaxWidth + 80;
   Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height +
     VirtualDrawTree.Margins.Top + VirtualDrawTree.Margins.Bottom + ButtonedEdit.Margins.Top +
-    ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
+    ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height - GetSystemMetrics(SM_CYCAPTION) - 10);
 
   SetWindowPos(Handle, HWND_TOPMOST, Left, Top, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
 

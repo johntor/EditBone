@@ -70,12 +70,13 @@ end;
 procedure TPopupHighlighterDialog.Execute(AHighlighters: TStrings; ASelectedHighlighter: string);
 var
   i: Integer;
-  LNode: PVirtualNode;
+  LNode, LSelectedNode: PVirtualNode;
   LNodeData: PSearchRec;
   LHighlighterName: string;
   LWidth, LMaxWidth: Integer;
 begin
   LMaxWidth := 0;
+  LSelectedNode := nil;
   for i := 0 to AHighlighters.Count - 1 do
   begin
     LNode := VirtualDrawTree.AddChild(nil);
@@ -87,17 +88,23 @@ begin
       LMaxWidth := LWidth;
 
     LNodeData.Name := LHighlighterName;
-    VirtualDrawTree.Selected[LNode] := ASelectedHighlighter = LHighlighterName;
-  end;
-  for LNode in VirtualDrawTree.SelectedNodes(False) do
-    VirtualDrawTree.ScrollIntoView(LNode, True, False);
 
+    if ASelectedHighlighter = LHighlighterName then
+    begin
+      VirtualDrawTree.Selected[LNode] := True;
+      LSelectedNode := LNode;
+    end;
+  end;
   VirtualDrawTree.Sort(nil, 0, sdAscending, False);
   VirtualDrawTree.Invalidate;
+
+  if Assigned(LSelectedNode) then
+    VirtualDrawTree.ScrollIntoView(LSelectedNode, True);
+
   Width := LMaxWidth + 80;
   Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AHighlighters.Count + ButtonedEdit.Height +
     VirtualDrawTree.Margins.Top + VirtualDrawTree.Margins.Bottom + ButtonedEdit.Margins.Top +
-    ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height);
+    ButtonedEdit.Margins.Bottom + BorderWidth * 2 + 2, TForm(Self.PopupParent).Height - GetSystemMetrics(SM_CYCAPTION) - 10);
 
   SetWindowPos(Handle, HWND_TOPMOST, Left, Top, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
 
