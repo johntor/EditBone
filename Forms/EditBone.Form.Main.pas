@@ -840,7 +840,6 @@ type
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(const ALanguage: string);
     procedure SearchFindInFiles(const AFolder: string = '');
-    procedure SetDialogPosition(AHandle: THandle; APoint: TPoint);
     procedure SetFields;
     procedure SetImages;
     procedure SetOptions;
@@ -2804,11 +2803,6 @@ begin
   FDocument.CheckFileDateTimes;
 end;
 
-procedure TMainForm.SetDialogPosition(AHandle: THandle; APoint: TPoint);
-begin
-  SetWindowPos(AHandle, HWND_TOPMOST, APoint.X, APoint.Y, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
-end;
-
 procedure TMainForm.TitleBarItems2Click(Sender: TObject);
 var
   LPoint: TPoint;
@@ -2844,8 +2838,6 @@ begin
   else
   begin
     FPopupFilesDialog := TPopupFilesDialog.Create(Self);
-    FPopupFilesDialog.Width := 0;
-    FPopupFilesDialog.Height := 0;
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
 
@@ -2853,8 +2845,6 @@ begin
 
     FPopupFilesDialog.Left := LPoint.X;
     FPopupFilesDialog.Top := LPoint.Y;
-
-    SetDialogPosition(FPopupFilesDialog.Handle, LPoint);
 
     LockFormPaint;
 
@@ -2886,8 +2876,6 @@ begin
   else
   begin
     FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
-    FPopupEncodingDialog.Width := 0;
-    FPopupEncodingDialog.Height := 0;
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
 
@@ -2895,8 +2883,6 @@ begin
 
     FPopupEncodingDialog.Left := LPoint.X;
     FPopupEncodingDialog.Top := LPoint.Y;
-
-    SetDialogPosition(FPopupEncodingDialog.Handle, LPoint);
 
     LockFormPaint;
 
@@ -2956,8 +2942,6 @@ begin
   else
   begin
     FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
-    FPopupHighlighterDialog.Width := 0;
-    FPopupHighlighterDialog.Height := 0;
     FPopupHighlighterDialog.PopupParent := Self;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
 
@@ -2965,8 +2949,6 @@ begin
 
     FPopupHighlighterDialog.Left := LPoint.X;
     FPopupHighlighterDialog.Top := LPoint.Y;
-
-    SetDialogPosition(FPopupHighlighterDialog.Handle, LPoint);
 
     LockFormPaint;
 
@@ -2993,8 +2975,6 @@ begin
   else
   begin
     FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
-    FPopupHighlighterColorDialog.Width := 0;
-    FPopupHighlighterColorDialog.Height := 0;
     FPopupHighlighterColorDialog.PopupParent := Self;
     FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
 
@@ -3002,8 +2982,6 @@ begin
 
     FPopupHighlighterColorDialog.Left := LPoint.X;
     FPopupHighlighterColorDialog.Top := LPoint.Y;
-
-    SetDialogPosition(FPopupHighlighterColorDialog.Handle, LPoint);
 
     LockFormPaint;
 
