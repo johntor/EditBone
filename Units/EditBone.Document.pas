@@ -1738,7 +1738,7 @@ begin
       LLanguageItem := LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text;
       LFileType := Trim(System.Copy(LLanguageItem, 0, Pos('(', LLanguageItem) - 1));
       LFileType := Format('%s (%s)', [LFileType, StringBetween(OptionsContainer.FileTypes.Strings[i], '(', ')')]);
-      WriteString('FileTypes', IntToStr(i), LFileType);
+      WriteString('FileTypes', OptionsContainer.FileTypes.Names[i], LFileType);
     end;
   finally
     Free;
