@@ -117,8 +117,9 @@ begin
   begin
     LData := VirtualDrawTree.GetNodeData(LNode);
     LLanguageText := LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Strings.Text;
-    LFileType := Trim(Copy(LLanguageText, 0, Pos('(', LLanguageText) - 1));
-    LFileType := Format('%s (%s)', [LFileType, StringBetween(LData^.FileType, '(', ')')]);
+    LFileType := Trim(System.Copy(LLanguageText, 0, Pos('(', LLanguageText) - 1));
+    LFileType := Format('%s=%s (%s)', [LanguageDataModule.MultiStringHolderFileTypes.MultipleStrings.Items[i].Name,
+      LFileType, StringBetween(LData^.FileType, '(', ')')]);
     OptionsContainer.FileTypes.Add(LFileType);
     LNode := VirtualDrawTree.GetNext(LNode);
     Inc(i);
