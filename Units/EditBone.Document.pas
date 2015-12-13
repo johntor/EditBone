@@ -12,7 +12,7 @@ uses
 
 type
   TEBSetBookmarks = procedure of object;
-  TEBSetTitleBarMenus = procedure of object;
+  TEBSetTitleBarMenuCaptions = procedure of object;
   TEBCreateFileReopenList = procedure of object;
   TEBGetActionList = function: TObjectList<TAction> of object;
 
@@ -48,7 +48,7 @@ type
     FProgressBar: TBCProgressBar;
     FSaveDialog: TSaveDialog;
     FSetBookmarks: TEBSetBookmarks;
-    FSetTitleBarMenus: TEBSetTitleBarMenus;
+    FSetTitleBarMenuCaptions: TEBSetTitleBarMenuCaptions;
     FSkinManager: TBCSkinManager;
     FStatusBar: TBCStatusBar;
     FTabSheetNew: TTabSheet;
@@ -92,7 +92,7 @@ type
     function GetActiveSplitEditor: TBCEditor;
     function GetEditor(const ATabSheet: TTabSheet; const ATag: Integer = EDITBONE_DOCUMENT_EDITOR_TAG): TBCEditor;
     function GetMacroRecordPauseImageIndex: Integer;
-    function GetModifiedInfo: string;
+    function GetModifiedInfo(AEditor: TBCEditor): string;
     function Options(AActionList: TActionList): Boolean;
     function ReadIniOpenFiles: Boolean;
     function SaveAs: string;
@@ -151,7 +151,6 @@ type
     procedure SearchOptions;
     procedure SelectAll;
     procedure SelectForCompare;
-    procedure SetEncoding(AEditor: TBCEditor; Value: Integer);
     procedure SetHighlighter(AEditor: TBCEditor; const AHighlighterName: string);
     procedure SetHighlighterColor(AEditor: TBCEditor; const AColorName: string);
     procedure SetOptions;
@@ -189,7 +188,7 @@ type
     property ProgressBar: TBCProgressBar read FProgressBar write FProgressBar;
     property SaveDialog: TSaveDialog read FSaveDialog write FSaveDialog;
     property SetBookmarks: TEBSetBookmarks read FSetBookmarks write FSetBookmarks;
-    property SetTitleBarMenus: TEBSetTitleBarMenus read FSetTitleBarMenus write FSetTitleBarMenus;
+    property SetTitleBarMenuCaptions: TEBSetTitleBarMenuCaptions read FSetTitleBarMenuCaptions write FSetTitleBarMenuCaptions;
     property SkinManager: TBCSkinManager read FSkinManager write FSkinManager;
     property StatusBar: TBCStatusBar write FStatusBar;
     property XMLTreeVisible: Boolean read GetXMLTreeVisible;
@@ -201,12 +200,11 @@ implementation
 
 uses
   Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialogs.ConfirmReplace,
-  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,
-  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace, BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils,
-  BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options, BCCommon.Images, System.IniFiles,
-  BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images, BCControls.SpeedButton,
-  BCControls.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd, BCEditor.Highlighter.Colors,
-  BCCommon.Dialogs.Options.Search, Vcl.ValEdit, System.IOUtils;
+  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace,
+  BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
+  BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
+  BCControls.SpeedButton, BCControls.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
+  BCEditor.Highlighter.Colors, BCCommon.Dialogs.Options.Search, Vcl.ValEdit, System.IOUtils, EditBone.Encoding;
 
 { TEBDocument }
 
@@ -579,8 +577,8 @@ begin
     SetHighlighterColor(LEditor, OptionsContainer.DefaultColor);
   end;
 
-  if Assigned(FSetTitleBarMenus) then
-    FSetTitleBarMenus;
+  if Assigned(FSetTitleBarMenuCaptions) then
+    FSetTitleBarMenuCaptions;
 
   { reduce flickering by setting width and height to zero }
   LEditor.Width := 0;
@@ -997,8 +995,8 @@ begin
     if PageControl.PageCount = 0 then
       FNumberOfNewDocument := 0;
   end;
-  if Assigned(FSetTitleBarMenus) then
-    FSetTitleBarMenus;
+  if Assigned(FSetTitleBarMenuCaptions) then
+    FSetTitleBarMenuCaptions;
   CheckModifiedDocuments;
   PageControl.Repaint; { Icon paint bug fix }
 end;
@@ -1483,13 +1481,20 @@ begin
     if LEditor.SelectionAvailable then
       SearchFor := LEditor.SelectedText;
     LResult := ShowModal;
+
     if (LResult = mrOK) or (LResult = mrYes) then
     begin
       if ReplaceInWholeFile then
       begin
         GetOptions(LEditor);
         LEditor.CaretZero;
-        LEditor.ReplaceText(SearchFor, ReplaceWith);
+        Screen.Cursor := crHourGlass;
+        try
+          LEditor.ReplaceText(SearchFor, ReplaceWith);
+          SetActivePageCaptionModified(LEditor.Modified);
+        finally
+          Screen.Cursor := crDefault;
+        end;
       end
       else
       begin
@@ -1685,8 +1690,8 @@ begin
     if i < PageControl.PageCount then
     begin
       PageControl.ActivePageIndex := i;
-      if Assigned(FSetTitleBarMenus) then
-        FSetTitleBarMenus;
+      if Assigned(FSetTitleBarMenuCaptions) then
+        FSetTitleBarMenuCaptions;
     end;
 
     Result := LFileNamesList.Count > 0;
@@ -2224,19 +2229,15 @@ begin
     FStatusBar.Repaint;
 end;
 
-function TEBDocument.GetModifiedInfo: string;
-var
-  LEditor: TBCEditor;
+function TEBDocument.GetModifiedInfo(AEditor: TBCEditor): string;
 begin
   Result := '';
   if OptionsContainer.AutoSave then
     Result := LanguageDataModule.GetConstant('AutoSave')
   else
-  begin
-    LEditor := GetActiveEditor;
-    if Assigned(LEditor) and LEditor.Modified then
+  if Assigned(AEditor) then
+    if AEditor.Modified then
       Result := LanguageDataModule.GetConstant('Modified');
-  end;
 end;
 
 function TEBDocument.GetActiveDocumentModified: Boolean;
@@ -2690,30 +2691,6 @@ begin
   Editor := GetActiveEditor;
   if Assigned(Editor) then
     FilePropertiesDialog(Editor.DocumentName);
-end;
-
-procedure TEBDocument.SetEncoding(AEditor: TBCEditor; Value: Integer);
-begin
-  if Assigned(AEditor) then
-  with AEditor do
-  begin
-    case Value of
-      ENCODING_ANSI:
-        Encoding := TEncoding.ANSI;
-      ENCODING_ASCII:
-        Encoding := TEncoding.ASCII;
-      ENCODING_BIG_ENDIAN_UNICODE:
-        Encoding := TEncoding.BigEndianUnicode;
-      ENCODING_UNICODE:
-        Encoding := TEncoding.Unicode;
-      ENCODING_UTF7:
-        Encoding := TEncoding.UTF7;
-      ENCODING_UTF8:
-        Encoding := TEncoding.UTF8;
-      ENCODING_UTF8_WITHOUT_BOM:
-        Encoding := TEncoding.UTF8WithoutBOM;
-    end;
-  end;
 end;
 
 procedure TEBDocument.ToggleSplit;

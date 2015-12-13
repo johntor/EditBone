@@ -27,7 +27,6 @@ type
     FPageControl: TBCPageControl;
     FTabSheetFindInFiles: TTabSheet;
     FSkinManager: TBCSkinManager;
-    function GetIsAnyOutput: Boolean;
     function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
     function TabFound(const TabCaption: string): Boolean;
     function CheckCancel(ATabIndex: Integer = -1): Boolean;
@@ -47,7 +46,6 @@ type
     procedure SetProcessingTabSheet(Value: Boolean);
     procedure OpenFiles(OnlySelected: Boolean = False);
     procedure SetCheckedState(Value: TCheckState);
-    property IsAnyOutput: Boolean read GetIsAnyOutput;
     property OnTabsheetDblClick: TNotifyEvent read FTabsheetDblClick write FTabsheetDblClick;
     property OnOpenAll: TOpenAllEvent read FOpenAll write FOpenAll;
     property ProcessingTabSheet: Boolean read FProcessingTabSheet write SetProcessingTabSheet;
@@ -447,13 +445,6 @@ begin
       StringList.Free;
     end;
   end;
-end;
-
-function TEBOutput.GetIsAnyOutput: Boolean;
-begin
-  Result := False;
-  if Assigned(PageControl) then
-    Result := PageControl.PageCount > 1;
 end;
 
 function TEBOutput.CheckCancel(ATabIndex: Integer = -1): Boolean;

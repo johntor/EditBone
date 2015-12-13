@@ -27,7 +27,10 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog},
-  EditBone.Dialog.Popup.Encoding in 'Dialogs\EditBone.Dialog.Popup.Encoding.pas' {PopupEncodingDialog};
+  EditBone.Dialog.Popup.Encoding in 'Dialogs\EditBone.Dialog.Popup.Encoding.pas' {PopupEncodingDialog},
+  EditBone.Dialog.Popup.Highlighter in 'Dialogs\EditBone.Dialog.Popup.Highlighter.pas' {PopupHighlighterDialog},
+  EditBone.Dialog.Popup.Highlighter.Color in 'Dialogs\EditBone.Dialog.Popup.Highlighter.Color.pas' {PopupHighlighterColorDialog},
+  EditBone.Encoding in 'Units\EditBone.Encoding.pas';
 
 {$R *.res}
 

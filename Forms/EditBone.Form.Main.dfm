@@ -3019,7 +3019,6 @@ inherited MainForm: TMainForm
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
     ThirdParty.ThirdVirtualTrees = ' '#13#10'TVirtualDrawTree'#13#10'TBCFileTreeView'#13#10'TEBXMLTree'#13#10
-    OnGetMenuExtraLineData = SkinManagerGetMenuExtraLineData
     Left = 32
     Top = 178
   end
@@ -3115,7 +3114,7 @@ inherited MainForm: TMainForm
       item
         Align = tbaRight
         Caption = 'Text'
-        DropdownMenu = PopupMenuHighlighters
+        DropdownMenu = PopupMenuDummy
         FontData.Font.Charset = DEFAULT_CHARSET
         FontData.Font.Color = clWindowText
         FontData.Font.Height = -11
@@ -3127,7 +3126,6 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 52
-        OnMouseDown = TitleBarItemsHighlighterMouseDown
       end
       item
         Align = tbaRight
@@ -3145,7 +3143,7 @@ inherited MainForm: TMainForm
       item
         Align = tbaRight
         Caption = 'Default'
-        DropdownMenu = PopupMenuColors
+        DropdownMenu = PopupMenuDummy
         FontData.Font.Charset = DEFAULT_CHARSET
         FontData.Font.Color = clWindowText
         FontData.Font.Height = -11
@@ -3157,7 +3155,6 @@ inherited MainForm: TMainForm
         ShowHint = False
         Style = bsMenu
         Width = 68
-        OnMouseDown = TitleBarItemsColorsMouseDown
       end
       item
         Align = tbaRight
@@ -3345,14 +3342,6 @@ inherited MainForm: TMainForm
         Action = ActionViewToolbar
       end
     end
-  end
-  object PopupMenuColors: TPopupMenu [17]
-    Left = 938
-    Top = 518
-  end
-  object PopupMenuHighlighters: TPopupMenu [18]
-    Left = 804
-    Top = 584
   end
   inherited ApplicationEvents: TApplicationEvents
     OnActivate = ApplicationEventsActivate
@@ -4289,43 +4278,6 @@ inherited MainForm: TMainForm
       Hint = 'Show or hide the main menu'
       OnExecute = ActionViewMainMenuExecute
     end
-    object ActionSelectEncoding: TAction
-    end
-    object ActionSelectHighlighter: TAction
-      Caption = 'ActionSelectHighlighter'
-      OnExecute = ActionSelectHighlighterExecute
-    end
-    object ActionSelectHighlighterColor: TAction
-      Caption = 'ActionSelectHighlighterColor'
-      OnExecute = ActionSelectHighlighterColorExecute
-    end
-    object ActionEncodingANSI: TAction
-      Caption = 'ANSI'
-    end
-    object ActionEncodingASCII: TAction
-      Tag = 1
-      Caption = 'ASCII'
-    end
-    object ActionEncodingBigEndianUnicode: TAction
-      Tag = 2
-      Caption = 'Big Endian Unicode'
-    end
-    object ActionEncodingUnicode: TAction
-      Tag = 3
-      Caption = 'Unicode'
-    end
-    object ActionEncodingUTF7: TAction
-      Tag = 4
-      Caption = 'UTF-7'
-    end
-    object ActionEncodingUTF8: TAction
-      Tag = 5
-      Caption = 'UTF-8'
-    end
-    object ActionEncodingUTF8WithoutBOM: TAction
-      Tag = 6
-      Caption = 'UTF-8 without BOM'
-    end
     object ActionEditToggleCaseUpper: TAction
       Category = 'Edit'
       Caption = 'Upper'
@@ -4543,7 +4495,7 @@ inherited MainForm: TMainForm
       OnExecute = ActionSearchTextItemsExecute
     end
   end
-  object PopupMenuDocument: TPopupMenu [21]
+  object PopupMenuDocument: TPopupMenu [19]
     Images = ImagesDataModule.ImageListSmall
     Left = 594
     Top = 158
@@ -4593,13 +4545,13 @@ inherited MainForm: TMainForm
       Action = ActionFileProperties
     end
   end
-  object DragDrop: TBCDragDrop [22]
+  object DragDrop: TBCDragDrop [20]
     DropTarget = Owner
     OnDrop = DragDropDrop
     Left = 36
     Top = 372
   end
-  object PopupMenuDocumentFormat: TPopupMenu [23]
+  object PopupMenuDocumentFormat: TPopupMenu [21]
     Images = ImagesDataModule.ImageList
     Left = 314
     Top = 579
@@ -4625,7 +4577,7 @@ inherited MainForm: TMainForm
       Action = ActionDocumentFormatXML
     end
   end
-  object PopupMenuEditor: TPopupMenu [24]
+  object PopupMenuEditor: TPopupMenu [22]
     Images = ImagesDataModule.ImageListSmall
     Left = 448
     Top = 164
@@ -4822,7 +4774,7 @@ inherited MainForm: TMainForm
       Action = ActionEditToggleCase
     end
   end
-  object PopupMenuToggleCase: TPopupMenu [25]
+  object PopupMenuToggleCase: TPopupMenu [23]
     Images = ImagesDataModule.ImageList
     Left = 937
     Top = 586
@@ -4842,12 +4794,12 @@ inherited MainForm: TMainForm
       Action = ActionEditToggleCaseTitle
     end
   end
-  object AppInstances: TJvAppInstances [26]
+  object AppInstances: TJvAppInstances [24]
     OnCmdLineReceived = AppInstancesCmdLineReceived
     Left = 743
     Top = 250
   end
-  object PopupMenuDocumentMacro: TPopupMenu [27]
+  object PopupMenuDocumentMacro: TPopupMenu [25]
     Images = ImagesDataModule.ImageList
     Left = 466
     Top = 521
@@ -4870,20 +4822,20 @@ inherited MainForm: TMainForm
       Action = ActionMacroSaveAs
     end
   end
-  object OpenDialog: TsOpenDialog [28]
+  object OpenDialog: TsOpenDialog [26]
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
     Left = 874
     Top = 176
   end
-  object SaveDialog: TsSaveDialog [29]
+  object SaveDialog: TsSaveDialog [27]
     Left = 874
     Top = 228
   end
-  object PrintDialog: TPrintDialog [30]
+  object PrintDialog: TPrintDialog [28]
     Left = 872
     Top = 280
   end
-  object EditorPrint: TBCEditorPrint [31]
+  object EditorPrint: TBCEditorPrint [29]
     Color = clWhite
     Copies = 1
     Font.Charset = DEFAULT_CHARSET
@@ -4917,18 +4869,18 @@ inherited MainForm: TMainForm
     Left = 872
     Top = 348
   end
-  object EditorMacroRecorder: TBCEditorMacroRecorder [32]
+  object EditorMacroRecorder: TBCEditorMacroRecorder [30]
     RecordShortCut = 24658
     PlaybackShortCut = 24656
     Left = 870
     Top = 408
   end
-  object Timer: TTimer [33]
+  object Timer: TTimer [31]
     OnTimer = TimerTimer
     Left = 958
     Top = 180
   end
-  object PopupMenuXMLTree: TPopupMenu [34]
+  object PopupMenuXMLTree: TPopupMenu [32]
     Images = ImagesDataModule.ImageListSmall
     Left = 448
     Top = 306

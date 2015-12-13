@@ -31,7 +31,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.Windows, System.SysUtils, EditBone.Consts;
+  Winapi.Windows, System.SysUtils, EditBone.Encoding;
 
 var
   FOptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame;
@@ -76,7 +76,7 @@ end;
 procedure TOptionsEditorDefaultsFrame.Init;
 begin
   ComboBoxDefaultColor.Items := OptionsContainer.ColorStrings;
-  GetEncodingItems(ComboBoxDefaultEncoding);;
+  AddEncodingItems(ComboBoxDefaultEncoding);;
   ComboBoxDefaultHighlighter.Items := OptionsContainer.HighlighterStrings;
   GetSQLHighlighterItems;
 end;

@@ -1,4 +1,4 @@
-unit EditBone.Dialog.Popup.Encoding;
+unit EditBone.Dialog.Popup.Highlighter.Color;
 
 interface
 
@@ -10,7 +10,7 @@ uses
 type
   TSelectEncodingEvent = procedure(AId: Integer) of object;
 
-  TPopupEncodingDialog = class(TForm)
+  TPopupHighlighterColorDialog = class(TForm)
     VirtualDrawTree: TVirtualDrawTree;
     SkinProvider: TsSkinProvider;
     procedure VirtualDrawTreeDblClick(Sender: TObject);
@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Types, BCControls.Utils, EditBone.Encoding, sGraphUtils, sVclUtils, sDefaults, System.Math;
+  System.Types, BCControls.Utils, sGraphUtils, sVclUtils, sDefaults, System.Math;
 
 type
   PSearchRec = ^TSearchRec;
@@ -42,42 +42,42 @@ type
     Name: string;
   end;
 
-procedure TPopupEncodingDialog.FormCreate(Sender: TObject);
+procedure TPopupHighlighterColorDialog.FormCreate(Sender: TObject);
 begin
   VirtualDrawTree.NodeDataSize := SizeOf(TSearchRec);
 end;
 
-procedure TPopupEncodingDialog.FormShow(Sender: TObject);
+procedure TPopupHighlighterColorDialog.FormShow(Sender: TObject);
 begin
    VirtualDrawTree.SetFocus;
 end;
 
-procedure TPopupEncodingDialog.Execute(ASelectedEncoding: string);
+procedure TPopupHighlighterColorDialog.Execute(ASelectedEncoding: string);
 var
-  i: Integer;
   Node: PVirtualNode;
   NodeData: PSearchRec;
   LWidth, LMaxWidth: Integer;
 
-  procedure AddEncoding(AId: Integer; AName: string);
+  procedure AddEncoding(AId: Integer);
+  var
+    LName: string;
   begin
+    //LName := ENCODING_CAPTIONS[AId];
+
     Node := VirtualDrawTree.AddChild(nil);
     NodeData := VirtualDrawTree.GetNodeData(Node);
 
-    LWidth := VirtualDrawTree.Canvas.TextWidth(AName);
+    LWidth := VirtualDrawTree.Canvas.TextWidth(LName);
     if LWidth > LMaxWidth then
       LMaxWidth := LWidth;
 
     NodeData.Id := AId;
-    NodeData.Name := AName;
-    VirtualDrawTree.Selected[Node] := ASelectedEncoding = AName;
+    NodeData.Name := LName;
+    VirtualDrawTree.Selected[Node] := ASelectedEncoding = LName;
   end;
 
 begin
   LMaxWidth := 0;
-
-  for i := 0 to 6 do
-    AddEncoding(i, ENCODING_CAPTIONS[i]);
 
   VirtualDrawTree.Invalidate;
 
@@ -88,7 +88,7 @@ begin
   Visible := True;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeDblClick(Sender: TObject);
+procedure TPopupHighlighterColorDialog.VirtualDrawTreeDblClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PSearchRec;
@@ -100,7 +100,7 @@ begin
       FSelectEncoding(Data.Id);
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
+procedure TPopupHighlighterColorDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
 var
   Data: PSearchRec;
   S: string;
@@ -140,7 +140,7 @@ begin
   end;
 end;
 
-procedure TPopupEncodingDialog.WMActivate(var AMessage: TWMActivate);
+procedure TPopupHighlighterColorDialog.WMActivate(var AMessage: TWMActivate);
 begin
   if AMessage.Active <> WA_INACTIVE then
     SendMessage(Self.PopupParent.Handle, WM_NCACTIVATE, WPARAM(True), -1);
@@ -151,7 +151,7 @@ begin
     Release;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TPopupHighlighterColorDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   Data: PSearchRec;
 begin
@@ -160,7 +160,7 @@ begin
   inherited;
 end;
 
-procedure TPopupEncodingDialog.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
+procedure TPopupHighlighterColorDialog.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas;
   Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
   Data: PSearchRec;

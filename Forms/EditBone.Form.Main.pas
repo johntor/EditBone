@@ -5,14 +5,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
-  sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files,
+  sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files, EditBone.Dialog.Popup.Highlighter,
   Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
-  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList,
-  acAlphaImageList, BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
+  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList, acAlphaImageList,
+  BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs, sStatusBar,
   System.Generics.Collections, BCControls.ComboBox, sPanel, Vcl.AppEvnts, BCComponents.SkinProvider,
-  BCComponents.TitleBar, BCComponents.SkinManager, sStatusBar;
+  BCComponents.TitleBar, BCComponents.SkinManager, EditBone.Dialog.Popup.Highlighter.Color;
 
 type
   TMainForm = class(TBCBaseForm)
@@ -62,13 +62,6 @@ type
     ActionEditToggleCaseTitle: TAction;
     ActionEditToggleCaseUpper: TAction;
     ActionEditUndo: TAction;
-    ActionEncodingANSI: TAction;
-    ActionEncodingASCII: TAction;
-    ActionEncodingBigEndianUnicode: TAction;
-    ActionEncodingUnicode: TAction;
-    ActionEncodingUTF7: TAction;
-    ActionEncodingUTF8: TAction;
-    ActionEncodingUTF8WithoutBOM: TAction;
     ActionFile: TAction;
     ActionFileClose: TAction;
     ActionFileCloseAll: TAction;
@@ -135,9 +128,6 @@ type
     ActionSearchTextItems: TAction;
     ActionSearchToggleBookmark: TAction;
     ActionSearchToggleBookmarks: TAction;
-    ActionSelectEncoding: TAction;
-    ActionSelectHighlighter: TAction;
-    ActionSelectHighlighterColor: TAction;
     ActionSelectionBoxDown: TAction;
     ActionSelectionBoxLeft: TAction;
     ActionSelectionBoxRight: TAction;
@@ -488,7 +478,6 @@ type
     PanelToolsButtons: TBCPanel;
     PanelViewButtons: TBCPanel;
     Playback1: TMenuItem;
-    PopupMenuColors: TPopupMenu;
     PopupMenuDocument: TPopupMenu;
     PopupMenuDocumentFormat: TPopupMenu;
     PopupMenuDocumentMacro: TPopupMenu;
@@ -499,7 +488,6 @@ type
     PopupMenuEditSort: TPopupMenu;
     PopupMenuFileReopen: TPopupMenu;
     PopupMenuFileTreeView: TPopupMenu;
-    PopupMenuHighlighters: TPopupMenu;
     PopupMenuOutput: TPopupMenu;
     PopupMenuSearchGotoBookmarks: TPopupMenu;
     PopupMenuSearchToggleBookmarks: TPopupMenu;
@@ -743,8 +731,6 @@ type
     procedure ActionSearchTextItemsExecute(Sender: TObject);
     procedure ActionSearchToggleBookmarkExecute(Sender: TObject);
     procedure ActionSearchToggleBookmarksExecute(Sender: TObject);
-    procedure ActionSelectHighlighterColorExecute(Sender: TObject);
-    procedure ActionSelectHighlighterExecute(Sender: TObject);
     procedure ActionSelectionBoxDownExecute(Sender: TObject);
     procedure ActionSelectionBoxLeftExecute(Sender: TObject);
     procedure ActionSelectionBoxRightExecute(Sender: TObject);
@@ -802,6 +788,8 @@ type
     procedure OnTerminateFindInFiles(Sender: TObject);
     procedure SelectedEncodingClick(AId: Integer);
     procedure SelectedFileClick(APageIndex: Integer);
+    procedure SelectedHighlighterClick(AHighlighterName: string);
+    procedure SelectedHighlighterColorClick(AHighlighterColorName: string);
     procedure OutputDblClickActionExecute(Sender: TObject);
     procedure PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean; var Action: TacCloseAction);
     procedure PageControlDirectoryDblClick(Sender: TObject);
@@ -814,13 +802,10 @@ type
     procedure PageControlOutputDblClick(Sender: TObject);
     procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupMenuFileTreeViewPopup(Sender: TObject);
-    procedure SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string; var Glyph: TBitmap; var LineVisible: Boolean);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
     procedure TabSheetOpenClickBtn(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
-    procedure TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TitleBarItems2Click(Sender: TObject);
     procedure TitleBarItems4Click(Sender: TObject);
   private
@@ -833,12 +818,15 @@ type
     FOutputTreeView: TVirtualDrawTree;
     FPopupEncodingDialog: TPopupEncodingDialog;
     FPopupFilesDialog: TPopupFilesDialog;
+    FPopupHighlighterDialog: TPopupHighlighterDialog;
+    FPopupHighlighterColorDialog: TPopupHighlighterColorDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
     function GetActionList: TObjectList<TAction>;
-    function GetHighlighterColor: string;
-    function GetStringList(APopupMenu: TPopupMenu): TStringList;
+    //function GetHighlighterColor: string;
+    function GetHighlighterColors: TStringList;
+    function GetHighlighters: TStringList;
     function OnCancelSearch: Boolean;
     function Processing: Boolean;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
@@ -850,8 +838,6 @@ type
     procedure ReadLanguageFile(const ALanguage: string);
     procedure SearchFindInFiles(const AFolder: string = '');
     procedure SetFields;
-    procedure SetHighlighters;
-    procedure SetHighlighterColors;
     procedure SetImages;
     procedure SetOptions;
     procedure UpdateMenuBarLanguage;
@@ -860,8 +846,7 @@ type
   public
     procedure CreateFileReopenList;
     procedure SetBookmarks;
-    procedure SetTitleBarMenus;
-    property HighlighterColor: string read GetHighlighterColor;
+    procedure SetTitleBarMenuCaptions;
   end;
 
 var
@@ -875,7 +860,7 @@ uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
   BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
-  BCCommon.Utils, BCControls.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList,
+  BCCommon.Utils, BCControls.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList, EditBone.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialogs.DownloadURL,
   BCCommon.Forms.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Forms.SearchForFiles,
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialogs.SkinSelect, sGraphUtils, sConst,
@@ -906,7 +891,7 @@ begin
   if Processing then
     Exit;
   SetBookmarks;
-  SetTitleBarMenus;
+  SetTitleBarMenuCaptions;
   LEditor := FDocument.GetActiveEditor;
   if Assigned(LEditor) then
   begin
@@ -986,10 +971,24 @@ end;
 
 procedure TMainForm.SelectedEncodingClick(AId: Integer);
 begin
-  FDocument.SetEncoding(FDocument.GetActiveEditor, AId);
-  SetTitleBarMenus;
+  SetEncoding(FDocument.GetActiveEditor, AId);
+  SetTitleBarMenuCaptions;
   FPopupEncodingDialog.Visible := False;
   FPopupEncodingDialog := nil;
+end;
+
+procedure TMainForm.SelectedHighlighterClick(AHighlighterName: string);
+begin
+  FDocument.SetHighlighter(FDocument.GetActiveEditor, AHighlighterName);
+  FPopupHighlighterDialog.Visible := False;
+  FPopupHighlighterDialog := nil;
+end;
+
+procedure TMainForm.SelectedHighlighterColorClick(AHighlighterColorName: string);
+begin
+  FDocument.SetHighlighterColor(FDocument.GetActiveEditor, AHighlighterColorName);
+  FPopupHighlighterColorDialog.Visible := False;
+  FPopupHighlighterColorDialog := nil;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -1604,20 +1603,6 @@ begin
   FOutput.SetCheckedState(csCheckedNormal);
 end;
 
-procedure TMainForm.ActionSelectHighlighterColorExecute(Sender: TObject);
-begin
-  TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := TAction(Sender).Caption;
-  TAction(Sender).Checked := True;
-  FDocument.SetHighlighterColor(FDocument.GetActiveEditor, TAction(Sender).Caption);
-end;
-
-procedure TMainForm.ActionSelectHighlighterExecute(Sender: TObject);
-begin
-  TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := TAction(Sender).Caption;
-  TAction(Sender).Checked := True;
-  FDocument.SetHighlighter(FDocument.GetActiveEditor, TAction(Sender).Caption);
-end;
-
 procedure TMainForm.ActionSelectionBoxDownExecute(Sender: TObject);
 
   procedure BoxDown(Editor: TBCEditor);
@@ -1641,6 +1626,7 @@ begin
 end;
 
 procedure TMainForm.ActionSelectionBoxLeftExecute(Sender: TObject);
+
   procedure BoxLeft(Editor: TBCEditor);
   begin
     if Assigned(Editor) then
@@ -1683,6 +1669,7 @@ begin
 end;
 
 procedure TMainForm.ActionSelectionBoxUpExecute(Sender: TObject);
+
   procedure BoxUp(Editor: TBCEditor);
   begin
     if Assigned(Editor) then
@@ -1836,7 +1823,7 @@ begin
   begin
     SetOptions;
     CreateToolbar;
-    SetTitleBarMenus;
+    SetTitleBarMenuCaptions;
   end;
 end;
 
@@ -2184,7 +2171,7 @@ end;
 procedure TMainForm.SetFields;
 var
   LActiveEditor, LActiveSplitEditor: TBCEditor;
-  LActiveDocumentName: string;
+  LActiveDocumentName, LCaption, LConstant: string;
   LActiveDocumentFound, LActiveSplitDocumentFound: Boolean;
   LInfoText: string;
   LKeyState: TKeyboardState;
@@ -2268,11 +2255,11 @@ begin
     if ActionViewXMLTree.Enabled then
       ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
 
-    if LActiveDocumentName = '' then
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title
-    else
-      TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := Application.Title + '  -';
+    LCaption := Application.Title;
+    if LActiveDocumentName <> '' then
+      LCaption := LCaption + '  -';
 
+    TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := LCaption;
     TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveDocumentName <> '';
     TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveDocumentName + ']';
 
@@ -2337,7 +2324,7 @@ begin
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
     ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
 
-    ActionViewOutput.Enabled := FOutput.IsAnyOutput;
+    ActionViewOutput.Enabled := PageControlDirectory.PageCount > 1;
     if not ActionViewOutput.Enabled then { if there's no output then hide panel }
       PanelOutput.Visible := False;
 
@@ -2353,7 +2340,7 @@ begin
 
     if LActiveDocumentFound and OptionsContainer.StatusBarShowModified then
     begin
-      LInfoText := FDocument.GetModifiedInfo;
+      LInfoText := FDocument.GetModifiedInfo(LActiveEditor);
       if StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text <> LInfoText then
         StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := LInfoText;
     end
@@ -2363,11 +2350,17 @@ begin
     if OptionsContainer.StatusBarShowKeyState then
     begin
       if LKeyState[VK_INSERT] = 0 then
-        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Insert') then
-          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Insert');
+      begin
+        LConstant := LanguageDataModule.GetConstant('Insert');
+        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
+          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
+      end;
       if LKeyState[VK_INSERT] = 1 then
-        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LanguageDataModule.GetConstant('Overwrite') then
-          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LanguageDataModule.GetConstant('Overwrite');
+      begin
+        LConstant := LanguageDataModule.GetConstant('Overwrite');
+        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
+          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
+      end;
     end
     else
       StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := '';
@@ -2585,7 +2578,7 @@ begin
   end;
 end;
 
-function TMainForm.GetStringList(APopupMenu: TPopupMenu): TStringList;
+{function TMainForm.GetStringList(APopupMenu: TPopupMenu): TStringList;
 var
   i, j: Integer;
 begin
@@ -2596,7 +2589,7 @@ begin
       Result.Add(APopupMenu.Items[i].Items[j].Caption)
     else
       Result.Add(APopupMenu.Items[i].Caption);
-end;
+end;}
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
@@ -2614,11 +2607,9 @@ begin
   FSQLFormatterDLLFound := FileExists(GetSQLFormatterDLLFilename);
 
   CreateLanguageMenu(MenuItemToolbarMenuLanguage);
-  SetHighlighters;
-  SetHighlighterColors;
 
-  OptionsContainer.HighlighterStrings := GetStringList(PopupMenuHighlighters);
-  OptionsContainer.ColorStrings := GetStringList(PopupMenuColors);
+  OptionsContainer.HighlighterStrings := GetHighlighters;
+  OptionsContainer.ColorStrings := GetHighlighterColors;
 
   MainMenu.Images := ImagesDataModule.ImageListSmall;
   OnSkinChange := ChangeSkin;
@@ -2752,8 +2743,8 @@ begin
   Self.ReadLanguageFile(GetSelectedLanguage('English'));
 
   CreateFileReopenList;
-  //FOutput.ReadOutputFile;
-  PanelOutput.Visible := FOutput.IsAnyOutput;
+
+  PanelOutput.Visible := PageControlDirectory.PageCount > 1;
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
 
@@ -2761,26 +2752,6 @@ begin
   if Assigned(Editor) then
     if Editor.CanFocus then
       Editor.SetFocus;
-end;
-
-procedure TMainForm.SkinManagerGetMenuExtraLineData(FirstItem: TMenuItem; var SkinSection, Caption: string;
-  var Glyph: TBitmap; var LineVisible: Boolean);
-begin
-  inherited;
-
-  if FirstItem = PopupMenuHighlighters.Items[0] then
-  begin
-    LineVisible := True;
-    Caption :=  LanguageDataModule.GetConstant('Highlighter');
-  end
-  else
-  if FirstItem = PopupMenuColors.Items[0] then
-  begin
-    LineVisible := True;
-    Caption := LanguageDataModule.GetConstant('Color');
-  end
-  else
-    LineVisible := False;
 end;
 
 procedure TMainForm.StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -2824,39 +2795,6 @@ begin
   inherited;
   // TODO: refactor
   FDocument.CheckFileDateTimes;
-end;
-
-procedure TMainForm.TitleBarItemsHighlighterMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var
-  LMenuItem: TMenuItem;
-  LTitleCaption: string;
-
-  procedure ClearSubMenuItems;
-  var
-    i, j: Integer;
-    LSubMenuItem: TMenuItem;
-  begin
-    for i := 0 to PopupMenuHighlighters.Items.Count - 1 do
-    begin
-      LSubMenuItem := PopupMenuHighlighters.Items[i];
-      for j := 0 to LSubMenuItem.Count - 1 do
-        LSubMenuItem[j].Checked := False;
-    end;
-  end;
-
-begin
-  LTitleCaption := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption;
-  LMenuItem := PopupMenuHighlighters.Items.Find(LTitleCaption[1]);
-  if Assigned(LMenuItem) then
-  begin
-    LMenuItem.Checked := True;
-
-    ClearSubMenuItems;
-
-    LMenuItem := LMenuItem.Find(LTitleCaption);
-    if Assigned(LMenuItem) then
-      LMenuItem.Checked := True;
-  end;
 end;
 
 procedure TMainForm.TitleBarItems2Click(Sender: TObject);
@@ -2991,15 +2929,6 @@ begin
   end;
 end;
 
-procedure TMainForm.TitleBarItemsColorsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var
-  LMenuItem: TMenuItem;
-begin
-  LMenuItem := PopupMenuColors.Items.Find(TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
-  if Assigned(LMenuItem) then
-    LMenuItem.Checked := True;
-end;
-
 procedure TMainForm.ReadIniOptions;
 var
   i: Integer;
@@ -3093,7 +3022,7 @@ begin
   FDocument.PopupMenuEditor := PopupMenuEditor;
   FDocument.PopupMenuXMLTree := PopupMenuXMLTree;
   FDocument.SetBookmarks := SetBookmarks;
-  FDocument.SetTitleBarMenus := SetTitleBarMenus;
+  FDocument.SetTitleBarMenuCaptions := SetTitleBarMenuCaptions;
   FDocument.OpenDialog := OpenDialog;
   FDocument.SaveDialog := SaveDialog;
   FDocument.CreateFileReopenList := CreateFileReopenList;
@@ -3386,77 +3315,44 @@ begin
   end;
 end;
 
-procedure TMainForm.SetHighlighters;
+function TMainForm.GetHighlighters: TStringList;
 var
   LFileName, LName: string;
-  LMenuItem, LSubMenuItem: TMenuItem;
-  LAction: TAction;
 begin
-  PopupMenuHighlighters.Items.Clear;
-
+  Result := TStringList.Create;
   for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Highlighters\', '*.json', False) do
   begin
     LName := ChangeFileExt(ExtractFileName(LFileName), '');
-
-    LMenuItem := PopupMenuHighlighters.Items.Find(LName[1]);
-    if not Assigned(LMenuItem) then
-    begin
-      LMenuItem := TMenuItem.Create(PopupMenuHighlighters);
-      LMenuItem.Caption := LName[1];
-      LMenuItem.RadioItem := True;
-      PopupMenuHighlighters.Items.Add(LMenuItem);
-    end;
-
-    LAction := TAction.Create(Self);
-    LAction.Caption := LName;
-    LAction.OnExecute := ActionSelectHighlighterExecute;
-    LSubMenuItem := TMenuItem.Create(PopupMenuHighlighters);
-    LSubMenuItem.Action := LAction;
-    LSubMenuItem.RadioItem := True;
-    LSubMenuItem.AutoCheck := True;
-    LMenuItem.Add(LSubMenuItem);
+    Result.Add(LName);
   end;
 end;
 
-procedure TMainForm.SetHighlighterColors;
+function TMainForm.GetHighlighterColors: TStringList;
 var
   LFileName, LName: string;
-  LMenuItem: TMenuItem;
-  LAction: TAction;
 begin
-  PopupMenuColors.Items.Clear;
+  Result := TStringList.Create;
   for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Colors\', '*.json', False) do
   begin
     LName := ChangeFileExt(ExtractFileName(LFileName), '');
-
-    LAction := TAction.Create(Self);
-    LAction.Caption := LName;
-    LAction.OnExecute := ActionSelectHighlighterColorExecute;
-    LMenuItem := TMenuItem.Create(PopupMenuColors);
-    LMenuItem.Action := LAction;
-    LMenuItem.RadioItem := True;
-    LMenuItem.AutoCheck := True;
-    PopupMenuColors.Items.Add(LMenuItem);
+    Result.Add(LName);
   end;
 end;
 
-function TMainForm.GetHighlighterColor: string;
+{function TMainForm.GetHighlighterColor: string;
 begin
   Result := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption;
-end;
+end;  }
 
-procedure TMainForm.SetTitleBarMenus;
+procedure TMainForm.SetTitleBarMenuCaptions;
 var
   LEditor: TBCEditor;
 begin
   LEditor := FDocument.GetActiveEditor;
   if Assigned(LEditor) then
   begin
-    { Encoding }
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := EncodingToText(LEditor.Encoding);
-    { Highlighter }
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
-    { Color }
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;
   end;
 end;
