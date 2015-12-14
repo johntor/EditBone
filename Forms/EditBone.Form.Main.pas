@@ -2330,7 +2330,7 @@ begin
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
     ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
 
-    ActionViewOutput.Enabled := PageControlDirectory.PageCount > 1;
+    ActionViewOutput.Enabled := PageControlOutput.PageCount > 1;
     if not ActionViewOutput.Enabled then { if there's no output then hide panel }
       PanelOutput.Visible := False;
 
