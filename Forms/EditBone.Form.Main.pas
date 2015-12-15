@@ -826,8 +826,6 @@ type
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
     function GetActionList: TObjectList<TAction>;
-    function GetHighlighterColors: TStringList;
-    function GetHighlighters: TStringList;
     function GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
     function OnCancelSearch: Boolean;
     function Processing: Boolean;
@@ -2935,10 +2933,7 @@ begin
   inherited;
 
   if Assigned(FPopupHighlighterDialog) then
-  begin
-    FPopupHighlighterDialog.Visible := False;
-    FPopupHighlighterDialog := nil;
-  end
+    FPopupHighlighterDialog := nil
   else
   begin
     FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
@@ -2968,10 +2963,7 @@ var
 begin
   inherited;
   if Assigned(FPopupHighlighterColorDialog) then
-  begin
-    FPopupHighlighterColorDialog.Visible := False;
-    FPopupHighlighterColorDialog := nil;
-  end
+    FPopupHighlighterColorDialog := nil
   else
   begin
     FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
@@ -3380,35 +3372,6 @@ begin
     Free;
   end;
 end;
-
-function TMainForm.GetHighlighters: TStringList;
-var
-  LFileName, LName: string;
-begin
-  Result := TStringList.Create;
-  for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Highlighters\', '*.json', False) do
-  begin
-    LName := ChangeFileExt(ExtractFileName(LFileName), '');
-    Result.Add(LName);
-  end;
-end;
-
-function TMainForm.GetHighlighterColors: TStringList;
-var
-  LFileName, LName: string;
-begin
-  Result := TStringList.Create;
-  for LFileName in BCCommon.FileUtils.GetFiles(ExtractFilePath(Application.ExeName) + '\Colors\', '*.json', False) do
-  begin
-    LName := ChangeFileExt(ExtractFileName(LFileName), '');
-    Result.Add(LName);
-  end;
-end;
-
-{function TMainForm.GetHighlighterColor: string;
-begin
-  Result := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption;
-end;  }
 
 procedure TMainForm.SetTitleBarMenuCaptions;
 var

@@ -2511,7 +2511,7 @@ begin
   with AEditor do
   begin
     Highlighter.LoadFromFile(Format('%s.json', [AHighlighterName]));
-    CodeFolding.Visible := OptionsContainer.ShowCodeFolding and (Highlighter.CodeFoldingRangeCount > 0); // (Highlighter.CodeFoldingRegions.Count > 0);
+    CodeFolding.Visible := OptionsContainer.ShowCodeFolding and (Highlighter.CodeFoldingRangeCount > 0);
 
     ExtraTag := 0;
     if Pos('JSON', AHighlighterName) <> 0 then
