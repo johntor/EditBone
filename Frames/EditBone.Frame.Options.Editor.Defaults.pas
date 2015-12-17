@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.ComboBox,
   BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControls.Panel, Vcl.ExtCtrls, sPanel,
-  sFrameAdapter;
+  sFrameAdapter, Vcl.Buttons, sSpeedButton, BCControls.SpeedButton, sEdit, BCControls.Edit, System.Actions, Vcl.ActnList,
+  sDialogs;
 
 type
   TOptionsEditorDefaultsFrame = class(TBCOptionsBaseFrame)
@@ -14,6 +15,16 @@ type
     ComboBoxDefaultHighlighter: TBCComboBox;
     Panel: TBCPanel;
     ComboBoxDefaultSQLHighlighter: TBCComboBox;
+    PanelDirectoryComboBoxAndButton: TBCPanel;
+    PanelDirectoryComboBoxRight: TBCPanel;
+    PanelDirectoryButton: TBCPanel;
+    SpeedButtonBrowser: TBCSpeedButton;
+    PanelDirectoryComboBoxClient: TBCPanel;
+    EditBrowser: TBCEdit;
+    ActionList: TActionList;
+    ActionBrowserButtonClick: TAction;
+    OpenDialog: TsOpenDialog;
+    procedure ActionBrowserButtonClickExecute(Sender: TObject);
   private
     procedure GetSQLHighlighterItems;
   protected
@@ -41,6 +52,13 @@ begin
   if not Assigned(FOptionsEditorDefaultsFrame) then
     FOptionsEditorDefaultsFrame := TOptionsEditorDefaultsFrame.Create(AOwner);
   Result := FOptionsEditorDefaultsFrame;
+end;
+
+procedure TOptionsEditorDefaultsFrame.ActionBrowserButtonClickExecute(Sender: TObject);
+begin
+  inherited;
+  if OpenDialog.Execute then
+    EditBrowser.Text := OpenDialog.FileName;
 end;
 
 destructor TOptionsEditorDefaultsFrame.Destroy;
@@ -87,6 +105,7 @@ begin
   ComboBoxDefaultEncoding.ItemIndex := OptionsContainer.DefaultEncoding;
   ComboBoxDefaultHighlighter.ItemIndex := ComboBoxDefaultHighlighter.IndexOf(OptionsContainer.DefaultHighlighter);
   ComboBoxDefaultSQLHighlighter.ItemIndex := ComboBoxDefaultSQLHighlighter.IndexOf(OptionsContainer.DefaultSQLHighlighter);
+  EditBrowser.Text := OptionsContainer.DefaultBrowser;
 end;
 
 procedure TOptionsEditorDefaultsFrame.PutData;
@@ -95,6 +114,7 @@ begin
   OptionsContainer.DefaultEncoding := ComboBoxDefaultEncoding.ItemIndex;
   OptionsContainer.DefaultHighlighter := ComboBoxDefaultHighlighter.Text;
   OptionsContainer.DefaultSQLHighlighter := ComboBoxDefaultSQLHighlighter.Text;
+  OptionsContainer.DefaultBrowser := EditBrowser.Text;
 end;
 
 end.

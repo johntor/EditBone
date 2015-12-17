@@ -1009,7 +1009,7 @@ end;
 
 procedure TMainForm.ActionDocumentViewInBrowserExecute(Sender: TObject);
 begin
-  BrowseURL(FormatFileName(FDocument.ActiveDocumentName));
+  BrowseURL(FormatFileName(FDocument.ActiveDocumentName), OptionsContainer.DefaultBrowser);
 end;
 
 procedure TMainForm.ActionFileReopenClearExecute(Sender: TObject);
