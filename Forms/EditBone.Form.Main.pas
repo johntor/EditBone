@@ -1970,7 +1970,7 @@ procedure TMainForm.ActionViewFilesExecute(Sender: TObject);
 var
   LSelectedPath: string;
 begin
-  with SearchForFilesForm do
+  with SearchForFilesForm(Self) do
   begin
     OnOpenFile := DoSearchForFilesOpenFile;
     LSelectedPath := FDirectory.SelectedPath;
