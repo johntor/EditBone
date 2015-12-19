@@ -25,19 +25,12 @@ type
     FEditor: TBCEditor;
     FProgressBar: TBCProgressBar;
   protected
-    procedure DoNodeClick(const HitInfo: THitInfo); override;
     procedure DoPaintNode(var PaintInfo: TVTPaintInfo); override;
     procedure DoFreeNode(Node: PVirtualNode); override;
     function DoGetNodeWidth(Node: PVirtualNode; Column: TColumnIndex; Canvas: TCanvas = nil): Integer; override;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
-    //function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-     // var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList; override;
-    //function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-    //  var Ghosted: Boolean; var Index: System.UITypes.TImageIndex): TCustomImageList; override;
     function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var Index: Integer): TCustomImageList; override;
-    //function DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-    //  var Ghosted: Boolean; var Index: Integer): TCustomImageList; override;
+      var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList; override;
     procedure CreateWnd; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -242,13 +235,14 @@ var
 
   procedure ReadDocTypeItem;
   begin
+    IncChar(2); { '<!' }
     LNode := AddChild(LNodeStack.Peek);
     LData := GetNodeData(LNode);
     LData.NodeType := ntElement;
     LData.BlockBegin := GetTextPosition(LChar, LLine);
     LData.NodeName := ExtractText(LPLineText, CWHITESPACE + ['=', '/', EDITBONE_NONE_CHAR, '>']);
     LData.BlockEnd := GetTextPosition(LChar, LLine);
-
+    IncChar(1); { ' ' }
     LNode := AddChild(LNode);
     LData := GetNodeData(LNode);
     LData.NodeType := ntAttribute;
@@ -362,11 +356,11 @@ var
       if StrLComp(LPLineText, '<!--', 4) = 0 then
         ReadComment
       else
-      if StrLComp(LPLineText, '<!DOCTYPE', 9) = 0 then
-        ReadDoctype
-      else
       if StrLComp(LPLineText, '<![CDATA[', 9) = 0 then
         ReadCData
+      else
+      if StrLComp(LPLineText, '<!', 2) = 0 then
+        ReadDoctype
       else
       if StrLComp(LPLineText, '</', 2) = 0 then
         ReadEndTag
@@ -404,23 +398,6 @@ begin
     Editor.CaretZero;
   finally
     LNodeStack.Free;
-  end;
-end;
-
-procedure TEBXMLTree.DoNodeClick(const HitInfo: THitInfo);
-var
-  SelectedNode: PVirtualNode;
-  Data: PXMLTreeRec;
-begin
-  inherited;
-  SelectedNode := HitInfo.HitNode; //VirtualDrawTree.GetFirstSelected;
-  if Assigned(SelectedNode) then
-  begin
-    Data := GetNodeData(SelectedNode);
-    Editor.TextCaretPosition := GetTextPosition(Data.BlockBegin.Char, Data.BlockBegin.Line);
-    Editor.EnsureCursorPositionVisible(True);
-    Editor.SelectionBeginPosition := Data.BlockBegin;
-    Editor.SelectionEndPosition := Data.BlockEnd;
   end;
 end;
 
@@ -486,11 +463,7 @@ begin
 end;
 
 function TEBXMLTree.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var Index: Integer): TCustomImageList;
-//function TEBXMLTree.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-//  var Ghosted: Boolean; var Index: Integer): TCustomImageList;
-//function TEBXMLTree.DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-//  var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList;
+  var Ghosted: Boolean; var Index: TImageIndex): TCustomImageList;
 var
   Data: PXMLTreeRec;
 begin

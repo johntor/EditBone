@@ -27,6 +27,7 @@ type
     procedure EditorCaretChanged(Sender: TObject; X, Y: Integer);
     procedure EditorOnChange(Sender: TObject);
     procedure EditorReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; DeleteLine: Boolean; var Action: TBCEditorReplaceAction);
+    procedure XMLTreeClick(Sender: TObject);
   private
     FActionSearchClose: TAction;
     FActionSearchFindNext: TAction;
@@ -245,6 +246,29 @@ begin
   end;
 end;
 
+procedure TEBDocument.XMLTreeClick(Sender: TObject);
+var
+  LEditor: TBCEditor;
+  LXMLTree: TEBXMLTree;
+  LData: PXMLTreeRec;
+  LNode: PVirtualNode;
+begin
+  LEditor := GetActiveEditor;
+  LXMLTree := GetXMLTree(PageControl.ActivePage);
+  if Assigned(LEditor) and Assigned(LXMLTree) then
+  begin
+    LNode := LXMLTree.GetFirstSelected;
+    if Assigned(LNode) then
+    begin
+      LData := LXMLTree.GetNodeData(LXMLTree.GetFirstSelected);
+      LEditor.TextCaretPosition := GetTextPosition(LData.BlockBegin.Char, LData.BlockBegin.Line);
+      LEditor.EnsureCursorPositionVisible(True);
+      LEditor.SelectionBeginPosition := LData.BlockBegin;
+      LEditor.SelectionEndPosition := LData.BlockEnd;
+    end;
+  end;
+end;
+
 function TEBDocument.ToggleXMLTree: Boolean;
 var
   LEditor: TBCEditor;
@@ -280,6 +304,7 @@ begin
         LXMLTree.TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale];
         LXMLTree.TreeOptions.MiscOptions := [toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
         LXMLTree.TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware];
+        LXMLTree.OnClick := XMLTreeClick;
         { vertical splitter }
         LVerticalSplitter := TBCSplitter.Create(PageControl.ActivePage);
         LVerticalSplitter.Parent := PageControl.ActivePage;
