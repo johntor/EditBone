@@ -115,8 +115,8 @@ inherited MainForm: TMainForm
       ParentFont = False
       TabHeight = 22
       TabOrder = 0
-      TabPadding = 2
-      TabSpacing = 12
+      TabPadding = 6
+      TabSpacing = 8
       SkinData.SkinSection = 'RIBBONPAGE'
       HoldShiftToDragDrop = False
       TabDragDrop = False
