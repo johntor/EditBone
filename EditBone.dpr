@@ -2,8 +2,10 @@ program EditBone;
 								  
 uses
   {$ifdef DEBUG}
-  {$endif }
+  //FastMM4,
+  {$endif}
   Vcl.Forms,
+  BCCommon.Utils,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
   EditBone.DataModule.Images in 'DataModules\EditBone.DataModule.Images.pas' {EBDataModuleImages: TDataModule},
   EditBone.Dialog.About in 'Dialogs\EditBone.Dialog.About.pas' {AboutDialog},
@@ -24,8 +26,6 @@ uses
   EditBone.Output in 'Units\EditBone.Output.pas',
   EditBone.Types in 'Units\EditBone.Types.pas',
   EditBone.XMLTree in 'Units\EditBone.XMLTree.pas',
-  Vcl.Themes,
-  Vcl.Styles,
   EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog},
   EditBone.Dialog.Popup.Encoding in 'Dialogs\EditBone.Dialog.Popup.Encoding.pas' {PopupEncodingDialog},
   EditBone.Encoding in 'Units\EditBone.Encoding.pas';
@@ -36,6 +36,8 @@ begin
   {$ifdef DEBUG}
   ReportMemoryLeaksOnShutdown := True;
   {$endif}
+  if RestoreIfRunning(Application.Handle) then
+    Exit;
   Application.Initialize;
   Application.Title := 'EditBone';
   Application.MainFormOnTaskbar := True;
