@@ -4,6 +4,8 @@ uses
   {$ifdef DEBUG}
   //FastMM4,
   {$endif}
+  Winapi.Windows,
+  Winapi.Messages,
   Vcl.Forms,
   BCCommon.Utils,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
@@ -32,15 +34,34 @@ uses
 
 {$R *.res}
 
+var
+  i: Integer;
+  Arg: string;
+  Window: HWND;
+  CopyDataStruct: TCopyDataStruct;
 begin
   {$ifdef DEBUG}
   ReportMemoryLeaksOnShutdown := True;
   {$endif}
-  if RestoreIfRunning(Application.Handle) then
-    Exit;
-  Application.Initialize;
-  Application.Title := 'EditBone';
-  Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TMainForm, MainForm);
-  Application.Run;
+  Window := FindWindow(SWindowClassName, nil);
+  if Window = 0 then
+  begin
+    Application.Initialize;
+    Application.Title := 'EditBone';
+    Application.MainFormOnTaskbar := True;
+    Application.CreateForm(TMainForm, MainForm);
+    Application.Run;
+  end
+  else
+  begin
+    FillChar(CopyDataStruct, Sizeof(CopyDataStruct), 0);
+    for i := 1 to ParamCount do
+    begin
+      Arg := ParamStr(i);
+      CopyDataStruct.cbData := (Length(Arg) + 1) * SizeOf(Char);
+      CopyDataStruct.lpData := PChar(Arg);
+      SendMessage(Window, WM_COPYDATA, 0, NativeInt(@CopyDataStruct));
+    end;
+    SetForegroundWindow(Window);
+  end;
 end.

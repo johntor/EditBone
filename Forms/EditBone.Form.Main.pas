@@ -9,10 +9,13 @@ uses
   Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
   sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
-  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, JvAppInst, Vcl.ImgList, acAlphaImageList,
+  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
   BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs, sStatusBar,
   System.Generics.Collections, BCControls.ComboBox, sPanel, Vcl.AppEvnts, BCComponents.SkinProvider,
   BCComponents.TitleBar, BCComponents.SkinManager, BCCommon.Dialog.Popup.Highlighter.Color;
+
+const
+  SWindowClassName = 'UniqueWindowClassNameForEditBone';
 
 type
   TMainForm = class(TBCBaseForm)
@@ -176,7 +179,6 @@ type
     ActionViewWordWrap: TAction;
     ActionViewXMLTree: TAction;
     ActionXMLTreeRefresh: TAction;
-    AppInstances: TJvAppInstances;
     DragDrop: TBCDragDrop;
     EditorMacroRecorder: TBCEditorMacroRecorder;
     EditorPrint: TBCEditorPrint;
@@ -767,7 +769,6 @@ type
     procedure ActionViewWordWrapExecute(Sender: TObject);
     procedure ActionViewXMLTreeExecute(Sender: TObject);
     procedure ActionXMLTreeRefreshExecute(Sender: TObject);
-    procedure AppInstancesCmdLineReceived(Sender: TObject; CmdLine: TStrings);
     procedure ApplicationEventsActivate(Sender: TObject);
     procedure ApplicationEventsHint(Sender: TObject);
     procedure ApplicationEventsMessage(var Msg: tagMSG; var Handled: Boolean);
@@ -837,6 +838,7 @@ type
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(const ALanguage: string);
+    procedure ReadParams;
     procedure SearchFindInFiles(const AFolder: string = '');
     procedure SetFields;
     procedure SetImages;
@@ -845,6 +847,9 @@ type
     procedure UpdateMenuBarLanguage;
     procedure UpdatePageControlMargins;
     procedure WriteIniFile;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure WMCopyData(var Message: TWMCopyData); message WM_COPYDATA;
   public
     procedure CreateFileReopenList;
     procedure SetBookmarks;
@@ -868,6 +873,11 @@ uses
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialogs.SkinSelect, sGraphUtils, sConst,
   BCCommon.Forms.Print.Preview, EditBone.DataModule.Images;
 
+procedure TMainForm.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.WinClassName := SWindowClassName;
+end;
 
 procedure TMainForm.PageControlDirectoryCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
   var Action: TacCloseAction);
@@ -2116,18 +2126,6 @@ begin
   FDocument.RefreshXMLTree;
 end;
 
-procedure TMainForm.AppInstancesCmdLineReceived(Sender: TObject; CmdLine: TStrings);
-var
-  i: Integer;
-begin
-  if WindowState = wsMinimized then
-    ShowWindow(Handle, SW_RESTORE);
-  PageControlDocument.Visible := False;
-  for i := 0 to CmdLine.Count - 1 do
-    FDocument.Open(CmdLine.Strings[i], True);
-  PageControlDocument.Visible := True;
-end;
-
 procedure TMainForm.ApplicationEventsActivate(Sender: TObject);
 begin
   if Processing then
@@ -2720,17 +2718,20 @@ begin
   end;
 end;
 
-procedure TMainForm.FormShow(Sender: TObject);
+procedure TMainForm.WMCopyData(var Message: TWMCopyData);
+var
+  LParam: string;
+begin
+  SetString(LParam, PChar(Message.CopyDataStruct.lpData), (Message.CopyDataStruct.cbData div SizeOf(Char)) - 1);
+  FDocument.Open(LParam, nil, 0, 0, True);
+  Application.Restore;
+  Application.BringToFront;
+end;
+
+procedure TMainForm.ReadParams;
 var
   i: Integer;
-  Editor: TBCEditor;
 begin
-  inherited;
-
-  if not FDocument.ReadIniOpenFiles and (ParamCount = 0) or
-    (ParamCount = 1) and (ParamStr(1) = PARAM_NO_INI) then
-    FDocument.New;
-
   FNoIni := False;
   if ParamCount > 0 then
   for i := 1 to ParamCount do
@@ -2743,6 +2744,19 @@ begin
     else
       FDocument.Open(ParamStr(i), nil, 0, 0, True);
   end;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+var
+  Editor: TBCEditor;
+begin
+  inherited;
+
+  if not FDocument.ReadIniOpenFiles and (ParamCount = 0) or
+    (ParamCount = 1) and (ParamStr(1) = PARAM_NO_INI) then
+    FDocument.New;
+
+  ReadParams;
 
   Self.ReadLanguageFile(GetSelectedLanguage('English'));
 

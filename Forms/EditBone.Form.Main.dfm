@@ -4797,12 +4797,7 @@ inherited MainForm: TMainForm
       Action = ActionEditToggleCaseTitle
     end
   end
-  object AppInstances: TJvAppInstances [24]
-    OnCmdLineReceived = AppInstancesCmdLineReceived
-    Left = 743
-    Top = 250
-  end
-  object PopupMenuDocumentMacro: TPopupMenu [25]
+  object PopupMenuDocumentMacro: TPopupMenu [24]
     Images = ImagesDataModule.ImageList
     Left = 466
     Top = 521
@@ -4825,20 +4820,20 @@ inherited MainForm: TMainForm
       Action = ActionMacroSaveAs
     end
   end
-  object OpenDialog: TsOpenDialog [26]
+  object OpenDialog: TsOpenDialog [25]
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
     Left = 874
     Top = 176
   end
-  object SaveDialog: TsSaveDialog [27]
+  object SaveDialog: TsSaveDialog [26]
     Left = 874
     Top = 228
   end
-  object PrintDialog: TPrintDialog [28]
+  object PrintDialog: TPrintDialog [27]
     Left = 872
     Top = 280
   end
-  object EditorPrint: TBCEditorPrint [29]
+  object EditorPrint: TBCEditorPrint [28]
     Color = clWhite
     Copies = 1
     Font.Charset = DEFAULT_CHARSET
@@ -4872,18 +4867,18 @@ inherited MainForm: TMainForm
     Left = 872
     Top = 348
   end
-  object EditorMacroRecorder: TBCEditorMacroRecorder [30]
+  object EditorMacroRecorder: TBCEditorMacroRecorder [29]
     RecordShortCut = 24658
     PlaybackShortCut = 24656
     Left = 870
     Top = 408
   end
-  object Timer: TTimer [31]
+  object Timer: TTimer [30]
     OnTimer = TimerTimer
     Left = 958
     Top = 180
   end
-  object PopupMenuXMLTree: TPopupMenu [32]
+  object PopupMenuXMLTree: TPopupMenu [31]
     Images = ImagesDataModule.ImageListSmall
     Left = 448
     Top = 306
