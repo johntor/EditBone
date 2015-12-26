@@ -2,7 +2,7 @@ program EditBone;
 								  
 uses
   {$ifdef DEBUG}
-  //FastMM4,
+  FastMM4,
   {$endif}
   Winapi.Windows,
   Winapi.Messages,
@@ -34,34 +34,40 @@ uses
 
 {$R *.res}
 
+{$ifdef RELEASE}
 var
   i: Integer;
-  Arg: string;
-  Window: HWND;
-  CopyDataStruct: TCopyDataStruct;
+  LParam: string;
+  LWindow: HWND;
+  LCopyDataStruct: TCopyDataStruct;
+{$endif}
 begin
   {$ifdef DEBUG}
   ReportMemoryLeaksOnShutdown := True;
   {$endif}
-  Window := FindWindow(SWindowClassName, nil);
-  if Window = 0 then
+  {$ifdef RELEASE}
+  LWindow := FindWindow(SWindowClassName, nil);
+  if LWindow = 0 then
   begin
+  {$endif}
     Application.Initialize;
     Application.Title := 'EditBone';
     Application.MainFormOnTaskbar := True;
     Application.CreateForm(TMainForm, MainForm);
     Application.Run;
+  {$ifdef RELEASE}
   end
   else
   begin
-    FillChar(CopyDataStruct, Sizeof(CopyDataStruct), 0);
+    FillChar(LCopyDataStruct, Sizeof(TCopyDataStruct), 0);
     for i := 1 to ParamCount do
     begin
-      Arg := ParamStr(i);
-      CopyDataStruct.cbData := (Length(Arg) + 1) * SizeOf(Char);
-      CopyDataStruct.lpData := PChar(Arg);
-      SendMessage(Window, WM_COPYDATA, 0, NativeInt(@CopyDataStruct));
+      LParam := ParamStr(i);
+      LCopyDataStruct.cbData := (Length(LParam) + 1) * SizeOf(Char);
+      LCopyDataStruct.lpData := PChar(LParam);
+      SendMessage(LWindow, WM_COPYDATA, 0, NativeInt(@LCopyDataStruct));
     end;
-    SetForegroundWindow(Window);
+    SetForegroundWindow(LWindow);
   end;
+  {$endif}
 end.
