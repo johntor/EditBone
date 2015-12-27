@@ -14,6 +14,7 @@ type
     procedure DriveComboChange(Sender: TObject);
     procedure FileTreeViewClick(Sender: TObject);
     procedure FileTreeViewDblClick(Sender: TObject);
+    procedure FileTreeKeyPress(Sender: TObject; var Key: Char);
   private
     FFileTreeViewDblClick: TNotifyEvent;
     FFileTreeViewClick: TNotifyEvent;
@@ -75,7 +76,7 @@ implementation
 
 uses
   EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControls.Utils,
-  BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base,
+  BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base, EditBone.Consts,
   Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControls.Panel;
 
 destructor TEBDirectory.Destroy;
@@ -407,6 +408,14 @@ begin
     FFileTreeViewDblClick(Sender);
 end;
 
+procedure TEBDirectory.FileTreeKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = EDITBONE_CARRIAGE_RETURN then
+    if Assigned(FFileTreeViewDblClick) then
+      FFileTreeViewDblClick(Sender);
+end;
+
 function TEBDirectory.GetActiveDriveComboBox: TBCDriveComboBox;
 begin
   Result := GetDriveComboBox(FPageControl.ActivePage);
@@ -652,6 +661,7 @@ begin
     PopupMenu := PopupMenuFileTreeView;
     OnClick := FileTreeViewClick;
     OnDblClick := FileTreeViewDblClick;
+    OnKeyPress := FileTreeKeyPress;
     DefaultNodeHeight := Images.Height + 2;
     SkinManager := FSkinManager;
   end;
