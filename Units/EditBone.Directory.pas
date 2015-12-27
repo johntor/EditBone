@@ -4,10 +4,10 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
-  BCControls.FileControl, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, VirtualTrees,
+  BCControl.FileControl, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, VirtualTrees,
   BCCommon.Forms.SearchForFiles, sPageControl,
-  BCControls.ImageList,
-  BCComponents.SkinManager;
+  BCControl.ImageList,
+  BCComponent.SkinManager;
 
 type
   TEBDirectory = class(TObject)
@@ -75,9 +75,9 @@ type
 implementation
 
 uses
-  EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControls.Utils,
+  EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControl.Utils,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base, EditBone.Consts,
-  Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControls.Panel;
+  Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControl.Panel;
 
 destructor TEBDirectory.Destroy;
 begin

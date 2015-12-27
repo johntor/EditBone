@@ -4,11 +4,11 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
-  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControls.PageControl, Vcl.Buttons, Vcl.ActnList,
-  BCControls.ProgressBar, BCControls.Panel, sLabel, sPageControl, BCEditor.Types, BCControls.StatusBar,
+  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList,
+  BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
   BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
-  BCEditor.Print.Types, EditBone.XMLTree, BCControls.Splitter, BCControls.ComboBox, System.Generics.Collections,
-  BCComponents.SkinManager, BCControls.Labels;
+  BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
+  BCComponent.SkinManager, BCControl.Labels;
 
 type
   TEBSetBookmarks = procedure of object;
@@ -204,7 +204,7 @@ uses
   System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
-  BCControls.SpeedButton, BCControls.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
+  BCControl.SpeedButton, BCControl.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
   BCEditor.Highlighter.Colors, BCCommon.Dialogs.Options.Search, Vcl.ValEdit, System.IOUtils, EditBone.Encoding;
 
 { TEBDocument }

@@ -3,7 +3,7 @@ unit EditBone.DataModule.Images;
 interface
 
 uses
-  System.SysUtils, System.Classes, Vcl.Controls, acAlphaImageList, BCControls.ImageList, System.ImageList, Vcl.ImgList;
+  System.SysUtils, System.Classes, Vcl.Controls, acAlphaImageList, BCControl.ImageList, System.ImageList, Vcl.ImgList;
 
 type
   TEBDataModuleImages = class(TDataModule)

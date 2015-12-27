@@ -3,7 +3,7 @@ unit EditBone.XMLTree;
 interface
 
 uses
-  VirtualTrees, Vcl.Graphics, Vcl.ImgList, System.Classes, BCEditor.Editor, BCControls.ProgressBar, BCEditor.Types,
+  VirtualTrees, Vcl.Graphics, Vcl.ImgList, System.Classes, BCEditor.Editor, BCControl.ProgressBar, BCEditor.Types,
   sCommonData, System.UITypes;
 
 type

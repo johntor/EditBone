@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.ActnList, BCEditor.Editor,
-  BCControls.ComboBox, sComboBox, sFontCtrls, BCControls.Panel, BCControls.Statusbar, System.Actions, sPanel,
+  BCControl.ComboBox, sComboBox, sFontCtrls, BCControl.Panel, BCControl.Statusbar, System.Actions, sPanel,
   Vcl.StdCtrls, sStatusBar;
 
 const

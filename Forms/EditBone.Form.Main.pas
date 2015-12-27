@@ -6,13 +6,13 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
   sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files, BCCommon.Dialog.Popup.Highlighter,
-  Vcl.ComCtrls, BCControls.StatusBar, Vcl.ExtCtrls, BCControls.Panel, sSplitter, BCControls.Splitter,
-  sPageControl, BCControls.PageControl, BCCommon.Images, BCControls.SpeedButton, Vcl.Buttons, sSpeedButton,
+  Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, sSplitter, BCControl.Splitter,
+  sPageControl, BCControl.PageControl, BCCommon.Images, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
-  BCComponents.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
-  BCControls.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs, sStatusBar,
-  System.Generics.Collections, BCControls.ComboBox, sPanel, Vcl.AppEvnts, BCComponents.SkinProvider,
-  BCComponents.TitleBar, BCComponents.SkinManager, BCCommon.Dialog.Popup.Highlighter.Color;
+  BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
+  BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs, sStatusBar,
+  System.Generics.Collections, BCControl.ComboBox, sPanel, Vcl.AppEvnts, BCComponent.SkinProvider,
+  BCComponent.TitleBar, BCComponent.SkinManager, BCCommon.Dialog.Popup.Highlighter.Color;
 
 const
   SWindowClassName = 'UniqueWindowClassNameForEditBone';
@@ -867,7 +867,7 @@ uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
   BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
-  BCCommon.Utils, BCControls.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList, EditBone.Encoding,
+  BCCommon.Utils, BCControl.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList, EditBone.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialogs.DownloadURL,
   BCCommon.Forms.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Forms.SearchForFiles,
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialogs.SkinSelect, sGraphUtils, sConst,

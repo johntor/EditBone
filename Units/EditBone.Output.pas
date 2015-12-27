@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
-  VirtualTrees, BCComponents.SkinManager,
-  BCControls.PageControl, BCCommon.Images, sPageControl;
+  VirtualTrees, BCComponent.SkinManager,
+  BCControl.PageControl, BCCommon.Images, sPageControl;
 
 type
   TOpenAllEvent = procedure(var FileNames: TStrings);
@@ -59,7 +59,7 @@ implementation
 uses
   EditBone.Types, BCCommon.Options.Container, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
   BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types,
-  BCControls.Panel;
+  BCControl.Panel;
 
 constructor TEBOutput.Create(AOwner: TBCPageControl);
 begin

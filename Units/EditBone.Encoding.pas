@@ -3,7 +3,7 @@ unit EditBone.Encoding;
 interface
 
 uses
-  System.SysUtils, BCControls.ComboBox, BCEditor.Editor;
+  System.SysUtils, BCControl.ComboBox, BCEditor.Editor;
 
 const
   ENCODING_ANSI = 0;

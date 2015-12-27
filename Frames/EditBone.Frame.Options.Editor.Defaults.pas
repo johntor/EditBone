@@ -3,9 +3,9 @@ unit EditBone.Frame.Options.Editor.Defaults;
 interface
 
 uses
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.ComboBox,
-  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControls.Panel, Vcl.ExtCtrls, sPanel,
-  sFrameAdapter, Vcl.Buttons, sSpeedButton, BCControls.SpeedButton, sEdit, BCControls.Edit, System.Actions, Vcl.ActnList,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControl.ComboBox,
+  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControl.Panel, Vcl.ExtCtrls, sPanel,
+  sFrameAdapter, Vcl.Buttons, sSpeedButton, BCControl.SpeedButton, sEdit, BCControl.Edit, System.Actions, Vcl.ActnList,
   sDialogs;
 
 type

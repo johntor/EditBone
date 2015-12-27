@@ -3,8 +3,8 @@ unit EditBone.Frame.Options.Editor.Other;
 interface
 
 uses
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControls.ComboBox, Vcl.ExtCtrls,
-  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControls.Panel, sPanel, sFrameAdapter;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControl.ComboBox, Vcl.ExtCtrls,
+  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControl.Panel, sPanel, sFrameAdapter;
 
 type
   TOptionsEditorOtherFrame = class(TBCOptionsBaseFrame)
