@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetTools
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3980,7 +3980,6 @@ inherited MainForm: TMainForm
     object ActionToolsCompareFiles: TAction
       Category = 'Tools'
       Caption = 'Compare files'
-      Enabled = False
       Hint = 'Compare files'
       ImageIndex = 69
       OnExecute = ActionToolsCompareFilesExecute

@@ -6,7 +6,7 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
   Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList,
   BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
-  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs,
+  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs, BCCommon.Frames.Compare,
   BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
   BCComponent.SkinManager, BCControl.Labels;
 
@@ -66,6 +66,7 @@ type
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
     function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
+    function GetCompareFrame(TabSheet: TTabSheet): TCompareFrame;
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
     function GetSearchPanel(const ATabSheet: TTabSheet): TBCPanel;
     function GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
@@ -108,6 +109,7 @@ type
     procedure CloseAll;
     procedure CloseAllOtherPages;
     procedure CollapseAll;
+    procedure CompareFiles(AFileName: string = ''; AFileDragDrop: Boolean = False);
     procedure Copy;
     procedure Cut;
     procedure DecreaseIndent;
@@ -747,12 +749,11 @@ begin
   end;
 end;
 
- (*
-procedure TEBDocument.CompareFiles(FileName: string; AFileDragDrop: Boolean);
+procedure TEBDocument.CompareFiles(AFileName: string; AFileDragDrop: Boolean);
 var
   i: Integer;
   TabSheet: TsTabSheet;
-  //Frame: TCompareFrame;
+  Frame: TCompareFrame;
   TempList: TStringList;
   Editor: TBCEditor;
 begin
@@ -764,7 +765,7 @@ begin
     if Assigned(Editor) then
       TempList.Add(Editor.DocumentName);
   end;
-  if FileName <> '' then
+  if AFileName <> '' then
   begin
     { find compare tab }
     for i := 0 to PageControl.PageCount - 2 do
@@ -778,7 +779,7 @@ begin
         begin
           { else set file and exit }
           PageControl.ActivePageIndex := i;
-          Frame.SetCompareFile(FileName, AFileDragDrop);
+          Frame.SetCompareFile(AFileName, AFileDragDrop);
           Exit;
         end;
       end;
@@ -786,9 +787,9 @@ begin
   { create a TabSheet }
   TabSheet := TsTabSheet.Create(PageControl);
   TabSheet.PageControl := PageControl;
+  TabSheet.PageIndex := PageControl.PageCount - 2;
   TabSheet.ImageIndex := FCompareImageIndex;
   TabSheet.Caption := LanguageDataModule.GetConstant('CompareFiles');
-
   PageControl.ActivePage := TabSheet;
   { create a compare frame }
   Frame := TCompareFrame.Create(TabSheet);
@@ -796,22 +797,22 @@ begin
   begin
     Parent := TabSheet;
     Align := alClient;
+    Tag := EDITBONE_DOCUMENT_COMPARE_TAG;
     OpenDocumentsList := TempList;
-    SetCompareFile(FileName);
+    SetCompareFile(AFileName);
     SpecialChars := OptionsContainer.EnableSpecialChars;
     LineNumbers := OptionsContainer.EnableLineNumbers;
-    UpdateLanguage(GetSelectedLanguage);
+    //UpdateLanguage(GetSelectedLanguage);
   end;
-end;     *)
+end;
 
 procedure TEBDocument.SelectForCompare;
-{var
-  Editor: TBCEditor;   }
+var
+  LEditor: TBCEditor;
 begin
-  // TODO
-  {Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    CompareFiles(Editor.DocumentName);  }
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    CompareFiles(LEditor.DocumentName, False);
 end;
 
 function TEBDocument.FindOpenFile(const FileName: string): TBCEditor;
@@ -1906,14 +1907,14 @@ begin
   end;
 end;
 
-{function TEBDocument.GetCompareFrame(TabSheet: TTabSheet): TCompareFrame;
+function TEBDocument.GetCompareFrame(TabSheet: TTabSheet): TCompareFrame;
 begin
   Result := nil;
   if Assigned(TabSheet) then
     if TabSheet.ComponentCount <> 0 then
       if TabSheet.Components[0] is TCompareFrame then
         Result := TCompareFrame(TabSheet.Components[0]);
-end; }
+end;
 
 function TEBDocument.GetSplitter(const ATabSheet: TTabSheet; const ATag: Integer): TBCSplitter;
 var
@@ -2870,24 +2871,22 @@ begin
   try
     j := AFiles.Count;
     ProgressBar.Show(j);
-   { if FDocument.IsCompareFilesActivePage then
+   { if IsCompareFilesActivePage then
     begin
       if j > 1 then
         for i := 0 to j - 1 do
         begin
           ProgressBar.StepIt;
-          FDocument.CompareFiles(Value.Strings[i]);
+          CompareFiles(Value.Strings[i]);
         end
       else
-        FDocument.CompareFiles(Value.Strings[0], True)
+        CompareFiles(Value.Strings[0], True)
     end
-    else  }
-    ProgressBar.StepIt;
-    Open(AFiles.Strings[0], True);
-    for i := 1 to j - 1 do
+    else }
+    for i := 0 to j - 1 do
     begin
       ProgressBar.StepIt;
-      Open(AFiles.Strings[i], False);
+      Open(AFiles.Strings[i], i = 0);
     end;
   finally
     ProgressBar.Hide;

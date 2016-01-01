@@ -3,7 +3,7 @@ unit EditBone.Dialog.DirectoryTab;
 interface
 
 uses
-  System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.Dialogs.Base, Vcl.StdCtrls, BCControl.Edit,
+  System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.Dialog.Base, Vcl.StdCtrls, BCControl.Edit,
   Vcl.ActnList, BCControl.ComboBox,
   sComboBox, BCControl.SpeedButton, BCControl.Panel,
   BCControl.GroupBox, sLabel, acSlider, System.Actions, sGroupBox, sEdit, Vcl.Buttons, sSpeedButton, Vcl.ExtCtrls,

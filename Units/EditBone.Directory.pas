@@ -76,7 +76,7 @@ implementation
 
 uses
   EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControl.Utils,
-  BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialogs.Base, EditBone.Consts,
+  BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialog.Base, EditBone.Consts,
   Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControl.Panel;
 
 destructor TEBDirectory.Destroy;

@@ -1721,8 +1721,7 @@ end;
 
 procedure TMainForm.ActionToolsCompareFilesExecute(Sender: TObject);
 begin
-  // TODO
-  //FDocument.CompareFiles;
+  FDocument.CompareFiles;
 end;
 
 procedure TMainForm.ActionToolsConvertExecute(Sender: TObject);
@@ -2321,7 +2320,6 @@ begin
     ActionViewSpecialChars.Enabled := ActionViewLineNumbers.Enabled;
     ActionDocumentInfo.Enabled := LActiveDocumentFound;
     ActionToolsSelectForCompare.Enabled := False; // TODO: not implemented ActiveDocumentFound and not FDocument.ActiveDocumentModified;
-    ActionToolsCompareFiles.Enabled := False; // TODO: not implemented
     ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
     ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
