@@ -202,7 +202,7 @@ implementation
 {$R EDITBONE.DOCUMENT.RES}
 
 uses
-  Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace,
+  Vcl.Forms, BCCommon.Form.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace,
   System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialog.InputQuery, BCCommon.Dialog.Replace,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,

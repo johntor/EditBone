@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Forms.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Form.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
   sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files, BCCommon.Dialog.Popup.Highlighter,
   Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, sSplitter, BCControl.Splitter,
   sPageControl, BCControl.PageControl, BCCommon.Images, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton,
@@ -869,9 +869,9 @@ uses
   BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
   BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, EditBone.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
-  BCCommon.Forms.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Forms.SearchForFiles,
+  BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst,
-  BCCommon.Forms.Print.Preview, EditBone.DataModule.Images;
+  BCCommon.Form.Print.Preview, EditBone.DataModule.Images;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
