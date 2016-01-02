@@ -202,12 +202,12 @@ implementation
 {$R EDITBONE.DOCUMENT.RES}
 
 uses
-  Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialogs.ConfirmReplace,
-  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialogs.InputQuery, BCCommon.Dialogs.Replace,
+  Vcl.Forms, BCCommon.Forms.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace,
+  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialog.InputQuery, BCCommon.Dialog.Replace,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
   BCControl.SpeedButton, BCControl.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
-  BCEditor.Highlighter.Colors, BCCommon.Dialogs.Options.Search, Vcl.ValEdit, System.IOUtils, EditBone.Encoding;
+  BCEditor.Highlighter.Colors, BCCommon.Dialog.Options.Search, Vcl.ValEdit, System.IOUtils, EditBone.Encoding;
 
 { TEBDocument }
 

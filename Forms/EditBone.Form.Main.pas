@@ -867,10 +867,10 @@ uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
   BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
-  BCCommon.Utils, BCControl.Utils, BCCommon.Dialogs.FindInFiles, BCCommon.Dialogs.ItemList, EditBone.Encoding,
-  BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialogs.DownloadURL,
+  BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, EditBone.Encoding,
+  BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Forms.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Forms.SearchForFiles,
-  BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialogs.SkinSelect, sGraphUtils, sConst,
+  BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst,
   BCCommon.Forms.Print.Preview, EditBone.DataModule.Images;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
