@@ -4,7 +4,7 @@ interface
 
 uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.FileUtils, Vcl.StdCtrls,
-  System.Classes, System.SysUtils, Vcl.ActnList, BCCommon.Images, BCCommon.Frames.Options.Editor.Color,
+  System.Classes, System.SysUtils, Vcl.ActnList, BCCommon.Images, BCCommon.Frame.Options.Editor.Color,
   VirtualTrees, BCCommon.Options.Container, System.Generics.Collections,
   sSkinProvider, BCControl.ScrollBox, BCControl.Splitter, BCControl.Panel, System.Actions, sScrollBox, Vcl.ExtCtrls,
   sSplitter, sPanel;
@@ -94,21 +94,21 @@ implementation
 
 uses
   System.IniFiles,  BCCommon.Language.Utils, BCCommon.Utils, Winapi.Windows,
-  System.Types, BCCommon.Frames.Options.Editor.Minimap, BCCommon.Frames.Options.Editor.Scroll,
-  BCCommon.Frames.Options.Editor.Selection, BCCommon.Frames.Options.Editor.SpecialChars,
-  BCCommon.Frames.Options.Editor.Tabulator, EditBone.Frame.Options.Editor.Defaults,
+  System.Types, BCCommon.Frame.Options.Editor.Minimap, BCCommon.Frame.Options.Editor.Scroll,
+  BCCommon.Frame.Options.Editor.Selection, BCCommon.Frame.Options.Editor.SpecialChars,
+  BCCommon.Frame.Options.Editor.Tabulator, EditBone.Frame.Options.Editor.Defaults,
   BCCommon.Options.Container.SQL.Formatter, EditBone.Frame.Options.Editor.TabSheet,
-  BCCommon.Frames.Options.Editor.CompletionProposal, BCCommon.Frames.Options.Editor.Caret,
-  BCCommon.Frames.Options.Editor.CodeFolding, BCCommon.Frames.Options.Editor.MatchingPair,
-  BCCommon.Frames.Options.Editor.Search, BCCommon.Frames.Options.Editor.Options, BCCommon.Frames.Options.Editor.Font,
-  BCCommon.Frames.Options.Editor.LeftMargin, BCCommon.Frames.Options.Editor.RightMargin,
+  BCCommon.Frame.Options.Editor.CompletionProposal, BCCommon.Frame.Options.Editor.Caret,
+  BCCommon.Frame.Options.Editor.CodeFolding, BCCommon.Frame.Options.Editor.MatchingPair,
+  BCCommon.Frame.Options.Editor.Search, BCCommon.Frame.Options.Editor.Options, BCCommon.Frame.Options.Editor.Font,
+  BCCommon.Frame.Options.Editor.LeftMargin, BCCommon.Frame.Options.Editor.RightMargin,
   EditBone.Frame.Options.FileTypes, EditBone.Frame.Options.Directory, EditBone.Frame.Options.Directory.TabSheet,
-  EditBone.Frame.Options.Output.TabSheet, BCCommon.Frames.Options.Compare,
-  BCCommon.Frames.Options.MainMenu, BCCommon.Frames.Options.StatusBar, BCCommon.Frames.Options.Output,
-  BCCommon.Frames.Options.Toolbar, BCCommon.Frames.Options.Print, BCCommon.Frames.Options.SQL.Select,
-  BCCommon.Frames.Options.SQL.Alignments, BCCommon.Frames.Options.SQL.Insert, BCCommon.Frames.Options.SQL.Update,
-  BCCommon.Frames.Options.SQL.Whitespace, BCCommon.Frames.Options.SQL.Capitalization,
-  BCCommon.Frames.Options.SQL.Indentation, BCCommon.Frames.Options.SQL.Formatter;
+  EditBone.Frame.Options.Output.TabSheet, BCCommon.Frame.Options.Compare,
+  BCCommon.Frame.Options.MainMenu, BCCommon.Frame.Options.StatusBar, BCCommon.Frame.Options.Output,
+  BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print, BCCommon.Frame.Options.SQL.Select,
+  BCCommon.Frame.Options.SQL.Alignments, BCCommon.Frame.Options.SQL.Insert, BCCommon.Frame.Options.SQL.Update,
+  BCCommon.Frame.Options.SQL.Whitespace, BCCommon.Frame.Options.SQL.Capitalization,
+  BCCommon.Frame.Options.SQL.Indentation, BCCommon.Frame.Options.SQL.Formatter;
 
 var
   FOptionsForm: TOptionsForm;

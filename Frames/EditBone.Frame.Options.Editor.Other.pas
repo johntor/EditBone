@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControl.ComboBox, Vcl.ExtCtrls,
-  BCCommon.Options.Container, BCCommon.Frames.Options.Base, sComboBox, BCControl.Panel, sPanel, sFrameAdapter;
+  BCCommon.Options.Container, BCCommon.Frame.Options.Base, sComboBox, BCControl.Panel, sPanel, sFrameAdapter;
 
 type
   TOptionsEditorOtherFrame = class(TBCOptionsBaseFrame)

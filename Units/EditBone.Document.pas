@@ -6,7 +6,7 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
   Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList,
   BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
-  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs, BCCommon.Frames.Compare,
+  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs, BCCommon.Frame.Compare,
   BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
   BCComponent.SkinManager, BCControl.Labels;
 
