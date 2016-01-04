@@ -56,13 +56,11 @@ type
     function CreateNewTabSheet(const AFileName: string = ''; AShowMinimap: Boolean = False;
       const AHighlighter: string = ''; const AColor: string = ''; ASetActivePage: Boolean = True): TBCEditor;
     function FindOpenFile(const FileName: string): TBCEditor;
-    function GetActiveDocumentModified: Boolean;
     function GetActiveDocumentName: string;
     function GetActiveFileName: string;
     function GetActiveLabelSearchResultCount: TsLabel;
     function GetActivePageCaption: string;
     function GetActiveSearchPanel: TBCPanel;
-    function GetActiveTabSheetCaption: string;
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
     function GetComboBoxSearchText(const ATabSheet: TTabSheet): TBCComboBox;
@@ -173,10 +171,8 @@ type
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
     property ActionSearchTextItems: TAction read FActionSearchTextItems write FActionSearchTextItems;
-    property ActiveDocumentModified: Boolean read GetActiveDocumentModified;
     property ActiveDocumentName: string read GetActiveDocumentName;
     property ActiveFileName: string read GetActiveFileName;
-    property ActiveTabSheetCaption: string read GetActiveTabSheetCaption;
     property CanRedo: Boolean read GetCanRedo;
     property CanUndo: Boolean read GetCanUndo;
     property CaretInfo: string read FCaretInfo;
@@ -753,7 +749,7 @@ procedure TEBDocument.CompareFiles(AFileName: string; AFileDragDrop: Boolean);
 var
   i: Integer;
   TabSheet: TsTabSheet;
-  Frame: TCompareFrame;
+  LCompareFrame: TCompareFrame;
   TempList: TStringList;
   Editor: TBCEditor;
 begin
@@ -766,24 +762,22 @@ begin
       TempList.Add(Editor.DocumentName);
   end;
   if AFileName <> '' then
-  begin
-    { find compare tab }
-    for i := 0 to PageControl.PageCount - 2 do
-      if PageControl.Pages[i].ImageIndex = FCompareImageIndex then
+  { find compare tab }
+  for i := 0 to PageControl.PageCount - 2 do
+    if PageControl.Pages[i].ImageIndex = FCompareImageIndex then
+    begin
+      LCompareFrame := GetCompareFrame(PageControl.Pages[i]);
+      { if there already are two files to compare then continue }
+      if LCompareFrame.ComparedFilesSet then
+        Continue
+      else
       begin
-        Frame := GetCompareFrame(PageControl.Pages[i]);
-        { if there already are two files to compare then continue }
-        if Frame.ComparedFilesSet then
-          Continue
-        else
-        begin
-          { else set file and exit }
-          PageControl.ActivePageIndex := i;
-          Frame.SetCompareFile(AFileName, AFileDragDrop);
-          Exit;
-        end;
+        { else set file and exit }
+        PageControl.ActivePageIndex := i;
+        LCompareFrame.SetCompareFile(AFileName, AFileDragDrop);
+        Exit;
       end;
-  end;
+    end;
   { create a TabSheet }
   TabSheet := TsTabSheet.Create(PageControl);
   TabSheet.PageControl := PageControl;
@@ -792,16 +786,16 @@ begin
   TabSheet.Caption := LanguageDataModule.GetConstant('CompareFiles');
   PageControl.ActivePage := TabSheet;
   { create a compare frame }
-  Frame := TCompareFrame.Create(TabSheet);
-  with Frame do
+  LCompareFrame := TCompareFrame.Create(TabSheet);
+  with LCompareFrame do
   begin
     Parent := TabSheet;
     Align := alClient;
     Tag := EDITBONE_DOCUMENT_COMPARE_TAG;
     OpenDocumentsList := TempList;
-    SetCompareFile(AFileName);
     SpecialChars := OptionsContainer.EnableSpecialChars;
     LineNumbers := OptionsContainer.EnableLineNumbers;
+    SetCompareFile(AFileName);
     //UpdateLanguage(GetSelectedLanguage);
   end;
 end;
@@ -2124,15 +2118,6 @@ begin
   end;
 end;
 
-function TEBDocument.GetActiveTabSheetCaption: string;
-begin
-  Result := '';
-
-  if Assigned(PageControl.ActivePage) then
-    if PageControl.ActivePage.TabType = ttTab then
-      Result := PageControl.ActivePage.Caption;
-end;
-
 function TEBDocument.GetActiveDocumentName: string;
 var
   LEditor: TBCEditor;
@@ -2252,14 +2237,6 @@ begin
   if Assigned(AEditor) then
     if AEditor.Modified then
       Result := LanguageDataModule.GetConstant('Modified');
-end;
-
-function TEBDocument.GetActiveDocumentModified: Boolean;
-var
-  LEditor: TBCEditor;
-begin
-  LEditor := GetActiveEditor;
-  Result := Assigned(LEditor) and LEditor.Modified;
 end;
 
 procedure TEBDocument.NextPage;

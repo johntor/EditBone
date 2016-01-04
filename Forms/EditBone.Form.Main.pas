@@ -1842,7 +1842,7 @@ end;
 
 procedure TMainForm.ActionToolsSelectForCompareExecute(Sender: TObject);
 begin
- FDocument.SelectForCompare;
+  FDocument.SelectForCompare;
 end;
 
 procedure TMainForm.ActionOutputUnselectAllExecute(Sender: TObject);
@@ -2185,6 +2185,7 @@ var
   LSearchEnabled: Boolean;
   LIsRecordingMacro: Boolean;
   LIsRecordingStopped: Boolean;
+  LActiveDocumentModified: Boolean;
 begin
   FProcessingEventHandler := True;
   try
@@ -2208,6 +2209,7 @@ begin
     LSearchEnabled := False;
     LIsRecordingMacro := False;
     LIsRecordingStopped := False;
+    LActiveDocumentModified := False;
     if LActiveDocumentFound then
     begin
       LSelectionAvailable := LActiveEditor.SelectionAvailable;
@@ -2215,6 +2217,7 @@ begin
       LIsXMLDocument := LActiveEditor.ExtraTag = EXTENSION_XML;
       LIsJSONDocument := LActiveEditor.ExtraTag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
+      LActiveDocumentModified := LActiveEditor.Modified;
 
       LSearchEnabled := LActiveEditor.Search.Visible;
 
@@ -2227,11 +2230,13 @@ begin
       if LActiveEditor.DocumentName <> '' then
         LActiveDocumentName := FormatFileName(LActiveEditor.DocumentName, LActiveEditor.Modified);
 
-      if LActiveDocumentName = '' then
-        LActiveDocumentName := FDocument.ActiveTabSheetCaption;
-
       LSelectionModeChecked := LActiveEditor.Selection.Mode = smColumn;
     end;
+    if LActiveDocumentName = '' then
+      if Assigned(PageControlDocument.ActivePage) then
+        if PageControlDocument.ActivePage.TabType = ttTab then
+          LActiveDocumentName := PageControlDocument.ActivePage.Caption;
+
     if LActiveSplitDocumentFound then
       LSelectionAvailable := LSelectionAvailable or LActiveSplitEditor.SelectionAvailable;
 
@@ -2261,7 +2266,7 @@ begin
       LCaption := LCaption + '  -';
 
     TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := LCaption;
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := LActiveDocumentName <> '';
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := PageControlDocument.PageCount > 1;
     TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveDocumentName + ']';
 
     ActionFileProperties.Enabled := LActiveDocumentFound and (LActiveDocumentName <> '');
@@ -2273,7 +2278,7 @@ begin
     ActionViewNextPage.Enabled := PageControlDocument.PageCount > 2;
     ActionViewPreviousPage.Enabled := ActionViewNextPage.Enabled;
     ActionFileSaveAs.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
-    ActionFileSave.Enabled := FDocument.ActiveDocumentModified and LActiveDocumentFound;
+    ActionFileSave.Enabled := LActiveDocumentModified and LActiveDocumentFound;
     ActionFileSaveAll.Enabled := FDocument.ModifiedDocuments and LActiveDocumentFound;
     ActionFilePrint.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
     ActionFilePrintPreview.Enabled := ActionFileClose.Enabled and LActiveDocumentFound;
@@ -2319,7 +2324,7 @@ begin
     ActionViewLineNumbers.Enabled := Assigned(FDocument) and (PageControlDocument.PageCount > 1);
     ActionViewSpecialChars.Enabled := ActionViewLineNumbers.Enabled;
     ActionDocumentInfo.Enabled := LActiveDocumentFound;
-    ActionToolsSelectForCompare.Enabled := False; // TODO: not implemented ActiveDocumentFound and not FDocument.ActiveDocumentModified;
+    ActionToolsSelectForCompare.Enabled := LActiveDocumentFound and not LActiveDocumentModified;
     ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
     ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
@@ -2841,10 +2846,7 @@ begin
   inherited;
 
   if Assigned(FPopupFilesDialog) then
-  begin
-    FPopupFilesDialog.Visible := False;
-    FPopupFilesDialog := nil;
-  end
+    FPopupFilesDialog := nil
   else
   begin
     FPopupFilesDialog := TPopupFilesDialog.Create(Self);
@@ -2879,10 +2881,7 @@ var
 begin
   inherited;
   if Assigned(FPopupEncodingDialog) then
-  begin
-    FPopupEncodingDialog.Visible := False;
-    FPopupEncodingDialog := nil;
-  end
+    FPopupEncodingDialog := nil
   else
   begin
     FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
