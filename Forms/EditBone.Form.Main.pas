@@ -1726,7 +1726,7 @@ end;
 
 procedure TMainForm.ActionToolsConvertExecute(Sender: TObject);
 begin
-  ConvertForm.Open;
+  ConvertForm(Self).Open;
 end;
 
 procedure TMainForm.ActionToolsLanguageEditorExecute(Sender: TObject);
@@ -2213,9 +2213,9 @@ begin
     if LActiveDocumentFound then
     begin
       LSelectionAvailable := LActiveEditor.SelectionAvailable;
-      LIsSQLDocument := LActiveEditor.ExtraTag = EXTENSION_SQL;
-      LIsXMLDocument := LActiveEditor.ExtraTag = EXTENSION_XML;
-      LIsJSONDocument := LActiveEditor.ExtraTag = EXTENSION_JSON;
+      LIsSQLDocument := LActiveEditor.Tag = EXTENSION_SQL;
+      LIsXMLDocument := LActiveEditor.Tag = EXTENSION_XML;
+      LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
       LActiveDocumentModified := LActiveEditor.Modified;
 
@@ -2235,7 +2235,7 @@ begin
     if LActiveDocumentName = '' then
       if Assigned(PageControlDocument.ActivePage) then
         if PageControlDocument.ActivePage.TabType = ttTab then
-          LActiveDocumentName := PageControlDocument.ActivePage.Caption;
+          LActiveDocumentName := FormatFileName(PageControlDocument.ActivePage.Caption, LActiveEditor.Modified);
 
     if LActiveSplitDocumentFound then
       LSelectionAvailable := LSelectionAvailable or LActiveSplitEditor.SelectionAvailable;
@@ -2324,7 +2324,12 @@ begin
     ActionViewLineNumbers.Enabled := Assigned(FDocument) and (PageControlDocument.PageCount > 1);
     ActionViewSpecialChars.Enabled := ActionViewLineNumbers.Enabled;
     ActionDocumentInfo.Enabled := LActiveDocumentFound;
+    {$IFDEF DEBUG} // TODO
     ActionToolsSelectForCompare.Enabled := LActiveDocumentFound and not LActiveDocumentModified;
+    {$ELSE}
+    ActionToolsCompareFiles.Enabled := False;
+    ActionToolsSelectForCompare.Enabled := False;
+    {$ENDIF}
     ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
     ActionDocumentFormatXML.Enabled := LActiveDocumentFound and LIsXMLDocument;
@@ -2826,16 +2831,16 @@ var
   function GetFiles: TStrings;
   var
     i: Integer;
-    LEditor: TBCEditor;
+    LTabSheet: TsTabSheet;
   begin
     Result := TStringList.Create;
     for i := 0 to PageControlDocument.PageCount - 1 do
     begin
-      LEditor := FDocument.GetEditor(PageControlDocument.Pages[i]);
-      if Assigned(LEditor) then
+      LTabSheet := PageControlDocument.Pages[i] as TsTabSheet;
+      if Assigned(LTabSheet.Editor) then
       begin
-        if LEditor.FileName <> '' then
-          Result.AddObject(LEditor.DocumentName, TObject(i))
+        if LTabSheet.Editor.FileName <> '' then
+          Result.AddObject(LTabSheet.Editor.DocumentName, TObject(i))
         else
           Result.AddObject(PageControlDocument.Pages[i].Caption, TObject(i));
       end;
