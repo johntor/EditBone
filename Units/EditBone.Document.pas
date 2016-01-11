@@ -830,36 +830,23 @@ end;
 procedure TEBDocument.SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
 var
   i: Integer;
-  Temp: string;
-  LBookmarkIndex, Ln, Ch: Integer;
+  LTemp: string;
+  LBookmarkIndex: Integer;
   LTextPosition: TBCEditorTextPosition;
-
-  function RemoveBefore(ASubStr: string): string;
-  begin
-    Result := System.Copy(Temp, Pos(ASubStr, Temp) + 1, Length(Temp));
-  end;
-
-  function GetToken(ASubStr: string): string;
-  begin
-    Result := System.Copy(Temp, 1, Pos(ASubStr, Temp) - 1)
-  end;
-
 begin
   if Assigned(Bookmarks) then
   begin
     for i := 0 to Bookmarks.Count - 1 do
     begin
-      Temp := Bookmarks.Strings[i];
-      if Pos(Editor.DocumentName, Temp) <> 0 then
+      LTemp := Bookmarks.Strings[i];
+      if Pos(Editor.DocumentName, LTemp) <> 0 then
       begin
-        Temp := RemoveBefore('=');
-        LBookmarkIndex := StrToInt(GetToken(';'));
-        Temp := RemoveBefore(';');
-        Ln := StrToInt(GetToken(';'));
-        Temp := RemoveBefore(';');
-        Ch := StrToInt(Temp);
-        LTextPosition.Char := Ch;
-        LTextPosition.Line := Ln;
+        LTemp := RemoveTokenFromStart('=', LTemp);
+        LBookmarkIndex := StrToInt(GetNextToken(';', LTemp));
+        LTemp := RemoveTokenFromStart(';', LTemp);
+        LTextPosition.Line := StrToInt(GetNextToken(';', LTemp));
+        LTemp := RemoveTokenFromStart(';', LTemp);
+        LTextPosition.Char := StrToInt(LTemp);
         Editor.SetBookMark(LBookmarkIndex, LTextPosition);
       end;
     end;
@@ -869,43 +856,43 @@ end;
 procedure TEBDocument.AddToReopenFiles(const FileName: string);
 var
   i: Integer;
-  Files: TStrings;
-  IniFile: string;
+  LFiles: TStrings;
+  LIniFile: string;
 begin
-  IniFile := GetIniFilename;
-  Files := TStringList.Create;
+  LIniFile := GetIniFilename;
+  LFiles := TStringList.Create;
   try
     { Read section }
-    with TBigIniFile.Create(IniFile) do
+    with TBigIniFile.Create(LIniFile) do
     try
-      ReadSectionValues('FileReopenFiles', Files);
+      ReadSectionValues('FileReopenFiles', LFiles);
     finally
       Free;
     end;
     { Insert filename }
-    for i := 0 to Files.Count - 1 do
-      Files[i] := System.Copy(Files[i], Pos('=', Files[i]) + 1, Length(Files[i]));
-    for i := Files.Count - 1 downto 0 do
-      if Files[i] = FileName then
-        Files.Delete(i);
-    Files.Insert(0, FileName);
-    while Files.Count > 10 do
-      Files.Delete(Files.Count - 1);
+    for i := 0 to LFiles.Count - 1 do
+      LFiles[i] := System.Copy(LFiles[i], Pos('=', LFiles[i]) + 1, Length(LFiles[i]));
+    for i := LFiles.Count - 1 downto 0 do
+      if LFiles[i] = FileName then
+        LFiles.Delete(i);
+    LFiles.Insert(0, FileName);
+    while LFiles.Count > 10 do
+      LFiles.Delete(LFiles.Count - 1);
     { write section }
-    with TBigIniFile.Create(IniFile) do
+    with TBigIniFile.Create(LIniFile) do
     try
       EraseSection('FileReopenFiles');
-      for i := 0 to Files.Count - 1 do
-        WriteString('FileReopenFiles', IntToStr(i), Files.Strings[i]);
+      for i := 0 to LFiles.Count - 1 do
+        WriteString('FileReopenFiles', IntToStr(i), LFiles.Strings[i]);
     finally
       Free;
     end;
     { if ini file is open in editor reload it because time has changed }
     for i := 0 to PageControl.PageCount - 2 do
-      if PageControl.Pages[i].Caption = ExtractFileName(IniFile) then
+      if PageControl.Pages[i].Caption = ExtractFileName(LIniFile) then
         Refresh(i);
   finally
-    Files.Free;
+    LFiles.Free;
   end;
 end;
 
@@ -971,17 +958,17 @@ end;
 function TEBDocument.Close(AFreePage: Boolean = True; ATabIndex: Integer = -1): Integer;
 var
   LActivePageIndex: Integer;
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   Result := mrNone;
 
   if ATabIndex <> -1 then
-    Editor := (PageControl.Pages[ATabIndex] as TsTabSheet).Editor
+    LEditor := (PageControl.Pages[ATabIndex] as TsTabSheet).Editor
   else
-    Editor := GetActiveEditor;
+    LEditor := GetActiveEditor;
 
   PageControl.TabClosed := True;
-  if Assigned(Editor) and Editor.Modified then
+  if Assigned(LEditor) and LEditor.Modified then
   begin
     Result := SaveChanges;
     if Result = mrYes then
@@ -1019,19 +1006,19 @@ end;
 
 procedure TEBDocument.CloseAll;
 var
-  Rslt, i: Integer;
+  i, LResult: Integer;
 begin
   Application.ProcessMessages;
   FProcessing := True;
-  Rslt := mrNone;
+  LResult := mrNone;
 
   if FModifiedDocuments then
   begin
-    Rslt := SaveChanges;
-    if Rslt = mrYes then
+    LResult := SaveChanges;
+    if LResult = mrYes then
       SaveAll;
   end;
-  if Rslt <> mrCancel then
+  if LResult <> mrCancel then
   begin
     Screen.Cursor := crHourGlass;
     try
@@ -1060,30 +1047,30 @@ end;
 procedure TEBDocument.CloseAllOtherPages;
 var
   i: Integer;
-  Rslt: Integer;
-  ActiveEditor, Editor: TBCEditor;
+  LResult: Integer;
+  LActiveEditor, LEditor: TBCEditor;
 begin
   Application.ProcessMessages;
   FProcessing := True;
 
-  Rslt := mrNone;
+  LResult := mrNone;
 
-  ActiveEditor := GetActiveEditor;
+  LActiveEditor := GetActiveEditor;
 
   if GetModifiedDocuments(False) then
   begin
-    Rslt := SaveChanges(True);
+    LResult := SaveChanges(True);
 
-    if Rslt = mrYes then
+    if LResult = mrYes then
       for i := 0 to PageControl.PageCount - 2 do
       begin
-        Editor := (PageControl.Pages[i] as TsTabSheet).Editor;
-        if Assigned(Editor) and Editor.Modified and (Editor <> ActiveEditor) then
+        LEditor := (PageControl.Pages[i] as TsTabSheet).Editor;
+        if Assigned(LEditor) and LEditor.Modified and (LEditor <> LActiveEditor) then
           Save(PageControl.Pages[i]);
       end;
   end;
 
-  if Rslt <> mrCancel then
+  if LResult <> mrCancel then
   begin
     PageControl.ActivePage.PageIndex := 0; { move the page first }
     Screen.Cursor := crHourGlass;
@@ -1102,8 +1089,8 @@ begin
       Screen.Cursor := crDefault;
     end;
     PageControl.ActivePageIndex := 0;
-    Editor := GetActiveEditor;
-    if Assigned(Editor) and (Editor.DocumentName = '') then
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) and (LEditor.DocumentName = '') then
       FNumberOfNewDocument := 1
     else
       FNumberOfNewDocument := 0
@@ -1121,8 +1108,8 @@ end;
 
 function TEBDocument.Save(TabSheet: TTabSheet; ShowDialog: Boolean): string;
 var
-  AFileName, FilePath: string;
-  FilterIndex: Cardinal;
+  LFileName, LFilePath: string;
+  LFilterIndex: Cardinal;
   LTabSheet: TsTabSheet;
 begin
   Result := '';
@@ -1133,25 +1120,25 @@ begin
     begin
       if LTabSheet.Editor.DocumentName = '' then
       begin
-        AFileName := Trim(TabSheet.Caption);
-        AFileName := FormatFileName(AFileName);
+        LFileName := Trim(TabSheet.Caption);
+        LFileName := FormatFileName(LFileName);
       end
       else
-        AFileName := LTabSheet.Editor.FileName;
+        LFileName := LTabSheet.Editor.FileName;
 
-      FilePath := LTabSheet.Editor.FilePath;
-      FilterIndex := OptionsContainer.GetFilterIndex(ExtractFileExt(AFileName));
-      SaveDialog.InitialDir := FilePath;
+      LFilePath := LTabSheet.Editor.FilePath;
+      LFilterIndex := OptionsContainer.GetFilterIndex(ExtractFileExt(LFileName));
+      SaveDialog.InitialDir := LFilePath;
       SaveDialog.Filter := OptionsContainer.Filters;
       SaveDialog.Title := LanguageDataModule.GetConstant('SaveAs');
-      SaveDialog.FilterIndex := FilterIndex;
-      SaveDialog.FileName := AFileName;
+      SaveDialog.FilterIndex := LFilterIndex;
+      SaveDialog.FileName := LFileName;
       if SaveDialog.Execute(Application.Handle) then
       begin
         Result := SaveDialog.Files[0];
         if ExtractFileExt(Result) = '' then
-          if (FilterIndex > 1) and (FilterIndex < OptionsContainer.FilterCount) then
-            Result := Format('%s%s', [Result, OptionsContainer.GetFilterExt(FilterIndex)]);
+          if (LFilterIndex > 1) and (LFilterIndex < OptionsContainer.FilterCount) then
+            Result := Format('%s%s', [Result, OptionsContainer.GetFilterExt(LFilterIndex)]);
         TabSheet.Caption := ExtractFileName(Result);
         LTabSheet.Editor.DocumentName := Result;
       end
@@ -2477,62 +2464,65 @@ end;
 
 procedure TEBDocument.RecordMacro;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
   begin
-    if not Assigned(Editor.MacroRecorder) then
+    if not Assigned(LEditor.MacroRecorder) then
     begin
-      Editor.MacroRecorder := TBCEditorMacroRecorder.Create(Editor);
-      Editor.MacroRecorder.RecordMacro(Editor);
+      LEditor.MacroRecorder := TBCEditorMacroRecorder.Create(LEditor);
+      LEditor.MacroRecorder.RecordMacro(LEditor);
     end
-    else if Editor.MacroRecorder.State = msStopped then
+    else
+    if LEditor.MacroRecorder.State = msStopped then
     begin
       if AskYesOrNo(LanguageDataModule.GetYesOrNoMessage('RecordMacro')) then
       begin
-        Editor.MacroRecorder.Clear;
-        Editor.MacroRecorder.RecordMacro(Editor);
+        LEditor.MacroRecorder.Clear;
+        LEditor.MacroRecorder.RecordMacro(LEditor);
       end;
     end
-    else if Editor.MacroRecorder.State = msRecording then
-      Editor.MacroRecorder.Pause
-    else if Editor.MacroRecorder.State = msPaused then
-      Editor.MacroRecorder.Resume
+    else
+    if LEditor.MacroRecorder.State = msRecording then
+      LEditor.MacroRecorder.Pause
+    else
+    if LEditor.MacroRecorder.State = msPaused then
+      LEditor.MacroRecorder.Resume
   end;
 end;
 
 procedure TEBDocument.StopMacro;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
   begin
-    if Assigned(Editor.MacroRecorder) then
-      Editor.MacroRecorder.Stop;
+    if Assigned(LEditor.MacroRecorder) then
+      LEditor.MacroRecorder.Stop;
   end;
 end;
 
 procedure TEBDocument.PlaybackMacro;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
   begin
-    if Assigned(Editor.MacroRecorder) then
-      Editor.MacroRecorder.PlaybackMacro(Editor);
+    if Assigned(LEditor.MacroRecorder) then
+      LEditor.MacroRecorder.PlaybackMacro(LEditor);
   end;
 end;
 
 procedure TEBDocument.SaveMacro;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    if Assigned(Editor.MacroRecorder) then
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    if Assigned(LEditor.MacroRecorder) then
     begin
       SaveDialog.InitialDir := '';
       SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll]
@@ -2541,36 +2531,36 @@ begin
       SaveDialog.FileName := '';
       SaveDialog.DefaultExt := 'mcr';
       if SaveDialog.Execute(Application.Handle) then
-        Editor.MacroRecorder.SaveToFile(SaveDialog.Files[0]);
+        LEditor.MacroRecorder.SaveToFile(SaveDialog.Files[0]);
     end;
 end;
 
 procedure TEBDocument.LoadMacro;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
   begin
     OpenDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
     OpenDialog.Title := LanguageDataModule.GetConstant('Open');
     OpenDialog.DefaultExt := 'mcr';
     if OpenDialog.Execute(Application.Handle) then
     begin
-      if not Assigned(Editor.MacroRecorder) then
-        Editor.MacroRecorder := TBCEditorMacroRecorder.Create(Editor);
-      Editor.MacroRecorder.LoadFromFile(OpenDialog.Files[0]);
+      if not Assigned(LEditor.MacroRecorder) then
+        LEditor.MacroRecorder := TBCEditorMacroRecorder.Create(LEditor);
+      LEditor.MacroRecorder.LoadFromFile(OpenDialog.Files[0]);
     end;
   end;
 end;
 
 procedure TEBDocument.FileProperties;
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
-  Editor := GetActiveEditor;
-  if Assigned(Editor) then
-    FilePropertiesDialog(Editor.DocumentName);
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    FilePropertiesDialog(LEditor.DocumentName);
 end;
 
 procedure TEBDocument.ToggleSplit;
@@ -2668,19 +2658,19 @@ end;
 
 procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; const FileName: string);
 var
-  Ext, ItemString, Token: string;
+  LExt, LItemString, LToken: string;
   i: Integer;
 begin
-  Ext := '*' + LowerCase(ExtractFileExt(FileName));
+  LExt := '*' + LowerCase(ExtractFileExt(FileName));
 
   for i := 0 to OptionsContainer.FileTypes.Count - 1 do
   begin
-    ItemString := StringBetween(OptionsContainer.FileTypes.ValueFromIndex[i], '(', ')');
-    while ItemString <> '' do
+    LItemString := StringBetween(OptionsContainer.FileTypes.ValueFromIndex[i], '(', ')');
+    while LItemString <> '' do
     begin
-      Token := GetNextToken(';', ItemString);
-      ItemString := RemoveTokenFromStart(';', ItemString);
-      if Ext = Token then
+      LToken := GetNextToken(';', LItemString);
+      LItemString := RemoveTokenFromStart(';', LItemString);
+      if LExt = LToken then
       begin
         if Pos('SQL', OptionsContainer.FileTypes.Names[i]) <> 0 then
           SetHighlighter(AEditor, OptionsContainer.DefaultSQLHighlighter)
