@@ -293,7 +293,6 @@ begin
       LTabSheet.XMLTree.Margins.Top := 2;
       LTabSheet.XMLTree.Margins.Right := 0;
       LTabSheet.XMLTree.Margins.Bottom := 2;
-      LTabSheet.Editor.Margins.Left := 0;
       LTabSheet.XMLTree.ProgressBar := FProgressBar;
       LTabSheet.XMLTree.Editor := LTabSheet.Editor;
       LTabSheet.XMLTree.Images := EBDataModuleImages.ImageListXMLTree;
@@ -311,14 +310,17 @@ begin
       LTabSheet.SplitterVertical.Parent := PageControl.ActivePage;
       LTabSheet.SplitterVertical.Align := alLeft;
       LTabSheet.SplitterVertical.Left := LTabSheet.XMLTree.Left + 1; { splitter always right }
+
+      LTabSheet.Editor.Margins.Left := 0;
     end
     else
     begin
-      LTabSheet.Editor.Margins.Left := 2;
       LTabSheet.XMLTree.Free;
       LTabSheet.XMLTree := nil;
       LTabSheet.SplitterVertical.Parent := nil;
       LTabSheet.SplitterVertical.Free;
+
+      LTabSheet.Editor.Margins.Left := 2;
     end;
     Result := Assigned(LTabSheet.XMLTree);
   end;
@@ -831,6 +833,17 @@ var
   Temp: string;
   LBookmarkIndex, Ln, Ch: Integer;
   LTextPosition: TBCEditorTextPosition;
+
+  function RemoveBefore(ASubStr: string): string;
+  begin
+    Result := System.Copy(Temp, Pos(ASubStr, Temp) + 1, Length(Temp));
+  end;
+
+  function GetToken(ASubStr: string): string;
+  begin
+    Result := System.Copy(Temp, 1, Pos(ASubStr, Temp) - 1)
+  end;
+
 begin
   if Assigned(Bookmarks) then
   begin
@@ -839,12 +852,11 @@ begin
       Temp := Bookmarks.Strings[i];
       if Pos(Editor.DocumentName, Temp) <> 0 then
       begin
-        // TODO: use function
-        Temp := System.Copy(Temp, Pos('=', Temp) + 1, Length(Temp));
-        LBookmarkIndex := StrToInt(System.Copy(Temp, 1, Pos(';', Temp) - 1));
-        Temp := System.Copy(Temp, Pos(';', Temp) + 1, Length(Temp));
-        Ln := StrToInt(System.Copy(Temp, 1, Pos(';', Temp) - 1));
-        Temp := System.Copy(Temp, Pos(';', Temp) + 1, Length(Temp));
+        Temp := RemoveBefore('=');
+        LBookmarkIndex := StrToInt(GetToken(';'));
+        Temp := RemoveBefore(';');
+        Ln := StrToInt(GetToken(';'));
+        Temp := RemoveBefore(';');
         Ch := StrToInt(Temp);
         LTextPosition.Char := Ch;
         LTextPosition.Line := Ln;
@@ -987,7 +999,8 @@ begin
       PageControl.Pages[LActivePageIndex].Free;
       if LActivePageIndex > 0 then
         PageControl.ActivePageIndex := LActivePageIndex - 1
-      else if PageControl.PageCount > 0 then
+      else
+      if PageControl.PageCount > 0 then
         PageControl.ActivePageIndex := 0;
     end
     else
@@ -1110,23 +1123,23 @@ function TEBDocument.Save(TabSheet: TTabSheet; ShowDialog: Boolean): string;
 var
   AFileName, FilePath: string;
   FilterIndex: Cardinal;
-  LEditor: TBCEditor;
+  LTabSheet: TsTabSheet;
 begin
   Result := '';
-  LEditor := (TabSheet as TsTabSheet).Editor;
-  if Assigned(LEditor) then
+  LTabSheet := TabSheet as TsTabSheet;
+  if Assigned(LTabSheet.Editor) then
   begin
-    if (LEditor.DocumentName = '') or ShowDialog then
+    if (LTabSheet.Editor.DocumentName = '') or ShowDialog then
     begin
-      if LEditor.DocumentName = '' then
+      if LTabSheet.Editor.DocumentName = '' then
       begin
         AFileName := Trim(TabSheet.Caption);
         AFileName := FormatFileName(AFileName);
       end
       else
-        AFileName := LEditor.FileName;
+        AFileName := LTabSheet.Editor.FileName;
 
-      FilePath := LEditor.FilePath;
+      FilePath := LTabSheet.Editor.FilePath;
       FilterIndex := OptionsContainer.GetFilterIndex(ExtractFileExt(AFileName));
       SaveDialog.InitialDir := FilePath;
       SaveDialog.Filter := OptionsContainer.Filters;
@@ -1140,16 +1153,16 @@ begin
           if (FilterIndex > 1) and (FilterIndex < OptionsContainer.FilterCount) then
             Result := Format('%s%s', [Result, OptionsContainer.GetFilterExt(FilterIndex)]);
         TabSheet.Caption := ExtractFileName(Result);
-        LEditor.DocumentName := Result;
+        LTabSheet.Editor.DocumentName := Result;
       end
       else
       begin
-        if LEditor.CanFocus then
-          LEditor.SetFocus;
+        if LTabSheet.Editor.CanFocus then
+          LTabSheet.Editor.SetFocus;
         Exit;
       end;
     end;
-    with LEditor do
+    with LTabSheet.Editor do
     begin
       SaveToFile(DocumentName);
       if not OptionsContainer.UndoAfterSave then
@@ -1179,7 +1192,7 @@ end;
 procedure TEBDocument.SaveAll;
 var
   i: Integer;
-  LEditor: TBCEditor;
+  LTabSheet: TsTabSheet;
 begin
   FProcessing := True;
   Application.ProcessMessages;
@@ -1190,8 +1203,8 @@ begin
     begin
       ProgressBar.StepIt;
       Application.ProcessMessages;
-      LEditor := (PageControl.Pages[i] as TsTabSheet).Editor;
-      if Assigned(LEditor) and LEditor.Modified then
+      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      if Assigned(LTabSheet.Editor) and LTabSheet.Editor.Modified then
         Save(PageControl.Pages[i]);
     end;
     FProgressBar.Hide;

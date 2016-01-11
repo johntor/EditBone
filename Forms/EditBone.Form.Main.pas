@@ -2233,7 +2233,7 @@ begin
       LSelectionModeChecked := LActiveEditor.Selection.Mode = smColumn;
     end;
     if LActiveDocumentName = '' then
-      if Assigned(PageControlDocument.ActivePage) then
+      if LActiveDocumentFound then
         if PageControlDocument.ActivePage.TabType = ttTab then
           LActiveDocumentName := FormatFileName(PageControlDocument.ActivePage.Caption, LActiveEditor.Modified);
 
