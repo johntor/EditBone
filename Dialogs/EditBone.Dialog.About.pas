@@ -88,7 +88,7 @@ begin
   inherited;
   LabelVersion.Caption := Format(LabelVersion.Caption, [BCCommon.FileUtils.GetFileVersion(Application.ExeName),
     {$IFDEF WIN64}64{$ELSE}32{$ENDIF}]);
-  LabelCopyright.Caption := Format(LabelCopyright.Caption, ['© 2010-2015 Lasse Rautiainen']);
+  LabelCopyright.Caption := Format(LabelCopyright.Caption, ['© 2010-2016 Lasse Rautiainen']);
   if Width - LabelCopyright.Left - LabelCopyright.Width < 0 then
     Width := LabelCopyright.Left + LabelCopyright.Width + 20;
   { initialize the structure }

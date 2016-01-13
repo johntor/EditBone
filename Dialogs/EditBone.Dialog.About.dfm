@@ -49,7 +49,7 @@ inherited AboutDialog: TAboutDialog
     object LabelVersion: TLabel
       Left = 10
       Top = 40
-      Width = 104
+      Width = 103
       Height = 15
       Caption = 'Version %s (%d-bit)'
       Font.Charset = DEFAULT_CHARSET
@@ -524,7 +524,7 @@ inherited AboutDialog: TAboutDialog
       AlignWithMargins = True
       Left = 10
       Top = 46
-      Width = 117
+      Width = 449
       Height = 13
       Margins.Left = 10
       Margins.Right = 10
@@ -541,7 +541,7 @@ inherited AboutDialog: TAboutDialog
       AlignWithMargins = True
       Left = 10
       Top = 160
-      Width = 27
+      Width = 449
       Height = 13
       Margins.Left = 10
       Margins.Right = 10
@@ -558,7 +558,7 @@ inherited AboutDialog: TAboutDialog
       AlignWithMargins = True
       Left = 10
       Top = 89
-      Width = 142
+      Width = 449
       Height = 13
       Margins.Left = 10
       Margins.Right = 10
@@ -575,7 +575,7 @@ inherited AboutDialog: TAboutDialog
       AlignWithMargins = True
       Left = 10
       Top = 3
-      Width = 140
+      Width = 449
       Height = 13
       Margins.Left = 10
       Margins.Right = 10
