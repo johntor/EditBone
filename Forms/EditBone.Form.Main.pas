@@ -1085,12 +1085,12 @@ end;
 
 procedure TMainForm.ActionDirectoryContextMenuExecute(Sender: TObject);
 var
-  s: string;
+  LFileName: string;
 begin
-  s := FDirectory.SelectedFile;
-  if s = '' then
-    s :=  FDirectory.SelectedPath;
-  DisplayContextMenu(Handle, s, ScreenToClient(Mouse.CursorPos));
+  LFileName := FDirectory.SelectedFile;
+  if LFileName = '' then
+    LFileName :=  FDirectory.SelectedPath;
+  DisplayContextMenu(Handle, LFileName, ScreenToClient(Mouse.CursorPos));
 end;
 
 procedure TMainForm.ActionDirectoryDeleteExecute(Sender: TObject);
@@ -1706,12 +1706,12 @@ end;
 
 procedure TMainForm.ActionSelectReopenFileExecute(Sender: TObject);
 var
-  FileName: string;
+  LFileName: string;
   LMenuItem: TMenuItem;
 begin
   LMenuItem := Sender as TMenuItem;
-  FileName := System.Copy(LMenuItem.Caption, Pos(' ', LMenuItem.Caption) + 1, Length(LMenuItem.Caption));
-  FDocument.Open(FileName);
+  LFileName := System.Copy(LMenuItem.Caption, Pos(' ', LMenuItem.Caption) + 1, Length(LMenuItem.Caption));
+  FDocument.Open(LFileName);
 end;
 
 procedure TMainForm.ChangeSkin(Sender: TObject);
@@ -1738,7 +1738,7 @@ end;
 procedure TMainForm.CreateToolbar(ACreate: Boolean = False);
 var
   i, LLeft: Integer;
-  s: string;
+  LToken: string;
   LToolbarItems: TStrings;
   LIsChanged: Boolean;
   LSpeedButton: TBCSpeedButton;
@@ -1788,10 +1788,10 @@ begin
           LSpeedButton.SkinData.SkinSection := 'TOOLBUTTON';
           LSpeedButton.Layout := Vcl.Buttons.blGlyphTop;
 
-          s := GetTokenAfter('=', LToolbarItems.Strings[i]);
-          if s <> '-' then
+          LToken := GetTokenAfter('=', LToolbarItems.Strings[i]);
+          if LToken <> '-' then
           begin
-            LSpeedButton.Action := FindItemByName(s);
+            LSpeedButton.Action := FindItemByName(LToken);
             LSpeedButton.ShowCaption := False;
             if Assigned(LSpeedButton.Action) and TAction(LSpeedButton.Action).AutoCheck then
             begin
@@ -1859,10 +1859,10 @@ end;
 
 procedure TMainForm.ActionToggleBookmarksExecute(Sender: TObject);
 var
-  Action: TAction;
+  LAction: TAction;
 begin
-  Action := Sender as TAction;
-  FDocument.ToggleBookMark(Action.Tag);
+  LAction := Sender as TAction;
+  FDocument.ToggleBookMark(LAction.Tag);
 end;
 
 procedure TMainForm.ActionEditToggleCaseAlternatingExecute(Sender: TObject);
@@ -1897,10 +1897,10 @@ end;
 
 procedure TMainForm.ActionGotoBookmarksExecute(Sender: TObject);
 var
-  Action: TAction;
+  LAction: TAction;
 begin
-  Action := Sender as TAction;
-  FDocument.GotoBookMarks(Action.Tag);
+  LAction := Sender as TAction;
+  FDocument.GotoBookMarks(LAction.Tag);
 end;
 
 procedure TMainForm.ActionToolbarMenuSkinExecute(Sender: TObject);
@@ -2396,12 +2396,12 @@ end;
 procedure TMainForm.SetBookmarks;
 var
   i: Integer;
-  BookmarkList: TBCEditorBookmarkList;
+  LBookmarkList: TBCEditorBookmarkList;
   LActionGotoBookmarks, LActionToggleBookmarks: TAction;
 begin
   if OptionsContainer.LeftMarginShowBookmarks then
   begin
-    BookmarkList := FDocument.GetActiveBookmarkList;
+    LBookmarkList := FDocument.GetActiveBookmarkList;
     { Bookmarks }
     for i := 1 to 9 do
     begin
@@ -2415,44 +2415,44 @@ begin
       if Assigned(LActionToggleBookmarks) then
         LActionToggleBookmarks.Caption := Format('%s &%d', [LanguageDataModule.GetConstant('Bookmark'), i]);
     end;
-    if Assigned(BookmarkList) then
-    for i := 0 to BookmarkList.Count - 1 do
+    if Assigned(LBookmarkList) then
+    for i := 0 to LBookmarkList.Count - 1 do
     begin
-      LActionGotoBookmarks := TAction(FindComponent(Format('ActionGotoBookmarks%d', [BookmarkList.Items[i].Index + 1])));
+      LActionGotoBookmarks := TAction(FindComponent(Format('ActionGotoBookmarks%d', [LBookmarkList.Items[i].Index + 1])));
       if Assigned(LActionGotoBookmarks) then
       begin
         LActionGotoBookmarks.Enabled := True;
         LActionGotoBookmarks.Caption := Format('%s &%d: %s %d', [LanguageDataModule.GetConstant('Bookmark'),
-          BookmarkList.Items[i].Index + 1, LanguageDataModule.GetConstant('Line'), BookmarkList.Items[i].Line]);
+          LBookmarkList.Items[i].Index + 1, LanguageDataModule.GetConstant('Line'), LBookmarkList.Items[i].Line]);
       end;
-      LActionToggleBookmarks := TAction(FindComponent(Format('ActionToggleBookmarks%d', [BookmarkList.Items[i].Index + 1])));
+      LActionToggleBookmarks := TAction(FindComponent(Format('ActionToggleBookmarks%d', [LBookmarkList.Items[i].Index + 1])));
       if Assigned(LActionToggleBookmarks) then
         LActionToggleBookmarks.Caption := Format('%s &%d: %s %d', [LanguageDataModule.GetConstant('Bookmark'),
-          BookmarkList.Items[i].Index + 1, LanguageDataModule.GetConstant('Line'), BookmarkList.Items[i].Line]);
+          LBookmarkList.Items[i].Index + 1, LanguageDataModule.GetConstant('Line'), LBookmarkList.Items[i].Line]);
     end;
   end;
 end;
 
 procedure TMainForm.CreateLanguageMenu(AMenuItem: TMenuItem);
 var
-  LanguagePath, FileName, ExtractedFileName, LanguageName: string;
+  LLanguagePath, LFileName, LExtractedFileName, LLanguageName: string;
   LMenuItem: TMenuItem;
 begin
   ActionToolbarMenuLanguage.Enabled := False;
   AMenuItem.Clear;
 
-  LanguagePath := IncludeTrailingPathDelimiter(Format('%s%s', [ExtractFilePath(ParamStr(0)), 'Languages']));
-  if not DirectoryExists(LanguagePath) then
+  LLanguagePath := IncludeTrailingPathDelimiter(Format('%s%s', [ExtractFilePath(ParamStr(0)), 'Languages']));
+  if not DirectoryExists(LLanguagePath) then
     Exit;
 
-  LanguageName := GetSelectedLanguage('English');
-  for FileName in TDirectory.GetFiles(LanguagePath, '*.lng') do
+  LLanguageName := GetSelectedLanguage('English');
+  for LFileName in TDirectory.GetFiles(LLanguagePath, '*.lng') do
   begin
     LMenuItem := TMenuItem.Create(Application);
-    ExtractedFileName := ExtractFilename(ChangeFileExt(FileName, ''));
-    LMenuItem.Caption := ExtractedFileName;
+    LExtractedFileName := ExtractFilename(ChangeFileExt(LFileName, ''));
+    LMenuItem.Caption := LExtractedFileName;
     LMenuItem.OnClick := LanguageMenuClick;
-    LMenuItem.Checked := LanguageName = ExtractedFileName;
+    LMenuItem.Checked := LLanguageName = LExtractedFileName;
     LMenuItem.RadioItem := True;
     AMenuItem.Add(LMenuItem);
   end;
@@ -2514,7 +2514,7 @@ procedure TMainForm.UpdateMenuBarLanguage;
   procedure InitializeSpeedButtons(Panels: array of TBCPanel);
   var
     i, j: Integer;
-    s: string;
+    LCaption: string;
     LSpeedButton: TBCSpeedButton;
     LTextWidth: Integer;
     LAction: TBasicAction;
@@ -2531,15 +2531,15 @@ procedure TMainForm.UpdateMenuBarLanguage;
           LAction := LSpeedButton.Action;
           LSpeedButton.Action := LAction;
 
-          s := LSpeedButton.Caption;
-          s := StringReplace(s, '.', '', [rfReplaceAll]);
-          s := StringReplace(s, '&', '', [rfReplaceAll]);
-          LSpeedButton.Caption := s;
-          LTextWidth := LSpeedButton.Canvas.TextWidth(s);
+          LCaption := LSpeedButton.Caption;
+          LCaption := StringReplace(LCaption, '.', '', [rfReplaceAll]);
+          LCaption := StringReplace(LCaption, '&', '', [rfReplaceAll]);
+          LSpeedButton.Caption := LCaption;
+          LTextWidth := LSpeedButton.Canvas.TextWidth(LCaption);
           LSpeedButton.Width := Max(60, LTextWidth + 8);
           if LSpeedButton.ButtonStyle = tbsDropDown then
             LSpeedButton.Width := LSpeedButton.Width + 12;
-          LSpeedButton.Width := LSpeedButton.Width - s.CountChar(',') * LSpeedButton.Canvas.TextWidth(',');
+          LSpeedButton.Width := LSpeedButton.Width - LCaption.CountChar(',') * LSpeedButton.Canvas.TextWidth(',');
         end;
       end;
   end;
@@ -2565,7 +2565,7 @@ end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 var
-  Rslt: Integer;
+  LResult: Integer;
 begin
   if FOutput.ProcessingTabSheet then
   begin
@@ -2577,29 +2577,16 @@ begin
 
   if FDocument.ModifiedDocuments then
   begin
-    Rslt := SaveChanges;
-    if Rslt = mrYes then
+    LResult := SaveChanges;
+    if LResult = mrYes then
       FDocument.SaveAll;
-    if Rslt = mrCancel then
+    if LResult = mrCancel then
     begin
       Action := caNone;
       Exit;
     end;
   end;
 end;
-
-{function TMainForm.GetStringList(APopupMenu: TPopupMenu): TStringList;
-var
-  i, j: Integer;
-begin
-  Result := TStringList.Create;
-  for i := 0 to APopupMenu.Items.Count - 1 do
-    if APopupMenu.Items[i].Count > 0 then
-    for j := 0 to APopupMenu.Items[i].Count - 1 do
-      Result.Add(APopupMenu.Items[i].Items[j].Caption)
-    else
-      Result.Add(APopupMenu.Items[i].Caption);
-end;}
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
@@ -2653,7 +2640,7 @@ end;
 
 procedure TMainForm.SetOptions;
 var
-  PanelWidth: Integer;
+  LPanelWidth: Integer;
 begin
   PanelToolbar.Visible := OptionsContainer.ToolbarVisible;
   PanelMenuBar.Visible := OptionsContainer.MenuBarVisible;
@@ -2695,9 +2682,9 @@ begin
   if OptionsContainer.StatusBarShowModified then
   begin
     StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := EDITBONE_STATUS_BAR_PANEL_WIDTH;
-    PanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text) + 10;
-    if PanelWidth > EDITBONE_STATUS_BAR_PANEL_WIDTH then
-      StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := PanelWidth;
+    LPanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text) + 10;
+    if LPanelWidth > EDITBONE_STATUS_BAR_PANEL_WIDTH then
+      StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := LPanelWidth;
   end
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := 0;
@@ -2756,7 +2743,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 var
-  Editor: TBCEditor;
+  LEditor: TBCEditor;
 begin
   inherited;
 
@@ -2774,10 +2761,10 @@ begin
   if PanelOutput.Visible then
     PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
 
-  Editor := FDocument.GetActiveEditor;
-  if Assigned(Editor) then
-    if Editor.CanFocus then
-      Editor.SetFocus;
+  LEditor := FDocument.GetActiveEditor;
+  if Assigned(LEditor) then
+    if LEditor.CanFocus then
+      LEditor.SetFocus;
 end;
 
 procedure TMainForm.StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -2832,6 +2819,7 @@ var
   var
     i: Integer;
     LTabSheet: TsTabSheet;
+    LName: string;
   begin
     Result := TStringList.Create;
     for i := 0 to PageControlDocument.PageCount - 1 do
@@ -2840,9 +2828,10 @@ var
       if Assigned(LTabSheet.Editor) then
       begin
         if LTabSheet.Editor.FileName <> '' then
-          Result.AddObject(LTabSheet.Editor.DocumentName, TObject(i))
+          LName := LTabSheet.Editor.DocumentName
         else
-          Result.AddObject(PageControlDocument.Pages[i].Caption, TObject(i));
+          LName := PageControlDocument.Pages[i].Caption;
+        Result.AddObject(LName, TObject(i));
       end;
     end;
   end;
@@ -3076,17 +3065,17 @@ end;
 function TMainForm.GetActionList: TObjectList<TAction>;
 var
   i: Integer;
-  Action: TAction;
+  LAction: TAction;
 begin
   Result := TObjectList<TAction>.Create;
   for i := 0 to ActionList.ActionCount - 1 do
     if (ActionList.Actions[i].ImageIndex <> -1) and (ActionList.Actions[i].Hint <> '') then
     begin
-      Action := TAction.Create(nil);
-      Action.Name := ActionList.Actions[i].Name;
-      Action.Caption := StringReplace(ActionList.Actions[i].Caption, '&', '', []);
-      Action.ImageIndex := ActionList.Actions[i].ImageIndex;
-      Result.Add(Action);
+      LAction := TAction.Create(nil);
+      LAction.Name := ActionList.Actions[i].Name;
+      LAction.Caption := StringReplace(ActionList.Actions[i].Caption, '&', '', []);
+      LAction.ImageIndex := ActionList.Actions[i].ImageIndex;
+      Result.Add(LAction);
     end;
 end;
 
@@ -3128,7 +3117,7 @@ end;
 
 procedure TMainForm.ReadIniSizePositionAndState;
 var
-  State: Integer;
+  LState: Integer;
 begin
   with TBigIniFile.Create(GetIniFilename) do
   try
@@ -3146,8 +3135,8 @@ begin
     PanelOutput.Height := ReadInteger('Options', 'OutputPanelHeight', 121);
     Application.ProcessMessages;
     { State }
-    State := ReadInteger('Size', 'State', 0);
-    case State of
+    LState := ReadInteger('Size', 'State', 0);
+    case LState of
       0: WindowState := wsNormal;
       1: WindowState := wsMinimized;
       2:
@@ -3161,13 +3150,13 @@ end;
 
 procedure TMainForm.CreateFileReopenList;
 var
-  i, j, ImageIndex: Integer;
+  i, j, LImageIndex: Integer;
   s: string;
-  Files: TStrings;
+  LFiles: TStrings;
   LMenuItem, LMenuItem2: TMenuItem;
   LSystemImageList: TImageList;
   LSysImageList: THandle;
-  Icon: TIcon;
+  LIcon: TIcon;
 begin
   LSystemImageList := TImageList.Create(nil);
   try
@@ -3181,15 +3170,15 @@ begin
     PopupMenuFileReopen.Items.Clear;
     MenuItemMainMenuFileReopen.Clear;
 
-    Files := TStringList.Create;
+    LFiles := TStringList.Create;
     with TBigIniFile.Create(GetIniFilename) do
     try
-      ReadSectionValues('FileReopenFiles', Files);
+      ReadSectionValues('FileReopenFiles', LFiles);
       { Files }
       j := 0;
-      for i := 0 to Files.Count - 1 do
+      for i := 0 to LFiles.Count - 1 do
       begin
-        s := System.Copy(Files.Strings[i], Pos('=', Files.Strings[i]) + 1, Length(Files.Strings[i]));
+        s := System.Copy(LFiles.Strings[i], Pos('=', LFiles.Strings[i]) + 1, Length(LFiles.Strings[i]));
         if FileExists(s) then
         begin
           LMenuItem := TMenuItem.Create(PopupMenuFileReopen);
@@ -3199,16 +3188,16 @@ begin
           LMenuItem.Caption := Format('%d %s', [j, s]);
           LMenuItem2.Caption := Format('%d %s', [j, s]);
           { Add image to imagelist }
-          Icon := TIcon.Create;
+          LIcon := TIcon.Create;
           try
-            ImageIndex := GetIconIndex(s, SHGFI_ICON or SHGFI_ADDOVERLAYS);
-            LSystemImageList.GetIcon(ImageIndex, Icon);
-            ImageIndex := ImageList_AddIcon(ImagesDataModule.ImageListSmall.Handle, Icon.Handle);
+            LImageIndex := GetIconIndex(s, SHGFI_ICON or SHGFI_ADDOVERLAYS);
+            LSystemImageList.GetIcon(LImageIndex, LIcon);
+            LImageIndex := ImageList_AddIcon(ImagesDataModule.ImageListSmall.Handle, LIcon.Handle);
           finally
-            Icon.Free;
+            LIcon.Free;
           end;
-          LMenuItem.ImageIndex := ImageIndex;
-          LMenuItem2.ImageIndex := ImageIndex;
+          LMenuItem.ImageIndex := LImageIndex;
+          LMenuItem2.ImageIndex := LImageIndex;
           Inc(j);
 
           PopupMenuFileReopen.Items.Add(LMenuItem);
@@ -3217,7 +3206,7 @@ begin
       end;
 
       { Divider }
-      if Files.Count > 0 then
+      if LFiles.Count > 0 then
       begin
         LMenuItem := TMenuItem.Create(PopupMenuFileReopen);
         LMenuItem.Caption := '-';
@@ -3235,7 +3224,7 @@ begin
       end;
     finally
       Free;
-      Files.Free;
+      LFiles.Free;
     end;
   finally
     LSystemImageList.Free;
@@ -3244,11 +3233,11 @@ end;
 
 procedure TMainForm.OutputDblClickActionExecute(Sender: TObject);
 var
-  Filename: string;
-  Ln, Ch: LongWord;
+  LFilename: string;
+  LLine, LChar: LongWord;
 begin
-  if FOutput.SelectedLine(Filename, Ln, Ch) then
-    FDocument.Open(Filename, Ln, Ch);
+  if FOutput.SelectedLine(LFilename, LLine, LChar) then
+    FDocument.Open(LFilename, LLine, LChar);
 end;
 
 procedure TMainForm.FileTreeViewClickActionExecute(Sender: TObject);
@@ -3259,13 +3248,13 @@ end;
 
 procedure TMainForm.FileTreeViewDblClickActionExecute(Sender: TObject);
 var
-  Filename: string;
+  LFilename: string;
 begin
-  Filename := '';
+  LFilename := '';
   if Assigned(FDirectory) then
-    Filename := FDirectory.SelectedFile;
-  if Filename <> '' then
-    FDocument.Open(Filename);
+    LFilename := FDirectory.SelectedFile;
+  if LFilename <> '' then
+    FDocument.Open(LFilename);
 end;
 
 procedure TMainForm.OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString);
@@ -3326,7 +3315,7 @@ end;
 
 procedure TMainForm.OnTerminateFindInFiles(Sender: TObject);
 var
-  TimeDifference: string;
+  LTimeDifference: string;
 begin
   ProgressBar.Hide;
   FStopWatch.Stop;
@@ -3339,9 +3328,9 @@ begin
       StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := '';
     end;
     if StrToInt(FormatDateTime('n', FStopWatch.ElapsedMilliseconds / MSecsPerDay)) < 1 then
-      TimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
+      LTimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
     else
-      TimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
+      LTimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
     StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, TimeDifference])
   end;
   FOutput.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
