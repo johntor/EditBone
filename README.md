@@ -1,4 +1,4 @@
-Version 10.0.0. Use the Issues page to report bugs or send them directly to lasse@bonecode.com.
+Version 10.1.0. Use the Issues page to report bugs or send them directly to lasse@bonecode.com.
 
 <h3>Build requirements</h3>
 
