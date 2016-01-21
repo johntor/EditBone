@@ -556,6 +556,7 @@ begin
     OnDropFiles := DropFiles;
     PopupMenu := FPopupMenuEditor;
     Search.Visible := OptionsContainer.SearchVisible;
+    SyncEdit.Enabled := True;
   end;
   OptionsContainer.AssignTo(Result.Editor);
   Result.Editor.Minimap.Visible := Result.Editor.Minimap.Visible or AShowMinimap;

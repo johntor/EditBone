@@ -1,5 +1,12 @@
-Version 10.0.0 (Jan 17, 1016)
- 
+Version 10.1.0 (Jan 21, 2016)
+
+- Fixed undo
+- Fixed minimap divided by zero error
+- Fixed colors drop down count
+- Fixed code folding rescanning
+
+Version 10.0.0 (Jan 17, 2016)
+
 - Changed SynEdit to own TBCEditor component with new features and much better future development possibilities
 - Highlighters and colors are separated into files 
 - Styles changed to skins - skin editor: www.alphaskins.com/sfiles/askineditor.zip 

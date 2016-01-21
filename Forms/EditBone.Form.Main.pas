@@ -2327,8 +2327,10 @@ begin
     {$IFDEF DEBUG} // TODO
     ActionToolsSelectForCompare.Enabled := LActiveDocumentFound and not LActiveDocumentModified;
     {$ELSE}
+    ActionToolsCompareFiles.Visible := False;
     ActionToolsCompareFiles.Enabled := False;
     ActionToolsSelectForCompare.Enabled := False;
+    ActionToolsSelectForCompare.Visible := False;
     {$ENDIF}
     ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
@@ -3139,8 +3141,7 @@ begin
     case LState of
       0: WindowState := wsNormal;
       1: WindowState := wsMinimized;
-      2:
-        { This does not work WindowState := wsMaximized; }
+      2: { This does not work WindowState := wsMaximized; }
         ShowWindowAsync(Handle, SW_MAXIMIZE);
     end;
   finally
@@ -3331,7 +3332,7 @@ begin
       LTimeDifference := FormatDateTime(Format('s.zzz "%s"', [LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay)
     else
       LTimeDifference := FormatDateTime(Format('n "%s" s.zzz "%s"', [LanguageDataModule.GetConstant('Minute'), LanguageDataModule.GetConstant('Second')]), FStopWatch.ElapsedMilliseconds / MSecsPerDay);
-    StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, TimeDifference])
+    StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := Format(LanguageDataModule.GetConstant('OccurencesFound'), [FFindInFilesThread.Count, LTimeDifference])
   end;
   FOutput.PageControl.EndDrag(False); { if close button pressed and search canceled, dragging will stay... }
   FOutput.ProcessingTabSheet := False;
