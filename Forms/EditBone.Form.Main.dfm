@@ -1375,10 +1375,11 @@ inherited MainForm: TMainForm
             Top = 0
             Width = 60
             Height = 56
+            Hint = 'Show or hide synchronized editing'
             Action = ActionViewSyncEdit
             Align = alLeft
             AllowAllUp = True
-            GroupIndex = 6
+            GroupIndex = 8
             Flat = True
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -3035,6 +3036,7 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
+    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
