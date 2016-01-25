@@ -1,3 +1,9 @@
+Version 10.2.0 (Jan 25, 2016)
+
+- Added a synchronized edit mode. Select a word and press Ctrl+Shift+J or press 'Sync edit' button in View.
+- Fixed code folding rescanning
+- Fixed selection
+
 Version 10.1.0 (Jan 21, 2016)
 
 - Fixed undo

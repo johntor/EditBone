@@ -634,6 +634,8 @@ type
     TabSheetView: TsTabSheet;
     Timer: TTimer;
     PopupMenuDummy: TPopupMenu;
+    ActionViewSyncEdit: TAction;
+    SpeedButtonViewSyncEdit: TBCSpeedButton;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -811,6 +813,7 @@ type
     procedure TitleBarItems4Click(Sender: TObject);
     procedure TitleBarItems6Click(Sender: TObject);
     procedure TitleBarItems8Click(Sender: TObject);
+    procedure ActionViewSyncEditExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -2095,6 +2098,12 @@ begin
   Visible := not Visible;
 end;
 
+procedure TMainForm.ActionViewSyncEditExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.SyncEdit;
+end;
+
 procedure TMainForm.ActionViewToolbarExecute(Sender: TObject);
 begin
   OptionsContainer.ToolbarVisible := not OptionsContainer.ToolbarVisible;
@@ -2182,6 +2191,7 @@ var
   LIsJSONDocument: Boolean;
   LSelectionModeChecked: Boolean;
   LMinimapVisible: Boolean;
+  LSyncEditActive: Boolean;
   LSearchEnabled: Boolean;
   LIsRecordingMacro: Boolean;
   LIsRecordingStopped: Boolean;
@@ -2206,6 +2216,7 @@ begin
     LActiveDocumentName := '';
     LSelectionModeChecked := False;
     LMinimapVisible := False;
+    LSyncEditActive := False;
     LSearchEnabled := False;
     LIsRecordingMacro := False;
     LIsRecordingStopped := False;
@@ -2217,6 +2228,7 @@ begin
       LIsXMLDocument := LActiveEditor.Tag = EXTENSION_XML;
       LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
+      LSyncEditActive := LActiveEditor.SyncEdit.Active;
       LActiveDocumentModified := LActiveEditor.Modified;
 
       LSearchEnabled := LActiveEditor.Search.Visible;
@@ -2306,6 +2318,8 @@ begin
     ActionViewSplit.Checked := LActiveSplitDocumentFound;
     ActionViewMinimap.Enabled := LActiveDocumentFound;
     ActionViewMinimap.Checked := LActiveDocumentFound and LMinimapVisible;
+    ActionViewSyncEdit.Enabled := LActiveDocumentFound and LSelectionAvailable;
+    ActionViewSyncEdit.Checked := LActiveDocumentFound and LSyncEditActive;
 
     ActionSearchSearch.Enabled := LActiveDocumentFound;
     ActionSearchSearchButton.Enabled := LActiveDocumentFound;

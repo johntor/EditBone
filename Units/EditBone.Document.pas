@@ -172,6 +172,7 @@ type
     procedure ShowInfo;
     procedure Sort(ASortOrder: TBCEditorSortOrder = soToggle);
     procedure StopMacro;
+    procedure SyncEdit;
     procedure ToggleBookmark(AItemIndex: Integer);
     procedure ToggleCase(ACase: TBCEditorCase = cNone);
     procedure ToggleMiniMap;
@@ -2504,6 +2505,16 @@ begin
       LEditor.MacroRecorder.Stop;
   end;
 end;
+
+procedure TEBDocument.SyncEdit;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.SyncEdit.Active := not LEditor.SyncEdit.Active;
+end;
+
 
 procedure TEBDocument.PlaybackMacro;
 var

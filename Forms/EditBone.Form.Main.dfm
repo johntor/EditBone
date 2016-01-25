@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetView
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -1245,7 +1245,7 @@ inherited MainForm: TMainForm
             ImageIndex = 58
           end
           object SpeedButtonViewPreviousPage: TBCSpeedButton
-            Left = 690
+            Left = 750
             Top = 0
             Width = 60
             Height = 56
@@ -1266,7 +1266,7 @@ inherited MainForm: TMainForm
           end
           object SpeedButtonViewDivider3: TBCSpeedButton
             AlignWithMargins = True
-            Left = 680
+            Left = 740
             Top = 4
             Width = 10
             Height = 48
@@ -1288,7 +1288,7 @@ inherited MainForm: TMainForm
             ImageIndex = 1
           end
           object SpeedButtonViewNextPage: TBCSpeedButton
-            Left = 750
+            Left = 810
             Top = 0
             Width = 60
             Height = 56
@@ -1308,7 +1308,7 @@ inherited MainForm: TMainForm
             ImageIndex = 62
           end
           object SpeedButtonXMLTree: TBCSpeedButton
-            Left = 620
+            Left = 680
             Top = 0
             Width = 60
             Height = 56
@@ -1369,6 +1369,27 @@ inherited MainForm: TMainForm
             SkinData.SkinSection = 'TOOLBUTTON'
             Images = ImagesDataModule.ImageList
             ImageIndex = 94
+          end
+          object SpeedButtonViewSyncEdit: TBCSpeedButton
+            Left = 620
+            Top = 0
+            Width = 60
+            Height = 56
+            Action = ActionViewSyncEdit
+            Align = alLeft
+            AllowAllUp = True
+            GroupIndex = 6
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            SkinData.SkinSection = 'TOOLBUTTON'
+            Images = ImagesDataModule.ImageList
+            ImageIndex = 139
           end
         end
       end
@@ -3014,7 +3035,6 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
-    IsDefault = True
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
@@ -3877,6 +3897,15 @@ inherited MainForm: TMainForm
       Hint = 'Split the document'
       ImageIndex = 95
       OnExecute = ActionViewSplitExecute
+    end
+    object ActionViewSyncEdit: TAction
+      Category = 'View'
+      Caption = 'Sync edit'
+      GroupIndex = 8
+      Hint = 'Show or hide synchronized edit'
+      ImageIndex = 139
+      ShortCut = 24650
+      OnExecute = ActionViewSyncEditExecute
     end
     object ActionViewXMLTree: TAction
       Category = 'View'
