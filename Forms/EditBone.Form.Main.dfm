@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetView
+      ActivePage = TabSheetFile
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3087,7 +3087,7 @@ inherited MainForm: TMainForm
         FontData.Font.Style = []
         Height = 21
         Index = 2
-        Name = 'TitleBarItemFileName'
+        Name = 'TitleBarItemFilename'
         ShowHint = False
         OnClick = TitleBarItems2Click
       end
@@ -3362,6 +3362,16 @@ inherited MainForm: TMainForm
       end
       object MenuItemToolbarMenuViewStatusBar: TMenuItem
         Action = ActionViewStatusBar
+      end
+      object MenuItemToolbarMenuViewTitleBar: TMenuItem
+        Action = ActionViewTitleBar
+        SubMenuImages = ImagesDataModule.ImageListSmall
+        object MenuItemToolbarMenuViewTitleBarFilename: TMenuItem
+          Action = ActionViewTitleBarFilename
+        end
+        object MenuItemToolbarMenuViewTitleBarFileList: TMenuItem
+          Action = ActionViewTitleBarFileList
+        end
       end
       object MenuItemToolbarMenuViewToolbar: TMenuItem
         Action = ActionViewToolbar
@@ -4189,6 +4199,23 @@ inherited MainForm: TMainForm
       Caption = 'Status bar'
       Hint = 'Show or hide the status bar'
       OnExecute = ActionViewStatusBarExecute
+    end
+    object ActionViewTitleBar: TAction
+      Category = 'View'
+      Caption = 'Title bar'
+      OnExecute = ActionDummyExecute
+    end
+    object ActionViewTitleBarFilename: TAction
+      Category = 'View'
+      Caption = 'Filename'
+      Hint = 'Show or hide the title bar filename'
+      OnExecute = ActionViewTitleBarFilenameExecute
+    end
+    object ActionViewTitleBarFileList: TAction
+      Category = 'View'
+      Caption = 'File list'
+      Hint = 'Show or hide the title bar file list'
+      OnExecute = ActionViewTitleBarFileListExecute
     end
     object ActionViewOutput: TAction
       Category = 'View'

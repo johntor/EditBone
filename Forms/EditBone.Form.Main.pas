@@ -636,6 +636,12 @@ type
     PopupMenuDummy: TPopupMenu;
     ActionViewSyncEdit: TAction;
     SpeedButtonViewSyncEdit: TBCSpeedButton;
+    MenuItemToolbarMenuViewTitleBar: TMenuItem;
+    MenuItemToolbarMenuViewTitleBarFilename: TMenuItem;
+    MenuItemToolbarMenuViewTitleBarFileList: TMenuItem;
+    ActionViewTitleBar: TAction;
+    ActionViewTitleBarFilename: TAction;
+    ActionViewTitleBarFileList: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -814,6 +820,8 @@ type
     procedure TitleBarItems6Click(Sender: TObject);
     procedure TitleBarItems8Click(Sender: TObject);
     procedure ActionViewSyncEditExecute(Sender: TObject);
+    procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
+    procedure ActionViewTitleBarFileListExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -2104,6 +2112,18 @@ begin
   FDocument.SyncEdit;
 end;
 
+procedure TMainForm.ActionViewTitleBarFileListExecute(Sender: TObject);
+begin
+  inherited;
+  OptionsContainer.TitlebarFileListVisible := not OptionsContainer.TitlebarFileListVisible;
+end;
+
+procedure TMainForm.ActionViewTitleBarFilenameExecute(Sender: TObject);
+begin
+  inherited;
+  OptionsContainer.TitleBarFilenameVisible := not OptionsContainer.TitleBarFilenameVisible;
+end;
+
 procedure TMainForm.ActionViewToolbarExecute(Sender: TObject);
 begin
   OptionsContainer.ToolbarVisible := not OptionsContainer.ToolbarVisible;
@@ -2259,6 +2279,7 @@ begin
     ActionViewOutput.Checked := PanelOutput.Visible;
     ActionViewDirectory.Enabled := FDirectory.IsAnyDirectory;
     ActionViewDirectory.Checked := PanelDirectory.Visible;
+
     SplitterHorizontal.Visible := PanelOutput.Visible;
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
@@ -2274,12 +2295,22 @@ begin
       ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
 
     LCaption := Application.Title;
-    if LActiveDocumentName <> '' then
+    if (LActiveDocumentName <> '') and OptionsContainer.TitlebarFilenameVisible then
       LCaption := LCaption + '  -';
 
     TitleBar.Items[EDITBONE_TITLE_BAR_CAPTION].Caption := LCaption;
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Visible := PageControlDocument.PageCount > 1;
-    TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption := '[' + LActiveDocumentName + ']';
+
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Visible := (PageControlDocument.PageCount > 1) and OptionsContainer.TitlebarFilenameVisible;
+    TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Caption := '[' + LActiveDocumentName + ']';
+
+    ActionViewTitleBarFilename.Checked := OptionsContainer.TitlebarFilenameVisible;
+
+    if OptionsContainer.TitlebarFileListVisible then
+      TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Style := bsButton
+    else
+      TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Style := bsInfo;
+
+    ActionViewTitleBarFileList.Checked := OptionsContainer.TitlebarFileListVisible;
 
     ActionFileProperties.Enabled := LActiveDocumentFound and (LActiveDocumentName <> '');
 
@@ -2863,7 +2894,7 @@ begin
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
 
-    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILE_NAME);
+    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILENAME);
 
     FPopupFilesDialog.Left := LPoint.X;
     FPopupFilesDialog.Top := LPoint.Y;
@@ -2872,7 +2903,7 @@ begin
 
     LFiles := GetFiles;
     try
-      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILE_NAME].Caption);
+      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Caption);
     finally
       LFiles.Free;
     end;

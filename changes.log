@@ -1,3 +1,25 @@
+Version 10.4.0 (Jan 30, 2016)
+
+- Added key commands for toggling line comments (Ctrl + /) and block comments (Ctrl + Shift + /) 
+- Added View->Title bar->Filename and View->Title bar->File list
+- Added skin download link into skin dialog
+- Fixed sync edit for selected block
+- Fixed left margin glyph drawing
+- Fixed word wrap painting
+- Fixed SQL - Firebird highlighter
+- Fixed color files
+- Updated language files
+
+Version 10.3.1 (Jan 27, 2016)
+
+- Updated language files
+
+Version 10.3.0 (Jan 26, 2016)
+
+- Added highlighter for Windows PowerShell
+- Fixed highlighters
+- Fixed sync edit
+
 Version 10.2.1 (Jan 25, 2016)
 
 - Added a synchronized edit mode. Select a word and press Ctrl+Shift+J or press 'Sync edit' button in View.
