@@ -1,4 +1,10 @@
-Version 10.4.0 (Jan 30, 2016)
+Version 10.5.0 (Jan 31, 2016)
+
+- Added Show border, Use blending, and Invert blending options for minimap
+- Fixed sync edit
+- Updated language files
+
+Version 10.4.1 (Jan 30, 2016)
 
 - Added key commands for toggling line comments (Ctrl + /) and block comments (Ctrl + Shift + /) 
 - Added View->Title bar->Filename and View->Title bar->File list
