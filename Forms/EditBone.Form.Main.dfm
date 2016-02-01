@@ -3338,18 +3338,8 @@ inherited MainForm: TMainForm
     object MenuItemToolbarMenuView: TMenuItem
       Action = ActionToolbarMenuView
       SubMenuImages = ImagesDataModule.ImageListSmall
-      object MenuItemToolbarMenuViewColor: TMenuItem
-        Action = ActionViewColorSelection
-        Hint = 'Show or hide the color selection'
-      end
       object MenuItemToolbarMenuViewDirectory: TMenuItem
         Action = ActionViewDirectory
-      end
-      object MenuItemToolbarMenuViewEncoding: TMenuItem
-        Action = ActionViewEncodingSelection
-      end
-      object MenuItemToolbarMenuViewHighlighter: TMenuItem
-        Action = ActionViewHighlighterSelection
       end
       object MenuItemMainMenu: TMenuItem
         Action = ActionViewMainMenu
@@ -3366,11 +3356,21 @@ inherited MainForm: TMainForm
       object MenuItemToolbarMenuViewTitleBar: TMenuItem
         Action = ActionViewTitleBar
         SubMenuImages = ImagesDataModule.ImageListSmall
+        object MenuItemToolbarMenuViewColor: TMenuItem
+          Action = ActionViewColorSelection
+          Hint = 'Show or hide the color selection'
+        end
+        object MenuItemToolbarMenuViewEncoding: TMenuItem
+          Action = ActionViewEncodingSelection
+        end
         object MenuItemToolbarMenuViewTitleBarFilename: TMenuItem
           Action = ActionViewTitleBarFilename
         end
         object MenuItemToolbarMenuViewTitleBarFileList: TMenuItem
           Action = ActionViewTitleBarFileList
+        end
+        object MenuItemToolbarMenuViewHighlighter: TMenuItem
+          Action = ActionViewHighlighterSelection
         end
       end
       object MenuItemToolbarMenuViewToolbar: TMenuItem
