@@ -248,7 +248,8 @@ object OptionsForm: TOptionsForm
       ImageIndex = 59
     end
     object ActionEditorSyncEdit: TAction
-      Caption = 'ActionEditorSyncEdit'
+      Caption = 'Sync edit'
+      ImageIndex = 139
     end
     object ActionEditorTabs: TAction
       Caption = 'Tabs'

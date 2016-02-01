@@ -1,3 +1,12 @@
+Version 10.6.0 (Feb 01, 2016)
+
+- Added sync edit options
+- Added escape char for keyword higlighting and code folding
+- Fixed code folding
+- Fixed sync edit
+- Fixed print preview 
+- Fixed Object Pascal highlighter
+
 Version 10.5.0 (Jan 31, 2016)
 
 - Added Show border, Use blending, and Invert blending options for minimap

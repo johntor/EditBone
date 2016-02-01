@@ -105,7 +105,7 @@ uses
   BCCommon.Frame.Options.Editor.Search, BCCommon.Frame.Options.Editor.Options, BCCommon.Frame.Options.Editor.Font,
   BCCommon.Frame.Options.Editor.LeftMargin, BCCommon.Frame.Options.Editor.RightMargin,
   EditBone.Frame.Options.FileTypes, EditBone.Frame.Options.Directory, EditBone.Frame.Options.Directory.TabSheet,
-  EditBone.Frame.Options.Output.TabSheet, BCCommon.Frame.Options.Compare,
+  EditBone.Frame.Options.Output.TabSheet, BCCommon.Frame.Options.Compare, BCCommon.Frame.Options.Editor.SyncEdit,
   BCCommon.Frame.Options.MainMenu, BCCommon.Frame.Options.StatusBar, BCCommon.Frame.Options.Output,
   BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print, BCCommon.Frame.Options.SQL.Select,
   BCCommon.Frame.Options.SQL.Alignments, BCCommon.Frame.Options.SQL.Insert, BCCommon.Frame.Options.SQL.Update,
@@ -229,6 +229,12 @@ begin
     Data.Index := PostInc(i);
     Data.ImageIndex := ActionEditorSpecialChars.ImageIndex;
     Data.Caption := ActionEditorSpecialChars.Caption;
+    { Editor sync edit }
+    ChildNode := AddChild(Node);
+    Data := GetNodeData(ChildNode);
+    Data.Index := PostInc(i);
+    Data.ImageIndex := ActionEditorSyncEdit.ImageIndex;
+    Data.Caption := ActionEditorSyncEdit.Caption;
     { Editor tabs }
     ChildNode := AddChild(Node);
     Data := GetNodeData(ChildNode);
@@ -506,8 +512,10 @@ begin
     if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 13) then
       OptionsEditorSpecialCharsFrame(Self).ShowFrame;
     if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 14) then
-      OptionsEditorTabsFrame(Self).ShowFrame;
+      OptionsEditorSyncEditFrame(Self).ShowFrame;
     if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 15) then
+      OptionsEditorTabsFrame(Self).ShowFrame;
+    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 16) then
       OptionsEditorTabulatorFrame(Self).ShowFrame;
     if (Level = 0) and (TreeNode.Index = 1) then
       OptionsDirectoryFrame(Self).ShowFrame;
