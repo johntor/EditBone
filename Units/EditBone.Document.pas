@@ -213,7 +213,7 @@ implementation
 {$R EDITBONE.DOCUMENT.RES}
 
 uses
-  Vcl.Forms, BCCommon.Form.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace,
+  Vcl.Forms, BCCommon.Form.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace, Vcl.Printers,
   System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialog.InputQuery, BCCommon.Dialog.Replace,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
@@ -1361,6 +1361,11 @@ end;
 
 procedure TEBDocument.PrintPreview;
 begin
+  if Printer.Printers.Count = 0 then
+  begin
+    ShowErrorMessage(LanguageDataModule.GetMessage('NoDefaultPrinter'));
+    Exit;
+  end;
   with PrintPreviewDialog do
   begin
     InitializeEditorPrint(PrintPreview.EditorPrint);
