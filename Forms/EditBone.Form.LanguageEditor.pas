@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ActnList,
-  Vcl.ComCtrls, VirtualTrees, Vcl.AppEvnts, BCControl.Edit,
+  Vcl.ComCtrls, VirtualTrees, Vcl.AppEvnts, BCControl.Edit, System.UITypes,
   System.Actions, BCCommon.Images, BCControl.Panel, Vcl.Dialogs, sDialogs, BCControl.Statusbar,
   sSkinProvider, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton, Vcl.ExtCtrls, sPanel, sStatusBar;
 
@@ -54,7 +54,7 @@ type
     procedure VirtualDrawTreeEdited(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
     procedure VirtualDrawTreeEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
     procedure VirtualDrawTreeInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
     procedure VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -424,7 +424,7 @@ end;
 
 procedure TLanguageEditorForm.VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean;
-  var ImageIndex: Integer);
+  var ImageIndex: TImageIndex);
 var
   Data: PObjectNodeRec;
 begin

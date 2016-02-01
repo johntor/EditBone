@@ -5,7 +5,7 @@ interface
 uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.FileUtils, Vcl.StdCtrls,
   System.Classes, System.SysUtils, Vcl.ActnList, BCCommon.Images, BCCommon.Frame.Options.Editor.Color,
-  VirtualTrees, BCCommon.Options.Container, System.Generics.Collections,
+  VirtualTrees, BCCommon.Options.Container, System.Generics.Collections, System.UITypes,
   sSkinProvider, BCControl.ScrollBox, BCControl.Splitter, BCControl.Panel, System.Actions, sScrollBox, Vcl.ExtCtrls,
   sSplitter, sPanel;
 
@@ -63,17 +63,19 @@ type
     SkinProvider: TsSkinProvider;
     Splitter: TBCSplitter;
     VirtualDrawTreeOptions: TVirtualDrawTree;
+    ActionEditorSyncEdit: TAction;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure VirtualDrawTreeOptionsClick(Sender: TObject);
     procedure VirtualDrawTreeOptionsFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeOptionsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure VirtualDrawTreeOptionsDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeOptionsGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; var NodeWidth: Integer);
     procedure VirtualDrawTreeOptionsKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure VirtualDrawTreeOptionsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
+      Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
   private
     FActionList: TObjectList<TAction>;
     FSQLFormatterDLLFound: Boolean;
@@ -560,9 +562,8 @@ begin
   inherited;
 end;
 
-procedure TOptionsForm.VirtualDrawTreeOptionsGetImageIndex(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean;
-  var ImageIndex: Integer);
+procedure TOptionsForm.VirtualDrawTreeOptionsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode;
+  Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
 var
   Data: POptionsRec;
 begin

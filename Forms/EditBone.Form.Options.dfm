@@ -247,6 +247,9 @@ object OptionsForm: TOptionsForm
       Caption = 'Special chars'
       ImageIndex = 59
     end
+    object ActionEditorSyncEdit: TAction
+      Caption = 'ActionEditorSyncEdit'
+    end
     object ActionEditorTabs: TAction
       Caption = 'Tabs'
       ImageIndex = 113
