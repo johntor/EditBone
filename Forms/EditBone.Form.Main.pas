@@ -642,6 +642,8 @@ type
     ActionViewTitleBar: TAction;
     ActionViewTitleBarFilename: TAction;
     ActionViewTitleBarFileList: TAction;
+    ActionDocumentHTMLExport: TAction;
+    BCSpeedButton1: TBCSpeedButton;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -822,6 +824,7 @@ type
     procedure ActionViewSyncEditExecute(Sender: TObject);
     procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
+    procedure ActionDocumentHTMLExportExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -1178,6 +1181,12 @@ end;
 procedure TMainForm.ActionDocumentFormatXMLExecute(Sender: TObject);
 begin
   FDocument.FormatXML;
+end;
+
+procedure TMainForm.ActionDocumentHTMLExportExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.HTMLExport;
 end;
 
 procedure TMainForm.ActionDocumentInfoExecute(Sender: TObject);

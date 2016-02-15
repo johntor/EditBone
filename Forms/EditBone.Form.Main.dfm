@@ -102,7 +102,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetDocument
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -125,15 +125,11 @@ inherited MainForm: TMainForm
         TabType = ttMenu
         TabMenu = PopupMenuToolbar
         TabSkin = 'CHECKBOX'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
       end
       object TabSheetFile: TsTabSheet
         Caption = 'File'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelFileButtons: TBCPanel
           Left = 0
           Top = 0
@@ -461,8 +457,6 @@ inherited MainForm: TMainForm
         Caption = 'Edit'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelEditButtons: TBCPanel
           Left = 0
           Top = 0
@@ -795,8 +789,6 @@ inherited MainForm: TMainForm
         Caption = 'Search'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelSearchButtons: TBCPanel
           Left = 0
           Top = 0
@@ -1021,8 +1013,6 @@ inherited MainForm: TMainForm
         Caption = 'View'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelViewButtons: TBCPanel
           Left = 0
           Top = 0
@@ -1398,8 +1388,6 @@ inherited MainForm: TMainForm
         Caption = 'Document'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelDocumentButtons: TBCPanel
           Left = 0
           Top = 0
@@ -1455,7 +1443,7 @@ inherited MainForm: TMainForm
             ImageIndex = 1
           end
           object SpeedButtonDocumentViewInBrowser: TBCSpeedButton
-            Left = 232
+            Left = 292
             Top = 0
             Width = 82
             Height = 56
@@ -1476,7 +1464,7 @@ inherited MainForm: TMainForm
           end
           object SpeedButtonDocumentDivider2: TBCSpeedButton
             AlignWithMargins = True
-            Left = 222
+            Left = 282
             Top = 4
             Width = 10
             Height = 48
@@ -1539,14 +1527,34 @@ inherited MainForm: TMainForm
             Images = ImagesDataModule.ImageList
             ImageIndex = 136
           end
+          object BCSpeedButton1: TBCSpeedButton
+            Left = 222
+            Top = 0
+            Width = 60
+            Height = 56
+            Action = ActionDocumentHTMLExport
+            Align = alLeft
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = False
+            ButtonStyle = tbsTextButton
+            SkinData.SkinSection = 'TOOLBUTTON'
+            Images = ImagesDataModule.ImageList
+            ImageIndex = 140
+          end
         end
       end
       object TabSheetTools: TsTabSheet
         Caption = 'Tools'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelToolsButtons: TBCPanel
           Left = 0
           Top = 0
@@ -1710,8 +1718,6 @@ inherited MainForm: TMainForm
         Caption = 'Help'
         ImageIndex = -1
         TabSkin = 'RIBBONTAB'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         object PanelHelpButtons: TBCPanel
           Left = 0
           Top = 0
@@ -1907,8 +1913,6 @@ inherited MainForm: TMainForm
           ParentDoubleBuffered = False
           TabType = ttButton
           TabSkin = 'CHECKBOX'
-          SkinData.CustomColor = False
-          SkinData.CustomFont = False
           OnClickBtn = TabSheetOpenClickBtn
         end
       end
@@ -1966,8 +1970,6 @@ inherited MainForm: TMainForm
           Caption = '      '
           TabType = ttButton
           TabSkin = 'CHECKBOX'
-          SkinData.CustomColor = False
-          SkinData.CustomFont = False
           OnClickBtn = ActionFileNewExecute
         end
       end
@@ -3028,15 +3030,12 @@ inherited MainForm: TMainForm
         ParentDoubleBuffered = False
         TabType = ttButton
         TabSkin = 'CHECKBOX'
-        SkinData.CustomColor = False
-        SkinData.CustomFont = False
         OnClickBtn = TabSheetFindInFilesClickBtn
       end
     end
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
-    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
@@ -4553,6 +4552,12 @@ inherited MainForm: TMainForm
       Hint = 'Search items'
       ImageIndex = 77
       OnExecute = ActionSearchTextItemsExecute
+    end
+    object ActionDocumentHTMLExport: TAction
+      Category = 'Document'
+      Caption = 'HTML Export'
+      ImageIndex = 140
+      OnExecute = ActionDocumentHTMLExportExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [19]

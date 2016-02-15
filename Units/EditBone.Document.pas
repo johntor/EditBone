@@ -137,6 +137,7 @@ type
     procedure FormatXML;
     procedure GotoBookmarks(ItemIndex: Integer);
     procedure GotoLine;
+    procedure HTMLExport;
     procedure IncreaseIndent;
     procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
     procedure InsertDateAndTime;
@@ -1949,6 +1950,23 @@ begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
       LEditor.GotoLineAndCenter(LLine);
+  end;
+end;
+
+procedure TEBDocument.HTMLExport;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+  begin
+    SaveDialog.InitialDir := '';
+    SaveDialog.Filter := LanguageDataModule.GetFileTypes('HTML with Scripts') + '|*.html;*.htm';
+    SaveDialog.Title := LanguageDataModule.GetConstant('SaveAs');
+    SaveDialog.FileName := '';
+    SaveDialog.DefaultExt := 'html';
+    if SaveDialog.Execute(Application.Handle) then
+      LEditor.ExportToHTML(SaveDialog.FileName);
   end;
 end;
 
