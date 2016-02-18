@@ -2631,6 +2631,7 @@ begin
     LTabSheet.SplitEditor.Visible := False;
     LTabSheet.SplitEditor.Parent := nil;
     LTabSheet.SplitEditor.Free;
+    LTabSheet.SplitEditor := nil;
     { horizontal splitter }
     LTabSheet.SplitterHorizontal.Parent := nil;
     LTabSheet.SplitterHorizontal.Free;
