@@ -1,3 +1,11 @@
+Version 10.9.0 (Feb 28, 2016)
+
+- Added mouse move scroll after wheel click
+- Fixed F3 and Shift + F3 to work with selected word.
+- Fixed flickering when scrolling with selection
+- Fixed special chars
+- Fixed tabulator
+
 Version 10.8.0 (Feb 26, 2016)
 
 - Added Columns and Previous line indent options for tabulator.

@@ -3036,7 +3036,6 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
-    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
@@ -4926,7 +4925,6 @@ inherited MainForm: TMainForm
     Margins.Top = 18.000000000000000000
     OnPrintLine = EditorPrintPrintLine
     OnPrintStatus = EditorPrintPrintStatus
-    TabWidth = 8
     Left = 872
     Top = 348
   end
