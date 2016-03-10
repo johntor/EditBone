@@ -1,3 +1,16 @@
+Version 10.10.0 (Mar 10, 2016)
+
+- Added Use middle color option for special chars
+- Added Align option for the search map
+- Fixed word wrap
+- Fixed special chars
+- Fixed sync edit
+- Fixed matching pair
+- Fixed tabulator
+- Fixed undo and redo
+- Fixed mouse move scroll
+- Updated language files
+
 Version 10.9.0 (Feb 28, 2016)
 
 - Added mouse move scroll after wheel click
