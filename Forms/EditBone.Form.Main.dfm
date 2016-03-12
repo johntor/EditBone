@@ -3036,6 +3036,7 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
+    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10

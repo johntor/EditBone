@@ -844,6 +844,7 @@ type
     function GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
     function OnCancelSearch: Boolean;
     function Processing: Boolean;
+    procedure CopyIniFilesIntoUserProfile;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
@@ -2489,6 +2490,28 @@ begin
   end;
 end;
 
+procedure TMainForm.CopyIniFilesIntoUserProfile;
+var
+  LOldFileName, LNewFileName: string;
+begin
+  LOldFileName := GetOldIniFilename;
+  LNewFileName := GetIniFilename;
+  if FileExists(LOldFileName) then
+  begin
+    if not FileExists(LNewFileName) then
+      TFile.Move(LOldFileName, LNewFileName);
+    TFile.Delete(LOldFileName);
+  end;
+  LOldFileName := GetOldOutFilename;
+  LNewFileName := GetOutFilename;
+  if FileExists(LOldFileName) then
+  begin
+    if not FileExists(LNewFileName) then
+      TFile.Move(LOldFileName, LNewFileName);
+    TFile.Delete(LOldFileName);
+  end;
+end;
+
 procedure TMainForm.CreateLanguageMenu(AMenuItem: TMenuItem);
 var
   LLanguagePath, LFileName, LExtractedFileName, LLanguageName: string;
@@ -2649,6 +2672,8 @@ begin
   inherited;
 
   PageControlToolbar.ActivePage := TabSheetFile;
+
+  CopyIniFilesIntoUserProfile;
 
   FImageListCount := ImagesDataModule.ImageListSmall.Count; { System images are appended after menu icons for file reopen }
   ReadIniOptions;
