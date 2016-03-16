@@ -2500,7 +2500,6 @@ begin
   begin
     if not FileExists(LNewFileName) then
       TFile.Move(LOldFileName, LNewFileName);
-    TFile.Delete(LOldFileName);
   end;
   LOldFileName := GetOldOutFilename;
   LNewFileName := GetOutFilename;
@@ -2508,7 +2507,6 @@ begin
   begin
     if not FileExists(LNewFileName) then
       TFile.Move(LOldFileName, LNewFileName);
-    TFile.Delete(LOldFileName);
   end;
 end;
 
