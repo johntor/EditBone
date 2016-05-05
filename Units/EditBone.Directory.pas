@@ -6,7 +6,7 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
   BCControl.FileControl, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, VirtualTrees,
   BCCommon.Form.SearchForFiles, sPageControl,
-  BCControl.ImageList,
+
   BCComponent.SkinManager;
 
 type

@@ -6,13 +6,14 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Form.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
   sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files, BCCommon.Dialog.Popup.Highlighter,
-  Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, sSplitter, BCControl.Splitter,
+  Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, BCControl.Splitter,
   sPageControl, BCControl.PageControl, BCCommon.Images, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
   BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
-  BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs, sStatusBar,
-  System.Generics.Collections, BCControl.ComboBox, sPanel, Vcl.AppEvnts, BCComponent.SkinProvider,
-  BCComponent.TitleBar, BCComponent.SkinManager, BCCommon.Dialog.Popup.Highlighter.Color;
+  BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
+  System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,
+  BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.SkinProvider, BCComponent.TitleBar,
+  BCComponent.SkinManager, sStatusBar;
 
 const
   SWindowClassName = 'UniqueWindowClassNameForEditBone';

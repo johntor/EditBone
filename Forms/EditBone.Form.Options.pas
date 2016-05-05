@@ -6,7 +6,7 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, BCCommon.FileUtils, Vcl.StdCtrls,
   System.Classes, System.SysUtils, Vcl.ActnList, BCCommon.Images, BCCommon.Frame.Options.Editor.Color,
   VirtualTrees, BCCommon.Options.Container, System.Generics.Collections, System.UITypes,
-  sSkinProvider, BCControl.ScrollBox, BCControl.Splitter, BCControl.Panel, System.Actions, sScrollBox, Vcl.ExtCtrls,
+  sSkinProvider, BCControl.ScrollBox, BCControl.Splitter, BCControl.Panel, System.Actions, Vcl.ExtCtrls, sScrollBox,
   sSplitter, sPanel;
 
 type

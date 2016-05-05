@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, Vcl.StdCtrls, Vcl.ExtCtrls, BCControl.ButtonedEdit, sSkinProvider,
-  System.Actions, Vcl.ActnList, System.ImageList, Vcl.ImgList, sPanel, BCControl.Panel;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, Vcl.ExtCtrls, sSkinProvider,
+  System.Actions, Vcl.ActnList;
 
 type
   TSelectEncodingEvent = procedure(AId: Integer) of object;
@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Types, BCControl.Utils, EditBone.Encoding, sGraphUtils, sVclUtils, sDefaults, System.Math;
+  System.Types, BCControl.Utils, EditBone.Encoding, sGraphUtils, sVclUtils, System.Math;
 
 type
   PSearchRec = ^TSearchRec;
