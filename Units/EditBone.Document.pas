@@ -121,7 +121,7 @@ type
     procedure CloseAll;
     procedure CloseAllOtherPages;
     procedure CollapseAll;
-    procedure CompareFiles(AFileName: string = ''; AFileDragDrop: Boolean = False);
+    procedure CompareFiles(const AFileName: string = ''; AFileDragDrop: Boolean = False);
     procedure Copy;
     procedure Cut;
     procedure DecreaseIndent;
@@ -301,7 +301,6 @@ begin
       LTabSheet.XMLTree.PopupMenu := FPopupMenuXMLTree;
       LTabSheet.XMLTree.Parent := PageControl.ActivePage;
       LTabSheet.XMLTree.LoadFromXML(LTabSheet.Editor.Text);
-      LTabSheet.XMLTree.TreeOptions.SelectionOptions := [];
       LTabSheet.XMLTree.TreeOptions.SelectionOptions := [toFullRowSelect];
       LTabSheet.XMLTree.TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale];
       LTabSheet.XMLTree.TreeOptions.MiscOptions := [toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
@@ -738,7 +737,7 @@ begin
   end;
 end;
 
-procedure TEBDocument.CompareFiles(AFileName: string; AFileDragDrop: Boolean);
+procedure TEBDocument.CompareFiles(const AFileName: string; AFileDragDrop: Boolean);
 var
   i: Integer;
   LTabSheet: TsTabSheet;

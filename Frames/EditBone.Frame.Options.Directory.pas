@@ -3,9 +3,10 @@ unit EditBone.Frame.Options.Directory;
 interface
 
 uses
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControl.Edit,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCControl.Edit,
   BCCommon.Options.Container,  BCCommon.Frame.Options.Base,
-  BCControl.Panel, acSlider, sLabel, sComboBox, BCControl.ComboBox, sEdit, Vcl.ExtCtrls, sPanel, sFrameAdapter;
+  BCControl.Panel, acSlider, sLabel, BCControl.ComboBox, Vcl.ExtCtrls, Vcl.StdCtrls, sComboBox, sEdit, sPanel,
+  sFrameAdapter;
 
 type
   TOptionsDirectoryFrame = class(TBCOptionsBaseFrame)

@@ -24,7 +24,7 @@ type
     FSelectEncoding: TSelectEncodingEvent;
     procedure WMActivate(var AMessage: TWMActivate); message WM_ACTIVATE;
   public
-    procedure Execute(ASelectedEncoding: string);
+    procedure Execute(const ASelectedEncoding: string);
     property OnSelectEncoding: TSelectEncodingEvent read FSelectEncoding write FSelectEncoding;
   end;
 
@@ -52,7 +52,7 @@ begin
    VirtualDrawTree.SetFocus;
 end;
 
-procedure TPopupEncodingDialog.Execute(ASelectedEncoding: string);
+procedure TPopupEncodingDialog.Execute(const ASelectedEncoding: string);
 var
   i: Integer;
   Node: PVirtualNode;

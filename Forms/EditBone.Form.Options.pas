@@ -388,7 +388,7 @@ begin
     WriteIniFile;
     SaveSelectedTreeNode;
   finally
-    Free;
+    Release;
   end;
   if Result then
     SQLFormatterOptionsContainer.WriteIniFile; { this is written here because dll is reading settings from the ini file }

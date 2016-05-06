@@ -37,7 +37,7 @@ type
     procedure SetVisibleRows;
     procedure WMActivate(var AMessage: TWMActivate); message WM_ACTIVATE;
   public
-    procedure Execute(AFiles: TStrings; ASelectedFile: string);
+    procedure Execute(AFiles: TStrings; const ASelectedFile: string);
     property OnSelectFile: TSelectFileEvent read FSelectFile write FSelectFile;
   end;
 
@@ -72,7 +72,7 @@ begin
   end;
 end;
 
-procedure TPopupFilesDialog.Execute(AFiles: TStrings; ASelectedFile: string);
+procedure TPopupFilesDialog.Execute(AFiles: TStrings; const ASelectedFile: string);
 var
   i: Integer;
   LNode, LSelectedNode: PVirtualNode;

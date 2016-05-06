@@ -3,10 +3,10 @@ unit EditBone.Frame.Options.Editor.Defaults;
 interface
 
 uses
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, BCControl.ComboBox,
-  BCCommon.Options.Container, BCCommon.Frame.Options.Base, sComboBox, BCControl.Panel, Vcl.ExtCtrls, sPanel,
-  sFrameAdapter, Vcl.Buttons, sSpeedButton, BCControl.SpeedButton, sEdit, BCControl.Edit, System.Actions, Vcl.ActnList,
-  sDialogs;
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCControl.ComboBox,
+  BCCommon.Options.Container, BCCommon.Frame.Options.Base, sComboBox, BCControl.Panel, Vcl.ExtCtrls,
+  Vcl.Buttons, BCControl.SpeedButton, BCControl.Edit, System.Actions, Vcl.ActnList,
+  sDialogs, Vcl.StdCtrls, sEdit, sSpeedButton, sPanel, sFrameAdapter;
 
 type
   TOptionsEditorDefaultsFrame = class(TBCOptionsBaseFrame)

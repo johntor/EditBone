@@ -2448,7 +2448,7 @@ begin
     ActionOutputUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
   except
     { intentionally silent }
-  end;
+  end; //FI:W501 FixInsight ignore
 end;
 
 procedure TMainForm.SetBookmarks;

@@ -3,9 +3,9 @@ unit EditBone.Frame.Options.FileTypes;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Types, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  System.SysUtils, System.Classes, System.Types, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   BCControl.Edit, BCCommon.Options.Container, BCCommon.Frame.Options.Base, VirtualTrees, BCControl.Panel,
-  sFrameAdapter, sEdit, Vcl.ExtCtrls, sPanel;
+  Vcl.ExtCtrls, Vcl.StdCtrls, sEdit, sPanel, sFrameAdapter;
 
 type
   TOptionsFileTypesFrame = class(TBCOptionsBaseFrame)
