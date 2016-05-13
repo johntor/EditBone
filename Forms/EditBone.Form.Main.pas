@@ -2383,10 +2383,8 @@ begin
     {$IFDEF DEBUG} // TODO
     ActionToolsSelectForCompare.Enabled := LActiveDocumentFound and not LActiveDocumentModified;
     {$ELSE}
-    ActionToolsCompareFiles.Visible := False;
     ActionToolsCompareFiles.Enabled := False;
     ActionToolsSelectForCompare.Enabled := False;
-    ActionToolsSelectForCompare.Visible := False;
     {$ENDIF}
     ActionDocumentFormatJSON.Enabled := LActiveDocumentFound and LIsJSONDocument;
     ActionDocumentFormatSQL.Enabled := FSQLFormatterDLLFound and LActiveDocumentFound and LIsSQLDocument;
