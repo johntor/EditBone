@@ -614,7 +614,7 @@ begin
         VK_UP: LCommand := ecUp;
         VK_DOWN: LCommand := ecDown;
         VK_END: LCommand := ecLineEnd;
-        VK_HOME: LCommand := ecLineStart;
+        VK_HOME: LCommand := ecLineBegin;
       else
         LCommand := ecNone;
       end;
@@ -949,7 +949,8 @@ begin
             FCreateFileReopenList;
         end;
       end
-      else if ExtractFileName(FileName) <> '' then
+      else
+      if ExtractFileName(FileName) <> '' then
         ShowErrorMessage(Format(LanguageDataModule.GetErrorMessage('FileNotFound'), [FileName]))
     end;
   finally

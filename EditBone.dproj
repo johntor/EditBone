@@ -73,9 +73,10 @@
         <DCC_K>false</DCC_K>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <VerInfo_MajorVer>10</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=10.2.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=10.2.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MajorVer>11</VerInfo_MajorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <DCC_UsePackage>JvGlobus;JvMM;JvManagedThreads;DBXSqliteDriver;fmx;JvDlgs;IndySystem;JvCrypt;tethering;DBXInterBaseDriver;DataSnapClient;DataSnapServer;DataSnapCommon;JvNet;DataSnapProviderClient;JvDotNetCtrls;DBXSybaseASEDriver;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;MetropolisUILiveTile;JvXPCtrls;vcldb;vcldsnap;DBXDb2Driver;DBXOracleDriver;CustomIPTransport;JvCore;vclribbon;dsnap;IndyIPServer;fmxase;vcl;IndyCore;SynEdit_RXE7;EhLib210;DBXMSSQLDriver;IndyIPCommon;CloudService;acntDelphiXE7_R;JvAppFrm;soapserver;JvDB;JvRuntimeDesign;inetdbxpress;BCControlRXE7;dsnapxml;JclDeveloperTools;JvDocking;adortl;JvWizards;JvHMI;bindcompfmx;BCEditorRXE7;JvBands;RESTBackendComponents;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;JvPluginSystem;JclContainers;DBXOdbcDriver;JvCmp;JvSystem;xmlrtl;DataSnapNativeClient;svnui;JvTimeFramework;JvControls;IndyProtocols;DBXMySQLDriver;soaprtl;vclactnband;bindengine;bindcompdbx;JvJans;JvPageComps;bindcompvcl;JvStdCtrls;JvCustom;Jcl;vclie;JvPrintPreview;vcltoucBBCControlCComponentBCComponenth;BCComponentsDXE7;BCComponentsRXE7;emsclient;VclSmp;VCLRESTComponents;DBXInformixDriver;DataSnapConnectors;DataSnapServerMidas;BCControlsDXE7;dsnapcon;DBXFirebirdDriver;inet;fmxobj;JclVcl;JvPascalInterpreter;soapmidas;vclx;svn;DBXSybaseASADriver;fmxdae;RESTComponents;VirtualTreesR;dbexpress;DataSnapIndy10ServerTransport;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
@@ -83,9 +84,10 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <VerInfo_MajorVer>10</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=10.2.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=10.2.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MajorVer>11</VerInfo_MajorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
@@ -103,8 +105,10 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <VerInfo_MajorVer>11</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
         <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
@@ -114,8 +118,10 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <VerInfo_MajorVer>11</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
@@ -128,17 +134,21 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MajorVer>11</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=EditBone;ProductVersion=11.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=EditBone;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_MajorVer>11</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=EditBone;ProductVersion=11.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=11.1.1.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=EditBone;ProductVersion=11.1.1.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <ItemGroup>
@@ -226,43 +236,6 @@
                     <Source Name="MainSource">EditBone.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvAppFrmDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvAppFrmDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCoreDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCoreDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvBandsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvBandsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCmpDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCmpDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvControlsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvControlsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCryptDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCryptDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCustomDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvCustomDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDBDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDBDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDlgsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDlgsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDockingDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDockingDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDotNetCtrlsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvDotNetCtrlsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvGlobusDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvGlobusDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvHMIDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvHMIDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvJansDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvJansDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvManagedThreadsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvManagedThreadsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvMMDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvMMDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvNetDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvNetDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPageCompsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPageCompsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPascalInterpreterDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPascalInterpreterDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPluginSystemDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPluginSystemDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPrintPreviewDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvPrintPreviewDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvRuntimeDesignDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvRuntimeDesignDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvStdCtrlsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvStdCtrlsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvSystemDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvSystemDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvTimeFrameworkDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvTimeFrameworkDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvWizardsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvWizardsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvXPCtrlsDesign220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JvXPCtrlsDesign220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclBaseExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclBaseExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclDebugExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclDebugExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclProjectAnalysisExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclProjectAnalysisExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclFavoriteFoldersExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclFavoriteFoldersExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclRepositoryExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclRepositoryExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclSIMDViewExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclSIMDViewExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclStackTraceViewerExpert220.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\JclStackTraceViewerExpert220.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\BCComponentsDXE8.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\BCComponentsDXE8.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\BCControlsDXE8.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\BCControlsDXE8.bpl not found</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\VirtualTreesD23.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\16.0\Bpl\VirtualTreesD23.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k220.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp220.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k220.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
@@ -670,12 +643,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
