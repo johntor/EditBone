@@ -2484,7 +2484,11 @@ begin
   if Assigned(AEditor) then
   with AEditor do
   begin
-    Highlighter.Colors.LoadFromFile(Format('%s.json', [AColorName]));
+    try
+      Highlighter.Colors.LoadFromFile(Format('%s.json', [AColorName]));
+    except
+      Highlighter.Colors.LoadFromFile('Default.json');
+    end;
     SetSkinColors(AEditor);
     Invalidate;
   end;
