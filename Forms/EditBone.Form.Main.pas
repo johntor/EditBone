@@ -12,7 +12,7 @@ uses
   BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
   BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
   System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,
-  BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.SkinProvider, BCComponent.TitleBar,
+  BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.TitleBar,
   BCComponent.SkinManager, sStatusBar;
 
 const

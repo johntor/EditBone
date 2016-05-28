@@ -3197,7 +3197,7 @@ inherited MainForm: TMainForm
     Left = 36
     Top = 234
   end
-  inherited SkinProvider: TBCSkinProvider
+  inherited SkinProvider: TsSkinProvider
     Left = 32
     Top = 294
   end
