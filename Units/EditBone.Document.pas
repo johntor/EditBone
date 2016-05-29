@@ -2620,11 +2620,10 @@ begin
     LTabSheet.SplitEditor.Width := 0; { avoid flickering }
     LTabSheet.SplitEditor.Height := LTabSheet.Editor.Height div 2;
     LTabSheet.SplitEditor.Parent := PageControl.ActivePage;
+    LTabSheet.SplitEditor.Assign(LTabSheet.Editor);
     OptionsContainer.AssignTo(LTabSheet.SplitEditor);
     LTabSheet.SplitEditor.ChainEditor(LTabSheet.Editor);
     LTabSheet.SplitEditor.SetFocus;
-    LTabSheet.SplitEditor.Minimap.Visible := LTabSheet.Editor.Minimap.Visible;
-    LTabSheet.SplitEditor.CodeFolding.Visible := LTabSheet.Editor.CodeFolding.Visible;
     { horizontal splitter }
     LTabSheet.SplitterHorizontal := TBCSplitter.Create(PageControl.ActivePage);
     LTabSheet.SplitterHorizontal.Align := alBottom;
