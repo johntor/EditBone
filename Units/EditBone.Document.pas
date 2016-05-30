@@ -2619,8 +2619,8 @@ begin
     LTabSheet.SplitEditor.Margins.SetBounds(2, 0, 2, 2);
     LTabSheet.SplitEditor.Width := 0; { avoid flickering }
     LTabSheet.SplitEditor.Height := LTabSheet.Editor.Height div 2;
-    LTabSheet.SplitEditor.Parent := PageControl.ActivePage;
     LTabSheet.SplitEditor.Assign(LTabSheet.Editor);
+    LTabSheet.SplitEditor.Parent := PageControl.ActivePage;
     OptionsContainer.AssignTo(LTabSheet.SplitEditor);
     LTabSheet.SplitEditor.ChainEditor(LTabSheet.Editor);
     LTabSheet.SplitEditor.SetFocus;

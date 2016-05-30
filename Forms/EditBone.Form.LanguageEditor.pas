@@ -405,6 +405,7 @@ begin
     Data.Value[4] := 'Changed';
     Caption := GetCaption;
   end;
+  VirtualDrawTree.Invalidate;
 end;
 
 procedure TLanguageEditorForm.VirtualDrawTreeEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
