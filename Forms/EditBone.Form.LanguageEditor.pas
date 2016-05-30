@@ -77,8 +77,8 @@ type
   private
     FEdit: TWinControl;
     FTree: TVirtualDrawTree; // A back reference to the tree calling.
-    FNode: PVirtualNode;       // The node being edited.
-    FColumn: Integer;          // The column of the node being edited.
+    FNode: PVirtualNode;     // The node being edited.
+    FColumn: Integer;        // The column of the node being edited.
   protected
     procedure EditKeyPress(Sender: TObject; var Key: Char);
   public
@@ -398,12 +398,15 @@ procedure TLanguageEditorForm.VirtualDrawTreeEdited(Sender: TBaseVirtualTree; No
 var
   Data: PObjectNodeRec;
 begin
-  if (VirtualDrawTree.Tag = 1) and (Pos('~', FLanguageFileName) = 0) then
+  if VirtualDrawTree.Tag = 1 then
   begin
-    FLanguageFileName := FLanguageFileName + '~';
     Data := VirtualDrawTree.GetNodeData(Node);
     Data.Value[4] := 'Changed';
-    Caption := GetCaption;
+    if Pos('~', FLanguageFileName) = 0 then
+    begin
+      FLanguageFileName := FLanguageFileName + '~';
+      Caption := GetCaption;
+    end;
   end;
   VirtualDrawTree.Invalidate;
 end;
