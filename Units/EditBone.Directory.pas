@@ -75,9 +75,9 @@ type
 implementation
 
 uses
-  EditBone.Dialog.DirectoryTab, BigIni, BCCommon.Language.Strings, BCCommon.Options.Container, BCControl.Utils,
+  EditBone.Dialog.DirectoryTab, BCCommon.Language.Strings, BCCommon.Options.Container, BCControl.Utils,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.StringUtils, BCCommon.Dialog.Base, EditBone.Consts,
-  Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControl.Panel;
+  Winapi.ShellAPI, Winapi.CommCtrl, EditBone.DataModule.Images, BCControl.Panel, System.IniFiles;
 
 destructor TEBDirectory.Destroy;
 begin
@@ -152,7 +152,7 @@ var
   LExcludeOtherBranches: Boolean;
 begin
   LLastPaths := TStringList.Create;
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     { Options }
     ReadSectionValues('LastPaths', LLastPaths);
@@ -350,7 +350,7 @@ var
   LFileTreeView: TBCFileTreeView;
   LTabSheet: TTabSheet;
 begin
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     WriteInteger('Options', 'ActiveDirectoryIndex', FPageControl.ActivePageIndex);
     { Options }

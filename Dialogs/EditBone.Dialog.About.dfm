@@ -600,16 +600,15 @@ inherited AboutDialog: TAboutDialog
       object HTMLLabel3rdPartyComponents: TsHTMLLabel
         Left = 10
         Top = 4
-        Width = 416
+        Width = 383
         Height = 13
         Caption = 
           '<a href="http://www.alphaskins.com/">AlphaSkins</a>, <a href="ht' +
-          'tp://www.hinzen.de/delphi/index.html">BigIni</a>, <a href="http:' +
-          '//www.sqlparser.com/">General SQL Parser</a>, <a href="http://ro' +
-          'bstechcorner.blogspot.fi/">IniPersist</a>, <a href="https://gith' +
-          'ub.com/ahausladen/JsonDataObjects">JsonDataObjects</a>, <a href=' +
-          '"http://angusj.com/delphi/">TDiff</a>, <a href="http://www.soft-' +
-          'gems.net">Virtual Tree</a>'
+          'tp://www.sqlparser.com/">General SQL Parser</a>, <a href="http:/' +
+          '/robstechcorner.blogspot.fi/">IniPersist</a>, <a href="https://g' +
+          'ithub.com/ahausladen/JsonDataObjects">JsonDataObjects</a>, <a hr' +
+          'ef="http://angusj.com/delphi/">TDiff</a>, <a href="http://www.so' +
+          'ft-gems.net">Virtual Tree</a>'
         ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText

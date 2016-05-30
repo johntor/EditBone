@@ -882,12 +882,12 @@ implementation
 uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
-  BigIni, BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
+  BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
   BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, EditBone.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
   BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst,
-  BCCommon.Form.Print.Preview, EditBone.DataModule.Images;
+  BCCommon.Form.Print.Preview, EditBone.DataModule.Images, System.IniFiles;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
@@ -1040,7 +1040,7 @@ end;
 
 procedure TMainForm.ActionFileReopenClearExecute(Sender: TObject);
 begin
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     EraseSection('FileReopenFiles');
   finally
@@ -1778,7 +1778,7 @@ var
 begin
   LLeft := 0;
   LToolbarItems := TStringList.Create;
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     { update if changed }
     LIsChanged := ReadBool('ToolbarItemsChanged', 'Changed', False);
@@ -2559,7 +2559,7 @@ var
 begin
   LCaption := StringReplace(TMenuItem(Sender).Caption, '&', '', [rfReplaceAll]);
 
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     WriteString('Options', 'Language', LCaption);
   finally
@@ -3077,7 +3077,7 @@ begin
   OptionsContainer.ReadIniFile;
   SQLFormatterOptionsContainer.ReadIniFile;
 
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     { Options }
     StatusBar.Visible := ReadBool('Options', 'ShowStatusbar', True);
@@ -3197,7 +3197,7 @@ procedure TMainForm.ReadIniSizePositionAndState;
 var
   LState: Integer;
 begin
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     { Size }
     Width := ReadInteger('Size', 'Width', Round(Screen.Width * 0.8));
@@ -3248,7 +3248,7 @@ begin
     MenuItemMainMenuFileReopen.Clear;
 
     LFiles := TStringList.Create;
-    with TBigIniFile.Create(GetIniFilename) do
+    with TIniFile.Create(GetIniFilename) do
     try
       ReadSectionValues('FileReopenFiles', LFiles);
       { Files }
@@ -3423,7 +3423,7 @@ end;
 
 procedure TMainForm.WriteIniFile;
 begin
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     WriteString(Application.Title, 'Version', GetFileVersion(Application.ExeName));
     if WindowState = wsNormal  then

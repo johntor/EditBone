@@ -388,7 +388,7 @@ begin
     WriteIniFile;
     SaveSelectedTreeNode;
   finally
-    Free;
+    Free; { Do not use Release for this. Options need to be set before updating the editor. }
   end;
   if Result then
     SQLFormatterOptionsContainer.WriteIniFile; { this is written here because dll is reading settings from the ini file }

@@ -215,7 +215,7 @@ implementation
 
 uses
   Vcl.Forms, BCCommon.Form.Print.Preview, BCCommon.Options.Container, BCCommon.Dialog.ConfirmReplace, Vcl.Printers,
-  System.Types, BigIni, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialog.InputQuery, BCCommon.Dialog.Replace,
+  System.Types, BCCommon.Language.Strings, VirtualTrees,  BCCommon.Dialog.InputQuery, BCCommon.Dialog.Replace,
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
   BCControl.SpeedButton, BCControl.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
@@ -865,7 +865,7 @@ begin
   LFiles := TStringList.Create;
   try
     { Read section }
-    with TBigIniFile.Create(LIniFile) do
+    with TIniFile.Create(LIniFile) do
     try
       ReadSectionValues('FileReopenFiles', LFiles);
     finally
@@ -881,7 +881,7 @@ begin
     while LFiles.Count > 10 do
       LFiles.Delete(LFiles.Count - 1);
     { write section }
-    with TBigIniFile.Create(LIniFile) do
+    with TIniFile.Create(LIniFile) do
     try
       EraseSection('FileReopenFiles');
       for i := 0 to LFiles.Count - 1 do
@@ -1390,7 +1390,7 @@ var
     end;
 
   begin
-    with TBigIniFile.Create(GetIniFilename) do
+    with TIniFile.Create(GetIniFilename) do
     try
       SetOption(ReadBool('Options', 'SearchBeepIfSearchStringNotFound', True), soBeepIfStringNotFound);
       SetOption(ReadBool('Options', 'SearchCaseSensitive', False), soCaseSensitive);
@@ -1658,7 +1658,7 @@ begin
   LCaretXList := TValueListEditor.Create(nil);
   LCaretYList := TValueListEditor.Create(nil);
   LMinimapsList := TValueListEditor.Create(nil);
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     PageControl.Visible := False;
     { Open Files }
@@ -1713,7 +1713,7 @@ var
   LTextCaretPosition: TBCEditorTextPosition;
   LLanguageItem: string;
 begin
-  with TBigIniFile.Create(GetIniFilename) do
+  with TIniFile.Create(GetIniFilename) do
   try
     EraseSection('OpenFiles');
     EraseSection('Bookmarks');
