@@ -1,5 +1,12 @@
 Version 11.2.2 Use the Issues page to report bugs or send them directly to lasse@bonecode.com.
 
+<h3>Parameters</h3>
+
+Param | Description 
+--- | --- 
+-noini | INI file is not read or written.
+-noskin | Skin is not loaded.
+
 <h3>Build requirements</h3>
 
 * <a href="http://alphaskins.com">AlphaSkins</a> (commercial) 
