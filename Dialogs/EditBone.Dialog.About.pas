@@ -78,6 +78,7 @@ end;
 
 procedure TAboutDialog.FormShow(Sender: TObject);
 begin
+  inherited;
   Initialize;
 end;
 

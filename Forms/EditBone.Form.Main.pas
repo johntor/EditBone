@@ -2815,6 +2815,9 @@ begin
     if ParamStr(i) = PARAM_NO_SKIN then
       SkinManager.Active := False
     else
+    if ParamStr(i) = PARAM_APP_INI_PATH then
+      GApplicationIniPath := True
+    else
       FDocument.Open(ParamStr(i), nil, 0, 0, True);
   end;
 end;
