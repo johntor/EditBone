@@ -4,6 +4,7 @@ Version 11.2.2 Use the Issues page to report bugs or send them directly to lasse
 
 Param | Description 
 --- | --- 
+-appinipath | INI files are saved into application folder (version 12.0.0)
 -noini | INI file is not read or written.
 -noskin | Skin is not loaded.
 
