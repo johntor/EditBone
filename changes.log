@@ -1,3 +1,106 @@
+Version 12.0.0 beta (July 25, 2016)
+
+- Refactored TBCEditor control painting for better Unicode and non-fixed font support														 
+- Added smooth horizontal scrolling
+- Added -appinipath application parameter
+- Fixed minimap double buffering
+- Fixed Object Pascal highlighter
+- Fixed check for updates
+- Fixed skin selection to exclude commercial skins
+- Enabled High-DPI - application is now DPI aware
+- Updated third-party controls and components
+
+Version 11.2.2 (May 31, 2016)
+
+- Fixed about dialog language
+- Fixed language editor
+- Fixed options setting
+- Fixed find in files ini saving into unicode ini file (EditBoneUni.ini)
+- Fixed language files
+
+Version 11.2.1 (May 30, 2016)
+
+- Fixed language editor
+- Fixed find in files
+- Fixed split
+- Fixed color options
+- Updated Windows 10 skin
+
+Version 11.2.0 (May 29, 2016)
+
+- Added expand real numbers and terms case-sensitive selection options
+- Fixed drag and drop editing
+- Fixed memory leak from toolbar options
+- Fixed font and color options
+- Fixed language files
+- Updated third-party controls and components
+
+Version 11.1.2 (May 24, 2016)
+
+- Fixed font and color options
+- Fixed multi-caret editing
+- Fixed language files
+
+Version 11.1.1 (May 22, 2016)
+
+- Fixed color and font options
+- Fixed file types
+- Fixed language files
+
+Version 11.1.0 (May 21, 2016)
+
+- Added multi-caret editing (add carets with Ctrl and Shift+Ctrl)														
+- Added highlighter for GLSL
+- Added minimap background color option
+- Fixed code folding                                       
+- Fixed AutoIt v3 highlighter
+- Fixed replace
+- Fixed command processing
+- Updated third-party controls and components
+
+Version 11.0.0 (Mar 21, 2016)
+
+- Added show shadow option for the minimap
+- Fixed matching pair
+- Updated language files
+
+Version 10.10.5 (Mar 20, 2016)
+
+- Fixed undo and redo
+- Fixed insert line
+- Fixed code folding
+- Fixed Object Pascal highlighter
+
+Version 10.10.4 (Mar 18, 2016)
+
+- Fixed prompt on replace option
+- Fixed undo and redo
+- Fixed painting of collapsed code folding
+- Fixed Object Pascal highlighter
+- Fixed mouse move scrolling
+- Fixed guide lines
+- Fixed copy and paste
+- Updated language files
+
+Version 10.10.3 (Mar 16, 2016)
+
+- Fixed Object Pascal highlighter
+- Fixed INI file move
+- Fixed undo and redo
+
+Version 10.10.2 (Mar 14, 2016)
+
+- Fixed undo and redo
+- Fixed auto indentation
+- Fixed home and end key commands
+- Updated language files (fixed color constants)
+- INI files are moved automatically into user's profile folder
+
+Version 10.10.1 (Mar 12, 2016)
+
+- Fixed code folding
+- Fixed find in files item saving
+
 Version 10.10.0 (Mar 10, 2016)
 
 - Added Use middle color option for special chars
