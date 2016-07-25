@@ -7,7 +7,7 @@ uses
   Winapi.Windows,
   Winapi.Messages,
   Vcl.Forms,
-  BCCommon.Utils,
+  //BCCommon.Utils,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
   EditBone.DataModule.Images in 'DataModules\EditBone.DataModule.Images.pas' {EBDataModuleImages: TDataModule},
   EditBone.Dialog.About in 'Dialogs\EditBone.Dialog.About.pas' {AboutDialog},
