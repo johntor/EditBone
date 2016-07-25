@@ -993,32 +993,24 @@ end;
 procedure TMainForm.SelectedFileClick(APageIndex: Integer);
 begin
   PageControlDocument.ActivePageIndex := APageIndex;
-  FPopupFilesDialog.Visible := False;
-  FPopupFilesDialog := nil;
 end;
 
 procedure TMainForm.SelectedEncodingClick(AId: Integer);
 begin
   SetEncoding(FDocument.GetActiveEditor, AId);
   SetTitleBarMenuCaptions;
-  FPopupEncodingDialog.Visible := False;
-  FPopupEncodingDialog := nil;
 end;
 
 procedure TMainForm.SelectedHighlighterClick(AHighlighterName: string);
 begin
   FDocument.SetHighlighter(FDocument.GetActiveEditor, AHighlighterName);
   SetTitleBarMenuCaptions;
-  FPopupHighlighterDialog.Visible := False;
-  FPopupHighlighterDialog := nil;
 end;
 
 procedure TMainForm.SelectedHighlighterColorClick(AHighlighterColorName: string);
 begin
   FDocument.SetHighlighterColor(FDocument.GetActiveEditor, AHighlighterColorName);
   SetTitleBarMenuCaptions;
-  FPopupHighlighterColorDialog.Visible := False;
-  FPopupHighlighterColorDialog := nil;
 end;
 
 function TMainForm.Processing: Boolean;
@@ -2919,12 +2911,11 @@ var
 
 begin
   inherited;
-
   if Assigned(FPopupFilesDialog) then
-    FPopupFilesDialog := nil
-  else
-  begin
-    FPopupFilesDialog := TPopupFilesDialog.Create(Self);
+    Exit;
+
+  FPopupFilesDialog := TPopupFilesDialog.Create(Self);
+  try
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
 
@@ -2946,6 +2937,8 @@ begin
 
     while Assigned(FPopupFilesDialog) and FPopupFilesDialog.Visible do
       Application.HandleMessage;
+  finally
+    FPopupFilesDialog.Free;
     FPopupFilesDialog := nil;
   end;
 end;
@@ -2956,10 +2949,10 @@ var
 begin
   inherited;
   if Assigned(FPopupEncodingDialog) then
-    FPopupEncodingDialog := nil
-  else
-  begin
-    FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
+    Exit;
+
+  FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
+  try
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
 
@@ -2976,6 +2969,8 @@ begin
 
     while Assigned(FPopupEncodingDialog) and FPopupEncodingDialog.Visible do
       Application.HandleMessage;
+  finally
+    FPopupEncodingDialog.Free;
     FPopupEncodingDialog := nil;
   end;
 end;
@@ -3017,12 +3012,11 @@ var
   LPoint: TPoint;
 begin
   inherited;
-
   if Assigned(FPopupHighlighterDialog) then
-    FPopupHighlighterDialog := nil
-  else
-  begin
-    FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
+    Exit;
+
+  FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
+  try
     FPopupHighlighterDialog.PopupParent := Self;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
 
@@ -3039,6 +3033,8 @@ begin
 
     while Assigned(FPopupHighlighterDialog) and FPopupHighlighterDialog.Visible do
       Application.HandleMessage;
+  finally
+    FPopupHighlighterDialog.Free;
     FPopupHighlighterDialog := nil;
   end;
 end;
@@ -3049,10 +3045,10 @@ var
 begin
   inherited;
   if Assigned(FPopupHighlighterColorDialog) then
-    FPopupHighlighterColorDialog := nil
-  else
-  begin
-    FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
+    Exit;
+
+  FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
+  try
     FPopupHighlighterColorDialog.PopupParent := Self;
     FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
 
@@ -3069,6 +3065,8 @@ begin
 
     while Assigned(FPopupHighlighterColorDialog) and FPopupHighlighterColorDialog.Visible do
       Application.HandleMessage;
+  finally
+    FPopupHighlighterColorDialog.Free;
     FPopupHighlighterColorDialog := nil;
   end;
 end;

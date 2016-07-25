@@ -7,6 +7,8 @@ inherited MainForm: TMainForm
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnShow = FormShow
+  ExplicitWidth = 1127
+  ExplicitHeight = 741
   PixelsPerInch = 96
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
@@ -47,6 +49,9 @@ inherited MainForm: TMainForm
       end>
     ParentColor = True
     OnDrawPanel = StatusBarDrawPanel
+    ExplicitTop = 657
+    ExplicitWidth = 1111
+    ExplicitHeight = 25
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 2
       Top = 3
@@ -3036,7 +3041,6 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
-    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10

@@ -161,6 +161,7 @@ begin
   if Assigned(Data) then
     if Assigned(FSelectFile) then
       FSelectFile(Data.PageIndex);
+  Close;
 end;
 
 procedure TPopupFilesDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);

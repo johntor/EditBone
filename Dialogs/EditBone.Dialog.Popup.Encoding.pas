@@ -99,6 +99,7 @@ begin
   if Assigned(Data) then
     if Assigned(FSelectEncoding) then
       FSelectEncoding(Data.Id);
+  Close;
 end;
 
 procedure TPopupEncodingDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
