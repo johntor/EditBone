@@ -46,7 +46,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Types, BCControl.Utils, sGraphUtils, sVclUtils, sDefaults, System.Math;
+  System.Types, BCControl.Utils, sGraphUtils, sVclUtils, sDefaults, System.Math, acPopupController;
 
 type
   PSearchRec = ^TSearchRec;
@@ -117,9 +117,7 @@ begin
   Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height +
     VirtualDrawTree.BorderWidth * 2 + 2, TForm(Self.PopupParent).Height - GetSystemMetrics(SM_CYCAPTION) - 10);
 
-  SetWindowPos(Handle, HWND_TOPMOST, Left, Top, 0, 0, SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
-
-  Visible := True;
+  ShowPopupForm(Self, Point(Left, Top + 2));
 end;
 
 procedure TPopupFilesDialog.FormDestroy(Sender: TObject);
