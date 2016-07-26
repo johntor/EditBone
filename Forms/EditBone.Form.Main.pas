@@ -628,7 +628,7 @@ type
     TabSheetFile: TsTabSheet;
     TabSheetFindInFiles: TsTabSheet;
     TabSheetHelp: TsTabSheet;
-    TabSheetNew: TsTabSheet;
+    TabSheetOpen: TsTabSheet;
     TabSheetSearch: TsTabSheet;
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
@@ -644,6 +644,7 @@ type
     ActionViewTitleBarFileList: TAction;
     ActionDocumentHTMLExport: TAction;
     BCSpeedButton1: TBCSpeedButton;
+    sTabSheet1: TsTabSheet;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
