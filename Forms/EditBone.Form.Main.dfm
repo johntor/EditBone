@@ -1892,7 +1892,6 @@ inherited MainForm: TMainForm
         Top = 0
         Width = 329
         Height = 404
-        ActivePage = TabSheetOpen
         Align = alClient
         DoubleBuffered = True
         Font.Charset = DEFAULT_CHARSET
@@ -1913,13 +1912,6 @@ inherited MainForm: TMainForm
         HoldShiftToDragDrop = False
         RightClickSelect = True
         TabDragDrop = True
-        object TabSheetOpen: TsTabSheet
-          DoubleBuffered = False
-          ParentDoubleBuffered = False
-          TabType = ttButton
-          TabSkin = 'CHECKBOX'
-          OnClickBtn = TabSheetOpenClickBtn
-        end
       end
     end
     object PanelDocument: TBCPanel
@@ -3041,6 +3033,7 @@ inherited MainForm: TMainForm
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
+    IsDefault = False
     MenuSupport.UseExtraLine = False
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10

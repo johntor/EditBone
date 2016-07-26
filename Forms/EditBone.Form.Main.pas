@@ -629,7 +629,6 @@ type
     TabSheetFindInFiles: TsTabSheet;
     TabSheetHelp: TsTabSheet;
     TabSheetNew: TsTabSheet;
-    TabSheetOpen: TsTabSheet;
     TabSheetSearch: TsTabSheet;
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
