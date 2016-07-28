@@ -866,6 +866,7 @@ type
   protected
     procedure CreateParams(var Params: TCreateParams); override;
     procedure WMCopyData(var Message: TWMCopyData); message WM_COPYDATA;
+    procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
   public
     procedure CreateFileReopenList;
     procedure SetBookmarks;
@@ -3005,6 +3006,31 @@ procedure TMainForm.UnlockFormPaint;
 begin
   SkinProvider.SkinData.EndUpdate;
   SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
+end;
+
+procedure TMainForm.WMEnterSizeMove(var Message: TMessage);
+begin
+  if Assigned(FPopupHighlighterDialog) then
+  begin
+    FPopupHighlighterDialog.Free;
+    FPopupHighlighterDialog := nil;
+  end;
+  if Assigned(FPopupFilesDialog) then
+  begin
+    FPopupFilesDialog.Free;
+    FPopupFilesDialog := nil;
+  end;
+  if Assigned(FPopupEncodingDialog) then
+  begin
+    FPopupEncodingDialog.Free;
+    FPopupEncodingDialog := nil;
+  end;
+  if Assigned(FPopupHighlighterColorDialog) then
+  begin
+    FPopupHighlighterColorDialog.Free;
+    FPopupHighlighterColorDialog := nil;
+  end;
+  inherited;
 end;
 
 procedure TMainForm.TitleBarItems6Click(Sender: TObject);
