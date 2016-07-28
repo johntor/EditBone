@@ -1,4 +1,6 @@
-Version 12.0.2 Use the Issues page to report bugs or send them directly to lasse@bonecode.com.
+Version 12.0.2 
+
+Use the Issues page to report bugs or send them directly to lasse@bonecode.com. See also <a href="https://github.com/bonecode/TBCEditor/issues">TBCEditor</a> issues.
 
 <h3>Parameters</h3>
 
