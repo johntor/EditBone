@@ -1,3 +1,10 @@
+Version 12.1.0 (July 28, 2016)
+
+- Added show shadow scroll option
+- Fixed search options
+- Fixed option slider positions
+- Fixed language files
+
 Version 12.0.4 (July 28, 2016)
 
 - Fixed TBCEditor control painting
