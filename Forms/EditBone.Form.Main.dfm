@@ -1847,11 +1847,11 @@ inherited MainForm: TMainForm
   object PanelMiddle: TBCPanel [3]
     AlignWithMargins = True
     Left = 0
-    Top = 124
+    Top = 123
     Width = 1111
-    Height = 404
+    Height = 405
     Margins.Left = 0
-    Margins.Top = 5
+    Margins.Top = 4
     Margins.Right = 0
     Margins.Bottom = 0
     Align = alClient
@@ -1866,15 +1866,16 @@ inherited MainForm: TMainForm
       Left = 329
       Top = 0
       Width = 5
-      Height = 404
+      Height = 405
       Visible = False
       SkinData.SkinSection = 'SPLITTER'
+      ExplicitHeight = 404
     end
     object PanelDirectory: TBCPanel
       Left = 0
       Top = 0
       Width = 329
-      Height = 404
+      Height = 405
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1891,8 +1892,8 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 329
-        Height = 404
-        ActivePage = sTabSheet1
+        Height = 405
+        ActivePage = TabSheetDirectory
         Align = alClient
         DoubleBuffered = True
         Font.Charset = DEFAULT_CHARSET
@@ -1913,7 +1914,7 @@ inherited MainForm: TMainForm
         HoldShiftToDragDrop = False
         RightClickSelect = True
         TabDragDrop = True
-        object sTabSheet1: TsTabSheet
+        object TabSheetDirectory: TsTabSheet
           DoubleBuffered = False
           ParentDoubleBuffered = False
           TabType = ttButton
@@ -1926,7 +1927,7 @@ inherited MainForm: TMainForm
       Left = 334
       Top = 0
       Width = 777
-      Height = 404
+      Height = 405
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1943,7 +1944,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 777
-        Height = 404
+        Height = 405
         Margins.Left = 0
         Margins.Top = 5
         Margins.Right = 0

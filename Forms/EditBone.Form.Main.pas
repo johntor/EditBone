@@ -644,7 +644,7 @@ type
     ActionViewTitleBarFileList: TAction;
     ActionDocumentHTMLExport: TAction;
     BCSpeedButton1: TBCSpeedButton;
-    sTabSheet1: TsTabSheet;
+    TabSheetDirectory: TsTabSheet;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -1792,14 +1792,16 @@ begin
         while PanelToolbar.ControlCount > 0 do
           PanelToolbar.Controls[0].Destroy;
 
+        if OptionsContainer.ToolbarIconSizeSmall then
+          ActionList.Images := ImagesDataModule.ImageListSmall
+        else
+          ActionList.Images := ImagesDataModule.ImageList;
+
         for i := 0 to LToolbarItems.Count - 1 do
         begin
           LSpeedButton := TBCSpeedButton.Create(PanelToolbar);
           LSpeedButton.Flat := True;
-          if OptionsContainer.ToolbarIconSizeSmall then
-            LSpeedButton.Images := ImagesDataModule.ImageListSmall
-          else
-            LSpeedButton.Images := ImagesDataModule.ImageList;
+
           LSpeedButton.SkinData.SkinSection := 'TOOLBUTTON';
           LSpeedButton.Layout := Vcl.Buttons.blGlyphTop;
 
@@ -1931,23 +1933,16 @@ begin
     PageControlToolbar.Margins.SetBounds(3, 3, 3, 0)
   else
     PageControlToolbar.Margins.SetBounds(0, 3, 0, 0);
-  PageControlDirectory.AlignWithMargins := SkinManager.ExtendedBorders;
-  PageControlDocument.AlignWithMargins := SkinManager.ExtendedBorders;
-  if PanelDirectory.Visible then
+  if SkinManager.ExtendedBorders then
   begin
-    if PanelDirectory.Align = alLeft then
-    begin
-      PageControlDirectory.Margins.SetBounds(3, 0, 0, 0);
-      PageControlDocument.Margins.SetBounds(0, 0, 3, 0)
-    end
-    else
-    begin
-      PageControlDirectory.Margins.SetBounds(0, 0, 3, 0);
-      PageControlDocument.Margins.SetBounds(3, 0, 0, 0)
-    end;
+    PanelMiddle.Margins.Left := 3;
+    PanelMiddle.Margins.Right := 3;
   end
   else
-    PageControlDocument.Margins.SetBounds(3, 0, 3, 0);
+  begin
+    PanelMiddle.Margins.Left := 0;
+    PanelMiddle.Margins.Right := 0;
+  end;
   PageControlOutput.AlignWithMargins := SkinManager.ExtendedBorders;
   PageControlOutput.Margins.SetBounds(3, 0, 3, 0);
 end;
@@ -2668,6 +2663,7 @@ begin
   FImageListCount := ImagesDataModule.ImageListSmall.Count; { System images are appended after menu icons for file reopen }
   ReadIniOptions;
   CreateToolbar(True);
+  ActionList.Images := ImagesDataModule.ImageList;
   CreateObjects;
   ReadIniSizePositionAndState;
   SetOptions;

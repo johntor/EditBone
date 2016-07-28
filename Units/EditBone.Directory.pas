@@ -138,7 +138,8 @@ begin
   inherited Create;
 
   FPageControl := AOwner;
-  FTabSheetOpen := AOwner.Pages[0];
+  if FPageControl.PageCount > 0 then
+    FTabSheetOpen := AOwner.Pages[0];
   CreateImageList;
 end;
 

@@ -1155,6 +1155,8 @@ begin
     with LTabSheet.Editor do
     begin
       SaveToFile(DocumentName);
+      if not OptionsContainer.UndoAfterSave then
+        UndoList.Clear;
       FileDateTime := GetFileDateTime(DocumentName);
       TabSheet.ImageIndex := GetIconIndex(DocumentName);
       TabSheet.Caption := FormatFileName(TabSheet.Caption);
