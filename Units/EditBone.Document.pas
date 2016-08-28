@@ -1494,7 +1494,6 @@ begin
       if ReplaceInWholeFile then
       begin
         GetOptions(LEditor);
-        LEditor.CaretZero;
         Screen.Cursor := crHourGlass;
         try
           LEditor.ReplaceText(SearchFor, ReplaceWith);

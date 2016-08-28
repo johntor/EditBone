@@ -77,9 +77,9 @@ inherited AboutDialog: TAboutDialog
     object LabelMemoryAvailable: TLabel
       Left = 10
       Top = 116
-      Width = 176
+      Width = 175
       Height = 13
-      Caption = 'Memory Available to Windows: %s'
+      Caption = 'Memory available to Windows: %s'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -91,10 +91,10 @@ inherited AboutDialog: TAboutDialog
     object LabelCopyright: TLabel
       Left = 10
       Top = 58
-      Width = 175
+      Width = 169
       Height = 13
       Alignment = taCenter
-      Caption = 'Copyright %s. All Rights Reserved.'
+      Caption = 'Copyright %s. All rights reserved.'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -529,7 +529,7 @@ inherited AboutDialog: TAboutDialog
       Margins.Left = 10
       Margins.Right = 10
       Align = alTop
-      Caption = '3rd Party Components'
+      Caption = '3rd party components'
       ParentFont = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -563,7 +563,7 @@ inherited AboutDialog: TAboutDialog
       Margins.Left = 10
       Margins.Right = 10
       Align = alTop
-      Caption = 'Language File Contributors'
+      Caption = 'Language file contributors'
       ParentFont = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -580,7 +580,7 @@ inherited AboutDialog: TAboutDialog
       Margins.Left = 10
       Margins.Right = 10
       Align = alTop
-      Caption = 'Development Environment'
+      Caption = 'Development environment'
       ParentFont = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -635,8 +635,8 @@ inherited AboutDialog: TAboutDialog
         Caption = 
           'ansidev, bovirus, Christian Heinrichs, DEKO, Han Leentvaar, Jos ' +
           'Berkers, Karel Van Dongen, Ma Xiaoguang, Midas, nickW, Satit Arc' +
-          'hanusorn, Stanis'#322'aw Nakonieczny, ZityiSoft Translator Team, '#920#945#957#940 +
-          #963#951#962' '#922#945#964#963#945#947#949#974#961#947#951#962', '#1057#1077#1088#1075#1077#1081' '#1053#1086#1074#1080#1082#1086#1074
+          'hanusorn, Saif Alasadi, Stanis'#322'aw Nakonieczny, ZityiSoft Transla' +
+          'tor Team, '#920#945#957#940#963#951#962' '#922#945#964#963#945#947#949#974#961#947#951#962', '#1057#1077#1088#1075#1077#1081' '#1053#1086#1074#1080#1082#1086#1074
         ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText

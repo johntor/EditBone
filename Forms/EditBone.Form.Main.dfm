@@ -7,8 +7,6 @@ inherited MainForm: TMainForm
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  ExplicitWidth = 1127
-  ExplicitHeight = 741
   PixelsPerInch = 96
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
@@ -49,9 +47,6 @@ inherited MainForm: TMainForm
       end>
     ParentColor = True
     OnDrawPanel = StatusBarDrawPanel
-    ExplicitTop = 657
-    ExplicitWidth = 1111
-    ExplicitHeight = 25
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 2
       Top = 3
@@ -120,9 +115,11 @@ inherited MainForm: TMainForm
       ParentFont = False
       TabHeight = 22
       TabOrder = 0
+      ActiveIsBold = True
       TabPadding = 6
       TabSpacing = 8
       SkinData.SkinSection = 'RIBBONPAGE'
+      SkinData.OuterEffects.Visibility = ovAlways
       HoldShiftToDragDrop = False
       TabDragDrop = False
       object TabSheetButton: TsTabSheet
@@ -143,7 +140,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonFileNew: TBCSpeedButton
             Left = 0
             Top = 0
@@ -470,7 +467,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonEditUndo: TBCSpeedButton
             Left = 0
             Top = 0
@@ -802,7 +799,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonSearchSearch: TBCSpeedButton
             Left = 0
             Top = 0
@@ -1026,7 +1023,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonViewOpenDirectory: TBCSpeedButton
             Left = 0
             Top = 0
@@ -1401,7 +1398,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonDocumentInfo: TBCSpeedButton
             Left = 0
             Top = 0
@@ -1568,7 +1565,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonToolsOptions: TBCSpeedButton
             Left = 0
             Top = 0
@@ -1731,7 +1728,7 @@ inherited MainForm: TMainForm
           Align = alClient
           BevelOuter = bvNone
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
+          SkinData.SkinSection = 'TRANSPARENT'
           object SpeedButtonHelpCheckForUpdates: TBCSpeedButton
             Left = 0
             Top = 0
@@ -1869,7 +1866,6 @@ inherited MainForm: TMainForm
       Height = 405
       Visible = False
       SkinData.SkinSection = 'SPLITTER'
-      ExplicitHeight = 404
     end
     object PanelDirectory: TBCPanel
       Left = 0
@@ -1918,7 +1914,7 @@ inherited MainForm: TMainForm
           DoubleBuffered = False
           ParentDoubleBuffered = False
           TabType = ttButton
-          TabSkin = 'CHECKBOX'
+          TabSkin = 'TRANSPARENT'
           OnClickBtn = TabSheetOpenClickBtn
         end
       end
@@ -1975,7 +1971,7 @@ inherited MainForm: TMainForm
         object TabSheetOpen: TsTabSheet
           Caption = '      '
           TabType = ttButton
-          TabSkin = 'CHECKBOX'
+          TabSkin = 'TRANSPARENT'
           OnClickBtn = ActionFileNewExecute
         end
       end
@@ -3035,15 +3031,17 @@ inherited MainForm: TMainForm
         ImageIndex = 36
         ParentDoubleBuffered = False
         TabType = ttButton
-        TabSkin = 'CHECKBOX'
+        TabSkin = 'TRANSPARENT'
         OnClickBtn = TabSheetFindInFilesClickBtn
       end
     end
   end
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
+    Effects.AllowOuterEffects = True
     IsDefault = True
     MenuSupport.UseExtraLine = False
+    SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10

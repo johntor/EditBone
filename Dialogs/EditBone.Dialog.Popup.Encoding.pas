@@ -49,7 +49,7 @@ end;
 
 procedure TPopupEncodingDialog.FormShow(Sender: TObject);
 begin
-   VirtualDrawTree.SetFocus;
+  VirtualDrawTree.SetFocus;
 end;
 
 procedure TPopupEncodingDialog.Execute(const ASelectedEncoding: string);

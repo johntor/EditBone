@@ -863,10 +863,10 @@ type
     procedure UpdateMenuBarLanguage;
     procedure UpdatePageControlMargins;
     procedure WriteIniFile;
-  protected
-    procedure CreateParams(var Params: TCreateParams); override;
     procedure WMCopyData(var Message: TWMCopyData); message WM_COPYDATA;
     procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     procedure CreateFileReopenList;
     procedure SetBookmarks;
