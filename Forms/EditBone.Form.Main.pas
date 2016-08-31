@@ -849,6 +849,7 @@ type
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
+    procedure DestroyPopups;
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure LockFormPaint;
     procedure ReadIniOptions;
@@ -2695,7 +2696,33 @@ begin
   OptionsContainer.Free;
   SQLFormatterOptionsContainer.Free;
 
+  DestroyPopups;
+
   inherited;
+end;
+
+procedure TMainForm.DestroyPopups;
+begin
+  if Assigned(FPopupHighlighterDialog) then
+  begin
+    FPopupHighlighterDialog.Free;
+    FPopupHighlighterDialog := nil;
+  end;
+  if Assigned(FPopupFilesDialog) then
+  begin
+    FPopupFilesDialog.Free;
+    FPopupFilesDialog := nil;
+  end;
+  if Assigned(FPopupEncodingDialog) then
+  begin
+    FPopupEncodingDialog.Free;
+    FPopupEncodingDialog := nil;
+  end;
+  if Assigned(FPopupHighlighterColorDialog) then
+  begin
+    FPopupHighlighterColorDialog.Free;
+    FPopupHighlighterColorDialog := nil;
+  end;
 end;
 
 procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -2909,10 +2936,10 @@ var
 begin
   inherited;
   if Assigned(FPopupFilesDialog) then
-    Exit;
-
-  FPopupFilesDialog := TPopupFilesDialog.Create(Self);
+    Exit
+  else
   try
+    FPopupFilesDialog := TPopupFilesDialog.Create(Self);
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
 
@@ -2946,10 +2973,10 @@ var
 begin
   inherited;
   if Assigned(FPopupEncodingDialog) then
-    Exit;
-
-  FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
+    Exit
+  else
   try
+    FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
 
@@ -3006,26 +3033,7 @@ end;
 
 procedure TMainForm.WMEnterSizeMove(var Message: TMessage);
 begin
-  if Assigned(FPopupHighlighterDialog) then
-  begin
-    FPopupHighlighterDialog.Free;
-    FPopupHighlighterDialog := nil;
-  end;
-  if Assigned(FPopupFilesDialog) then
-  begin
-    FPopupFilesDialog.Free;
-    FPopupFilesDialog := nil;
-  end;
-  if Assigned(FPopupEncodingDialog) then
-  begin
-    FPopupEncodingDialog.Free;
-    FPopupEncodingDialog := nil;
-  end;
-  if Assigned(FPopupHighlighterColorDialog) then
-  begin
-    FPopupHighlighterColorDialog.Free;
-    FPopupHighlighterColorDialog := nil;
-  end;
+  DestroyPopups;
   inherited;
 end;
 
@@ -3034,11 +3042,12 @@ var
   LPoint: TPoint;
 begin
   inherited;
-  if Assigned(FPopupHighlighterDialog) then
-    Exit;
 
-  FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
+  if Assigned(FPopupHighlighterDialog) then
+    Exit
+  else
   try
+    FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
     FPopupHighlighterDialog.PopupParent := Self;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
 
@@ -3067,10 +3076,10 @@ var
 begin
   inherited;
   if Assigned(FPopupHighlighterColorDialog) then
-    Exit;
-
-  FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
+    Exit
+  else
   try
+    FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
     FPopupHighlighterColorDialog.PopupParent := Self;
     FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
 
