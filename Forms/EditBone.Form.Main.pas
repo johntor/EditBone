@@ -826,6 +826,7 @@ type
     procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
     procedure ActionDocumentHTMLExportExecute(Sender: TObject);
+    procedure SkinProviderAfterAnimation(AnimType: TacAnimEvent);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -3500,6 +3501,12 @@ begin
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;
   end;
+end;
+
+procedure TMainForm.SkinProviderAfterAnimation(AnimType: TacAnimEvent);
+begin
+  inherited;
+
 end;
 
 {

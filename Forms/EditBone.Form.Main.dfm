@@ -91,6 +91,8 @@ inherited MainForm: TMainForm
     Height = 91
     Align = alTop
     BevelOuter = bvNone
+    DoubleBuffered = False
+    ParentDoubleBuffered = False
     TabOrder = 3
     SkinData.SkinSection = 'CHECKBOX'
     object PageControlToolbar: TBCPageControl
@@ -104,6 +106,7 @@ inherited MainForm: TMainForm
       Margins.Bottom = 0
       ActivePage = TabSheetFile
       Align = alClient
+      DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -112,6 +115,7 @@ inherited MainForm: TMainForm
       HotTrack = True
       Images = ImagesDataModule.ImageListSmall
       MultiLine = True
+      ParentDoubleBuffered = False
       ParentFont = False
       TabHeight = 22
       TabOrder = 0
@@ -3039,6 +3043,8 @@ inherited MainForm: TMainForm
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
     Effects.AllowOuterEffects = True
+    AnimEffects.PageChange.Active = False
+    AnimEffects.PageChange.Time = 40
     IsDefault = True
     MenuSupport.UseExtraLine = False
     SkinInfo = 'N/A'
@@ -3202,6 +3208,8 @@ inherited MainForm: TMainForm
     Top = 234
   end
   inherited SkinProvider: TsSkinProvider
+    SkinData.OuterEffects.Visibility = ovAlways
+    OnAfterAnimation = SkinProviderAfterAnimation
     Left = 32
     Top = 294
   end
