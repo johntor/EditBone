@@ -1,6 +1,20 @@
+Version 12.2.0 (September 6, 2016)
+
+- Added Show search results minimap option.
+- Added Arabic language by Saif Alasadi
+- Fixed TBCEditor control painting for better Unicode and non-fixed font support
+- Fixed multi-edit ghost caret painting
+- Fixed replace dialog
+- Fixed selected only replace option
+- Fixed horizontal scrolling
+- Fixed caret click accuracy
+- Fixed word wrap
+- Fixed undo
+- Updated AlphaSkins controls v11.15
+
 Version 12.1.0 (July 28, 2016)
 
-- Added show shadow scroll option
+- Added show shadow scroll option													
 - Fixed search options
 - Fixed option slider positions
 - Fixed language files
@@ -27,11 +41,11 @@ Version 12.0.1 (July 25, 2016)
 
 - Fixed title popups
 - Fixed special chars
-- Updated AlphaSkins controls v11.11 
+- Updated AlphaSkins controls v11.11
 
 Version 12.0.0 (July 25, 2016)
 
-- Refactored TBCEditor control painting for better Unicode and non-fixed font support														 
+- Refactored TBCEditor control painting for better Unicode and non-fixed font support
 - Added smooth horizontal scrolling
 - Added -appinipath application parameter
 - Fixed minimap double buffering
