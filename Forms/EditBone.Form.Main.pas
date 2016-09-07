@@ -2388,6 +2388,8 @@ begin
     ActionOutputOpenSelected.Visible := OptionsContainer.OutputShowCheckBox;
     ActionOutputSelectAll.Visible := OptionsContainer.OutputShowCheckBox;
     ActionOutputUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
+
+    ActionToolbarMenuSkin.Visible := SkinManager.Active;
   except
     { intentionally silent }
   end; //FI:W501 FixInsight ignore
