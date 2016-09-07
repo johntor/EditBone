@@ -368,7 +368,6 @@ begin
     Margins.Top := 2;
     Margins.Right := 2;
     Margins.Bottom := 2;
-    AutoSize := True;
     Height := 21;
     Visible := OptionsContainer.SearchVisible;
     Parent := ATabSheet;
@@ -493,6 +492,7 @@ begin
   begin
     Parent := ATabSheet.PanelSearch;
     Align := alRight;
+    Flat := True;
     Width := 20;
     Left := ATabSheet.LabelSearchResult.Left + ATabSheet.LabelSearchResult.Width + 1;
     ShowCaption := False;
@@ -501,11 +501,14 @@ begin
     Hint := ActionSearchClose.Hint;
     Images := ImagesDataModule.ImageListSmall;
     LBitmap := TBitmap.Create;
-    LBitmap.Width := 32;
-    LBitmap.Height := 16;
-    LBitmap.LoadFromResourceName(hInstance, 'SEARCHGLYPH');
-    Glyph := LBitmap;
-    LBitmap.Free;
+    try
+      LBitmap.Width := 32;
+      LBitmap.Height := 16;
+      LBitmap.LoadFromResourceName(hInstance, 'SEARCHGLYPH');
+      Glyph := LBitmap;
+    finally
+      LBitmap.Free;
+    end;
   end;
 end;
 
@@ -1434,11 +1437,9 @@ begin
     Result := LTabSheet.PanelSearch.Visible;
 
     if Result then
-    begin
       if Assigned(LTabSheet.ComboBoxSearchText) then
         if LTabSheet.ComboBoxSearchText.CanFocus then
           LTabSheet.ComboBoxSearchText.SetFocus;
-    end;
   end;
 end;
 
