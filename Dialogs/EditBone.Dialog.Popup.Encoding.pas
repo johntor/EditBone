@@ -97,7 +97,7 @@ begin
   if Assigned(Data) then
     if Assigned(FSelectEncoding) then
       FSelectEncoding(Data.Id);
-  Close;
+  Hide;
 end;
 
 procedure TPopupEncodingDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
@@ -146,9 +146,6 @@ begin
     SendMessage(Self.PopupParent.Handle, WM_NCACTIVATE, WPARAM(True), -1);
 
   inherited;
-
-  if AMessage.Active = WA_INACTIVE then
-    Release;
 end;
 
 procedure TPopupEncodingDialog.VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);

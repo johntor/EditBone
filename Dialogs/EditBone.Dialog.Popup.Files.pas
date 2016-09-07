@@ -159,7 +159,7 @@ begin
   if Assigned(Data) then
     if Assigned(FSelectFile) then
       FSelectFile(Data.PageIndex);
-  Close;
+  Hide;
 end;
 
 procedure TPopupFilesDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
@@ -216,9 +216,6 @@ begin
     SendMessage(Self.PopupParent.Handle, WM_NCACTIVATE, WPARAM(True), -1);
 
   inherited;
-
-  if AMessage.Active = WA_INACTIVE then
-    Release;
 end;
 
 procedure TPopupFilesDialog.ActionClearExecute(Sender: TObject);
