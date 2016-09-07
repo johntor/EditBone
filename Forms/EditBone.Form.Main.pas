@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BCCommon.Form.Base, System.Actions, Vcl.ActnList, Vcl.Menus,
   sSkinProvider, acTitleBar, sSkinManager, EditBone.Dialog.Popup.Files, BCCommon.Dialog.Popup.Highlighter,
-  Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, BCControl.Splitter,
+  Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, BCControl.Splitter, BCEditor.Editor,
   sPageControl, BCControl.PageControl, BCCommon.Images, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, EditBone.Dialog.Popup.Encoding,
   BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
@@ -826,7 +826,7 @@ type
     procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
     procedure ActionDocumentHTMLExportExecute(Sender: TObject);
-    procedure SkinProviderAfterAnimation(AnimType: TacAnimEvent);
+    procedure SplitterVerticalClick(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -853,6 +853,7 @@ type
     procedure DestroyPopups;
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure LockFormPaint;
+    procedure MoveSelection(AEditor: TBCEditor; const AVirtualKey: Byte);
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(const ALanguage: string);
@@ -885,7 +886,7 @@ implementation
 uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
   BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
-  BCEditor.Editor, BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
+  BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
   BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, EditBone.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
@@ -1634,91 +1635,43 @@ begin
   FOutput.SetCheckedState(csCheckedNormal);
 end;
 
-procedure TMainForm.ActionSelectionBoxDownExecute(Sender: TObject);
-
-  procedure BoxDown(Editor: TBCEditor);
-  begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-      begin
-        OptionsContainer.EnableSelectionMode := True;
-        Editor.Selection.Options := Editor.Selection.Options + [soALTSetsColumnMode];
-        Editor.Selection.Mode := smColumn;
-        Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
-        Keybd_Event(VK_DOWN, MapVirtualKey(VK_DOWN, 0), 0, 0);
-        Keybd_Event(VK_DOWN, MapVirtualKey(VK_DOWN, 0), KEYEVENTF_KEYUP, 0);
-        Keybd_Event(VK_MENU, MapVirtualKey(VK_MENU, 0), KEYEVENTF_KEYUP, 0);
-      end;
-  end;
-
+procedure TMainForm.MoveSelection(AEditor: TBCEditor; const AVirtualKey: Byte);
 begin
-  BoxDown(FDocument.GetActiveEditor);
-  BoxDown(FDocument.GetActiveSplitEditor);
+  if Assigned(AEditor) then
+    if AEditor.Focused then
+    begin
+      OptionsContainer.EnableSelectionMode := True;
+      AEditor.Selection.Options := AEditor.Selection.Options + [soALTSetsColumnMode];
+      AEditor.Selection.Mode := smColumn;
+      Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
+      Keybd_Event(AVirtualKey, MapVirtualKey(AVirtualKey, 0), 0, 0);
+      Keybd_Event(AVirtualKey, MapVirtualKey(AVirtualKey, 0), KEYEVENTF_KEYUP, 0);
+      Keybd_Event(VK_MENU, MapVirtualKey(VK_MENU, 0), KEYEVENTF_KEYUP, 0);
+    end;
+end;
+
+procedure TMainForm.ActionSelectionBoxDownExecute(Sender: TObject);
+begin
+  MoveSelection(FDocument.GetActiveEditor, VK_DOWN);
+  MoveSelection(FDocument.GetActiveSplitEditor, VK_DOWN);
 end;
 
 procedure TMainForm.ActionSelectionBoxLeftExecute(Sender: TObject);
-
-  procedure BoxLeft(Editor: TBCEditor);
-  begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-      begin
-        OptionsContainer.EnableSelectionMode := True;
-        Editor.Selection.Options := Editor.Selection.Options + [soALTSetsColumnMode];
-        Editor.Selection.Mode := smColumn;
-        Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
-        Keybd_Event(VK_LEFT, MapVirtualKey(VK_LEFT, 0), 0, 0);
-        Keybd_Event(VK_LEFT, MapVirtualKey(VK_LEFT, 0), KEYEVENTF_KEYUP, 0);
-        Keybd_Event(VK_MENU, MapVirtualKey(VK_MENU, 0), KEYEVENTF_KEYUP, 0);
-      end;
-  end;
-
 begin
-  BoxLeft(FDocument.GetActiveEditor);
-  BoxLeft(FDocument.GetActiveSplitEditor);
+  MoveSelection(FDocument.GetActiveEditor, VK_LEFT);
+  MoveSelection(FDocument.GetActiveSplitEditor, VK_LEFT);
 end;
 
 procedure TMainForm.ActionSelectionBoxRightExecute(Sender: TObject);
-  procedure BoxRight(Editor: TBCEditor);
-  begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-      begin
-        OptionsContainer.EnableSelectionMode := True;
-        Editor.Selection.Options := Editor.Selection.Options + [soALTSetsColumnMode];
-        Editor.Selection.Mode := smColumn;
-        Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
-        Keybd_Event(VK_RIGHT, MapVirtualKey(VK_RIGHT, 0), 0, 0);
-        Keybd_Event(VK_RIGHT, MapVirtualKey(VK_RIGHT, 0), KEYEVENTF_KEYUP, 0);
-        Keybd_Event(VK_MENU, MapVirtualKey(VK_MENU, 0), KEYEVENTF_KEYUP, 0);
-      end;
-  end;
-
 begin
-  BoxRight(FDocument.GetActiveEditor);
-  BoxRight(FDocument.GetActiveSplitEditor);
+  MoveSelection(FDocument.GetActiveEditor, VK_RIGHT);
+  MoveSelection(FDocument.GetActiveSplitEditor, VK_RIGHT);
 end;
 
 procedure TMainForm.ActionSelectionBoxUpExecute(Sender: TObject);
-
-  procedure BoxUp(Editor: TBCEditor);
-  begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-      begin
-        OptionsContainer.EnableSelectionMode := True;
-        Editor.Selection.Options := Editor.Selection.Options + [soALTSetsColumnMode];
-        Editor.Selection.Mode := smColumn;
-        Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
-        Keybd_Event(VK_UP, MapVirtualKey(VK_UP, 0), 0, 0);
-        Keybd_Event(VK_UP, MapVirtualKey(VK_UP, 0), KEYEVENTF_KEYUP, 0);
-        Keybd_Event(VK_MENU, MapVirtualKey(VK_MENU, 0), KEYEVENTF_KEYUP, 0);
-      end;
-  end;
-
 begin
-  BoxUp(FDocument.GetActiveEditor);
-  BoxUp(FDocument.GetActiveSplitEditor);
+  MoveSelection(FDocument.GetActiveEditor, VK_UP);
+  MoveSelection(FDocument.GetActiveSplitEditor, VK_UP);
 end;
 
 procedure TMainForm.ActionSelectReopenFileExecute(Sender: TObject);
@@ -3503,7 +3456,7 @@ begin
   end;
 end;
 
-procedure TMainForm.SkinProviderAfterAnimation(AnimType: TacAnimEvent);
+procedure TMainForm.SplitterVerticalClick(Sender: TObject);
 begin
   inherited;
 

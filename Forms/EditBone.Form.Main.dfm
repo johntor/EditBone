@@ -1857,9 +1857,8 @@ inherited MainForm: TMainForm
     Margins.Bottom = 0
     Align = alClient
     BevelOuter = bvNone
-    Color = clWindow
     DoubleBuffered = False
-    ParentBackground = False
+    ParentColor = True
     ParentDoubleBuffered = False
     TabOrder = 2
     SkinData.SkinSection = 'CHECKBOX'
@@ -1869,6 +1868,7 @@ inherited MainForm: TMainForm
       Width = 5
       Height = 405
       Visible = False
+      OnClick = SplitterVerticalClick
       SkinData.SkinSection = 'SPLITTER'
     end
     object PanelDirectory: TBCPanel
@@ -1882,8 +1882,8 @@ inherited MainForm: TMainForm
       Margins.Bottom = 5
       Align = alLeft
       BevelOuter = bvNone
-      Color = clWindow
       DoubleBuffered = False
+      ParentColor = True
       ParentDoubleBuffered = False
       TabOrder = 0
       Visible = False
@@ -2999,7 +2999,7 @@ inherited MainForm: TMainForm
     Margins.Bottom = 0
     Align = alBottom
     BevelOuter = bvNone
-    Color = clWindow
+    ParentColor = True
     TabOrder = 4
     Visible = False
     SkinData.SkinSection = 'CHECKBOX'
@@ -3209,7 +3209,6 @@ inherited MainForm: TMainForm
   end
   inherited SkinProvider: TsSkinProvider
     SkinData.OuterEffects.Visibility = ovAlways
-    OnAfterAnimation = SkinProviderAfterAnimation
     Left = 32
     Top = 294
   end
