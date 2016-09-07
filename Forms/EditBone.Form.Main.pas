@@ -846,6 +846,7 @@ type
     function GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
     function OnCancelSearch: Boolean;
     function Processing: Boolean;
+    function ReadApplicationParamFiles: Boolean;
     procedure CopyIniFilesIntoUserProfile;
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateObjects;
@@ -854,10 +855,10 @@ type
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure LockFormPaint;
     procedure MoveSelection(AEditor: TBCEditor; const AVirtualKey: Byte);
+    procedure ReadApplicationParams;
     procedure ReadIniOptions;
     procedure ReadIniSizePositionAndState;
     procedure ReadLanguageFile(const ALanguage: string);
-    procedure ReadParams;
     procedure SearchFindInFiles(const AFolder: string = '');
     procedure SetFields;
     procedure SetImages;
@@ -2493,7 +2494,7 @@ procedure TMainForm.EditorPrintPrintStatus(Sender: TObject; Status: TBCEditorPri
   var Abort: Boolean);
 begin
   inherited;
-  //xxx abortti mahdollisuus
+  // TODO: Abort
 end;
 
 procedure TMainForm.LanguageMenuClick(Sender: TObject);
@@ -2610,6 +2611,8 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   inherited;
+
+  ReadApplicationParams;
 
   PageControlToolbar.ActivePage := TabSheetFile;
 
@@ -2771,7 +2774,7 @@ begin
   Application.BringToFront;
 end;
 
-procedure TMainForm.ReadParams;
+procedure TMainForm.ReadApplicationParams;
 var
   i: Integer;
 begin
@@ -2787,22 +2790,40 @@ begin
     else
     if ParamStr(i) = PARAM_APP_INI_PATH then
       GApplicationIniPath := True
-    else
-      FDocument.Open(ParamStr(i), nil, 0, 0, True);
+  end;
+end;
+
+function TMainForm.ReadApplicationParamFiles: Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+
+  FNoIni := False;
+  if ParamCount > 0 then
+  for i := 1 to ParamCount do
+  if (ParamStr(i) <> PARAM_NO_INI) and (ParamStr(i) <> PARAM_NO_SKIN) and (ParamStr(i) <> PARAM_APP_INI_PATH) then
+  begin
+    FDocument.Open(ParamStr(i), nil, 0, 0, True);
+    Result := True;
   end;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 var
   LEditor: TBCEditor;
+  LOpenFilesFound, LParamFilesFound: Boolean;
 begin
   inherited;
 
-  if not FDocument.ReadIniOpenFiles and (ParamCount = 0) or
-    (ParamCount = 1) and (ParamStr(1) = PARAM_NO_INI) then
-    FDocument.New;
+  //if not FDocument.ReadIniOpenFiles and (ParamCount = 0) or (ParamCount = 1) and (ParamStr(1) = PARAM_NO_INI) then
+  //  FDocument.New;
 
-  ReadParams;
+  LOpenFilesFound := FDocument.ReadIniOpenFiles;
+  LParamFilesFound := ReadApplicationParamFiles;
+
+  if not LOpenFilesFound and not LParamFilesFound then
+    FDocument.New;
 
   Self.ReadLanguageFile(GetSelectedLanguage('English'));
 
@@ -2835,9 +2856,8 @@ begin
         SkinProvider.SkinData, True)
     else
     begin
-      StatusBar.Canvas.Brush.Style := bsClear;
       StatusBar.Canvas.Font.Assign(StatusBar.Font);
-      StatusBar.Canvas.TextOut(LRect.Left, LRect.Top + 6, FDocument.CaretInfo);
+      StatusBar.Canvas.TextOut(LRect.Left, LRect.Top + 2, FDocument.CaretInfo);
     end;
   end;
 end;

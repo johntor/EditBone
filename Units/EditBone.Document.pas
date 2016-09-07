@@ -542,7 +542,10 @@ begin
     AlignWithMargins := True;
     Margins.Left := 2;
     Margins.Top := 2;
-    Margins.Right := 2;
+    if FSkinManager.Active then
+      Margins.Right := 2
+    else
+      Margins.Right := 4;
     Margins.Bottom := 2;
     Visible := False;
     Parent := Result;

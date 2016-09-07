@@ -645,7 +645,10 @@ begin
     Align := alClient;
     Padding.Left := 2;
     Padding.Top := 2;
-    Padding.Right := 2;
+    if FSkinManager.Active then
+      Padding.Right := 2
+    else
+      Padding.Right := 4;
     Padding.Bottom := 2;
   end;
 
