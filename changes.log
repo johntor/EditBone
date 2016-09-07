@@ -1,3 +1,11 @@
+Version 12.2.1 (September 7, 2016)
+
+- Fixed title bar selection dialogs
+- Fixed application parameter reading
+- Fixed -noskin painting
+- Fixed search close button
+- Fixed find in files file mask
+
 Version 12.2.0 (September 6, 2016)
 
 - Added Show search results minimap option.
