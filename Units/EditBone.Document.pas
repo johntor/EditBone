@@ -1439,7 +1439,14 @@ begin
     if Result then
       if Assigned(LTabSheet.ComboBoxSearchText) then
         if LTabSheet.ComboBoxSearchText.CanFocus then
+        begin
+          if LTabSheet.Editor.SelectionAvailable then
+          begin
+            LTabSheet.ComboBoxSearchText.Text := LTabSheet.Editor.SelectedText;
+            LTabSheet.ComboBoxSearchText.OnChange(nil);
+          end;
           LTabSheet.ComboBoxSearchText.SetFocus;
+        end;
   end;
 end;
 
@@ -1907,9 +1914,7 @@ end;
 function TEBDocument.GetActiveComboBoxSearchText: TBCComboBox;
 begin
   if Assigned(PageControl.ActivePage) then
-  begin
     Result := (PageControl.ActivePage as TsTabSheet).FComboBoxSearchText
-  end
   else
     Result := nil;
 end;
