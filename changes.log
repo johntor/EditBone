@@ -1,3 +1,24 @@
+Version 12.3.0 (September 11, 2016)
+
+- Added Triangle code folding mark style
+- Added Show tree line code folding option
+- Fixed past end of line scroll option
+- Fixed search
+- Fixed select all in column mode
+- Fixed Windows 2000 support
+- Fixed language files
+
+Version 12.2.3 (September 9, 2016)
+
+- Fixed horizontal scrolling
+- Fixed column mode selection painting
+
+Version 12.2.2 (September 8, 2016)
+
+- Fixed guide line painting
+- Fixed color options
+- Fixed selection
+
 Version 12.2.1 (September 7, 2016)
 
 - Fixed title bar selection dialogs
@@ -18,6 +39,7 @@ Version 12.2.0 (September 6, 2016)
 - Fixed caret click accuracy
 - Fixed word wrap
 - Fixed undo
+- Fixed language files
 - Updated AlphaSkins controls v11.15
 
 Version 12.1.0 (July 28, 2016)
