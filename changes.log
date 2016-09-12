@@ -1,3 +1,9 @@
+Version 12.3.1 (September 12, 2016)
+
+- Fixed line break
+- Fixed search highlighting
+- Fixed language files
+
 Version 12.3.0 (September 11, 2016)
 
 - Added Triangle code folding mark style
