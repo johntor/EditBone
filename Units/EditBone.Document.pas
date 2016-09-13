@@ -1454,10 +1454,11 @@ begin
       if Assigned(LTabSheet.ComboBoxSearchText) then
         if LTabSheet.ComboBoxSearchText.CanFocus then
         begin
-          if LTabSheet.Editor.SelectionAvailable then
+          if LTabSheet.Editor.SelectionAvailable and
+            (LTabSheet.Editor.SelectionBeginPosition.Line = LTabSheet.Editor.SelectionEndPosition.Line) then
           begin
             LTabSheet.ComboBoxSearchText.Text := LTabSheet.Editor.SelectedText;
-            LTabSheet.ComboBoxSearchText.OnChange(nil);
+            DoSearchTextChange(LTabSheet.Editor);
           end;
           LTabSheet.ComboBoxSearchText.SetFocus;
         end;
