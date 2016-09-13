@@ -92,6 +92,7 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
+    procedure DoSearchTextChange(AEditor: TBCEditor);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -651,46 +652,53 @@ var
   LComboBoxSearchText: TBCComboBox;
   LItems: TStrings;
   LTabSheet: TsTabSheet;
+  LEditor: TBCEditor;
 begin
-  if (Key = EDITBONE_CARRIAGE_RETURN) or (Key = EDITBONE_LINEFEED) then
-  begin
-    SetActiveEditorFocus;
-    LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) then
-      if LComboBoxSearchText.Items.IndexOf(LComboBoxSearchText.Text) = -1 then
+  case Key of
+    EDITBONE_CARRIAGE_RETURN, EDITBONE_LINEFEED:
       begin
-        LComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
-        { Update other documents }
-        for i := 0 to FPageControl.PageCount - 2 do
-        if FPageControl.Pages[i] <> FPageControl.ActivePage then
-        begin
-          LTabSheet := FPageControl.Pages[i] as TsTabSheet;
-          if Assigned(LTabSheet.ComboBoxSearchText) then
-            LTabSheet.ComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
-        end;
-        { Save to ini }
-        LItems := TStringList.Create;
-        try
-          with TIniFile.Create(GetIniFilename) do
-          try
-            ReadSectionValues('SearchItems', LItems);
-            WriteString('SearchItems', IntToStr(LItems.Count), LComboBoxSearchText.Text);
-          finally
-            Free;
+        SetActiveEditorFocus;
+        LComboBoxSearchText := GetActiveComboBoxSearchText;
+        if Assigned(LComboBoxSearchText) then
+          if LComboBoxSearchText.Items.IndexOf(LComboBoxSearchText.Text) = -1 then
+          begin
+            LComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
+            { Update other documents }
+            for i := 0 to FPageControl.PageCount - 2 do
+            if FPageControl.Pages[i] <> FPageControl.ActivePage then
+            begin
+              LTabSheet := FPageControl.Pages[i] as TsTabSheet;
+              if Assigned(LTabSheet.ComboBoxSearchText) then
+                LTabSheet.ComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
+            end;
+            { Save to ini }
+            LItems := TStringList.Create;
+            try
+              with TIniFile.Create(GetIniFilename) do
+              try
+                ReadSectionValues('SearchItems', LItems);
+                WriteString('SearchItems', IntToStr(LItems.Count), LComboBoxSearchText.Text);
+              finally
+                Free;
+              end;
+            finally
+              LItems.Free;
+            end;
           end;
-        finally
-          LItems.Free;
-        end;
+        Key := EDITBONE_NONE_CHAR;
+
+        LEditor := GetActiveEditor;
+        if Assigned(LEditor) then
+          DoSearchTextChange(LEditor);
       end;
-    Key := EDITBONE_NONE_CHAR;
-  end;
-  if Key = EDITBONE_ESCAPE then
-  begin
-    LTabSheet := FPageControl.ActivePage as TsTabSheet;
-    if Assigned(LTabSheet.PanelSearch) then
-      LTabSheet.PanelSearch.Visible := False;
-    SetActiveEditorFocus;
-    Key := EDITBONE_NONE_CHAR;
+    EDITBONE_ESCAPE:
+      begin
+        LTabSheet := FPageControl.ActivePage as TsTabSheet;
+        if Assigned(LTabSheet.PanelSearch) then
+          LTabSheet.PanelSearch.Visible := False;
+        SetActiveEditorFocus;
+        Key := EDITBONE_NONE_CHAR;
+      end;
   end;
 end;
 
@@ -722,25 +730,31 @@ begin
   end;
 end;
 
+procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor);
+var
+  LComboBoxSearchText: TBCComboBox;
+begin
+  if Assigned(AEditor) then
+  begin
+    LComboBoxSearchText := GetActiveComboBoxSearchText;
+    if Assigned(LComboBoxSearchText) then
+      AEditor.Search.SearchText := LComboBoxSearchText.Text;
+    SetSearchMatchesFound;
+
+    OptionsContainer.DocumentSpecificSearchText := '';
+    if not OptionsContainer.DocumentSpecificSearch then
+      OptionsContainer.DocumentSpecificSearchText := AEditor.Search.SearchText
+  end;
+end;
+
 procedure TEBDocument.ComboBoxSearchTextChange(Sender: TObject);
 var
   LEditor: TBCEditor;
-  LComboBoxSearchText: TBCComboBox;
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
     if soSearchOnTyping in LEditor.Search.Options then
-    begin
-      LComboBoxSearchText := GetActiveComboBoxSearchText;
-      if Assigned(LComboBoxSearchText) then
-        LEditor.Search.SearchText := LComboBoxSearchText.Text;
-      SetSearchMatchesFound;
-    end;
-    OptionsContainer.DocumentSpecificSearchText := '';
-    if not OptionsContainer.DocumentSpecificSearch then
-      OptionsContainer.DocumentSpecificSearchText := LEditor.Search.SearchText
-  end;
+      DoSearchTextChange(LEditor);
 end;
 
 procedure TEBDocument.CompareFiles(const AFileName: string; AFileDragDrop: Boolean);
@@ -1466,10 +1480,12 @@ var
   LEditor: TBCEditor;
 begin
   LEditor := GetActiveEditor;
-  if not Assigned(LEditor) then
-    Exit;
-  if not SetDocumentSpecificSearchText(LEditor) then
-    LEditor.FindNext;
+  if Assigned(LEditor) then
+  begin
+    DoSearchTextChange(LEditor);
+    if not SetDocumentSpecificSearchText(LEditor) then
+      LEditor.FindNext;
+  end;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1477,10 +1493,12 @@ var
   LEditor: TBCEditor;
 begin
   LEditor := GetActiveEditor;
-  if not Assigned(LEditor) then
-    Exit;
-  if not SetDocumentSpecificSearchText(LEditor) then
-    LEditor.FindPrevious;
+  if Assigned(LEditor) then
+  begin
+    DoSearchTextChange(LEditor);
+    if not SetDocumentSpecificSearchText(LEditor) then
+      LEditor.FindPrevious;
+  end;
 end;
 
 procedure TEBDocument.Replace;
