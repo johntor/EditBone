@@ -76,6 +76,7 @@ var
 begin
   LMaxWidth := 0;
 
+  VirtualDrawTree.Clear;
   for i := Low(ENCODING_CAPTIONS) to High(ENCODING_CAPTIONS) do
     AddEncoding(i, ENCODING_CAPTIONS[i]);
 

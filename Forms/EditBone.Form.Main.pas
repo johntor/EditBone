@@ -851,7 +851,6 @@ type
     procedure CreateLanguageMenu(AMenuItem: TMenuItem);
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
-    procedure DestroyPopups;
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
     procedure LockFormPaint;
     procedure MoveSelection(AEditor: TBCEditor; const AVirtualKey: Byte);
@@ -868,7 +867,6 @@ type
     procedure UpdatePageControlMargins;
     procedure WriteIniFile;
     procedure WMCopyData(var Message: TWMCopyData); message WM_COPYDATA;
-    procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
   public
@@ -2655,33 +2653,7 @@ begin
   OptionsContainer.Free;
   SQLFormatterOptionsContainer.Free;
 
-  DestroyPopups;
-
   inherited;
-end;
-
-procedure TMainForm.DestroyPopups;
-begin
-  if Assigned(FPopupHighlighterDialog) then
-  begin
-    FPopupHighlighterDialog.Free;
-    FPopupHighlighterDialog := nil;
-  end;
-  if Assigned(FPopupFilesDialog) then
-  begin
-    FPopupFilesDialog.Free;
-    FPopupFilesDialog := nil;
-  end;
-  if Assigned(FPopupEncodingDialog) then
-  begin
-    FPopupEncodingDialog.Free;
-    FPopupEncodingDialog := nil;
-  end;
-  if Assigned(FPopupHighlighterColorDialog) then
-  begin
-    FPopupHighlighterColorDialog.Free;
-    FPopupHighlighterColorDialog := nil;
-  end;
 end;
 
 procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -2911,10 +2883,9 @@ var
 
 begin
   inherited;
-  if Assigned(FPopupFilesDialog) then
-    Exit
-  else
-  try
+
+  if not Assigned(FPopupFilesDialog) then
+  begin
     FPopupFilesDialog := TPopupFilesDialog.Create(Self);
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
@@ -2923,24 +2894,16 @@ begin
 
     FPopupFilesDialog.Left := LPoint.X;
     FPopupFilesDialog.Top := LPoint.Y;
-
-    LockFormPaint;
-
-    LFiles := GetFiles;
-    try
-      FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Caption);
-    finally
-      LFiles.Free;
-    end;
-
-    UnlockFormPaint;
-
-    while Assigned(FPopupFilesDialog) and FPopupFilesDialog.Visible do
-      Application.HandleMessage;
-  finally
-    FPopupFilesDialog.Free;
-    FPopupFilesDialog := nil;
   end;
+
+  LockFormPaint;
+  LFiles := GetFiles;
+  try
+    FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Caption);
+  finally
+    LFiles.Free;
+  end;
+  UnlockFormPaint;
 end;
 
 procedure TMainForm.TitleBarItems4Click(Sender: TObject);
@@ -2948,10 +2911,9 @@ var
   LPoint: TPoint;
 begin
   inherited;
-  if Assigned(FPopupEncodingDialog) then
-    Exit
-  else
-  try
+
+  if not Assigned(FPopupEncodingDialog) then
+  begin
     FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
@@ -2960,19 +2922,11 @@ begin
 
     FPopupEncodingDialog.Left := LPoint.X;
     FPopupEncodingDialog.Top := LPoint.Y;
-
-    LockFormPaint;
-
-    FPopupEncodingDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
-
-    UnlockFormPaint;
-
-    while Assigned(FPopupEncodingDialog) and FPopupEncodingDialog.Visible do
-      Application.HandleMessage;
-  finally
-    FPopupEncodingDialog.Free;
-    FPopupEncodingDialog := nil;
   end;
+
+  LockFormPaint;
+  FPopupEncodingDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
+  UnlockFormPaint;
 end;
 
 function TMainForm.GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
@@ -3007,22 +2961,14 @@ begin
   SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
 end;
 
-procedure TMainForm.WMEnterSizeMove(var Message: TMessage);
-begin
-  DestroyPopups;
-  inherited;
-end;
-
 procedure TMainForm.TitleBarItems6Click(Sender: TObject);
 var
   LPoint: TPoint;
 begin
   inherited;
 
-  if Assigned(FPopupHighlighterDialog) then
-    Exit
-  else
-  try
+  if not Assigned(FPopupHighlighterDialog) then
+  begin
     FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
     FPopupHighlighterDialog.PopupParent := Self;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
@@ -3031,19 +2977,11 @@ begin
 
     FPopupHighlighterDialog.Left := LPoint.X;
     FPopupHighlighterDialog.Top := LPoint.Y;
-
-    LockFormPaint;
-
-    FPopupHighlighterDialog.Execute(OptionsContainer.HighlighterStrings, TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
-
-    UnlockFormPaint;
-
-    while Assigned(FPopupHighlighterDialog) and FPopupHighlighterDialog.Visible do
-      Application.HandleMessage;
-  finally
-    FPopupHighlighterDialog.Free;
-    FPopupHighlighterDialog := nil;
   end;
+
+  LockFormPaint;
+  FPopupHighlighterDialog.Execute(OptionsContainer.HighlighterStrings, TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
+  UnlockFormPaint;
 end;
 
 procedure TMainForm.TitleBarItems8Click(Sender: TObject);
@@ -3051,10 +2989,9 @@ var
   LPoint: TPoint;
 begin
   inherited;
-  if Assigned(FPopupHighlighterColorDialog) then
-    Exit
-  else
-  try
+
+  if not Assigned(FPopupHighlighterColorDialog) then
+  begin
     FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
     FPopupHighlighterColorDialog.PopupParent := Self;
     FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
@@ -3063,19 +3000,11 @@ begin
 
     FPopupHighlighterColorDialog.Left := LPoint.X;
     FPopupHighlighterColorDialog.Top := LPoint.Y;
-
-    LockFormPaint;
-
-    FPopupHighlighterColorDialog.Execute(OptionsContainer.HighlighterColorStrings, TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
-
-    UnlockFormPaint;
-
-    while Assigned(FPopupHighlighterColorDialog) and FPopupHighlighterColorDialog.Visible do
-      Application.HandleMessage;
-  finally
-    FPopupHighlighterColorDialog.Free;
-    FPopupHighlighterColorDialog := nil;
   end;
+
+  LockFormPaint;
+  FPopupHighlighterColorDialog.Execute(OptionsContainer.HighlighterColorStrings, TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
+  UnlockFormPaint;
 end;
 
 procedure TMainForm.ReadIniOptions;
