@@ -3,11 +3,10 @@ program EditBone;
 uses
   {$ifdef DEBUG}
   FastMM4,
-  {$endif}
+  {$endif }
   Winapi.Windows,
   Winapi.Messages,
   Vcl.Forms,
-  //BCCommon.Utils,
   EditBone.Consts in 'Units\EditBone.Consts.pas',
   EditBone.DataModule.Images in 'DataModules\EditBone.DataModule.Images.pas' {EBDataModuleImages: TDataModule},
   EditBone.Dialog.About in 'Dialogs\EditBone.Dialog.About.pas' {AboutDialog},
@@ -28,9 +27,7 @@ uses
   EditBone.Output in 'Units\EditBone.Output.pas',
   EditBone.Types in 'Units\EditBone.Types.pas',
   EditBone.XMLTree in 'Units\EditBone.XMLTree.pas',
-  EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog},
-  EditBone.Dialog.Popup.Encoding in 'Dialogs\EditBone.Dialog.Popup.Encoding.pas' {PopupEncodingDialog},
-  EditBone.Encoding in 'Units\EditBone.Encoding.pas';
+  EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog};
 
 {$R *.res}
 
@@ -54,7 +51,7 @@ begin
     Application.Title := 'EditBone';
     Application.MainFormOnTaskbar := True;
     Application.CreateForm(TMainForm, MainForm);
-    Application.Run;
+  Application.Run;
   {$ifdef RELEASE}
   end
   else

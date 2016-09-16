@@ -42,7 +42,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.Windows, System.SysUtils, EditBone.Encoding;
+  Winapi.Windows, System.SysUtils, BCCommon.Encoding;
 
 var
   FOptionsEditorDefaultsFrame: TOptionsEditorDefaultsFrame;
