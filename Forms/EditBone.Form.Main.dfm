@@ -1868,7 +1868,6 @@ inherited MainForm: TMainForm
       Width = 5
       Height = 405
       Visible = False
-      OnClick = SplitterVerticalClick
       SkinData.SkinSection = 'SPLITTER'
     end
     object PanelDirectory: TBCPanel

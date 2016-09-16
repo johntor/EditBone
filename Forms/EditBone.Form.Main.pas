@@ -826,7 +826,6 @@ type
     procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
     procedure ActionDocumentHTMLExportExecute(Sender: TObject);
-    procedure SplitterVerticalClick(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -2889,12 +2888,11 @@ begin
     FPopupFilesDialog := TPopupFilesDialog.Create(Self);
     FPopupFilesDialog.PopupParent := Self;
     FPopupFilesDialog.OnSelectFile := SelectedFileClick;
-
-    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILENAME);
-
-    FPopupFilesDialog.Left := LPoint.X;
-    FPopupFilesDialog.Top := LPoint.Y;
   end;
+
+  LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_FILENAME);
+  FPopupFilesDialog.Left := LPoint.X;
+  FPopupFilesDialog.Top := LPoint.Y;
 
   LockFormPaint;
   LFiles := GetFiles;
@@ -2917,12 +2915,11 @@ begin
     FPopupEncodingDialog := TPopupEncodingDialog.Create(Self);
     FPopupEncodingDialog.PopupParent := Self;
     FPopupEncodingDialog.OnSelectEncoding := SelectedEncodingClick;
-
-    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_ENCODING);
-
-    FPopupEncodingDialog.Left := LPoint.X;
-    FPopupEncodingDialog.Top := LPoint.Y;
   end;
+
+  LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_ENCODING);
+  FPopupEncodingDialog.Left := LPoint.X;
+  FPopupEncodingDialog.Top := LPoint.Y;
 
   LockFormPaint;
   FPopupEncodingDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
@@ -2972,12 +2969,11 @@ begin
     FPopupHighlighterDialog := TPopupHighlighterDialog.Create(Self);
     FPopupHighlighterDialog.PopupParent := Self;
     FPopupHighlighterDialog.OnSelectHighlighter := SelectedHighlighterClick;
-
-    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_HIGHLIGHTER);
-
-    FPopupHighlighterDialog.Left := LPoint.X;
-    FPopupHighlighterDialog.Top := LPoint.Y;
   end;
+
+  LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_HIGHLIGHTER);
+  FPopupHighlighterDialog.Left := LPoint.X;
+  FPopupHighlighterDialog.Top := LPoint.Y;
 
   LockFormPaint;
   FPopupHighlighterDialog.Execute(OptionsContainer.HighlighterStrings, TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
@@ -2995,12 +2991,11 @@ begin
     FPopupHighlighterColorDialog := TPopupHighlighterColorDialog.Create(Self);
     FPopupHighlighterColorDialog.PopupParent := Self;
     FPopupHighlighterColorDialog.OnSelectHighlighterColor := SelectedHighlighterColorClick;
-
-    LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_COLORS);
-
-    FPopupHighlighterColorDialog.Left := LPoint.X;
-    FPopupHighlighterColorDialog.Top := LPoint.Y;
   end;
+
+  LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_COLORS);
+  FPopupHighlighterColorDialog.Left := LPoint.X;
+  FPopupHighlighterColorDialog.Top := LPoint.Y;
 
   LockFormPaint;
   FPopupHighlighterColorDialog.Execute(OptionsContainer.HighlighterColorStrings, TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
@@ -3405,12 +3400,6 @@ begin
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;
   end;
-end;
-
-procedure TMainForm.SplitterVerticalClick(Sender: TObject);
-begin
-  inherited;
-
 end;
 
 {
