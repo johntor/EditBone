@@ -1399,34 +1399,16 @@ var
   LTabSheet: TsTabSheet;
 
   procedure ReadSearchOptions(AEditor: TBCEditor);
-
-    procedure SetOption(Enabled: Boolean; Option: TBCEditorSearchOption);
-    begin
-      if Enabled then
-        AEditor.Search.Options := AEditor.Search.Options + [Option]
-      else
-        AEditor.Search.Options := AEditor.Search.Options - [Option];
-    end;
-
   begin
     with TIniFile.Create(GetIniFilename) do
     try
-      SetOption(ReadBool('Options', 'SearchBeepIfSearchStringNotFound', True), soBeepIfStringNotFound);
-      SetOption(ReadBool('Options', 'SearchCaseSensitive', False), soCaseSensitive);
-      SetOption(ReadBool('Options', 'SearchEntireScope', False), soEntireScope);
-      SetOption(ReadBool('Options', 'SearchHighlightResult', True), soHighlightResults);
-      if ReadBool('Options', 'SearchRegularExpression', False) then
-        AEditor.Search.Engine := seRegularExpression
-      else
-      if ReadBool('Options', 'SearchWildCard', False) then
-        AEditor.Search.Engine := seWildCard
-      else
-        AEditor.Search.Engine := seNormal;
-      SetOption(ReadBool('Options', 'SearchOnTyping', True), soSearchOnTyping);
-      SetOption(ReadBool('Options', 'SearchSelectedOnly', False), soSelectedOnly);
-      SetOption(ReadBool('Options', 'SearchShowSearchMatchNotFound', True), soShowSearchMatchNotFound);
-      SetOption(ReadBool('Options', 'SearchShowSearchStringNotFound', False), soShowStringNotFound);
-      SetOption(ReadBool('Options', 'SearchWholeWordsOnly', False), soWholeWordsOnly);
+      AEditor.Search.SetOption(soBeepIfStringNotFound, ReadBool('Options', 'SearchBeepIfSearchStringNotFound', True));
+      AEditor.Search.SetOption(soEntireScope, ReadBool('Options', 'SearchEntireScope', False));
+      AEditor.Search.SetOption(soHighlightResults, ReadBool('Options', 'SearchHighlightResult', True));
+      AEditor.Search.SetOption(soSearchOnTyping, ReadBool('Options', 'SearchOnTyping', True));
+      AEditor.Search.SetOption(soShowSearchMatchNotFound, ReadBool('Options', 'SearchShowSearchMatchNotFound', True));
+      AEditor.Search.SetOption(soShowStringNotFound, ReadBool('Options', 'SearchShowSearchStringNotFound', False));
+      AEditor.Search.SetOption(soWholeWordsOnly, ReadBool('Options', 'SearchWholeWordsOnly', False));
     finally
       Free;
     end;

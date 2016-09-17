@@ -798,7 +798,7 @@ type
     procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
     procedure OnProgressBarStepFindInFiles(Sender: TObject);
     procedure OnTerminateFindInFiles(Sender: TObject);
-    procedure SelectedEncodingClick(AId: Integer);
+    procedure SelectedEncodingClick(const AIndex: Integer);
     procedure SelectedFileClick(APageIndex: Integer);
     procedure SelectedHighlighterClick(AHighlighterName: string);
     procedure SelectedHighlighterColorClick(AHighlighterColorName: string);
@@ -997,9 +997,9 @@ begin
   PageControlDocument.ActivePageIndex := APageIndex;
 end;
 
-procedure TMainForm.SelectedEncodingClick(AId: Integer);
+procedure TMainForm.SelectedEncodingClick(const AIndex: Integer);
 begin
-  SetEncoding(FDocument.GetActiveEditor, AId);
+  SetEncoding(FDocument.GetActiveEditor, AIndex);
   SetTitleBarMenuCaptions;
 end;
 
