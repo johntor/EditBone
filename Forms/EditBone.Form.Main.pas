@@ -646,6 +646,8 @@ type
     BCSpeedButton1: TBCSpeedButton;
     TabSheetDirectory: TsTabSheet;
     ActionSearchEngine: TAction;
+    ActionSearchCaseSensitive: TAction;
+    ActionSearchInSelection: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -829,6 +831,8 @@ type
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
     procedure ActionDocumentHTMLExportExecute(Sender: TObject);
     procedure ActionSearchEngineExecute(Sender: TObject);
+    procedure ActionSearchCaseSensitiveExecute(Sender: TObject);
+    procedure ActionSearchInSelectionExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -1532,6 +1536,22 @@ begin
   BrowseURL(BONECODE_URL);
 end;
 
+procedure TMainForm.ActionSearchCaseSensitiveExecute(Sender: TObject);
+
+  procedure SetCaseSensitiveOption(AEditor: TBCEditor);
+  begin
+    if Assigned(AEditor) then
+      AEditor.Search.SetOption(soCaseSensitive, ActionSearchCaseSensitive.Checked);
+  end;
+
+begin
+  inherited;
+
+  ActionSearchCaseSensitive.Checked := not ActionSearchCaseSensitive.Checked;
+  SetCaseSensitiveOption(FDocument.GetActiveEditor);
+  SetCaseSensitiveOption(FDocument.GetActiveSplitEditor);
+end;
+
 procedure TMainForm.ActionSearchClearBookmarksExecute(Sender: TObject);
 begin
   FDocument.ClearBookmarks;
@@ -1600,6 +1620,22 @@ end;
 procedure TMainForm.ActionSearchGoToLineExecute(Sender: TObject);
 begin
   FDocument.GotoLine;
+end;
+
+procedure TMainForm.ActionSearchInSelectionExecute(Sender: TObject);
+
+  procedure SetCaseSensitiveOption(AEditor: TBCEditor);
+  begin
+    if Assigned(AEditor) then
+      AEditor.Search.InSelection.Active := ActionSearchInSelection.Checked;
+  end;
+
+begin
+  inherited;
+
+  ActionSearchInSelection.Checked := not ActionSearchInSelection.Checked;
+  SetCaseSensitiveOption(FDocument.GetActiveEditor);
+  SetCaseSensitiveOption(FDocument.GetActiveSplitEditor);
 end;
 
 procedure TMainForm.ActionSearchOptionsExecute(Sender: TObject);
@@ -3137,10 +3173,12 @@ begin
   FDocument.GetActionList := GetActionList;
   FDocument.SkinManager := SkinManager;
   FDocument.StatusBar := StatusBar;
+  FDocument.ActionSearchCaseSensitive := ActionSearchCaseSensitive;
   FDocument.ActionSearchTextItems := ActionSearchTextItems;
   FDocument.ActionSearchEngine := ActionSearchEngine;
   FDocument.ActionSearchFindPrevious := ActionSearchFindPrevious;
   FDocument.ActionSearchFindNext := ActionSearchFindNext;
+  FDocument.ActionSearchInSelection := ActionSearchInSelection;
   FDocument.ActionSearchOptions := ActionSearchOptions;
   FDocument.ActionSearchClose := ActionSearchClose;
   FDocument.ProgressBar := ProgressBar;

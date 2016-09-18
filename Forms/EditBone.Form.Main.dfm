@@ -4574,10 +4574,23 @@ inherited MainForm: TMainForm
     end
     object ActionSearchEngine: TAction
       Category = 'Search'
-      Caption = 'ActionSearchEngine'
       Hint = 'Select search engine'
       ImageIndex = 141
       OnExecute = ActionSearchEngineExecute
+    end
+    object ActionSearchCaseSensitive: TAction
+      Category = 'Search'
+      GroupIndex = 1
+      Hint = 'Case sensitive'
+      ImageIndex = 142
+      OnExecute = ActionSearchCaseSensitiveExecute
+    end
+    object ActionSearchInSelection: TAction
+      Category = 'Search'
+      GroupIndex = 2
+      Hint = 'In selection'
+      ImageIndex = 143
+      OnExecute = ActionSearchInSelectionExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [19]
