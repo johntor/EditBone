@@ -186,6 +186,7 @@ type
     procedure ToggleSplit;
     procedure Undo;
     procedure UpdateHighlighterColors;
+    procedure UpdateSearchItems(AItems: TStrings);
     procedure WriteIniFile;
     property ActionSearchCaseSensitive: TAction read FActionSearchCaseSensitive write FActionSearchCaseSensitive;
     property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
@@ -360,7 +361,8 @@ end;
 
 procedure TEBDocument.CreateSearchPanel(ATabSheet: TsTabSheet);
 var
-  LItems: TStrings;
+  i: Integer;
+  LValueListEditor: TValueListEditor;
   LSplitter: TBCSplitter;
   LSpeedButton: TBCSpeedButton;
   LBitmap: TBitmap;
@@ -413,16 +415,31 @@ begin
     OnKeyPress := ComboBoxSearchTextKeyPress;
     OnKeyDown := ComboBoxKeyDown;
     OnMouseWheel := ComboBoxMouseWheel;
-    LItems := TStringList.Create;
     Left := LLeft + 1;
     LLeft := Left + Width - 1;
   end;
+  { SearchItems are moved into EditBoneUni.ini, remove this after a while. }
+  LValueListEditor := TValueListEditor.Create(nil);
   with TIniFile.Create(GetIniFilename) do
   try
-    ReadSectionValues('SearchItems', LItems);
-    InsertItemsToComboBox(LItems, ATabSheet.ComboBoxSearchText);
+    ReadSectionValues('SearchItems', LValueListEditor.Strings);
+    EraseSection('SearchItems');
   finally
-    LItems.Free;
+    Free;
+  end;
+  with TIniFile.Create(GetUniIniFilename) do
+  try
+    if LValueListEditor.Strings.Count > 0 then
+    begin
+      EraseSection('SearchItems');
+      for i := 0 to LValueListEditor.Strings.Count - 1 do
+        WriteString('SearchItems', IntToStr(i), LValueListEditor.Values[IntToStr(i)]);
+    end;
+    ReadSectionValues('SearchItems', LValueListEditor.Strings);
+    if LValueListEditor.Strings.Count > 0 then
+      InsertItemsToComboBox(LValueListEditor, ATabSheet.ComboBoxSearchText);
+  finally
+    LValueListEditor.Free;
     Free;
   end;
   { Splitter }
@@ -766,7 +783,7 @@ begin
             { Save to ini }
             LItems := TStringList.Create;
             try
-              with TIniFile.Create(GetIniFilename) do
+              with TIniFile.Create(GetUniIniFilename) do
               try
                 ReadSectionValues('SearchItems', LItems);
                 WriteString('SearchItems', IntToStr(LItems.Count), LComboBoxSearchText.Text);
@@ -1212,7 +1229,6 @@ begin
   end;
   Application.ProcessMessages;
   CheckModifiedDocuments;
-  PageControl.Repaint; { Icon paint bug fix }
   FProcessing := False;
 end;
 
@@ -1461,10 +1477,10 @@ begin
   end;
 end;
 
-{ TODO: Split? }
 function TEBDocument.ToggleSearch(AShowPanel: Boolean = False): Boolean;
 var
   LTabSheet: TsTabSheet;
+  LEditor: TBCEditor;
 
   procedure ReadSearchOptions(AEditor: TBCEditor);
   begin
@@ -1495,8 +1511,12 @@ begin
 
     LTabSheet.Editor.Search.Visible := LTabSheet.PanelSearch.Visible;
 
+    LEditor := GetFocusedEditor;
+    if not Assigned(LEditor) then
+      LEditor := LTabSheet.Editor;
+
     if LTabSheet.PanelSearch.Visible then
-      ReadSearchOptions(LTabSheet.Editor);
+      ReadSearchOptions(LEditor);
 
     Result := LTabSheet.PanelSearch.Visible;
 
@@ -1504,11 +1524,11 @@ begin
       if Assigned(LTabSheet.ComboBoxSearchText) then
         if LTabSheet.ComboBoxSearchText.CanFocus then
         begin
-          if LTabSheet.Editor.SelectionAvailable and
-            (LTabSheet.Editor.SelectionBeginPosition.Line = LTabSheet.Editor.SelectionEndPosition.Line) then
+          if LEditor.SelectionAvailable and
+            (LEditor.SelectionBeginPosition.Line = LEditor.SelectionEndPosition.Line) then
           begin
-            LTabSheet.ComboBoxSearchText.Text := LTabSheet.Editor.SelectedText;
-            DoSearchTextChange(LTabSheet.Editor);
+            LTabSheet.ComboBoxSearchText.Text := LEditor.SelectedText;
+            DoSearchTextChange(LEditor);
           end;
           LTabSheet.ComboBoxSearchText.SetFocus;
         end;
@@ -1776,6 +1796,14 @@ begin
     Free;
     PageControl.Visible := True;
   end;
+end;
+
+procedure TEBDocument.UpdateSearchItems(AItems: TStrings);
+var
+  i: Integer;
+begin
+  for i := 0 to PageControl.PageCount - 2 do
+    (PageControl.Pages[i] as TsTabSheet).FComboBoxSearchText.Items.Assign(AItems);
 end;
 
 procedure TEBDocument.WriteIniFile;

@@ -1661,6 +1661,7 @@ end;
 
 procedure TMainForm.ActionSearchTextItemsExecute(Sender: TObject);
 var
+  i, j: Integer;
   LComboBox: TBCComboBox;
 begin
   inherited;
@@ -1672,7 +1673,21 @@ begin
     begin
       ListBox.Items.Assign(LComboBox.Items);
       if ShowModal = mrOk then
-        LComboBox.Items.Assign(ListBox.Items);
+      begin
+        FDocument.UpdateSearchItems(ListBox.Items);
+        with TIniFile.Create(GetUniIniFilename) do
+        try
+          EraseSection('SearchItems');
+          j := 0;
+          for i := ListBox.Items.Count - 1 downto 0 do
+          begin
+            WriteString('SearchItems', IntToStr(j), ListBox.Items[i]);
+            Inc(j);
+          end;
+        finally
+          Free;
+        end;
+      end;
     end;
   finally
     Free;
