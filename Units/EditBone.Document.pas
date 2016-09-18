@@ -53,6 +53,7 @@ type
     procedure XMLTreeClick(Sender: TObject);
   private
     FActionSearchClose: TAction;
+    FActionSearchEngine: TAction;
     FActionSearchFindNext: TAction;
     FActionSearchFindPrevious: TAction;
     FActionSearchOptions: TAction;
@@ -107,6 +108,7 @@ type
     function GetActiveComboBoxSearchText: TBCComboBox;
     function GetActiveEditor: TBCEditor;
     function GetActiveSplitEditor: TBCEditor;
+    function GetFocusedEditor: TBCEditor;
     function GetMacroRecordPauseImageIndex: Integer;
     function GetModifiedInfo(AEditor: TBCEditor): string;
     function Options(AActionList: TActionList): Boolean;
@@ -184,6 +186,7 @@ type
     procedure UpdateHighlighterColors;
     procedure WriteIniFile;
     property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
+    property ActionSearchEngine: TAction read FActionSearchEngine write FActionSearchEngine;
     property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchOptions: TAction read FActionSearchOptions write FActionSearchOptions;
@@ -358,6 +361,7 @@ var
   LSpeedButton: TBCSpeedButton;
   LBitmap: TBitmap;
 begin
+  { Panel }
   ATabSheet.PanelSearch := TBCPanel.Create(ATabSheet);
   with ATabSheet.PanelSearch do
   begin
@@ -373,6 +377,24 @@ begin
     Visible := OptionsContainer.SearchVisible;
     Parent := ATabSheet;
   end;
+  { Search engine button }
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    AlignWithMargins := True;
+    Margins.SetBounds(0, 0, 6, 0);
+    Parent := ATabSheet.PanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    Left := 0;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchEngine.OnExecute;
+    ImageIndex := ActionSearchTextItems.ImageIndex;
+    Hint := ActionSearchTextItems.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+  end;
+  { Search combobox }
   ATabSheet.ComboBoxSearchText := TBCComboBox.Create(ATabSheet);
   with ATabSheet.ComboBoxSearchText do
   begin
@@ -395,6 +417,7 @@ begin
     LItems.Free;
     Free;
   end;
+  { Splitter }
   LSplitter := TBCSplitter.Create(ATabSheet);
   with LSplitter do
   begin
@@ -402,6 +425,7 @@ begin
     Parent := ATabSheet.PanelSearch;
     Left := ATabSheet.ComboBoxSearchText.Width + 1;
   end;
+  { Search item editor button }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -416,6 +440,7 @@ begin
     Hint := ActionSearchTextItems.Hint;
     Images := ImagesDataModule.ImageListSmall;
   end;
+  { Divider }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -425,6 +450,7 @@ begin
     ButtonStyle := tbsDivider;
     Left := LSplitter.Left + LSplitter.Width + 22;
   end;
+  { Find previous button }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -439,6 +465,7 @@ begin
     Hint := ActionSearchFindPrevious.Hint;
     Images := ImagesDataModule.ImageListSmall;
   end;
+  { Find next button }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -453,6 +480,7 @@ begin
     Hint := ActionSearchFindNext.Hint;
     Images := ImagesDataModule.ImageListSmall;
   end;
+  { Divider }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -462,6 +490,7 @@ begin
     ButtonStyle := tbsDivider;
     Left := LSplitter.Left + LSplitter.Width + 74;
   end;
+  { Search options button }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -476,6 +505,7 @@ begin
     Hint := ActionSearchOptions.Hint;
     Images := ImagesDataModule.ImageListSmall;
   end;
+  { Search results label }
   ATabSheet.LabelSearchResult := TsLabel.Create(ATabSheet);
   with ATabSheet.LabelSearchResult do
   begin
@@ -488,6 +518,7 @@ begin
     Font.Size := 10;
     SkinManager := FSkinManager;
   end;
+  { Close button }
   LSpeedButton := TBCSpeedButton.Create(ATabSheet);
   with LSpeedButton do
   begin
@@ -1229,96 +1260,72 @@ begin
 end;
 
 procedure TEBDocument.Undo;
-
-  procedure Undo(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-      begin
-        AEditor.DoUndo;
-        if AEditor.UndoList.ItemCount = 0 then
-          PageControl.ActivePage.Caption := GetActivePageCaption;
-      end;
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  Undo(GetActiveEditor);
-  Undo(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+  begin
+    LEditor.DoUndo;
+    if LEditor.UndoList.ItemCount = 0 then
+      PageControl.ActivePage.Caption := GetActivePageCaption;
+  end;
   CheckModifiedDocuments;
 end;
 
 procedure TEBDocument.Redo;
-
-  procedure Redo(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.DoRedo;
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  Redo(GetActiveEditor);
-  Redo(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.DoRedo;
   CheckModifiedDocuments;
 end;
 
 procedure TEBDocument.Cut;
-
-  procedure Cut(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CutToClipboard;
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  Cut(GetActiveEditor);
-  Cut(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CutToClipboard;
 end;
 
 procedure TEBDocument.Copy;
-
-  procedure Copy(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CopyToClipboard;
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  Copy(GetActiveEditor);
-  Copy(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CopyToClipboard;
 end;
 
 procedure TEBDocument.Paste;
 var
-  LEditor, LSplitEditor: TBCEditor;
+  LEditor: TBCEditor;
   LComboBoxSearchText: TBCComboBox;
 begin
-  LEditor := GetActiveEditor;
+  LEditor := GetFocusedEditor;
   if Assigned(LEditor) and LEditor.Focused then
     LEditor.PasteFromClipboard
   else
   begin
-    LSplitEditor := GetActiveSplitEditor;
-    if Assigned(LSplitEditor) and LSplitEditor.Focused then
-      LSplitEditor.PasteFromClipboard
-    else
+    LEditor := GetActiveEditor;
+    if Assigned(LEditor) and LEditor.Search.Enabled then
     begin
-      if Assigned(LEditor) and LEditor.Search.Enabled then
-      begin
-        LEditor.Search.SearchText := Clipboard.AsText;
-        if Assigned(LSplitEditor) and LSplitEditor.Search.Enabled then
-          LSplitEditor.Search.SearchText := Clipboard.AsText;
+      LEditor.Search.SearchText := Clipboard.AsText;
 
-        if not OptionsContainer.DocumentSpecificSearch then
-          OptionsContainer.DocumentSpecificSearchText := Clipboard.AsText;
+      if not OptionsContainer.DocumentSpecificSearch then
+        OptionsContainer.DocumentSpecificSearchText := Clipboard.AsText;
 
-        LComboBoxSearchText := GetActiveComboBoxSearchText;
-        if Assigned(LComboBoxSearchText) then
-          LComboBoxSearchText.Text := LEditor.Search.SearchText;
-      end;
+      LComboBoxSearchText := GetActiveComboBoxSearchText;
+      if Assigned(LComboBoxSearchText) then
+        LComboBoxSearchText.Text := LEditor.Search.SearchText;
     end;
+    LEditor := GetActiveSplitEditor;
+    if Assigned(LEditor) and LEditor.Search.Enabled then
+      LEditor.Search.SearchText := Clipboard.AsText;
   end;
 end;
 
@@ -1592,20 +1599,15 @@ var
   i: Integer;
   LTabSheet: TsTabSheet;
 
-  procedure ToggleSelectionMode(Editor: TBCEditor);
+  procedure ToggleSelectionMode(AEditor: TBCEditor);
   begin
-    if Assigned(Editor) then
+    if Assigned(AEditor) then
     begin
       if OptionsContainer.EnableSelectionMode then
-      begin
-        Editor.Selection.Options := Editor.Selection.Options - [soALTSetsColumnMode];
-        Editor.Selection.Mode := smColumn;
-      end
+        AEditor.Selection.Mode := smColumn
       else
-      begin
-        Editor.Selection.Options := Editor.Selection.Options + [soALTSetsColumnMode];
-        Editor.Selection.Mode := smNormal
-      end;
+        AEditor.Selection.Mode := smNormal;
+      AEditor.Selection.SetOption(soALTSetsColumnMode, not OptionsContainer.EnableSelectionMode);
     end;
   end;
 
@@ -1997,6 +1999,17 @@ begin
     Result := nil;
 end;
 
+function TEBDocument.GetFocusedEditor: TBCEditor;
+begin
+  Result := GetActiveEditor;
+  if Assigned(Result) and not Result.Focused then
+  begin
+    Result := GetActiveSplitEditor;
+    if Assigned(Result) and not Result.Focused then
+      Result := nil;
+  end;
+end;
+
 procedure TEBDocument.SetActivePageCaptionModified(AModified: Boolean);
 begin
   PageControl.ActivePage.Caption := FormatFileName(PageControl.ActivePage.Caption, AModified);
@@ -2247,22 +2260,16 @@ end;
 procedure TEBDocument.SelectAll;
 var
   LComboBoxSearchText: TBCComboBox;
-
-  procedure SelectAll(Editor: TBCEditor);
-  begin
-    if Assigned(Editor) then
-      if Editor.Focused then
-        Editor.SelectAll;
-  end;
-
+  LEditor: TBCEditor;
 begin
   LComboBoxSearchText := GetActiveComboBoxSearchText;
   if Assigned(LComboBoxSearchText) and LComboBoxSearchText.Focused then
     LComboBoxSearchText.SelectAll
   else
   begin
-    SelectAll(GetActiveEditor);
-    SelectAll(GetActiveSplitEditor);
+    LEditor := GetFocusedEditor;
+    if Assigned(LEditor) then
+      LEditor.SelectAll;
   end;
 end;
 
@@ -2321,59 +2328,39 @@ begin
 end;
 
 procedure TEBDocument.InsertLine;
-
-  procedure InsertLine(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CommandProcessor(ecInsertLine, 'N', nil);
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  InsertLine(GetActiveEditor);
-  InsertLine(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecInsertLine, 'N', nil);
 end;
 
 procedure TEBDocument.DeleteWord;
-
-  procedure DeleteWord(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CommandProcessor(ecDeleteWord, 'T', nil);
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  DeleteWord(GetActiveEditor);
-  DeleteWord(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecDeleteWord, 'T', nil);
 end;
 
 procedure TEBDocument.DeleteLine;
-
-  procedure DeleteLine(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CommandProcessor(ecDeleteLine, 'Y', nil);
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  DeleteLine(GetActiveEditor);
-  DeleteLine(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecDeleteLine, 'Y', nil);
 end;
 
 procedure TEBDocument.DeleteEndOfLine;
-
-  procedure DeleteEndOfLine(AEditor: TBCEditor);
-  begin
-    if Assigned(AEditor) then
-      if AEditor.Focused then
-        AEditor.CommandProcessor(ecDeleteEndOfLine, 'Y', nil);
-  end;
-
+var
+  LEditor: TBCEditor;
 begin
-  DeleteEndOfLine(GetActiveEditor);
-  DeleteEndOfLine(GetActiveSplitEditor);
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.CommandProcessor(ecDeleteEndOfLine, 'Y', nil);
 end;
 
 procedure TEBDocument.ShowInfo;

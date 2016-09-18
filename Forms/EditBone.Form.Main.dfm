@@ -3601,6 +3601,8 @@ inherited MainForm: TMainForm
       Caption = 'Word'
       Hint = 'Delete word'
       ImageIndex = 25
+      SecondaryShortCuts.Strings = (
+        'Ctrl+Del')
       ShortCut = 16468
       OnExecute = ActionEditDeleteWordExecute
     end
@@ -4569,6 +4571,13 @@ inherited MainForm: TMainForm
       Caption = 'HTML Export'
       ImageIndex = 140
       OnExecute = ActionDocumentHTMLExportExecute
+    end
+    object ActionSearchEngine: TAction
+      Category = 'Search'
+      Caption = 'ActionSearchEngine'
+      Hint = 'Select search engine'
+      ImageIndex = 141
+      OnExecute = ActionSearchEngineExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [19]

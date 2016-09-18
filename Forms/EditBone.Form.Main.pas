@@ -9,9 +9,9 @@ uses
   Vcl.ComCtrls, BCControl.StatusBar, Vcl.ExtCtrls, BCControl.Panel, BCControl.Splitter, BCEditor.Editor,
   sPageControl, BCControl.PageControl, BCCommon.Images, BCControl.SpeedButton, Vcl.Buttons, sSpeedButton,
   EditBone.Directory, EditBone.Document, VirtualTrees, BCEditor.Print.Types, BCCommon.Dialog.Popup.Encoding,
-  BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,
+  BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,  BCEditor.Types,
   BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
-  System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,
+  System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,  BCCommon.Dialog.Popup.SearchEngine,
   BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.TitleBar,
   BCComponent.SkinManager, sStatusBar;
 
@@ -645,6 +645,7 @@ type
     ActionDocumentHTMLExport: TAction;
     BCSpeedButton1: TBCSpeedButton;
     TabSheetDirectory: TsTabSheet;
+    ActionSearchEngine: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -815,6 +816,7 @@ type
     procedure PageControlOutputMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupMenuFileTreeViewPopup(Sender: TObject);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+    procedure SelectedSearchEngineClick(ASearchEngine: TBCEditorSearchEngine);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
     procedure TabSheetOpenClickBtn(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
@@ -826,6 +828,7 @@ type
     procedure ActionViewTitleBarFilenameExecute(Sender: TObject);
     procedure ActionViewTitleBarFileListExecute(Sender: TObject);
     procedure ActionDocumentHTMLExportExecute(Sender: TObject);
+    procedure ActionSearchEngineExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -838,6 +841,7 @@ type
     FPopupFilesDialog: TPopupFilesDialog;
     FPopupHighlighterDialog: TPopupHighlighterDialog;
     FPopupHighlighterColorDialog: TPopupHighlighterColorDialog;
+    FPopupSearchEngineDialog: TBCPopupSearchEngineDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
     FStopWatch: TStopWatch;
@@ -888,8 +892,8 @@ uses
   BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, BCCommon.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
-  BCCommon.StringUtils, BCEditor.Types, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst,
-  BCCommon.Form.Print.Preview, EditBone.DataModule.Images, System.IniFiles;
+  BCCommon.StringUtils, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst, BCCommon.Form.Print.Preview,
+  EditBone.DataModule.Images, System.IniFiles;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
@@ -1538,6 +1542,39 @@ begin
   FDocument.SearchClose;
 end;
 
+procedure TMainForm.ActionSearchEngineExecute(Sender: TObject);
+var
+  LEditor: TBCEditor;
+begin
+  inherited;
+  LEditor := FDocument.GetActiveEditor;
+  if Assigned(LEditor) then
+  begin
+    if not Assigned(FPopupSearchEngineDialog) then
+    begin
+      FPopupSearchEngineDialog := TBCPopupSearchEngineDialog.Create(Self);
+      FPopupSearchEngineDialog.PopupParent := Self;
+      FPopupSearchEngineDialog.OnSelectSearchEngine := SelectedSearchEngineClick;
+    end;
+    LockFormPaint;
+    FPopupSearchEngineDialog.Execute(LEditor.Search.Engine);
+    UnlockFormPaint;
+  end;
+end;
+
+procedure TMainForm.SelectedSearchEngineClick(ASearchEngine: TBCEditorSearchEngine);
+
+  procedure SetSearchEngine(AEditor: TBCEditor);
+  begin
+    if Assigned(AEditor) then
+      AEditor.Search.Engine := ASearchEngine;
+  end;
+
+begin
+  SetSearchEngine(FDocument.GetActiveEditor);
+  SetSearchEngine(FDocument.GetActiveSplitEditor);
+end;
+
 procedure TMainForm.ActionSearchFindInFilesExecute(Sender: TObject);
 begin
   inherited;
@@ -1639,7 +1676,7 @@ begin
     if AEditor.Focused then
     begin
       OptionsContainer.EnableSelectionMode := True;
-      AEditor.Selection.Options := AEditor.Selection.Options + [soALTSetsColumnMode];
+      AEditor.Selection.SetOption(soALTSetsColumnMode, True);
       AEditor.Selection.Mode := smColumn;
       Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
       Keybd_Event(AVirtualKey, MapVirtualKey(AVirtualKey, 0), 0, 0);
@@ -2789,9 +2826,6 @@ var
 begin
   inherited;
 
-  //if not FDocument.ReadIniOpenFiles and (ParamCount = 0) or (ParamCount = 1) and (ParamStr(1) = PARAM_NO_INI) then
-  //  FDocument.New;
-
   LOpenFilesFound := FDocument.ReadIniOpenFiles;
   LParamFilesFound := ReadApplicationParamFiles;
 
@@ -3104,6 +3138,7 @@ begin
   FDocument.SkinManager := SkinManager;
   FDocument.StatusBar := StatusBar;
   FDocument.ActionSearchTextItems := ActionSearchTextItems;
+  FDocument.ActionSearchEngine := ActionSearchEngine;
   FDocument.ActionSearchFindPrevious := ActionSearchFindPrevious;
   FDocument.ActionSearchFindNext := ActionSearchFindNext;
   FDocument.ActionSearchOptions := ActionSearchOptions;
