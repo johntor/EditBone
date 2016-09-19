@@ -95,7 +95,7 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure DoSearchTextChange(AEditor: TBCEditor; const ADocumentSpecificSearchText: Boolean = True);
+    procedure DoSearchTextChange(AEditor: TBCEditor; const ASetDocumentSpecificSearchText: Boolean = True);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -846,7 +846,7 @@ begin
   end;
 end;
 
-procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const ADocumentSpecificSearchText: Boolean = True);
+procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const ASetDocumentSpecificSearchText: Boolean = True);
 var
   LComboBoxSearchText: TBCComboBox;
 begin
@@ -857,7 +857,7 @@ begin
       AEditor.Search.SearchText := LComboBoxSearchText.Text;
     SetSearchMatchesFound;
 
-    if ADocumentSpecificSearchText then
+    if ASetDocumentSpecificSearchText then
     begin
       OptionsContainer.DocumentSpecificSearchText := '';
       if not OptionsContainer.DocumentSpecificSearch then
