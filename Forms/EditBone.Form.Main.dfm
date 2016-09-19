@@ -1,6 +1,6 @@
 inherited MainForm: TMainForm
   Caption = 'EditBone'
-  ClientHeight = 682
+  ClientHeight = 702
   ClientWidth = 1111
   KeyPreview = True
   Position = poDefault
@@ -11,7 +11,7 @@ inherited MainForm: TMainForm
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
     Left = 0
-    Top = 528
+    Top = 548
     Width = 1111
     Height = 5
     Cursor = crVSplit
@@ -21,7 +21,7 @@ inherited MainForm: TMainForm
   end
   inherited StatusBar: TBCStatusBar
     AlignWithMargins = True
-    Top = 657
+    Top = 677
     Width = 1111
     Height = 25
     Margins.Left = 0
@@ -1241,7 +1241,7 @@ inherited MainForm: TMainForm
             ImageIndex = 58
           end
           object SpeedButtonViewPreviousPage: TBCSpeedButton
-            Left = 750
+            Left = 900
             Top = 0
             Width = 60
             Height = 56
@@ -1284,7 +1284,7 @@ inherited MainForm: TMainForm
             ImageIndex = 1
           end
           object SpeedButtonViewNextPage: TBCSpeedButton
-            Left = 810
+            Left = 960
             Top = 0
             Width = 60
             Height = 56
@@ -1387,6 +1387,71 @@ inherited MainForm: TMainForm
             SkinData.SkinSection = 'TOOLBUTTON'
             Images = ImagesDataModule.ImageList
             ImageIndex = 139
+          end
+          object SpeedButtonViewDivider4: TBCSpeedButton
+            AlignWithMargins = True
+            Left = 890
+            Top = 4
+            Width = 10
+            Height = 48
+            Margins.Left = 0
+            Margins.Top = 4
+            Margins.Right = 0
+            Margins.Bottom = 4
+            Align = alLeft
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            ButtonStyle = tbsDivider
+            SkinData.SkinSection = 'SPEEDBUTTON'
+            ImageIndex = 1
+          end
+          object SpeedButtonViewUnfold: TBCSpeedButton
+            Left = 820
+            Top = 0
+            Width = 70
+            Height = 56
+            Action = ActionViewUnfold
+            Align = alLeft
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            ButtonStyle = tbsDropDown
+            SkinData.SkinSection = 'TOOLBUTTON'
+            DropdownMenu = PopupMenuViewUnfold
+            Images = ImagesDataModule.ImageList
+            ImageIndex = 142
+          end
+          object SpeedButtonViewFold: TBCSpeedButton
+            Left = 750
+            Top = 0
+            Width = 70
+            Height = 56
+            Action = ActionViewFold
+            Align = alLeft
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            ButtonStyle = tbsDropDown
+            SkinData.SkinSection = 'TOOLBUTTON'
+            DropdownMenu = PopupMenuViewFold
+            Images = ImagesDataModule.ImageList
+            ImageIndex = 141
           end
         end
       end
@@ -1850,7 +1915,7 @@ inherited MainForm: TMainForm
     Left = 0
     Top = 123
     Width = 1111
-    Height = 405
+    Height = 425
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -1866,7 +1931,7 @@ inherited MainForm: TMainForm
       Left = 329
       Top = 0
       Width = 5
-      Height = 405
+      Height = 425
       Visible = False
       SkinData.SkinSection = 'SPLITTER'
     end
@@ -1874,7 +1939,7 @@ inherited MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 329
-      Height = 405
+      Height = 425
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1891,7 +1956,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 329
-        Height = 405
+        Height = 425
         ActivePage = TabSheetDirectory
         Align = alClient
         DoubleBuffered = True
@@ -1926,7 +1991,7 @@ inherited MainForm: TMainForm
       Left = 334
       Top = 0
       Width = 777
-      Height = 405
+      Height = 425
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1943,7 +2008,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 777
-        Height = 405
+        Height = 425
         Margins.Left = 0
         Margins.Top = 5
         Margins.Right = 0
@@ -2989,7 +3054,7 @@ inherited MainForm: TMainForm
   end
   object PanelOutput: TBCPanel [5]
     Left = 0
-    Top = 533
+    Top = 553
     Width = 1111
     Height = 121
     Margins.Left = 0
@@ -4575,22 +4640,90 @@ inherited MainForm: TMainForm
     object ActionSearchEngine: TAction
       Category = 'Search'
       Hint = 'Select search engine'
-      ImageIndex = 141
+      ImageIndex = 143
       OnExecute = ActionSearchEngineExecute
     end
     object ActionSearchCaseSensitive: TAction
       Category = 'Search'
       GroupIndex = 1
       Hint = 'Case sensitive'
-      ImageIndex = 142
+      ImageIndex = 144
       OnExecute = ActionSearchCaseSensitiveExecute
     end
     object ActionSearchInSelection: TAction
       Category = 'Search'
       GroupIndex = 2
       Hint = 'In selection'
-      ImageIndex = 143
+      ImageIndex = 145
       OnExecute = ActionSearchInSelectionExecute
+    end
+    object ActionViewFold: TAction
+      Category = 'View'
+      Caption = 'Fold'
+      ImageIndex = 141
+      OnExecute = ActionViewFoldExecute
+    end
+    object ActionViewFoldAll: TAction
+      Category = 'View'
+      Caption = 'Fold all'
+      Hint = 'Fold all'
+      ImageIndex = 141
+      OnExecute = ActionViewFoldAllExecute
+    end
+    object ActionViewFoldAllDownFromSelectedLine: TAction
+      Category = 'View'
+      Caption = 'Fold all down from selected line'
+      Hint = 'Fold all down from selected line'
+      ImageIndex = 141
+      OnExecute = ActionViewFoldAllDownFromSelectedLineExecute
+    end
+    object ActionViewFoldAllUpFromSelectedLine: TAction
+      Category = 'View'
+      Caption = 'Fold all up from selected line'
+      Hint = 'Fold all up from selected line'
+      ImageIndex = 141
+      OnExecute = ActionViewFoldAllUpFromSelectedLineExecute
+    end
+    object ActionViewFoldSelected: TAction
+      Category = 'View'
+      Caption = 'Fold selected'
+      Hint = 'Fold selected'
+      ImageIndex = 141
+      OnExecute = ActionViewFoldSelectedExecute
+    end
+    object ActionViewUnfold: TAction
+      Category = 'View'
+      Caption = 'Unfold'
+      ImageIndex = 142
+      OnExecute = ActionViewUnfoldExecute
+    end
+    object ActionViewUnfoldAll: TAction
+      Category = 'View'
+      Caption = 'Unfold all'
+      Hint = 'Unfold all'
+      ImageIndex = 142
+      OnExecute = ActionViewUnfoldAllExecute
+    end
+    object ActionViewUnfoldAllDownFromSelectedLine: TAction
+      Category = 'View'
+      Caption = 'Unfold all down from selected line'
+      Hint = 'Unfold all down from selected line'
+      ImageIndex = 142
+      OnExecute = ActionViewUnfoldAllDownFromSelectedLineExecute
+    end
+    object ActionViewUnfoldAllUpFromSelectedLine: TAction
+      Category = 'View'
+      Caption = 'Unfold all up from selected line'
+      Hint = 'Unfold all up from selected line'
+      ImageIndex = 142
+      OnExecute = ActionViewUnfoldAllUpFromSelectedLineExecute
+    end
+    object ActionViewUnfoldSelected: TAction
+      Category = 'View'
+      Caption = 'Unfold selected'
+      Hint = 'Unfold selected'
+      ImageIndex = 142
+      OnExecute = ActionViewUnfoldSelectedExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [19]
@@ -4841,6 +4974,39 @@ inherited MainForm: TMainForm
     object MenuItemSeparator5: TMenuItem
       Caption = '-'
     end
+    object MenuItemFold: TMenuItem
+      Action = ActionViewFold
+      object MenuItemFoldAll: TMenuItem
+        Action = ActionViewFoldAll
+      end
+      object MenuItemFoldAllDownFromSelectedLine: TMenuItem
+        Action = ActionViewFoldAllDownFromSelectedLine
+      end
+      object MenuItemFoldAllUpFromSelectedLine: TMenuItem
+        Action = ActionViewFoldAllUpFromSelectedLine
+      end
+      object MenuItemFoldSelected: TMenuItem
+        Action = ActionViewFoldSelected
+      end
+    end
+    object Unfold1: TMenuItem
+      Action = ActionViewUnfold
+      object MenuItemUnfoldAll: TMenuItem
+        Action = ActionViewUnfoldAll
+      end
+      object MenuItemUnfoldAllDownFromSelectedLine: TMenuItem
+        Action = ActionViewUnfoldAllDownFromSelectedLine
+      end
+      object MenuItemUnfoldAllUpFromSelectedLine: TMenuItem
+        Action = ActionViewUnfoldAllUpFromSelectedLine
+      end
+      object MenuItemUnfoldSelected: TMenuItem
+        Action = ActionViewUnfoldSelected
+      end
+    end
+    object MenuItemSeparator6: TMenuItem
+      Caption = '-'
+    end
     object MenuItemFormat: TMenuItem
       Action = ActionDocumentFormat
       object MenuItemFormatJSON: TMenuItem
@@ -4865,7 +5031,7 @@ inherited MainForm: TMainForm
         Action = ActionDocumentFormatXML
       end
     end
-    object MenuItemSeparator6: TMenuItem
+    object MenuItemSeparator7: TMenuItem
       Caption = '-'
     end
     object MenuItemToggleCase: TMenuItem
@@ -5245,9 +5411,45 @@ inherited MainForm: TMainForm
         Action = ActionViewSplit
         AutoCheck = True
       end
+      object Syncedit1: TMenuItem
+        Action = ActionViewSyncEdit
+      end
       object MenuItemMainMenuViewXMLTree: TMenuItem
         Action = ActionViewXMLTree
         AutoCheck = True
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemMainMenuViewFold: TMenuItem
+        Action = ActionViewFold
+        object MenuItemMainMenuFoldAll: TMenuItem
+          Action = ActionViewFoldAll
+        end
+        object MenuItemMainMenuFoldAllDownFromSelectedLine: TMenuItem
+          Action = ActionViewFoldAllDownFromSelectedLine
+        end
+        object MenuItemMainMenuFoldAllUpFromSelectedLine: TMenuItem
+          Action = ActionViewFoldAllUpFromSelectedLine
+        end
+        object MenuItemMainMenuFoldSelected: TMenuItem
+          Action = ActionViewFoldSelected
+        end
+      end
+      object MenuItemMainMenuUnfold: TMenuItem
+        Action = ActionViewUnfold
+        object MenuItemMainMenuUnfoldAll: TMenuItem
+          Action = ActionViewUnfoldAll
+        end
+        object MenuItemMainMenuUnfoldAllDownFromSelectedLine: TMenuItem
+          Action = ActionViewUnfoldAllDownFromSelectedLine
+        end
+        object MenuItemMainMenuUnfoldAllUpFromSelectedLine: TMenuItem
+          Action = ActionViewUnfoldAllUpFromSelectedLine
+        end
+        object MenuItemMainMenuUnfoldSelected: TMenuItem
+          Action = ActionViewUnfoldSelected
+        end
       end
       object MenuItemMainMenuViewDivider3: TMenuItem
         Caption = '-'
@@ -5454,5 +5656,39 @@ inherited MainForm: TMainForm
   object PopupMenuDummy: TPopupMenu
     Left = 718
     Top = 337
+  end
+  object PopupMenuViewFold: TPopupMenu
+    Images = ImagesDataModule.ImageList
+    Left = 799
+    Top = 525
+    object MenuItemViewFoldAll: TMenuItem
+      Action = ActionViewFoldAll
+    end
+    object MenuItemViewFoldAllDownFromSelectedLine: TMenuItem
+      Action = ActionViewFoldAllDownFromSelectedLine
+    end
+    object MenuItemViewFoldAllUpFromSelectedLine: TMenuItem
+      Action = ActionViewFoldAllUpFromSelectedLine
+    end
+    object MenuItemViewFoldSelected: TMenuItem
+      Action = ActionViewFoldSelected
+    end
+  end
+  object PopupMenuViewUnfold: TPopupMenu
+    Images = ImagesDataModule.ImageList
+    Left = 801
+    Top = 585
+    object MenuItemViewUnfoldAll: TMenuItem
+      Action = ActionViewUnfoldAll
+    end
+    object MenuItemViewUnfoldAllDownFromSelectedLine: TMenuItem
+      Action = ActionViewUnfoldAllDownFromSelectedLine
+    end
+    object MenuItemViewUnfoldAllUpFromSelectedLine: TMenuItem
+      Action = ActionViewUnfoldAllUpFromSelectedLine
+    end
+    object MenuItemViewUnfoldSelected: TMenuItem
+      Action = ActionViewUnfoldSelected
+    end
   end
 end

@@ -125,7 +125,6 @@ type
     procedure ClearBookmarks;
     procedure CloseAll;
     procedure CloseAllOtherPages;
-    procedure CollapseAll;
     procedure CompareFiles(const AFileName: string = ''; AFileDragDrop: Boolean = False);
     procedure Copy;
     procedure Cut;
@@ -137,6 +136,10 @@ type
     procedure FileProperties;
     procedure FindNext;
     procedure FindPrevious;
+    procedure FoldAll;
+    procedure FoldAllDownFromSelectedLine;
+    procedure FoldAllUpFromSelectedLine;
+    procedure FoldAllSelected;
     procedure FormatJSON(AIndentSize: Integer);
     procedure FormatSQL;
     procedure FormatXML;
@@ -187,6 +190,10 @@ type
     procedure Undo;
     procedure UpdateHighlighterColors;
     procedure UpdateSearchItems(AItems: TStrings);
+    procedure UnfoldAll;
+    procedure UnfoldAllDownFromSelectedLine;
+    procedure UnfoldAllUpFromSelectedLine;
+    procedure UnfoldAllSelected;
     procedure WriteIniFile;
     property ActionSearchCaseSensitive: TAction read FActionSearchCaseSensitive write FActionSearchCaseSensitive;
     property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
@@ -2819,13 +2826,76 @@ begin
     Result := LEditor.Marks;
 end;
 
-procedure TEBDocument.CollapseAll;
+procedure TEBDocument.FoldAll;
 var
   LEditor: TBCEditor;
 begin
-  LEditor := GetActiveEditor;
+  LEditor := GetFocusedEditor;
   if Assigned(LEditor) then
-    LEditor.CodeFoldingCollapseAll;
+    LEditor.FoldAll;
+end;
+
+procedure TEBDocument.FoldAllDownFromSelectedLine;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.FoldAll(LEditor.DisplayCaretY, LEditor.Lines.Count);
+end;
+
+procedure TEBDocument.FoldAllUpFromSelectedLine;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.FoldAll(1, LEditor.DisplayCaretY);
+end;
+
+procedure TEBDocument.FoldAllSelected;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.FoldAll(LEditor.SelectionBeginPosition.Line, LEditor.SelectionEndPosition.Line);
+end;
+
+procedure TEBDocument.UnfoldAll;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.UnfoldAll;
+end;
+
+procedure TEBDocument.UnfoldAllDownFromSelectedLine;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.UnfoldAll(LEditor.DisplayCaretY, LEditor.Lines.Count);
+end;
+
+procedure TEBDocument.UnfoldAllUpFromSelectedLine;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.UnfoldAll(1, LEditor.DisplayCaretY);
+end;
+
+procedure TEBDocument.UnfoldAllSelected;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetFocusedEditor;
+  if Assigned(LEditor) then
+    LEditor.UnfoldAll(LEditor.SelectionBeginPosition.Line, LEditor.SelectionEndPosition.Line);
 end;
 
 procedure TEBDocument.DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);

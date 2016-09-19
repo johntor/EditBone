@@ -421,8 +421,8 @@ type
     MenuItemSeparator2: TMenuItem;
     MenuItemSeparator3: TMenuItem;
     MenuItemSeparator4: TMenuItem;
-    MenuItemSeparator5: TMenuItem;
     MenuItemSeparator6: TMenuItem;
+    MenuItemSeparator7: TMenuItem;
     MenuItemSort: TMenuItem;
     MenuItemSortAscending: TMenuItem;
     MenuItemSortDescending: TMenuItem;
@@ -648,6 +648,52 @@ type
     ActionSearchEngine: TAction;
     ActionSearchCaseSensitive: TAction;
     ActionSearchInSelection: TAction;
+    MenuItemSeparator5: TMenuItem;
+    MenuItemFold: TMenuItem;
+    ActionViewFoldAll: TAction;
+    SpeedButtonViewDivider4: TBCSpeedButton;
+    SpeedButtonViewUnfold: TBCSpeedButton;
+    ActionViewFold: TAction;
+    ActionViewUnfold: TAction;
+    SpeedButtonViewFold: TBCSpeedButton;
+    Unfold1: TMenuItem;
+    ActionViewFoldAllDownFromSelectedLine: TAction;
+    ActionViewFoldAllUpFromSelectedLine: TAction;
+    ActionViewFoldSelected: TAction;
+    ActionViewUnfoldAll: TAction;
+    ActionViewUnfoldAllDownFromSelectedLine: TAction;
+    ActionViewUnfoldAllUpFromSelectedLine: TAction;
+    ActionViewUnfoldSelected: TAction;
+    PopupMenuViewFold: TPopupMenu;
+    MenuItemViewFoldAll: TMenuItem;
+    MenuItemViewFoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemViewFoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemViewFoldSelected: TMenuItem;
+    N4: TMenuItem;
+    Syncedit1: TMenuItem;
+    MenuItemMainMenuViewFold: TMenuItem;
+    MenuItemMainMenuUnfold: TMenuItem;
+    MenuItemMainMenuFoldAll: TMenuItem;
+    MenuItemMainMenuFoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemMainMenuFoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemMainMenuFoldSelected: TMenuItem;
+    MenuItemMainMenuUnfoldAll: TMenuItem;
+    MenuItemMainMenuUnfoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemMainMenuUnfoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemMainMenuUnfoldSelected: TMenuItem;
+    PopupMenuViewUnfold: TPopupMenu;
+    MenuItemViewUnfoldAll: TMenuItem;
+    MenuItemViewUnfoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemViewUnfoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemViewUnfoldSelected: TMenuItem;
+    MenuItemFoldAll: TMenuItem;
+    MenuItemFoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemFoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemFoldSelected: TMenuItem;
+    MenuItemUnfoldAll: TMenuItem;
+    MenuItemUnfoldAllDownFromSelectedLine: TMenuItem;
+    MenuItemUnfoldAllUpFromSelectedLine: TMenuItem;
+    MenuItemUnfoldSelected: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -833,6 +879,16 @@ type
     procedure ActionSearchEngineExecute(Sender: TObject);
     procedure ActionSearchCaseSensitiveExecute(Sender: TObject);
     procedure ActionSearchInSelectionExecute(Sender: TObject);
+    procedure ActionViewFoldAllExecute(Sender: TObject);
+    procedure ActionViewFoldExecute(Sender: TObject);
+    procedure ActionViewUnfoldExecute(Sender: TObject);
+    procedure ActionViewFoldAllDownFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewUnfoldAllDownFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewUnfoldAllExecute(Sender: TObject);
+    procedure ActionViewFoldAllUpFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewUnfoldAllUpFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewFoldSelectedExecute(Sender: TObject);
+    procedure ActionViewUnfoldSelectedExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -2041,6 +2097,36 @@ begin
   end;
 end;
 
+procedure TMainForm.ActionViewFoldAllDownFromSelectedLineExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.FoldAllDownFromSelectedLine;
+end;
+
+procedure TMainForm.ActionViewFoldAllExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.FoldAll;
+end;
+
+procedure TMainForm.ActionViewFoldAllUpFromSelectedLineExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.FoldAllUpFromSelectedLine;
+end;
+
+procedure TMainForm.ActionViewFoldExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonViewFold);
+end;
+
+procedure TMainForm.ActionViewFoldSelectedExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.FoldAllSelected;
+end;
+
 procedure TMainForm.ActionViewColorSelectionExecute(Sender: TObject);
 begin
   ActionViewColorSelection.Checked := not ActionViewColorSelection.Checked
@@ -2177,6 +2263,36 @@ begin
     OptionsContainer.MenuBarVisible := False;
     PanelMenuBar.Visible := False;
   end;
+end;
+
+procedure TMainForm.ActionViewUnfoldAllDownFromSelectedLineExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.UnfoldAllDownFromSelectedLine;
+end;
+
+procedure TMainForm.ActionViewUnfoldAllExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.UnfoldAll;
+end;
+
+procedure TMainForm.ActionViewUnfoldAllUpFromSelectedLineExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.UnfoldAllUpFromSelectedLine;
+end;
+
+procedure TMainForm.ActionViewUnfoldExecute(Sender: TObject);
+begin
+  inherited;
+  DropdownMenuPopup(SpeedButtonViewUnfold);
+end;
+
+procedure TMainForm.ActionViewUnfoldSelectedExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.UnfoldAllSelected;
 end;
 
 procedure TMainForm.ActionViewWordWrapExecute(Sender: TObject);
