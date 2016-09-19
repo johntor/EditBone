@@ -4670,19 +4670,19 @@ inherited MainForm: TMainForm
       ImageIndex = 141
       OnExecute = ActionViewFoldAllExecute
     end
-    object ActionViewFoldAllDownFromSelectedLine: TAction
+    object ActionViewFoldAllDownFromActiveLine: TAction
       Category = 'View'
-      Caption = 'Fold all down from selected line'
-      Hint = 'Fold all down from selected line'
+      Caption = 'Fold all down from active line'
+      Hint = 'Fold all down from active line'
       ImageIndex = 141
-      OnExecute = ActionViewFoldAllDownFromSelectedLineExecute
+      OnExecute = ActionViewFoldAllDownFromActiveLineExecute
     end
-    object ActionViewFoldAllUpFromSelectedLine: TAction
+    object ActionViewFoldAllUpFromActiveLine: TAction
       Category = 'View'
-      Caption = 'Fold all up from selected line'
-      Hint = 'Fold all up from selected line'
+      Caption = 'Fold all up from active line'
+      Hint = 'Fold all up from active line'
       ImageIndex = 141
-      OnExecute = ActionViewFoldAllUpFromSelectedLineExecute
+      OnExecute = ActionViewFoldAllUpFromActiveLineExecute
     end
     object ActionViewFoldSelected: TAction
       Category = 'View'
@@ -4704,19 +4704,19 @@ inherited MainForm: TMainForm
       ImageIndex = 142
       OnExecute = ActionViewUnfoldAllExecute
     end
-    object ActionViewUnfoldAllDownFromSelectedLine: TAction
+    object ActionViewUnfoldAllDownFromActiveLine: TAction
       Category = 'View'
-      Caption = 'Unfold all down from selected line'
-      Hint = 'Unfold all down from selected line'
+      Caption = 'Unfold all down from active line'
+      Hint = 'Unfold all down from active line'
       ImageIndex = 142
-      OnExecute = ActionViewUnfoldAllDownFromSelectedLineExecute
+      OnExecute = ActionViewUnfoldAllDownFromActiveLineExecute
     end
-    object ActionViewUnfoldAllUpFromSelectedLine: TAction
+    object ActionViewUnfoldAllUpFromActiveLine: TAction
       Category = 'View'
-      Caption = 'Unfold all up from selected line'
-      Hint = 'Unfold all up from selected line'
+      Caption = 'Unfold all up from active line'
+      Hint = 'Unfold all up from active line'
       ImageIndex = 142
-      OnExecute = ActionViewUnfoldAllUpFromSelectedLineExecute
+      OnExecute = ActionViewUnfoldAllUpFromActiveLineExecute
     end
     object ActionViewUnfoldSelected: TAction
       Category = 'View'
@@ -4980,10 +4980,10 @@ inherited MainForm: TMainForm
         Action = ActionViewFoldAll
       end
       object MenuItemFoldAllDownFromSelectedLine: TMenuItem
-        Action = ActionViewFoldAllDownFromSelectedLine
+        Action = ActionViewFoldAllDownFromActiveLine
       end
       object MenuItemFoldAllUpFromSelectedLine: TMenuItem
-        Action = ActionViewFoldAllUpFromSelectedLine
+        Action = ActionViewFoldAllUpFromActiveLine
       end
       object MenuItemFoldSelected: TMenuItem
         Action = ActionViewFoldSelected
@@ -4995,10 +4995,10 @@ inherited MainForm: TMainForm
         Action = ActionViewUnfoldAll
       end
       object MenuItemUnfoldAllDownFromSelectedLine: TMenuItem
-        Action = ActionViewUnfoldAllDownFromSelectedLine
+        Action = ActionViewUnfoldAllDownFromActiveLine
       end
       object MenuItemUnfoldAllUpFromSelectedLine: TMenuItem
-        Action = ActionViewUnfoldAllUpFromSelectedLine
+        Action = ActionViewUnfoldAllUpFromActiveLine
       end
       object MenuItemUnfoldSelected: TMenuItem
         Action = ActionViewUnfoldSelected
@@ -5427,10 +5427,10 @@ inherited MainForm: TMainForm
           Action = ActionViewFoldAll
         end
         object MenuItemMainMenuFoldAllDownFromSelectedLine: TMenuItem
-          Action = ActionViewFoldAllDownFromSelectedLine
+          Action = ActionViewFoldAllDownFromActiveLine
         end
         object MenuItemMainMenuFoldAllUpFromSelectedLine: TMenuItem
-          Action = ActionViewFoldAllUpFromSelectedLine
+          Action = ActionViewFoldAllUpFromActiveLine
         end
         object MenuItemMainMenuFoldSelected: TMenuItem
           Action = ActionViewFoldSelected
@@ -5442,10 +5442,10 @@ inherited MainForm: TMainForm
           Action = ActionViewUnfoldAll
         end
         object MenuItemMainMenuUnfoldAllDownFromSelectedLine: TMenuItem
-          Action = ActionViewUnfoldAllDownFromSelectedLine
+          Action = ActionViewUnfoldAllDownFromActiveLine
         end
         object MenuItemMainMenuUnfoldAllUpFromSelectedLine: TMenuItem
-          Action = ActionViewUnfoldAllUpFromSelectedLine
+          Action = ActionViewUnfoldAllUpFromActiveLine
         end
         object MenuItemMainMenuUnfoldSelected: TMenuItem
           Action = ActionViewUnfoldSelected
@@ -5665,10 +5665,10 @@ inherited MainForm: TMainForm
       Action = ActionViewFoldAll
     end
     object MenuItemViewFoldAllDownFromSelectedLine: TMenuItem
-      Action = ActionViewFoldAllDownFromSelectedLine
+      Action = ActionViewFoldAllDownFromActiveLine
     end
     object MenuItemViewFoldAllUpFromSelectedLine: TMenuItem
-      Action = ActionViewFoldAllUpFromSelectedLine
+      Action = ActionViewFoldAllUpFromActiveLine
     end
     object MenuItemViewFoldSelected: TMenuItem
       Action = ActionViewFoldSelected
@@ -5682,10 +5682,10 @@ inherited MainForm: TMainForm
       Action = ActionViewUnfoldAll
     end
     object MenuItemViewUnfoldAllDownFromSelectedLine: TMenuItem
-      Action = ActionViewUnfoldAllDownFromSelectedLine
+      Action = ActionViewUnfoldAllDownFromActiveLine
     end
     object MenuItemViewUnfoldAllUpFromSelectedLine: TMenuItem
-      Action = ActionViewUnfoldAllUpFromSelectedLine
+      Action = ActionViewUnfoldAllUpFromActiveLine
     end
     object MenuItemViewUnfoldSelected: TMenuItem
       Action = ActionViewUnfoldSelected

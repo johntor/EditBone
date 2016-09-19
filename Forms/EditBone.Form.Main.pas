@@ -657,12 +657,12 @@ type
     ActionViewUnfold: TAction;
     SpeedButtonViewFold: TBCSpeedButton;
     Unfold1: TMenuItem;
-    ActionViewFoldAllDownFromSelectedLine: TAction;
-    ActionViewFoldAllUpFromSelectedLine: TAction;
+    ActionViewFoldAllDownFromActiveLine: TAction;
+    ActionViewFoldAllUpFromActiveLine: TAction;
     ActionViewFoldSelected: TAction;
     ActionViewUnfoldAll: TAction;
-    ActionViewUnfoldAllDownFromSelectedLine: TAction;
-    ActionViewUnfoldAllUpFromSelectedLine: TAction;
+    ActionViewUnfoldAllDownFromActiveLine: TAction;
+    ActionViewUnfoldAllUpFromActiveLine: TAction;
     ActionViewUnfoldSelected: TAction;
     PopupMenuViewFold: TPopupMenu;
     MenuItemViewFoldAll: TMenuItem;
@@ -882,11 +882,11 @@ type
     procedure ActionViewFoldAllExecute(Sender: TObject);
     procedure ActionViewFoldExecute(Sender: TObject);
     procedure ActionViewUnfoldExecute(Sender: TObject);
-    procedure ActionViewFoldAllDownFromSelectedLineExecute(Sender: TObject);
-    procedure ActionViewUnfoldAllDownFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewFoldAllDownFromActiveLineExecute(Sender: TObject);
+    procedure ActionViewUnfoldAllDownFromActiveLineExecute(Sender: TObject);
     procedure ActionViewUnfoldAllExecute(Sender: TObject);
-    procedure ActionViewFoldAllUpFromSelectedLineExecute(Sender: TObject);
-    procedure ActionViewUnfoldAllUpFromSelectedLineExecute(Sender: TObject);
+    procedure ActionViewFoldAllUpFromActiveLineExecute(Sender: TObject);
+    procedure ActionViewUnfoldAllUpFromActiveLineExecute(Sender: TObject);
     procedure ActionViewFoldSelectedExecute(Sender: TObject);
     procedure ActionViewUnfoldSelectedExecute(Sender: TObject);
   private
@@ -2097,7 +2097,7 @@ begin
   end;
 end;
 
-procedure TMainForm.ActionViewFoldAllDownFromSelectedLineExecute(Sender: TObject);
+procedure TMainForm.ActionViewFoldAllDownFromActiveLineExecute(Sender: TObject);
 begin
   inherited;
   FDocument.FoldAllDownFromSelectedLine;
@@ -2109,7 +2109,7 @@ begin
   FDocument.FoldAll;
 end;
 
-procedure TMainForm.ActionViewFoldAllUpFromSelectedLineExecute(Sender: TObject);
+procedure TMainForm.ActionViewFoldAllUpFromActiveLineExecute(Sender: TObject);
 begin
   inherited;
   FDocument.FoldAllUpFromSelectedLine;
@@ -2265,7 +2265,7 @@ begin
   end;
 end;
 
-procedure TMainForm.ActionViewUnfoldAllDownFromSelectedLineExecute(Sender: TObject);
+procedure TMainForm.ActionViewUnfoldAllDownFromActiveLineExecute(Sender: TObject);
 begin
   inherited;
   FDocument.UnfoldAllDownFromSelectedLine;
@@ -2277,7 +2277,7 @@ begin
   FDocument.UnfoldAll;
 end;
 
-procedure TMainForm.ActionViewUnfoldAllUpFromSelectedLineExecute(Sender: TObject);
+procedure TMainForm.ActionViewUnfoldAllUpFromActiveLineExecute(Sender: TObject);
 begin
   inherited;
   FDocument.UnfoldAllUpFromSelectedLine;
@@ -2372,6 +2372,7 @@ var
   LIsRecordingMacro: Boolean;
   LIsRecordingStopped: Boolean;
   LActiveDocumentModified: Boolean;
+  LCodeFoldingVisible: Boolean;
 begin
   FProcessingEventHandler := True;
   try
@@ -2397,6 +2398,7 @@ begin
     LIsRecordingMacro := False;
     LIsRecordingStopped := False;
     LActiveDocumentModified := False;
+    LCodeFoldingVisible := False;
     if LActiveDocumentFound then
     begin
       LSelectionAvailable := LActiveEditor.SelectionAvailable;
@@ -2405,6 +2407,7 @@ begin
       LIsJSONDocument := LActiveEditor.Tag = EXTENSION_JSON;
       LMinimapVisible := LActiveEditor.Minimap.Visible;
       LSyncEditActive := LActiveEditor.SyncEdit.Active;
+      LCodeFoldingVisible := LActiveEditor.CodeFolding.Visible;
       LActiveDocumentModified := LActiveEditor.Modified;
 
       LSearchEnabled := LActiveEditor.Search.Visible;
@@ -2507,6 +2510,18 @@ begin
     ActionViewMinimap.Checked := LActiveDocumentFound and LMinimapVisible;
     ActionViewSyncEdit.Enabled := LActiveDocumentFound and LSelectionAvailable;
     ActionViewSyncEdit.Checked := LActiveDocumentFound and LSyncEditActive;
+
+    ActionViewFold.Enabled := LCodeFoldingVisible;
+    ActionViewFoldAll.Enabled := LCodeFoldingVisible;
+    ActionViewFoldAllDownFromActiveLine.Enabled := LCodeFoldingVisible;
+    ActionViewFoldAllUpFromActiveLine.Enabled := LCodeFoldingVisible;
+    ActionViewFoldSelected.Enabled := LCodeFoldingVisible and LSelectionAvailable;
+
+    ActionViewUnfold.Enabled := LCodeFoldingVisible;
+    ActionViewUnfoldAll.Enabled := LCodeFoldingVisible;
+    ActionViewUnfoldAllDownFromActiveLine.Enabled := LCodeFoldingVisible;
+    ActionViewUnfoldAllUpFromActiveLine.Enabled := LCodeFoldingVisible;
+    ActionViewUnfoldSelected.Enabled := LCodeFoldingVisible and LSelectionAvailable;
 
     ActionSearchSearch.Enabled := LActiveDocumentFound;
     ActionSearchSearchButton.Enabled := LActiveDocumentFound;
