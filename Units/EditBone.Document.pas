@@ -95,7 +95,7 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure DoSearchTextChange(AEditor: TBCEditor; const ASetDocumentSpecificSearchText: Boolean = True);
+    procedure DoSearchTextChange(AEditor: TBCEditor);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -846,23 +846,21 @@ begin
   end;
 end;
 
-procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const ASetDocumentSpecificSearchText: Boolean = True);
+procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor);
 var
   LComboBoxSearchText: TBCComboBox;
 begin
   if Assigned(AEditor) then
   begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) and (Trim(LComboBoxSearchText.Text) <> '') then
+    if Assigned(LComboBoxSearchText) then
       AEditor.Search.SearchText := LComboBoxSearchText.Text;
+
     SetSearchMatchesFound;
 
-    if ASetDocumentSpecificSearchText then
-    begin
-      OptionsContainer.DocumentSpecificSearchText := '';
-      if not OptionsContainer.DocumentSpecificSearch then
-        OptionsContainer.DocumentSpecificSearchText := AEditor.Search.SearchText
-    end;
+    OptionsContainer.DocumentSpecificSearchText := '';
+    if not OptionsContainer.DocumentSpecificSearch then
+      OptionsContainer.DocumentSpecificSearchText := AEditor.Search.SearchText
   end;
 end;
 
@@ -1562,11 +1560,8 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
-    DoSearchTextChange(LEditor, False);
     if not SetDocumentSpecificSearchText(LEditor) then
       LEditor.FindNext;
-  end;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1575,11 +1570,8 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
-    DoSearchTextChange(LEditor, False);
     if not SetDocumentSpecificSearchText(LEditor) then
       LEditor.FindPrevious;
-  end;
 end;
 
 procedure TEBDocument.Replace;
