@@ -8,7 +8,6 @@ Version 12.4.0 (September 19, 2016)
 - Fixed UTF-8 detection
 - Fixed clipboard
 - Fixed title bar popups
-- Fixed and optimized file loading
 - Fixed color files
 - Fixed language files
 
