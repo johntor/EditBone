@@ -1,3 +1,7 @@
+Version 12.4.1 (September 19, 2016)
+
+- Fixed search
+
 Version 12.4.0 (September 19, 2016)
 
 - Added fold/unfold code folding feature											
@@ -20,7 +24,7 @@ Version 12.3.1 (September 12, 2016)
 Version 12.3.0 (September 11, 2016)
 
 - Added Triangle code folding mark style
-- Added Show tree line code folding option
+- Added Show tree line code folding option                        
 - Fixed past end of line scroll option
 - Fixed search
 - Fixed select all in column mode
