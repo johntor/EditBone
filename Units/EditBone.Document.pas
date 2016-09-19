@@ -95,7 +95,7 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure DoSearchTextChange(AEditor: TBCEditor);
+    procedure DoSearchTextChange(AEditor: TBCEditor; const ADocumentSpecificSearchText: Boolean = True);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -846,20 +846,23 @@ begin
   end;
 end;
 
-procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor);
+procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const ADocumentSpecificSearchText: Boolean = True);
 var
   LComboBoxSearchText: TBCComboBox;
 begin
   if Assigned(AEditor) then
   begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if Assigned(LComboBoxSearchText) then
+    if Assigned(LComboBoxSearchText) and (Trim(LComboBoxSearchText.Text) <> '') then
       AEditor.Search.SearchText := LComboBoxSearchText.Text;
     SetSearchMatchesFound;
 
-    OptionsContainer.DocumentSpecificSearchText := '';
-    if not OptionsContainer.DocumentSpecificSearch then
-      OptionsContainer.DocumentSpecificSearchText := AEditor.Search.SearchText
+    if ADocumentSpecificSearchText then
+    begin
+      OptionsContainer.DocumentSpecificSearchText := '';
+      if not OptionsContainer.DocumentSpecificSearch then
+        OptionsContainer.DocumentSpecificSearchText := AEditor.Search.SearchText
+    end;
   end;
 end;
 
@@ -1560,7 +1563,7 @@ begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
   begin
-    DoSearchTextChange(LEditor);
+    DoSearchTextChange(LEditor, False);
     if not SetDocumentSpecificSearchText(LEditor) then
       LEditor.FindNext;
   end;
@@ -1573,7 +1576,7 @@ begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
   begin
-    DoSearchTextChange(LEditor);
+    DoSearchTextChange(LEditor, False);
     if not SetDocumentSpecificSearchText(LEditor) then
       LEditor.FindPrevious;
   end;
