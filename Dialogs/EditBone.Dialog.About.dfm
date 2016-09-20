@@ -633,10 +633,10 @@ inherited AboutDialog: TAboutDialog
         Height = 44
         AutoSize = False
         Caption = 
-          'ansidev, bovirus, Christian Heinrichs, DEKO, Han Leentvaar, Jos ' +
-          'Berkers, Karel Van Dongen, Ma Xiaoguang, Midas, nickW, Satit Arc' +
-          'hanusorn, Saif Alasadi, Stanis'#322'aw Nakonieczny, ZityiSoft Transla' +
-          'tor Team, '#920#945#957#940#963#951#962' '#922#945#964#963#945#947#949#974#961#947#951#962', '#1057#1077#1088#1075#1077#1081' '#1053#1086#1074#1080#1082#1086#1074
+          'ansidev, bovirus, Christian Heinrichs, DEKO, '#1043#1077#1086#1088#1075#1080' '#1044#1080#1084#1086#1074', Han L' +
+          'eentvaar, Jos Berkers, Karel Van Dongen, Ma Xiaoguang, Midas, ni' +
+          'ckW, Satit Archanusorn, Saif Alasadi, Stanis'#322'aw Nakonieczny, Zit' +
+          'yiSoft Translator Team, '#920#945#957#940#963#951#962' '#922#945#964#963#945#947#949#974#961#947#951#962', '#1057#1077#1088#1075#1077#1081' '#1053#1086#1074#1080#1082#1086#1074
         ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText

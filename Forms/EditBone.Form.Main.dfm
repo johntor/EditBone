@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetView
+      ActivePage = TabSheetDocument
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -1598,7 +1598,7 @@ inherited MainForm: TMainForm
             Images = ImagesDataModule.ImageList
             ImageIndex = 136
           end
-          object BCSpeedButton1: TBCSpeedButton
+          object SpeedButtonDocumentHTMLExport: TBCSpeedButton
             Left = 222
             Top = 0
             Width = 60
@@ -4786,7 +4786,7 @@ inherited MainForm: TMainForm
     Images = ImagesDataModule.ImageList
     Left = 314
     Top = 579
-    object J1: TMenuItem
+    object MenuItemDocumentFormatJSON: TMenuItem
       Action = ActionDocumentFormatJSON
       object MenuItemDocumentFormatJSONMinify: TMenuItem
         Action = ActionDocumentFormatJSONMinify
@@ -4989,7 +4989,7 @@ inherited MainForm: TMainForm
         Action = ActionViewFoldSelected
       end
     end
-    object Unfold1: TMenuItem
+    object MenuItemUnfold: TMenuItem
       Action = ActionViewUnfold
       object MenuItemUnfoldAll: TMenuItem
         Action = ActionViewUnfoldAll
@@ -5071,7 +5071,7 @@ inherited MainForm: TMainForm
     object MenuItemMacroStop: TMenuItem
       Action = ActionMacroStop
     end
-    object N1: TMenuItem
+    object MenuItemPopupMenuDocumentMacroDivider: TMenuItem
       Caption = '-'
     end
     object MenuItemMacroOpen: TMenuItem
@@ -5411,14 +5411,14 @@ inherited MainForm: TMainForm
         Action = ActionViewSplit
         AutoCheck = True
       end
-      object Syncedit1: TMenuItem
+      object MenuItemMainMenuViewSyncedit: TMenuItem
         Action = ActionViewSyncEdit
       end
       object MenuItemMainMenuViewXMLTree: TMenuItem
         Action = ActionViewXMLTree
         AutoCheck = True
       end
-      object N4: TMenuItem
+      object MenuItemMainMenuViewDivider3: TMenuItem
         Caption = '-'
       end
       object MenuItemMainMenuViewFold: TMenuItem
@@ -5451,7 +5451,7 @@ inherited MainForm: TMainForm
           Action = ActionViewUnfoldSelected
         end
       end
-      object MenuItemMainMenuViewDivider3: TMenuItem
+      object MenuItemMainMenuViewDivider4: TMenuItem
         Caption = '-'
       end
       object MenuItemMainMenuViewPreviousPage: TMenuItem
@@ -5466,7 +5466,7 @@ inherited MainForm: TMainForm
       object MenuItemMainMenuDocumentInfo: TMenuItem
         Action = ActionDocumentInfo
       end
-      object N2: TMenuItem
+      object MenuItemMainMenuDocumentDivider1: TMenuItem
         Caption = '-'
       end
       object MenuItemMainMenuDocumentFormat: TMenuItem
@@ -5493,28 +5493,28 @@ inherited MainForm: TMainForm
           Action = ActionDocumentFormatXML
         end
       end
-      object Macro1: TMenuItem
+      object MenuItemMainMenuDocumentMacro: TMenuItem
         Action = ActionMacro
-        object Playback1: TMenuItem
+        object MenuItemMainMenuDocumentPlayback: TMenuItem
           Action = ActionMacroPlayback
         end
-        object MenuItemMainMenuMacroRecordPause: TMenuItem
+        object MenuItemMainMenuDocumentMacroRecordPause: TMenuItem
           Action = ActionMacroRecord
         end
-        object Saveas1: TMenuItem
+        object MenuItemMainMenuDocumentStop: TMenuItem
           Action = ActionMacroStop
         end
-        object N5: TMenuItem
+        object MenuItemMainMenuDocumentMacroDivider: TMenuItem
           Caption = '-'
         end
-        object Open1: TMenuItem
+        object MenuItemMainMenuDocumentOpen: TMenuItem
           Action = ActionMacroOpen
         end
-        object Saveas2: TMenuItem
+        object MenuItemMainMenuDocumentSaveAs: TMenuItem
           Action = ActionMacroSaveAs
         end
       end
-      object N3: TMenuItem
+      object MenuItemMainMenuDocumentDivider2: TMenuItem
         Caption = '-'
       end
       object MenuItemMainMenuDocumentViewInBrowser: TMenuItem
