@@ -1,3 +1,10 @@
+Version 12.5.0 (September 20, 2016)
+
+- Added highlighter for TypeScript																																			
+- Optimized code folding - scanning time decreased 66 percent
+- Fixed code folding issues
+- Fixed language files
+
 Version 12.4.1 (September 19, 2016)
 
 - Fixed search
