@@ -23,6 +23,8 @@ Param | Description
 * EditBone v. <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.5.0</a>: <a href="http://www.bonecode.com/downloads/EditBone32.zip">32-bit Windows</a>, <a href="http://www.bonecode.com/downloads/EditBone64.zip">64-bit Windows</a>
 * SQL formatter: <a href="http://www.bonecode.com/downloads/SQLFormatter.zip" target="_blank">32-bit</a>, <a href="http://www.bonecode.com/downloads/SQLFormatter64.zip" target="_blank">64-bit</a>
 * <a href="http://bonecode.com/downloads/Languages.zip" target="_blank">Language files</a>  - 
+  <img src="http://bonecode.com/images/languages/Arabic.png" alt="Arabic" />
+  <img src="http://bonecode.com/images/languages/Bulgaria.png" alt="Bulgaria" />
   <img src="http://bonecode.com/images/languages/China.png" alt="China" />
   <img src="http://bonecode.com/images/languages/Dutch.png" alt="Dutch" />
   <img src="http://bonecode.com/images/languages/English.png" alt="English" />
