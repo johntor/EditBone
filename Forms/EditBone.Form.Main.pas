@@ -899,8 +899,8 @@ type
     FOutputTreeView: TVirtualDrawTree;
     FPopupEncodingDialog: TPopupEncodingDialog;
     FPopupFilesDialog: TPopupFilesDialog;
-    FPopupHighlighterDialog: TPopupHighlighterDialog;
     FPopupHighlighterColorDialog: TPopupHighlighterColorDialog;
+    FPopupHighlighterDialog: TPopupHighlighterDialog;
     FPopupSearchEngineDialog: TBCPopupSearchEngineDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
@@ -988,10 +988,8 @@ begin
   SetTitleBarMenuCaptions;
   LEditor := FDocument.GetActiveEditor;
   if Assigned(LEditor) then
-  begin
     if LEditor.CanFocus then
       LEditor.SetFocus;
-  end;
 end;
 
 procedure TMainForm.PageControlDocumentCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;

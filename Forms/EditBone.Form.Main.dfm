@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetDocument
+      ActivePage = TabSheetFile
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -3105,10 +3105,11 @@ inherited MainForm: TMainForm
     end
   end
   inherited SkinManager: TBCSkinManager
+    Effects.AllowAnimation = False
     Effects.AllowGlowing = False
     Effects.AllowOuterEffects = True
     AnimEffects.PageChange.Active = False
-    AnimEffects.PageChange.Time = 40
+    AnimEffects.PageChange.Time = 100
     IsDefault = True
     MenuSupport.UseExtraLine = False
     SkinInfo = 'N/A'

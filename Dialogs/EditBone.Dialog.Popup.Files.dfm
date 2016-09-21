@@ -65,7 +65,8 @@ object PopupFilesDialog: TPopupFilesDialog
   end
   object SkinProvider: TsSkinProvider
     AllowExtBorders = False
-    DrawNonClientArea = False
+    AllowBlendOnMoving = False
+    ShowAppIcon = False
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 44

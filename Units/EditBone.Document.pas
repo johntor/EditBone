@@ -2020,24 +2020,15 @@ var
 begin
   LEditorCommand := ecNone;
   case ItemIndex of
-    1:
-      LEditorCommand := ecGotoBookmark1;
-    2:
-      LEditorCommand := ecGotoBookmark2;
-    3:
-      LEditorCommand := ecGotoBookmark3;
-    4:
-      LEditorCommand := ecGotoBookmark4;
-    5:
-      LEditorCommand := ecGotoBookmark5;
-    6:
-      LEditorCommand := ecGotoBookmark6;
-    7:
-      LEditorCommand := ecGotoBookmark7;
-    8:
-      LEditorCommand := ecGotoBookmark8;
-    9:
-      LEditorCommand := ecGotoBookmark9;
+    1: LEditorCommand := ecGotoBookmark1;
+    2: LEditorCommand := ecGotoBookmark2;
+    3: LEditorCommand := ecGotoBookmark3;
+    4: LEditorCommand := ecGotoBookmark4;
+    5: LEditorCommand := ecGotoBookmark5;
+    6: LEditorCommand := ecGotoBookmark6;
+    7: LEditorCommand := ecGotoBookmark7;
+    8: LEditorCommand := ecGotoBookmark8;
+    9: LEditorCommand := ecGotoBookmark9;
   end;
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
@@ -2616,10 +2607,8 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
     if Assigned(LEditor.MacroRecorder) then
       LEditor.MacroRecorder.Stop;
-  end;
 end;
 
 procedure TEBDocument.SyncEdit;
@@ -2630,7 +2619,6 @@ begin
   if Assigned(LEditor) then
     LEditor.SyncEdit.Active := not LEditor.SyncEdit.Active;
 end;
-
 
 procedure TEBDocument.PlaybackMacro;
 var
@@ -2653,8 +2641,8 @@ begin
     if Assigned(LEditor.MacroRecorder) then
     begin
       SaveDialog.InitialDir := '';
-      SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR, [rfReplaceAll]
-        )) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
+      SaveDialog.Filter := Trim(StringReplace(LanguageDataModule.GetFileTypes('Macro'), '|', EDITBONE_NONE_CHAR,
+        [rfReplaceAll])) + EDITBONE_NONE_CHAR + EDITBONE_NONE_CHAR;
       SaveDialog.Title := LanguageDataModule.GetConstant('SaveAs');
       SaveDialog.FileName := '';
       SaveDialog.DefaultExt := 'mcr';
@@ -2709,6 +2697,7 @@ begin
     LTabSheet.SplitEditor.Parent := PageControl.ActivePage;
     OptionsContainer.AssignTo(LTabSheet.SplitEditor);
     LTabSheet.SplitEditor.ChainEditor(LTabSheet.Editor);
+    LTabSheet.SplitEditor.PopupMenu := FPopupMenuEditor;
     LTabSheet.SplitEditor.SetFocus;
     { horizontal splitter }
     LTabSheet.SplitterHorizontal := TBCSplitter.Create(PageControl.ActivePage);
