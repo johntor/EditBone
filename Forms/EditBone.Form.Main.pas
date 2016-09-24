@@ -1042,7 +1042,7 @@ procedure TMainForm.PageControlOutputMouseDown(Sender: TObject; Button: TMouseBu
 begin
   if (Button = mbMiddle) and OptionsContainer.OutputCloseTabByMiddleClick then
   begin
-    PageControlDocument.ActivePageIndex := PageControlDocument.GetTabUnderMouse(Point(X, Y));
+    PageControlDocument.ActivePageIndex := PageControlOutput.GetTabUnderMouse(Point(X, Y));
     ActionOutputClose.Execute;
   end;
 end;
@@ -1052,7 +1052,7 @@ begin
   inherited;
   if (Button = mbMiddle) and OptionsContainer.DirCloseTabByMiddleClick then
   begin
-    PageControlDocument.ActivePageIndex := PageControlDocument.GetTabUnderMouse(Point(X, Y));
+    PageControlDocument.ActivePageIndex := PageControlDirectory.GetTabUnderMouse(Point(X, Y));
     ActionViewCloseDirectory.Execute;
   end;
 end;
