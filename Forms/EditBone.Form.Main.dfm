@@ -3117,8 +3117,7 @@ inherited MainForm: TMainForm
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
     ThirdParty.ThirdVirtualTrees = ' '#13#10'TVirtualDrawTree'#13#10'TBCFileTreeView'#13#10'TEBXMLTree'#13#10
-    Left = 32
-    Top = 178
+    Top = 172
   end
   inherited TitleBar: TBCTitleBar
     Images = ImagesDataModule.ImageListSmall

@@ -1013,7 +1013,10 @@ procedure TMainForm.PageControlDocumentMouseDown(Sender: TObject; Button: TMouse
 begin
   inherited;
   if (Button = mbMiddle) and OptionsContainer.DocCloseTabByMiddleClick then
+  begin
+    PageControlDocument.ActivePageIndex := PageControlDocument.GetTabUnderMouse(Point(X, Y));
     FDocument.Close;
+  end;
 end;
 
 procedure TMainForm.PageControlOutputCloseBtnClick(Sender: TComponent; TabIndex: Integer; var CanClose: Boolean;
@@ -1038,14 +1041,20 @@ procedure TMainForm.PageControlOutputMouseDown(Sender: TObject; Button: TMouseBu
   Y: Integer);
 begin
   if (Button = mbMiddle) and OptionsContainer.OutputCloseTabByMiddleClick then
+  begin
+    PageControlDocument.ActivePageIndex := PageControlDocument.GetTabUnderMouse(Point(X, Y));
     ActionOutputClose.Execute;
+  end;
 end;
 
 procedure TMainForm.PageControlDirectoryMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
   if (Button = mbMiddle) and OptionsContainer.DirCloseTabByMiddleClick then
+  begin
+    PageControlDocument.ActivePageIndex := PageControlDocument.GetTabUnderMouse(Point(X, Y));
     ActionViewCloseDirectory.Execute;
+  end;
 end;
 
 procedure TMainForm.PopupMenuFileTreeViewPopup(Sender: TObject);
