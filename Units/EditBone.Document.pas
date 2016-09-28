@@ -90,12 +90,11 @@ type
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
     function GetXMLTreeVisible: Boolean;
     function Save(TabSheet: TTabSheet; ShowDialog: Boolean = False): string; overload;
-    function SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
     procedure AddToReopenFiles(const FileName: string);
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure DoSearchTextChange(AEditor: TBCEditor);
+    procedure DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -634,6 +633,8 @@ function TEBDocument.CreateNewTabSheet(const AFileName: string = ''; AShowMinima
 begin
   FProcessing := True;
 
+  Screen.Cursor := crHourGlass;
+
   { create new tab sheet }
   Result := TsTabSheet.Create(PageControl);
   Result.PageControl := PageControl;
@@ -697,7 +698,7 @@ begin
       SetHighlighterColor(Result.Editor, AColor)
     else
       SetHighlighterColor(Result.Editor, OptionsContainer.DefaultColor);
-    Result.Editor.LoadFromFile(AFileName);
+   // Result.Editor.LoadFromFile(AFileName);
   end
   else
   begin
@@ -718,6 +719,14 @@ begin
     Result.Editor.SetFocus;
 
   Result.TabVisible := True;
+
+  Application.ProcessMessages;
+
+  if AFileName <> '' then
+    Result.Editor.LoadFromFile(AFileName);
+
+  Screen.Cursor := crDefault;
+
   FProcessing := False;
 end;
 
@@ -846,7 +855,7 @@ begin
   end;
 end;
 
-procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor);
+procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False);
 var
   LComboBoxSearchText: TBCComboBox;
 begin
@@ -854,7 +863,18 @@ begin
   begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
     if Assigned(LComboBoxSearchText) then
-      AEditor.Search.SearchText := LComboBoxSearchText.Text;
+    begin
+      if AClear then
+      begin
+        AEditor.Search.SearchText := '';
+        AEditor.SelectionEndPosition := AEditor.SelectionBeginPosition;
+      end
+      else
+      if not OptionsContainer.DocumentSpecificSearch and (LComboBoxSearchText.Text = '') then
+        AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText
+      else
+        AEditor.Search.SearchText := LComboBoxSearchText.Text;
+    end;
 
     SetSearchMatchesFound;
 
@@ -867,11 +887,15 @@ end;
 procedure TEBDocument.ComboBoxSearchTextChange(Sender: TObject);
 var
   LEditor: TBCEditor;
+  LComboBoxSearchText: TBCComboBox;
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-    if soSearchOnTyping in LEditor.Search.Options then
-      DoSearchTextChange(LEditor);
+  begin
+    LComboBoxSearchText := GetActiveComboBoxSearchText;
+    if (soSearchOnTyping in LEditor.Search.Options) or Assigned(LComboBoxSearchText) and (LComboBoxSearchText.Text = '') then
+      DoSearchTextChange(LEditor, LComboBoxSearchText.Text = '');
+  end;
 end;
 
 procedure TEBDocument.CompareFiles(const AFileName: string; AFileDragDrop: Boolean);
@@ -1543,25 +1567,16 @@ begin
   end;
 end;
 
-function TEBDocument.SetDocumentSpecificSearchText(AEditor: TBCEditor): Boolean;
-begin
-  Result := False;
-  if not OptionsContainer.DocumentSpecificSearch then
-    if AEditor.Search.SearchText <> OptionsContainer.DocumentSpecificSearchText then
-    begin
-      AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText;
-      Result := True;
-    end;
-end;
-
 procedure TEBDocument.FindNext;
 var
   LEditor: TBCEditor;
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-    if not SetDocumentSpecificSearchText(LEditor) then
-      LEditor.FindNext;
+  begin
+    DoSearchTextChange(LEditor);
+    LEditor.FindNext;
+  end;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1570,8 +1585,10 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-    if not SetDocumentSpecificSearchText(LEditor) then
-      LEditor.FindPrevious;
+  begin
+    DoSearchTextChange(LEditor);
+    LEditor.FindPrevious;
+  end;
 end;
 
 procedure TEBDocument.Replace;
