@@ -2100,13 +2100,9 @@ end;
 
 function TEBDocument.GetFocusedEditor: TBCEditor;
 begin
-  Result := GetActiveEditor;
-  if Assigned(Result) and not Result.Focused then
-  begin
-    Result := GetActiveSplitEditor;
-    if Assigned(Result) and not Result.Focused then
-      Result := nil;
-  end;
+  Result := GetActiveSplitEditor;
+  if not Assigned(Result) or Assigned(Result) and not Result.Focused then
+    Result := GetActiveEditor;
 end;
 
 procedure TEBDocument.SetActivePageCaptionModified(AModified: Boolean);
@@ -2833,7 +2829,7 @@ var
 begin
   LEditor := GetFocusedEditor;
   if Assigned(LEditor) then
-    LEditor.FoldAll;
+    LEditor.FoldAll
 end;
 
 procedure TEBDocument.FoldAllDownFromSelectedLine;
