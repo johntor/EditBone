@@ -3,17 +3,15 @@ unit EditBone.Output;
 interface
 
 uses
-  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls,
-  VirtualTrees, BCComponent.SkinManager,
-  BCControl.PageControl, BCCommon.Images, sPageControl;
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.ComCtrls, EditBone.Types,
+  VirtualTrees, BCComponent.SkinManager, BCControl.PageControl, BCCommon.Images, sPageControl;
 
 type
-  TOpenAllEvent = procedure(var FileNames: TStrings);
-
   TEBOutput = class(TObject)
     procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
+    procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
+      Column: TColumnIndex; var NodeWidth: Integer);
     procedure VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
       var InitialStates: TVirtualNodeInitStates);
     procedure TabsheetDblClick(Sender: TObject);
@@ -27,25 +25,25 @@ type
     FPageControl: TBCPageControl;
     FTabSheetFindInFiles: TTabSheet;
     FSkinManager: TBCSkinManager;
-    function GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
-    function TabFound(const TabCaption: string): Boolean;
-    function CheckCancel(ATabIndex: Integer = -1): Boolean;
+    function GetOutputTreeView(ATabSheet: TTabSheet): TVirtualDrawTree;
+    function TabFound(const ATabCaption: string): Boolean;
+    function CheckCancel(const ATabIndex: Integer = -1): Boolean;
   public
     constructor Create(AOwner: TBCPageControl);
-    function CloseTabSheet(AFreePage: Boolean = True; ATabIndex: Integer = -1): Boolean;
-    function SelectedLine(var Filename: string; var Ln: LongWord; var Ch: LongWord): Boolean;
-    function AddTreeView(const TabCaption: string): TVirtualDrawTree;
-    procedure AddTreeViewLine(OutputTreeView: TVirtualDrawTree; const Filename: WideString; Ln, Ch: LongInt;
-      const Text: WideString; const SearchString: WideString = '');
+    function CloseTabSheet(const AFreePage: Boolean = True; const ATabIndex: Integer = -1): Boolean;
+    function SelectedLine(var AFilename: string; var ALine: LongWord; var ACharacter: LongWord): Boolean;
+    function AddTreeView(const ATabCaption: string): TVirtualDrawTree;
+    procedure AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: WideString; ALine, ACharacter: LongInt;
+      const AText: WideString; const ASearchString: WideString = '');
     procedure ReadOutputFile;
     procedure SetOptions;
     procedure WriteOutputFile;
     procedure CloseAllOtherTabSheets;
     procedure CloseAllTabSheets;
-    procedure CopyToClipboard(OnlySelected: Boolean = False);
-    procedure SetProcessingTabSheet(Value: Boolean);
-    procedure OpenFiles(OnlySelected: Boolean = False);
-    procedure SetCheckedState(Value: TCheckState);
+    procedure CopyToClipboard(const AOnlySelected: Boolean = False);
+    procedure SetProcessingTabSheet(const AValue: Boolean);
+    procedure OpenFiles(const AOnlySelected: Boolean = False);
+    procedure SetCheckedState(const AValue: TCheckState);
     property OnTabsheetDblClick: TNotifyEvent read FTabsheetDblClick write FTabsheetDblClick;
     property OnOpenAll: TOpenAllEvent read FOpenAll write FOpenAll;
     property ProcessingTabSheet: Boolean read FProcessingTabSheet write SetProcessingTabSheet;
@@ -57,7 +55,7 @@ type
 implementation
 
 uses
-  EditBone.Types, BCCommon.Options.Container, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
+  BCCommon.Options.Container, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
   BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types,
   BCControl.Panel;
 
@@ -74,65 +72,67 @@ begin
     FTabsheetDblClick(Sender);
 end;
 
-procedure TEBOutput.OpenFiles(OnlySelected: Boolean);
+procedure TEBOutput.OpenFiles(const AOnlySelected: Boolean);
 var
-  FileNames: TStrings;
+  LFileNames: TStrings;
 
   procedure GetFileNames;
   var
-    OutputTreeView: TVirtualDrawTree;
-    Node: PVirtualNode;
-    Data: POutputRec;
+    LOutputTreeView: TVirtualDrawTree;
+    LNode: PVirtualNode;
+    LData: POutputRec;
   begin
-    OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-    Node := OutputTreeView.GetFirst;
-    while Assigned(Node) do
+    LOutputTreeView := GetOutputTreeView(PageControl.ActivePage);
+    LNode := LOutputTreeView.GetFirst;
+    while Assigned(LNode) do
     begin
-      if not OnlySelected or OnlySelected and (OutputTreeView.CheckState[Node] = csCheckedNormal) then
+      if not AOnlySelected or AOnlySelected and (LOutputTreeView.CheckState[LNode] = csCheckedNormal) then
       begin
-        Data := OutputTreeView.GetNodeData(Node);
-        FileNames.Add(Data.FileName);
+        LData := LOutputTreeView.GetNodeData(LNode);
+        LFileNames.Add(LData.FileName);
       end;
-      Node := Node.NextSibling;
+      LNode := LNode.NextSibling;
     end;
   end;
 
 begin
   if Assigned(FOpenAll) then
   begin
-    FileNames := TStringList.Create;
+    LFileNames := TStringList.Create;
     try
       GetFileNames;
-      FOpenAll(FileNames);
+      FOpenAll(LFileNames);
     finally
-      FileNames.Free;
+      LFileNames.Free;
     end;
   end;
 end;
 
-function TEBOutput.TabFound(const TabCaption: string): Boolean;
+function TEBOutput.TabFound(const ATabCaption: string): Boolean;
 var
   i: Integer;
 begin
   Result := False;
   { check if there already is a tab with same name }
   for i := 0 to PageControl.PageCount - 1 do
-    if Trim(PageControl.Pages[i].Caption) = TabCaption then
-    begin
-      PageControl.ActivePageIndex := i;
-      Result := True;
-      Break;
-    end;
+  if Trim(PageControl.Pages[i].Caption) = ATabCaption then
+  begin
+    PageControl.ActivePageIndex := i;
+    Result := True;
+    Break;
+  end;
 end;
 
-function TEBOutput.AddTreeView(const TabCaption: string): TVirtualDrawTree;
+function TEBOutput.AddTreeView(const ATabCaption: string): TVirtualDrawTree;
 var
   LTabSheet: TsTabSheet;
   LVirtualDrawTree: TVirtualDrawTree;
   LPanel: TBCPanel;
+  LTabCaption: string;
 begin
+  LTabCaption := StringReplace(ATabCaption, '&', '&&', [rfReplaceAll]);
   { check if there already is a tab with same name }
-  if TabFound(StringReplace(TabCaption, '&', '&&', [rfReplaceAll])) then
+  if TabFound(LTabCaption) then
   begin
     Result := GetOutputTreeView(PageControl.ActivePage);
     if Assigned(Result) then
@@ -151,7 +151,7 @@ begin
 
   LTabSheet.TabVisible := False;
   LTabSheet.ImageIndex := IMAGE_INDEX_FIND_IN_FILES;
-  LTabSheet.Caption := StringReplace(TabCaption, '&', '&&', [rfReplaceAll]);
+  LTabSheet.Caption := LTabCaption;
   PageControl.ActivePage := LTabSheet;
 
   { Panel needed because Virtual tree's AlignWithMargins does not work. Remove when fixed. }
@@ -189,20 +189,19 @@ begin
   LTabSheet.TabVisible := True;
 end;
 
-procedure TEBOutput.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree;
-  const PaintInfo: TVTPaintInfo);
+procedure TEBOutput.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
 var
-  Data: POutputRec;
+  LData: POutputRec;
   S, Temp: string;
-  R: TRect;
-  Format: Cardinal;
+  LRect: TRect;
+  LFormat: Cardinal;
   LColor: TColor;
 begin
   with Sender as TVirtualDrawTree, PaintInfo do
   begin
-    Data := Sender.GetNodeData(Node);
+    LData := Sender.GetNodeData(Node);
 
-    if not Assigned(Data) then
+    if not Assigned(LData) then
       Exit;
 
     if Assigned(FSkinManager) then
@@ -225,56 +224,57 @@ begin
     end;
     Canvas.Font.Color := LColor;
 
-    if Data.Level = 0 then
+    if LData.Level = 0 then
       Canvas.Font.Style := Canvas.Font.Style + [fsBold]
     else
       Canvas.Font.Style := Canvas.Font.Style - [fsBold];
 
     SetBKMode(Canvas.Handle, TRANSPARENT);
 
-    R := ContentRect;
-    InflateRect(R, -TextMargin, 0);
-    Dec(R.Right);
-    Dec(R.Bottom);
-    if Data.Level = 2 then
-      R.Left := 4;
+    LRect := ContentRect;
+    InflateRect(LRect, -TextMargin, 0);
+    Dec(LRect.Right);
+    Dec(LRect.Bottom);
+    if LData.Level = 2 then
+      LRect.Left := 4;
 
-    if (Data.Level = 0) or (Data.Level = 2) then
-      S := Data.Filename
+    if (LData.Level = 0) or (LData.Level = 2) then
+      S := LData.Filename
     else
-      S := String(Data.Text);
+      S := String(LData.Text);
 
     if Length(S) > 0 then
     begin
-      Format := DT_TOP or DT_LEFT or DT_VCENTER or DT_SINGLELINE;
-      if (Data.Level = 0) or (Data.Level = 2) or (Data.SearchString = '') then
+      LFormat := DT_TOP or DT_LEFT or DT_VCENTER or DT_SINGLELINE;
+      if (LData.Level = 0) or (LData.Level = 2) or (LData.SearchString = '') then
       begin
-        if Data.Level = 0 then
+        if LData.Level = 0 then
           S := System.SysUtils.Format('%s [%d]', [S, Node.ChildCount]);
-        if Data.Level = 1 then
-          S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(Data.Filename)), Data.Ln + OptionsContainer.LeftMarginLineNumbersStartFrom, Data.Ch]) + S;
-        DrawText(Canvas.Handle, S, Length(S), R, Format)
+        if LData.Level = 1 then
+          S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line +
+            OptionsContainer.LeftMarginLineNumbersStartFrom, LData.Character]) + S;
+        DrawText(Canvas.Handle, S, Length(S), LRect, LFormat)
       end
       else
       begin
-        S := String(Data.Text);
-        S := System.Copy(S, 0, Data.TextCh - 1);
-
-        S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(Data.Filename)), Data.Ln + OptionsContainer.LeftMarginLineNumbersStartFrom, Data.Ch]) + S;
-
-        DrawText(Canvas.Handle, S, Length(S), R, Format);
+        S := String(LData.Text);
+        S := System.Copy(S, 0, LData.TextCharacter - 1);
+        S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line +
+          OptionsContainer.LeftMarginLineNumbersStartFrom, LData.Character]) + S;
+        DrawText(Canvas.Handle, S, Length(S), LRect, LFormat);
         S := StringReplace(S, Chr(9), '', [rfReplaceAll]); { replace tabs }
-        R.Left := R.Left + Canvas.TextWidth(S);
+        Inc(LRect.Left, Canvas.TextWidth(S));
         Canvas.Font.Color := clRed;
-        S := Copy(String(Data.Text), Data.TextCh, Length(Data.SearchString));
+        S := Copy(String(LData.Text), LData.TextCharacter, Length(LData.SearchString));
         Temp := StringReplace(S, '&', '&&', [rfReplaceAll]);
         Canvas.Font.Style := Canvas.Font.Style + [fsBold];
-        DrawText(Canvas.Handle, Temp, Length(Temp), R, Format);
+        DrawText(Canvas.Handle, Temp, Length(Temp), LRect, LFormat);
         Canvas.Font.Color := LColor;
-        R.Left := R.Left + Canvas.TextWidth(S);
+        inc(LRect.Left, Canvas.TextWidth(S));
         Canvas.Font.Style := Canvas.Font.Style - [fsBold];
-        S := System.Copy(Data.Text, Integer(Data.TextCh) + Integer(System.Length(Data.SearchString)), Length(Data.Text));
-        DrawText(Canvas.Handle, S, Length(S), R, Format);
+        S := System.Copy(LData.Text, Integer(LData.TextCharacter) + Integer(System.Length(LData.SearchString)),
+          Length(LData.Text));
+        DrawText(Canvas.Handle, S, Length(S), LRect, LFormat);
       end;
     end;
   end;
@@ -283,27 +283,27 @@ end;
 procedure TEBOutput.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree;
   HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
-  Data: POutputRec;
-  AMargin, BoldWidth: Integer;
+  LData: POutputRec;
+  LMargin, LBoldWidth: Integer;
   S: string;
 begin
   with Sender as TVirtualDrawTree do
   begin
-    AMargin := TextMargin;
-    Data := Sender.GetNodeData(Node);
-    if Assigned(Data) then
-    case Data.Level of
+    LMargin := TextMargin;
+    LData := Sender.GetNodeData(Node);
+    if Assigned(LData) then
+    case LData.Level of
       0: begin
            Canvas.Font.Style := Canvas.Font.Style + [fsBold];
-           NodeWidth := Canvas.TextWidth(Trim(Format('%s [%d]', [String(Data.FileName), Node.ChildCount]))) + 2 * AMargin;
+           NodeWidth := Canvas.TextWidth(Trim(Format('%s [%d]', [String(LData.FileName), Node.ChildCount]))) + 2 * LMargin;
          end;
       1: begin
-           S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(Data.Filename)), Data.Ln, Data.Ch]);
+           S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line, LData.Character]);
            Canvas.Font.Style := Canvas.Font.Style + [fsBold];
-           BoldWidth := Canvas.TextWidth(String(Data.SearchString));
+           LBoldWidth := Canvas.TextWidth(String(LData.SearchString));
            Canvas.Font.Style := Canvas.Font.Style - [fsBold];
-           BoldWidth := BoldWidth - Canvas.TextWidth(string(Data.SearchString));
-           NodeWidth := Canvas.TextWidth(Trim(S + String(Data.Text))) + 2 * AMargin + BoldWidth;
+           LBoldWidth := LBoldWidth - Canvas.TextWidth(string(LData.SearchString));
+           NodeWidth := Canvas.TextWidth(Trim(S + String(LData.Text))) + 2 * LMargin + LBoldWidth;
          end;
     end;
   end;
@@ -318,139 +318,136 @@ begin
   inherited;
 end;
 
-procedure TEBOutput.AddTreeViewLine(OutputTreeView: TVirtualDrawTree; const Filename: WideString; Ln, Ch: LongInt;
-  const Text: WideString; const SearchString: WideString);
+procedure TEBOutput.AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: WideString; ALine, ACharacter: LongInt;
+  const AText: WideString; const ASearchString: WideString);
 var
-  Node, LastNode: PVirtualNode;
-  NodeData: POutputRec;
-  s: WideString;
+  LNode, LLastNode: PVirtualNode;
+  LNodeData: POutputRec;
+  S: WideString;
 begin
   if not FProcessingTabSheet then
     Exit;
   if FCancelSearch then
     Exit;
-  if not Assigned(OutputTreeView) then
+  if not Assigned(AOutputTreeView) then
     Exit;
-  OutputTreeView.BeginUpdate;
-  LastNode := OutputTreeView.GetLast;
-  if Assigned(LastNode) then
+  AOutputTreeView.BeginUpdate;
+  LLastNode := AOutputTreeView.GetLast;
+  if Assigned(LLastNode) then
   begin
-    NodeData := OutputTreeView.GetNodeData(LastNode);
-    if (NodeData.Filename <> FileName) or (NodeData.Ln = -1) then
-      LastNode := nil;
+    LNodeData := AOutputTreeView.GetNodeData(LLastNode);
+    if (LNodeData.Filename <> AFileName) or (LNodeData.Line = -1) then
+      LLastNode := nil;
   end;
-  if not Assigned(LastNode) then
+  if not Assigned(LLastNode) then
   begin
-    FRootNode := OutputTreeView.AddChild(nil);
-    NodeData := OutputTreeView.GetNodeData(FRootNode);
-    NodeData.Level := 0;
-    if Ln = -1 then
+    FRootNode := AOutputTreeView.AddChild(nil);
+    LNodeData := AOutputTreeView.GetNodeData(FRootNode);
+    LNodeData.Level := 0;
+    if ALine = -1 then
     begin
-      NodeData.Level := 2;
-      NodeData.Filename := Text;
+      LNodeData.Level := 2;
+      LNodeData.Filename := AText;
     end
     else
-      NodeData.Filename := Filename;
+      LNodeData.Filename := AFilename;
   end;
-  if Ln <> -1  then
+  if ALine <> -1  then
   begin
-    Node := OutputTreeView.AddChild(FRootNode);
-    NodeData := OutputTreeView.GetNodeData(Node);
-    NodeData.Level := 1;
-    NodeData.Ln := Ln;
-    NodeData.Ch := Ch;
-    NodeData.SearchString := SearchString;
-    NodeData.Filename := Filename;
+    LNode := AOutputTreeView.AddChild(FRootNode);
+    LNodeData := AOutputTreeView.GetNodeData(LNode);
+    LNodeData.Level := 1;
+    LNodeData.Line := ALine;
+    LNodeData.Character := ACharacter;
+    LNodeData.SearchString := ASearchString;
+    LNodeData.Filename := AFilename;
 
-    s := Text;
+    S := AText;
 
-    if NodeData.SearchString <> '' then
+    if LNodeData.SearchString <> '' then
     begin
-      if Ch > 255 then
+      if ACharacter > 255 then
       begin
-        NodeData.TextCh := 11;
-        s := System.Copy(s, Ch - 10, System.Length(s));
+        LNodeData.TextCharacter := 11;
+        S := System.Copy(s, ACharacter - 10, System.Length(s));
       end
       else
-        NodeData.TextCh := Ch;
-      if System.Length(s) > 255 then
-        s := Format('%s...', [System.Copy(s, 0, 251)]);
+        LNodeData.TextCharacter := ACharacter;
+      if System.Length(S) > 255 then
+        S := Format('%s...', [System.Copy(S, 0, 251)]);
     end;
 
-    if toAutoExpand in OutputTreeView.TreeOptions.AutoOptions then
-      if not OutputTreeView.Expanded[FRootNode] then
-        OutputTreeView.FullExpand(FRootNode);
+    if toAutoExpand in AOutputTreeView.TreeOptions.AutoOptions then
+      if not AOutputTreeView.Expanded[FRootNode] then
+        AOutputTreeView.FullExpand(FRootNode);
 
-    NodeData.Text := s;
-    OutputTreeView.Tag := OutputTreeView.Tag + 1;
+    LNodeData.Text := s;
+    AOutputTreeView.Tag := AOutputTreeView.Tag + 1;
   end;
-  OutputTreeView.EndUpdate;
-  { fix for scrollbar resize bug }
-  SetWindowPos(OutputTreeView.Handle, 0, 0, 0, OutputTreeView.Width, OutputTreeView.Height, SWP_DRAWFRAME);
-  Application.ProcessMessages;
+  AOutputTreeView.EndUpdate;
 end;
 
-function TEBOutput.SelectedLine(var Filename: string; var Ln: LongWord; var Ch: LongWord): Boolean;
+function TEBOutput.SelectedLine(var AFilename: string; var ALine: LongWord; var ACharacter: LongWord): Boolean;
 var
-  Node: PVirtualNode;
-  NodeData: POutputRec;
-  OutputTreeView: TVirtualDrawTree;
+  LNode: PVirtualNode;
+  LNodeData: POutputRec;
+  LOutputTreeView: TVirtualDrawTree;
 begin
   Result := False;
-  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-  if not Assigned(OutputTreeView) then
+  LOutputTreeView := GetOutputTreeView(PageControl.ActivePage);
+  if not Assigned(LOutputTreeView) then
     Exit;
 
-  Node := OutputTreeView.GetFirstSelected;
-  NodeData := OutputTreeView.GetNodeData(Node);
+  LNode := LOutputTreeView.GetFirstSelected;
+  LNodeData := LOutputTreeView.GetNodeData(LNode);
 
-  Result := Assigned(NodeData) and (NodeData.Text <> '');
+  Result := Assigned(LNodeData) and (LNodeData.Text <> '');
   if Result then
   begin
-    Filename := String(NodeData.Filename);
-    Ln := NodeData.Ln;
-    Ch := NodeData.Ch;
+    AFilename := String(LNodeData.Filename);
+    ALine := LNodeData.Line;
+    ACharacter := LNodeData.Character;
   end;
 end;
 
-procedure TEBOutput.CopyToClipboard(OnlySelected: Boolean);
+procedure TEBOutput.CopyToClipboard(const AOnlySelected: Boolean);
 var
-  OutputTreeView: TVirtualDrawTree;
-  Node, ChildNode: PVirtualNode;
-  Data, ChildData: POutputRec;
-  StringList: TStrings;
+  LOutputTreeView: TVirtualDrawTree;
+  LNode, LChildNode: PVirtualNode;
+  LData, LChildData: POutputRec;
+  LStringList: TStrings;
 begin
-  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-  if Assigned(OutputTreeView) then
+  LOutputTreeView := GetOutputTreeView(PageControl.ActivePage);
+  if Assigned(LOutputTreeView) then
   begin
-    StringList := TStringList.Create;
+    LStringList := TStringList.Create;
     try
-      Node := OutputTreeView.GetFirst;
-      while Assigned(Node) do
+      LNode := LOutputTreeView.GetFirst;
+      while Assigned(LNode) do
       begin
-        if not OnlySelected or OnlySelected and (OutputTreeView.CheckState[Node] = csCheckedNormal) then
+        if not AOnlySelected or AOnlySelected and (LOutputTreeView.CheckState[LNode] = csCheckedNormal) then
         begin
-          Data := OutputTreeView.GetNodeData(Node);
-          StringList.Add(Data.FileName);
-          ChildNode := Node.FirstChild;
-          while Assigned(ChildNode) do
+          LData := LOutputTreeView.GetNodeData(LNode);
+          LStringList.Add(LData.FileName);
+          LChildNode := LNode.FirstChild;
+          while Assigned(LChildNode) do
           begin
-            ChildData := OutputTreeView.GetNodeData(ChildNode);
-            StringList.Add(System.SysUtils.Format('  %s (%d, %d): %s', [ExtractFilename(String(ChildData.Filename)),
-              ChildData.Ln, ChildData.Ch, ChildData.Text]));
-            ChildNode := ChildNode.NextSibling;
+            LChildData := LOutputTreeView.GetNodeData(LChildNode);
+            LStringList.Add(System.SysUtils.Format('  %s (%d, %d): %s', [ExtractFilename(String(LChildData.Filename)),
+              LChildData.Line, LChildData.Character, LChildData.Text]));
+            LChildNode := LChildNode.NextSibling;
           end;
         end;
-        Node := Node.NextSibling;
+        LNode := LNode.NextSibling;
       end;
     finally
-      Clipboard.AsText := StringList.Text;
-      StringList.Free;
+      Clipboard.AsText := LStringList.Text;
+      LStringList.Free;
     end;
   end;
 end;
 
-function TEBOutput.CheckCancel(ATabIndex: Integer = -1): Boolean;
+function TEBOutput.CheckCancel(const ATabIndex: Integer = -1): Boolean;
 var
   LTabSheet: TTabSheet;
 begin
@@ -470,7 +467,7 @@ begin
     end;
 end;
 
-function TEBOutput.CloseTabSheet(AFreePage: Boolean = True; ATabIndex: Integer = -1): Boolean;
+function TEBOutput.CloseTabSheet(const AFreePage: Boolean = True; const ATabIndex: Integer = -1): Boolean;
 var
   LActivePageIndex: Integer;
 begin
@@ -541,23 +538,23 @@ begin
   end;
 end;
 
-procedure TEBOutput.SetProcessingTabSheet(Value: Boolean);
+procedure TEBOutput.SetProcessingTabSheet(const AValue: Boolean);
 begin
-  FProcessingTabSheet := Value;
+  FProcessingTabSheet := AValue;
   FProcessingPage := PageControl.ActivePage;
   FCancelSearch := False;
 end;
 
-function TEBOutput.GetOutputTreeView(TabSheet: TTabSheet): TVirtualDrawTree;
+function TEBOutput.GetOutputTreeView(ATabSheet: TTabSheet): TVirtualDrawTree;
 var
   LPanel: TBCPanel;
 begin
   Result := nil;
-  if Assigned(TabSheet) then
-    if Assigned(TabSheet.Controls[0]) then
-      if TabSheet.Controls[0] is TBCPanel then
+  if Assigned(ATabSheet) then
+    if Assigned(ATabSheet.Controls[0]) then
+      if ATabSheet.Controls[0] is TBCPanel then
       begin
-        LPanel := TBCPanel(TabSheet.Controls[0]);
+        LPanel := TBCPanel(ATabSheet.Controls[0]);
         if Assigned(LPanel) then
           if Assigned(LPanel.Controls[0]) then
             if LPanel.Controls[0] is TVirtualDrawTree then
@@ -568,8 +565,8 @@ end;
 procedure TEBOutput.SetOptions;
 var
   i: Integer;
-  VirtualDrawTree: TVirtualDrawTree;
-  Node: PVirtualNode;
+  LVirtualDrawTree: TVirtualDrawTree;
+  LNode: PVirtualNode;
 begin
   PageControl.MultiLine := OptionsContainer.OutputMultiLine;
   PageControl.ShowCloseBtns := OptionsContainer.OutputShowCloseButton;
@@ -583,76 +580,74 @@ begin
 
   for i := 0 to PageControl.PageCount - 2 do
   begin
-    VirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
-    VirtualDrawTree.Indent := OptionsContainer.OutputIndent;
+    LVirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
+    LVirtualDrawTree.Indent := OptionsContainer.OutputIndent;
     if OptionsContainer.OutputShowTreeLines then
-      VirtualDrawTree.TreeOptions.PaintOptions := VirtualDrawTree.TreeOptions.PaintOptions + [toShowTreeLines]
+      LVirtualDrawTree.TreeOptions.PaintOptions := LVirtualDrawTree.TreeOptions.PaintOptions + [toShowTreeLines]
     else
-      VirtualDrawTree.TreeOptions.PaintOptions := VirtualDrawTree.TreeOptions.PaintOptions - [toShowTreeLines];
+      LVirtualDrawTree.TreeOptions.PaintOptions := LVirtualDrawTree.TreeOptions.PaintOptions - [toShowTreeLines];
 
     { check box }
-    Node := VirtualDrawTree.GetFirst;
-    while Assigned(Node) do
+    LNode := LVirtualDrawTree.GetFirst;
+    while Assigned(LNode) do
     begin
-      VirtualDrawTree.ReinitNode(Node, False);
-      Node := VirtualDrawTree.GetNextSibling(Node);
+      LVirtualDrawTree.ReinitNode(LNode, False);
+      LNode := LVirtualDrawTree.GetNextSibling(LNode);
     end;
   end;
 end;
 
-procedure TEBOutput.SetCheckedState(Value: TCheckState);
+procedure TEBOutput.SetCheckedState(const AValue: TCheckState);
 var
-  OutputTreeView: TVirtualDrawTree;
-  Node: PVirtualNode;
+  LOutputTreeView: TVirtualDrawTree;
+  LNode: PVirtualNode;
 begin
-  OutputTreeView := GetOutputTreeView(PageControl.ActivePage);
-  Node := OutputTreeView.GetFirst;
-  while Assigned(Node) do
+  LOutputTreeView := GetOutputTreeView(PageControl.ActivePage);
+  LNode := LOutputTreeView.GetFirst;
+  while Assigned(LNode) do
   begin
-    OutputTreeView.CheckState[Node] := Value;
-    Node := Node.NextSibling;
+    LOutputTreeView.CheckState[LNode] := AValue;
+    LNode := LNode.NextSibling;
   end;
 end;
 
 procedure TEBOutput.ReadOutputFile;
 var
-  Filename, S: string;
-  OutputFile: TStreamReader;
-  VirtualDrawTree: TVirtualDrawTree;
-  AFilename, Text, SearchString: string;
-  Ln, Ch: Cardinal;
+  LFilename, S: string;
+  LOutputFile: TStreamReader;
+  LVirtualDrawTree: TVirtualDrawTree;
+  LFilenameToken, LText, SearchString: string;
+  LLineToken, LCharacterToken: Cardinal;
 begin
   FProcessingTabSheet := True;
-  VirtualDrawTree := nil;
-  Filename := GetOutFilename;
-  if FileExists(Filename) then
+  LVirtualDrawTree := nil;
+  LFilename := GetOutFilename;
+  if FileExists(LFilename) then
   begin
-    OutputFile := TStreamReader.Create(Filename, TEncoding.Unicode);
+    LOutputFile := TStreamReader.Create(LFilename, TEncoding.Unicode);
     try
-      while not OutputFile.EndOfStream do
+      while not LOutputFile.EndOfStream do
       begin
-        S := OutputFile.ReadLine;
+        S := LOutputFile.ReadLine;
         if Pos('s:', S) = 1 then
-          VirtualDrawTree := AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [Copy(S, 3, Length(S))]))
+          LVirtualDrawTree := AddTreeView(Format(LanguageDataModule.GetConstant('SearchFor'), [Copy(S, 3, Length(S))]))
         else
+        if Assigned(LVirtualDrawTree) then
         begin
-          if Assigned(VirtualDrawTree) then
-          begin
-            AFilename := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
-            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-            Ln := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
-            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-            Ch := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
-            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-            Text := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
-            S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-            SearchString := S;
-            AddTreeViewLine(VirtualDrawTree, AFilename, Ln, Ch, Text, SearchString);
-          end;
+          LFilenameToken := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
+          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+          LLineToken := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
+          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+          LCharacterToken := StrToInt(GetNextToken(OUTPUT_FILE_SEPARATOR, S));
+          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+          LText := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
+          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+          SearchString := S;
+          AddTreeViewLine(LVirtualDrawTree, LFilenameToken, LLineToken, LCharacterToken, LText, SearchString);
         end;
       end;
     finally
-      OutputFile.Free;
+      LOutputFile.Free;
     end;
   end;
   FProcessingTabSheet := False;
@@ -661,47 +656,47 @@ end;
 procedure TEBOutput.WriteOutputFile;
 var
   i: Integer;
-  Filename: string;
-  OutputFile: TStreamWriter;
-  Node: PVirtualNode;
-  NodeData: POutputRec;
-  VirtualDrawTree: TVirtualDrawTree;
+  LFilename: string;
+  LOutputFile: TStreamWriter;
+  LNode: PVirtualNode;
+  LNodeData: POutputRec;
+  LVirtualDrawTree: TVirtualDrawTree;
 begin
   FProcessingTabSheet := True;
-  Filename := GetOutFilename;
-  if FileExists(Filename) then
-    DeleteFile(Filename);
+  LFilename := GetOutFilename;
+  if FileExists(LFilename) then
+    DeleteFile(LFilename);
   if OptionsContainer.OutputSaveTabs then
     if PageControl.PageCount > 0 then
     begin
-      OutputFile := TStreamWriter.Create(Filename, False, TEncoding.Unicode);
+      LOutputFile := TStreamWriter.Create(LFilename, False, TEncoding.Unicode);
       try
         for i := 0 to PageControl.PageCount - 2 do
         begin
-          VirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
-          if Assigned(VirtualDrawTree) then
+          LVirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
+          if Assigned(LVirtualDrawTree) then
           begin
             { tab sheet }
-            Node := VirtualDrawTree.GetFirst;
-            Node := VirtualDrawTree.GetFirstChild(Node);
-            if Assigned(Node) then
+            LNode := LVirtualDrawTree.GetFirst;
+            LNode := LVirtualDrawTree.GetFirstChild(LNode);
+            if Assigned(LNode) then
             begin
-              NodeData := VirtualDrawTree.GetNodeData(Node);
-              OutputFile.Writeline(Format('s:%s', [NodeData.SearchString]));
+              LNodeData := LVirtualDrawTree.GetNodeData(LNode);
+              LOutputFile.Writeline(Format('s:%s', [LNodeData.SearchString]));
             end;
             { data }
-            while Assigned(Node) do
+            while Assigned(LNode) do
             begin
-              NodeData := VirtualDrawTree.GetNodeData(Node);
-              if NodeData.SearchString <> '' then
-                OutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s', [NodeData.Filename, OUTPUT_FILE_SEPARATOR, NodeData.Ln,
-                  OUTPUT_FILE_SEPARATOR, NodeData.Ch, OUTPUT_FILE_SEPARATOR, NodeData.Text, OUTPUT_FILE_SEPARATOR, NodeData.SearchString]));
-              Node := VirtualDrawTree.GetNext(Node);
+              LNodeData := LVirtualDrawTree.GetNodeData(LNode);
+              if LNodeData.SearchString <> '' then
+                LOutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s', [LNodeData.Filename, OUTPUT_FILE_SEPARATOR, LNodeData.Line,
+                  OUTPUT_FILE_SEPARATOR, LNodeData.Character, OUTPUT_FILE_SEPARATOR, LNodeData.Text, OUTPUT_FILE_SEPARATOR, LNodeData.SearchString]));
+              LNode := LVirtualDrawTree.GetNext(LNode);
             end;
           end;
         end;
       finally
-        OutputFile.Free;
+        LOutputFile.Free;
       end;
     end;
   FProcessingTabSheet := False;
@@ -710,15 +705,15 @@ end;
 procedure TEBOutput.VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
   var InitialStates: TVirtualNodeInitStates);
 var
-  Data: POutputRec;
+  LData: POutputRec;
 begin
   with Sender do
   if OptionsContainer.OutputShowCheckBox then
   begin
     if GetNodeLevel(Node) = 0 then
     begin
-      Data := Sender.GetNodeData(Node);
-      if Data.Level <> 2 then
+      LData := Sender.GetNodeData(Node);
+      if LData.Level <> 2 then
       begin
         CheckType[Node] := ctCheckBox;
         CheckState[Node] := csCheckedNormal;

@@ -2,13 +2,18 @@ unit EditBone.Types;
 
 interface
 
+uses
+  System.Classes;
+
 type
+  TOpenAllEvent = procedure(var AFileNames: TStrings);
+
   TOutputRec = packed record
     Level: Byte;
     Filename: string;
-    Ln: LongInt;
-    Ch: LongInt;
-    TextCh: LongWord;
+    Line: LongInt;
+    Character: LongInt;
+    TextCharacter: LongWord;
     Text: WideString;
     SearchString: WideString;
   end;
