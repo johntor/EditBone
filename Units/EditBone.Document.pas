@@ -698,7 +698,7 @@ begin
       SetHighlighterColor(Result.Editor, AColor)
     else
       SetHighlighterColor(Result.Editor, OptionsContainer.DefaultColor);
-   // Result.Editor.LoadFromFile(AFileName);
+    Result.Editor.LoadFromFile(AFileName);
   end
   else
   begin
@@ -719,11 +719,6 @@ begin
     Result.Editor.SetFocus;
 
   Result.TabVisible := True;
-
-  Application.ProcessMessages;
-
-  if AFileName <> '' then
-    Result.Editor.LoadFromFile(AFileName);
 
   Screen.Cursor := crDefault;
 
