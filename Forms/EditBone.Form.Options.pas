@@ -64,6 +64,7 @@ type
     Splitter: TBCSplitter;
     VirtualDrawTreeOptions: TVirtualDrawTree;
     ActionEditorSyncEdit: TAction;
+    ActionEditorWordWrap: TAction;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -107,9 +108,9 @@ uses
   EditBone.Frame.Options.FileTypes, EditBone.Frame.Options.Directory, EditBone.Frame.Options.Directory.TabSheet,
   EditBone.Frame.Options.Output.TabSheet, BCCommon.Frame.Options.Compare, BCCommon.Frame.Options.Editor.SyncEdit,
   BCCommon.Frame.Options.MainMenu, BCCommon.Frame.Options.StatusBar, BCCommon.Frame.Options.Output,
-  BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print, BCCommon.Frame.Options.SQL.Select,
-  BCCommon.Frame.Options.SQL.Alignments, BCCommon.Frame.Options.SQL.Insert, BCCommon.Frame.Options.SQL.Update,
-  BCCommon.Frame.Options.SQL.Whitespace, BCCommon.Frame.Options.SQL.Capitalization,
+  BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print,  BCCommon.Frame.Options.Editor.WordWrap,
+  BCCommon.Frame.Options.SQL.Select, BCCommon.Frame.Options.SQL.Alignments, BCCommon.Frame.Options.SQL.Insert,
+  BCCommon.Frame.Options.SQL.Update, BCCommon.Frame.Options.SQL.Whitespace, BCCommon.Frame.Options.SQL.Capitalization,
   BCCommon.Frame.Options.SQL.Indentation, BCCommon.Frame.Options.SQL.Formatter;
 
 var
@@ -247,6 +248,12 @@ begin
     Data.Index := PostInc(i);
     Data.ImageIndex := ActionEditorTabulator.ImageIndex;
     Data.Caption := ActionEditorTabulator.Caption;
+    { Editor word wrap }
+    ChildNode := AddChild(Node);
+    Data := GetNodeData(ChildNode);
+    Data.Index := PostInc(i);
+    Data.ImageIndex := ActionEditorWordWrap.ImageIndex;
+    Data.Caption := ActionEditorWordWrap.Caption;
 
     Node.ChildCount := VirtualDrawTreeOptions.ChildCount[Node];
     VirtualDrawTreeOptions.Selected[Node] := True;
@@ -517,6 +524,8 @@ begin
       OptionsEditorTabsFrame(Self).ShowFrame;
     if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 16) then
       OptionsEditorTabulatorFrame(Self).ShowFrame;
+    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 17) then
+      OptionsEditorWordWrapFrame(Self).ShowFrame;
     if (Level = 0) and (TreeNode.Index = 1) then
       OptionsDirectoryFrame(Self).ShowFrame;
     if (ParentIndex = 1) and (Level = 1) and (TreeNode.Index = 0) then

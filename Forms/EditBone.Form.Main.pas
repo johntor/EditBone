@@ -1789,7 +1789,7 @@ begin
   if Assigned(AEditor) then
     if AEditor.Focused then
     begin
-      OptionsContainer.EnableSelectionMode := True;
+      OptionsContainer.SelectionModeEnabled := True;
       AEditor.Selection.SetOption(soALTSetsColumnMode, True);
       AEditor.Selection.Mode := smColumn;
       Keybd_Event(VK_SHIFT, MapVirtualKey(VK_SHIFT, 0), 0, 0);
@@ -3243,10 +3243,10 @@ begin
     SplitterVertical.Visible := PanelDirectory.Visible;
 
     //ActionViewXMLTree.Checked := OptionsContainer.ShowXMLTree;
-    ActionViewWordWrap.Checked := OptionsContainer.EnableWordWrap;
-    ActionViewLineNumbers.Checked := OptionsContainer.EnableLineNumbers;
-    ActionViewSpecialChars.Checked := OptionsContainer.EnableSpecialChars;
-    ActionViewSelectionMode.Checked := OptionsContainer.EnableSelectionMode;
+    ActionViewWordWrap.Checked := OptionsContainer.WordWrapEnabled;
+    ActionViewLineNumbers.Checked := OptionsContainer.LineNumbersEnabled;
+    ActionViewSpecialChars.Checked := OptionsContainer.SpecialCharsEnabled;
+    ActionViewSelectionMode.Checked := OptionsContainer.SelectionModeEnabled;
     ActionViewEncodingSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     ActionViewHighlighterSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
     ActionViewColorSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;

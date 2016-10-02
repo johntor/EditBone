@@ -259,6 +259,10 @@ object OptionsForm: TOptionsForm
       Caption = 'Tabulator'
       ImageIndex = 114
     end
+    object ActionEditorWordWrap: TAction
+      Caption = 'Word wrap'
+      ImageIndex = 57
+    end
     object ActionFileTypes: TAction
       Caption = 'File Types'
       ImageIndex = 120
@@ -321,11 +325,6 @@ object OptionsForm: TOptionsForm
     end
   end
   object SkinProvider: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 271

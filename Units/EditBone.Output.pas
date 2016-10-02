@@ -381,7 +381,7 @@ begin
       if not AOutputTreeView.Expanded[FRootNode] then
         AOutputTreeView.FullExpand(FRootNode);
 
-    LNodeData.Text := s;
+    LNodeData.Text := S;
     AOutputTreeView.Tag := AOutputTreeView.Tag + 1;
   end;
   AOutputTreeView.EndUpdate;

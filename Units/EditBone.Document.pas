@@ -941,8 +941,8 @@ begin
       Parent := LTabSheet;
       Align := alClient;
       OpenDocumentsList := LTempList;
-      SpecialChars := OptionsContainer.EnableSpecialChars;
-      LineNumbers := OptionsContainer.EnableLineNumbers;
+      SpecialChars := OptionsContainer.SpecialCharsEnabled;
+      LineNumbers := OptionsContainer.LineNumbersEnabled;
       SetCompareFile(AFileName);
       //UpdateLanguage(GetSelectedLanguage);
     end;
@@ -1656,8 +1656,8 @@ var
   i: Integer;
   LTabSheet: TsTabSheet;
 begin
-  OptionsContainer.EnableWordWrap := not OptionsContainer.EnableWordWrap;
-  Result := OptionsContainer.EnableWordWrap;
+  OptionsContainer.WordWrapEnabled := not OptionsContainer.WordWrapEnabled;
+  Result := OptionsContainer.WordWrapEnabled;
   for i := 0 to PageControl.PageCount - 2 do
   begin
     LTabSheet := PageControl.Pages[i] as TsTabSheet;
@@ -1672,8 +1672,8 @@ var
   i: Integer;
   LTabSheet: TsTabSheet;
 begin
-  OptionsContainer.EnableSpecialChars := not OptionsContainer.EnableSpecialChars;
-  Result := OptionsContainer.EnableSpecialChars;
+  OptionsContainer.SpecialCharsEnabled := not OptionsContainer.SpecialCharsEnabled;
+  Result := OptionsContainer.SpecialCharsEnabled;
   for i := 0 to PageControl.PageCount - 2 do
   begin
     LTabSheet := PageControl.Pages[i] as TsTabSheet;
@@ -1698,16 +1698,16 @@ var
   begin
     if Assigned(AEditor) then
     begin
-      if OptionsContainer.EnableSelectionMode then
+      if OptionsContainer.SelectionModeEnabled then
         AEditor.Selection.Mode := smColumn
       else
         AEditor.Selection.Mode := smNormal;
-      AEditor.Selection.SetOption(soALTSetsColumnMode, not OptionsContainer.EnableSelectionMode);
+      AEditor.Selection.SetOption(soALTSetsColumnMode, not OptionsContainer.SelectionModeEnabled);
     end;
   end;
 
 begin
-  OptionsContainer.EnableSelectionMode := not OptionsContainer.EnableSelectionMode;
+  OptionsContainer.SelectionModeEnabled := not OptionsContainer.SelectionModeEnabled;
   for i := 0 to PageControl.PageCount - 2 do
   begin
     LTabSheet := PageControl.Pages[i] as TsTabSheet;
@@ -1721,8 +1721,8 @@ var
   i: Integer;
   LTabSheet: TsTabSheet;
 begin
-  OptionsContainer.EnableLineNumbers := not OptionsContainer.EnableLineNumbers;
-  Result := OptionsContainer.EnableLineNumbers;
+  OptionsContainer.LineNumbersEnabled := not OptionsContainer.LineNumbersEnabled;
+  Result := OptionsContainer.LineNumbersEnabled;
   for i := 0 to PageControl.PageCount - 2 do
   begin
     LTabSheet := PageControl.Pages[i] as TsTabSheet;
