@@ -81,6 +81,7 @@ type
     FTabSheetNew: TTabSheet;
     function CreateNewTabSheet(const AFileName: string = ''; AShowMinimap: Boolean = False;
       const AHighlighter: string = ''; const AColor: string = ''; ASetActivePage: Boolean = True): TsTabSheet;
+    function DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False): Boolean;
     function FindOpenFile(const FileName: string): TBCEditor;
     function GetActiveDocumentName: string;
     function GetActiveFileName: string;
@@ -94,7 +95,6 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
-    procedure DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -850,10 +850,12 @@ begin
   end;
 end;
 
-procedure TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False);
+function TEBDocument.DoSearchTextChange(AEditor: TBCEditor; const AClear: Boolean = False): Boolean;
 var
   LComboBoxSearchText: TBCComboBox;
+  LSearchText: string;
 begin
+  Result := True;
   if Assigned(AEditor) then
   begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
@@ -861,14 +863,17 @@ begin
     begin
       if AClear then
       begin
-        AEditor.Search.SearchText := '';
+        LSearchText := '';
         AEditor.SelectionEndPosition := AEditor.SelectionBeginPosition;
       end
       else
       if not OptionsContainer.DocumentSpecificSearch and (LComboBoxSearchText.Text = '') then
-        AEditor.Search.SearchText := OptionsContainer.DocumentSpecificSearchText
+        LSearchText := OptionsContainer.DocumentSpecificSearchText
       else
-        AEditor.Search.SearchText := LComboBoxSearchText.Text;
+        LSearchText := LComboBoxSearchText.Text;
+      Result := LSearchText <> AEditor.Search.SearchText;
+      if Result then
+        AEditor.Search.SearchText := LSearchText;
     end;
 
     SetSearchMatchesFound;

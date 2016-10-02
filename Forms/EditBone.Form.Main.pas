@@ -694,6 +694,7 @@ type
     TabSheetTools: TsTabSheet;
     TabSheetView: TsTabSheet;
     Timer: TTimer;
+    ActionOpenFileList: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -889,6 +890,7 @@ type
     procedure TitleBarItems4Click(Sender: TObject);
     procedure TitleBarItems6Click(Sender: TObject);
     procedure TitleBarItems8Click(Sender: TObject);
+    procedure ActionOpenFileListExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -1503,6 +1505,12 @@ procedure TMainForm.ActionOutputOpenSelectedExecute(Sender: TObject);
 begin
   inherited;
   FOutput.OpenFiles(True);
+end;
+
+procedure TMainForm.ActionOpenFileListExecute(Sender: TObject);
+begin
+  inherited;
+  TitleBarItems2Click(Sender);
 end;
 
 procedure TMainForm.ActionOutputCloseAllExecute(Sender: TObject);

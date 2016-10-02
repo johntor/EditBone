@@ -4725,6 +4725,10 @@ inherited MainForm: TMainForm
       ImageIndex = 142
       OnExecute = ActionViewUnfoldSelectedExecute
     end
+    object ActionOpenFileList: TAction
+      ShortCut = 32891
+      OnExecute = ActionOpenFileListExecute
+    end
   end
   object PopupMenuDocument: TPopupMenu [19]
     Images = ImagesDataModule.ImageListSmall
