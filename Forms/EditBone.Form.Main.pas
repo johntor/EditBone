@@ -949,7 +949,7 @@ implementation
 
 uses
   Winapi.CommCtrl, Winapi.ShellAPI, System.Math, System.IOUtils, EditBone.Consts, BCCommon.FileUtils,
-  BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Bookmarks, Vcl.Clipbrd, System.Types,
+  BCCommon.Language.Utils, BCCommon.Language.Strings, BCEditor.Editor.Marks, Vcl.Clipbrd, System.Types,
   BCCommon.Options.Container, BCCommon.Options.Container.SQL.Formatter, BCCommon.Consts,
   BCCommon.Utils, BCControl.Utils, BCCommon.Dialog.FindInFiles, BCCommon.Dialog.ItemList, BCCommon.Encoding,
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
@@ -2629,13 +2629,14 @@ end;
 procedure TMainForm.SetBookmarks;
 var
   i: Integer;
-  LBookmarkList: TBCEditorBookmarkList;
+  LBookmarkList: TBCEditorMarkList;
   LActionGotoBookmarks, LActionToggleBookmarks: TAction;
 begin
   if OptionsContainer.LeftMarginShowBookmarks then
   begin
     LBookmarkList := FDocument.GetActiveBookmarkList;
     { Bookmarks }
+    if Assigned(LBookmarkList) then
     for i := 1 to 9 do
     begin
       LActionGotoBookmarks := TAction(FindComponent(Format('ActionGotoBookmarks%d', [i])));

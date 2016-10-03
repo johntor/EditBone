@@ -6,7 +6,7 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
   Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList,
   BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
-  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Bookmarks, Vcl.Dialogs, BCCommon.Frame.Compare,
+  BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Marks, Vcl.Dialogs, BCCommon.Frame.Compare,
   BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
   BCComponent.SkinManager;
 
@@ -46,7 +46,7 @@ type
     procedure ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
     procedure DropFiles(Sender: TObject; Pos: TPoint; AFiles: TStrings);
     procedure EditorAfterBookmarkPlaced(Sender: TObject);
-    procedure EditorAfterClearBookmark(Sender: TObject);
+    procedure EditorAfterDeleteBookmark(Sender: TObject);
     procedure EditorCaretChanged(Sender: TObject; X, Y: Integer);
     procedure EditorOnChange(Sender: TObject);
     procedure EditorReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; DeleteLine: Boolean; var Action: TBCEditorReplaceAction);
@@ -105,7 +105,7 @@ type
     constructor Create(AOwner: TBCPageControl);
     destructor Destroy; override;
     function Close(AFreePage: Boolean = True; ATabIndex: Integer = -1): Integer;
-    function GetActiveBookmarkList: TBCEditorBookmarkList;
+    function GetActiveBookmarkList: TBCEditorMarkList;
     function GetActiveComboBoxSearchText: TBCComboBox;
     function GetActiveEditor: TBCEditor;
     function GetActiveSplitEditor: TBCEditor;
@@ -359,7 +359,7 @@ begin
     FSetBookmarks;
 end;
 
-procedure TEBDocument.EditorAfterClearBookmark(Sender: TObject);
+procedure TEBDocument.EditorAfterDeleteBookmark(Sender: TObject);
 begin
   if Assigned(FSetBookmarks) then
     FSetBookmarks;
@@ -677,7 +677,7 @@ begin
     OnCaretChanged := EditorCaretChanged;
     OnReplaceText := EditorReplaceText;
     OnAfterBookmarkPlaced := EditorAfterBookmarkPlaced;
-    OnAfterClearBookmark := EditorAfterClearBookmark;
+    OnAfterDeleteBookmark := EditorAfterDeleteBookmark;
     OnDropFiles := DropFiles;
     PopupMenu := FPopupMenuEditor;
     Search.Visible := OptionsContainer.SearchVisible;
@@ -2813,14 +2813,14 @@ begin
   SetHighlighter(AEditor, OptionsContainer.DefaultHighlighter);
 end;
 
-function TEBDocument.GetActiveBookmarkList: TBCEditorBookmarkList;
+function TEBDocument.GetActiveBookmarkList: TBCEditorMarkList;
 var
   LEditor: TBCEditor;
 begin
   Result := nil;
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-    Result := LEditor.Marks;
+    Result := LEditor.Bookmarks;
 end;
 
 procedure TEBDocument.FoldAll;
