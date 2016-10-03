@@ -1,3 +1,47 @@
+Version 12.6.5 (October 3, 2016)
+
+- Fixed color options
+
+Version 12.6.4 (October 2, 2016)
+
+- Added word wrap options
+- Fixed caret positioning
+- Fixed search
+- Fixed showing of unknown chars according to encoding
+- Updated language files
+
+Version 12.6.3 (October 1, 2016)
+
+- Fixed creating of document tabs
+- Fixed caret positioning 
+- Fixed output
+- Fixed color files
+
+Version 12.6.2 (September 29, 2016)
+
+- Fixed file loading
+- Fixed word wrap
+- Fixed code folding
+
+Version 12.6.1 (September 28, 2016)
+
+- Fixed highlighter change
+- Fixed middle click tab close
+- Fixed search
+- Fixed undo
+- Fixed word wrap
+
+Version 12.6.0 (Septemper 21, 2016)
+
+- Added auto line break option for right margin
+- Added Bulgarian language by George Dimov
+- Fixed italic text painting
+- Fixed text editing on very long lines
+- Fixed split popup menu
+- Fixed title bar popups
+- Updated language files
+- Updated AlphaSkins controls v11.16 - http://www.alphaskins.com/
+
 Version 12.5.0 (September 20, 2016)
 
 - Added highlighter for TypeScript																																			
@@ -5,33 +49,39 @@ Version 12.5.0 (September 20, 2016)
 - Fixed code folding issues
 - Fixed language files
 
+Version 12.4.2 (September 20, 2016)
+
+- Fixed code folding
+- Fixed fold/unfold enabling
+- Fixed highlighters
+
 Version 12.4.1 (September 19, 2016)
 
 - Fixed search
 
 Version 12.4.0 (September 19, 2016)
 
-- Added fold/unfold code folding feature											
+- Added fold/unfold code folding feature
 - Optimized memory consumption and document loading speed
-- Added secondary short cut (Ctrl+Delete) for delete word 
+- Added secondary short cut (Ctrl+Delete) for delete word
 - Refactored search
 - Fixed Search items dialog
 - Fixed UTF-8 detection
 - Fixed clipboard
 - Fixed title bar popups
 - Fixed color files
-- Fixed language files
+- Updated language files
 
 Version 12.3.1 (September 12, 2016)
 
 - Fixed line break
 - Fixed search highlighting
-- Fixed language files
+- Updated language files
 
 Version 12.3.0 (September 11, 2016)
 
 - Added Triangle code folding mark style
-- Added Show tree line code folding option                        
+- Added Show tree line code folding option
 - Fixed past end of line scroll option
 - Fixed search
 - Fixed select all in column mode
@@ -74,10 +124,10 @@ Version 12.2.0 (September 6, 2016)
 
 Version 12.1.0 (July 28, 2016)
 
-- Added show shadow scroll option													
+- Added show shadow scroll option
 - Fixed search options
 - Fixed option slider positions
-- Fixed language files
+- Updated language files
 
 Version 12.0.4 (July 28, 2016)
 
@@ -121,7 +171,7 @@ Version 11.2.2 (May 31, 2016)
 - Fixed language editor
 - Fixed options setting
 - Fixed find in files ini saving into unicode ini file (EditBoneUni.ini)
-- Fixed language files
+- Updated language files
 
 Version 11.2.1 (May 30, 2016)
 
@@ -137,7 +187,7 @@ Version 11.2.0 (May 29, 2016)
 - Fixed drag and drop editing
 - Fixed memory leak from toolbar options
 - Fixed font and color options
-- Fixed language files
+- Updated language files
 - Updated third-party controls and components
 
 Version 11.1.2 (May 24, 2016)
@@ -150,7 +200,7 @@ Version 11.1.1 (May 22, 2016)
 
 - Fixed color and font options
 - Fixed file types
-- Fixed language files
+- Updated language files
 
 Version 11.1.0 (May 21, 2016)
 
@@ -1112,7 +1162,7 @@ Version 5.6.0 (April 10, 2013)
 - Fixed setting of the active page after closing a tab
 - Fixed a tab close button bugs
 - Fixed tab dragging
-- Fixed language files
+- Updated language files
 - Fixed use of system font in main menu
 - Updated third-party components
 - Updated Italian language (by bovirus)
@@ -1129,7 +1179,7 @@ Version 5.5.2 (March 26, 2013)
 
 - Fixed style bugs
 - Fixed a tab close button bugs
-- Fixed language files
+- Updated language files
 
 Version 5.5.1 (March 21, 2013)
 
@@ -1221,7 +1271,7 @@ Version 5.2.0 (February 24, 2013)
 - Added Auto Indent, Scroll Past Eof, Scroll Past Eol and Trim Trailing Spaces to Options
 - Fixed URI activation for text files
 - Fixed style bugs
-- Fixed language files
+- Updated language files
 
 Version 5.1.0 (February 21, 2013)
 
@@ -1238,13 +1288,13 @@ Version 5.0.0 (February 17, 2013)
 - Fixed block copy compatibility with Delphi and MSDev IDE (thanks to DEKO)
 - Fixed toggle word wrap, line numbers, special chars and selection mode on startup
 - Fixed toolbar repaint on startup
-- Fixed language files
+- Updated language files
 - Fixed language file saving in Language Editor
 
 Version 4.9.0 (February 11, 2013)
 
 - Added Format XML feature
-- Fixed language files
+- Updated language files
 - Updated third-party components
 
 Version 4.8.1 (February 5, 2013)
@@ -1255,7 +1305,7 @@ Version 4.8.0 (February 5, 2013)
 
 - Added file properties feature
 - Fixed document icon after saving a new file
-- Fixed language files
+- Updated language files
 
 Version 4.7.2 (February 3, 2013)
 
