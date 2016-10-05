@@ -26,12 +26,12 @@ type
     procedure VirtualDrawTreeDblClick(Sender: TObject);
     procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
-      Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree; HintCanvas: TCanvas; Node: PVirtualNode;
       Column: TColumnIndex; var NodeWidth: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
+      Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
   private
     FSelectFile: TSelectFileEvent;
     procedure SetVisibleRows;
@@ -261,6 +261,8 @@ procedure TPopupFilesDialog.VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTre
 var
   Data: PSearchRec;
 begin
+  if Kind = ikState then
+    Exit;
   Data := VirtualDrawTree.GetNodeData(Node);
   if Assigned(Data) then
     ImageIndex := Data.ImageIndex;

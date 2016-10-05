@@ -1556,6 +1556,7 @@ begin
       if Assigned(LTabSheet.ComboBoxSearchText) then
         if LTabSheet.ComboBoxSearchText.CanFocus then
         begin
+          LTabSheet.ComboBoxSearchText.Text := '';
           if LEditor.SelectionAvailable and
             (LEditor.SelectionBeginPosition.Line = LEditor.SelectionEndPosition.Line) then
           begin
@@ -2015,6 +2016,14 @@ var
   LTabSheet: TsTabSheet;
 begin
   LTabSheet := PageControl.ActivePage as TsTabSheet;
+
+  if OptionsContainer.SearchClearWhenClosed then
+  begin
+    LTabSheet.Editor.Search.SearchText := '';
+    LTabSheet.Editor.SelectionEndPosition := LTabSheet.Editor.SelectionBeginPosition;
+    LTabSheet.Editor.SetFocus;
+    SetSearchMatchesFound;
+  end;
 
   if Assigned(LTabSheet.PanelSearch) then
     LTabSheet.PanelSearch.Visible := False;

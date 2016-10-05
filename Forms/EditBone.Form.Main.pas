@@ -2623,7 +2623,7 @@ begin
     ActionToolbarMenuSkin.Visible := SkinManager.Active;
   except
     { intentionally silent }
-  end; //FI:W501 FixInsight ignore
+  end;
 end;
 
 procedure TMainForm.SetBookmarks;

@@ -432,12 +432,11 @@ procedure TLanguageEditorForm.VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualT
 var
   Data: PObjectNodeRec;
 begin
-  if Kind in [ikNormal, ikSelected] then
-  begin
-    Data := VirtualDrawTree.GetNodeData(Node);
-    if (Column = 0) and (Data.Level = 0) then
-      ImageIndex := Data.ImageIndex;
-  end;
+  if Kind = ikState then
+    Exit;
+  Data := VirtualDrawTree.GetNodeData(Node);
+  if (Column = 0) and (Data.Level = 0) then
+    ImageIndex := Data.ImageIndex;
 end;
 
 procedure TLanguageEditorForm.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree;
