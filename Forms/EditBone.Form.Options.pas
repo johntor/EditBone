@@ -585,7 +585,7 @@ var
   Data: POptionsRec;
 begin
   inherited;
-  if not (Kind in [ikNormal, ikSelected]) then
+  if Kind = ikState then
     Exit;
   Data := Sender.GetNodeData(Node);
   if Assigned(Data) then
