@@ -1,3 +1,13 @@
+Version 12.6.6 (October 8, 2016)
+
+- Added clear when closed search option
+- Fixed bookmarks
+- Fixed search
+- Fixed files
+- Fixed tabs
+- Optimized painting
+- Updated 3rd party controls
+
 Version 12.6.5 (October 3, 2016)
 
 - Fixed color options
