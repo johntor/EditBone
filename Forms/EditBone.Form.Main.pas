@@ -2812,7 +2812,8 @@ begin
   UpdateLanguage(Self, ALanguage);
   { menubar }
   UpdateMenuBarLanguage;
-  SendMessage(Application.MainForm.Handle, WM_SIZE, 0, 0);
+
+  Invalidate;
 end;
 
 procedure TMainForm.UpdateMenuBarLanguage;

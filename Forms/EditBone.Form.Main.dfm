@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetTools
+      ActivePage = TabSheetFile
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET

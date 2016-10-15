@@ -1428,7 +1428,7 @@ begin
 
       LComboBoxSearchText := GetActiveComboBoxSearchText;
       if Assigned(LComboBoxSearchText) then
-        LComboBoxSearchText.Text := LEditor.Search.SearchText;
+        LComboBoxSearchText.SelText := LEditor.Search.SearchText;
     end;
     LEditor := GetActiveSplitEditor;
     if Assigned(LEditor) and LEditor.Search.Enabled then
