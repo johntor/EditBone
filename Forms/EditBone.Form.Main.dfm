@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetSearch
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -3370,6 +3370,15 @@ inherited MainForm: TMainForm
     Images = ImagesDataModule.ImageList
     Left = 631
     Top = 579
+    object MenuItemSearchToggleBookmarkNext: TMenuItem
+      Action = ActionToggleNextBookmark
+    end
+    object MenuItemSearchToggleBookmarkPrevious: TMenuItem
+      Action = ActionTogglePreviousBookmark
+    end
+    object MenuItemSearchToggleBookmarkDivider: TMenuItem
+      Caption = '-'
+    end
     object MenuItemSearchToggleBookmark1: TMenuItem
       Action = ActionToggleBookmarks1
     end
@@ -3886,6 +3895,14 @@ inherited MainForm: TMainForm
       ShortCut = 16440
       OnExecute = ActionGotoBookmarksExecute
     end
+    object ActionToggleNextBookmark: TAction
+      Category = 'ToggleBookmarks'
+      Caption = 'Next'
+      Hint = 'Go to next bookmark'
+      ImageIndex = 41
+      ShortCut = 113
+      OnExecute = ActionToggleNextBookmarkExecute
+    end
     object ActionGotoBookmarks9: TAction
       Tag = 9
       Category = 'GotoBookmarks'
@@ -4141,6 +4158,14 @@ inherited MainForm: TMainForm
       Hint = 'Display information about EditBone'
       ImageIndex = 74
       OnExecute = ActionHelpAboutEditBoneExecute
+    end
+    object ActionTogglePreviousBookmark: TAction
+      Category = 'ToggleBookmarks'
+      Caption = 'Previous'
+      Hint = 'Go to previous bookmark'
+      ImageIndex = 146
+      ShortCut = 8305
+      OnExecute = ActionTogglePreviousBookmarkExecute
     end
     object ActionToggleBookmarks1: TAction
       Category = 'ToggleBookmarks'
@@ -4845,6 +4870,15 @@ inherited MainForm: TMainForm
     end
     object MenuItemToggleBookmarks: TMenuItem
       Action = ActionSearchToggleBookmarks
+      object MenuItemToggleBookmarkNext: TMenuItem
+        Action = ActionToggleNextBookmark
+      end
+      object MenuItemToggleBookmarkPrevious: TMenuItem
+        Action = ActionTogglePreviousBookmark
+      end
+      object MenuItemToggleBookmarkDivider: TMenuItem
+        Caption = '-'
+      end
       object MenuItemToggleBookmark1: TMenuItem
         Tag = 1
         Action = ActionToggleBookmarks1
@@ -5303,7 +5337,16 @@ inherited MainForm: TMainForm
       end
       object MenuItemMainMenuSearchToggleBookmarks: TMenuItem
         Action = ActionSearchToggleBookmarks
-        object MenuItemMainMenuSearchToggleBookmarksBookmark11: TMenuItem
+        object MenuItemMainMenuSearchToggleBookmarksNext: TMenuItem
+          Action = ActionToggleNextBookmark
+        end
+        object MenuItemMainMenuSearchToggleBookmarksPrevious: TMenuItem
+          Action = ActionTogglePreviousBookmark
+        end
+        object MenuItemMainMenuSearchToggleBookmarksDivider: TMenuItem
+          Caption = '-'
+        end
+        object MenuItemMainMenuSearchToggleBookmarksBookmark1: TMenuItem
           Action = ActionToggleBookmarks1
         end
         object MenuItemMainMenuSearchToggleBookmarksBookmark2: TMenuItem

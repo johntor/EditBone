@@ -375,7 +375,7 @@ type
     MenuItemMainMenuSearchSearch: TMenuItem;
     MenuItemMainMenuSearchToggleBookmark: TMenuItem;
     MenuItemMainMenuSearchToggleBookmarks: TMenuItem;
-    MenuItemMainMenuSearchToggleBookmarksBookmark11: TMenuItem;
+    MenuItemMainMenuSearchToggleBookmarksBookmark1: TMenuItem;
     MenuItemMainMenuSearchToggleBookmarksBookmark2: TMenuItem;
     MenuItemMainMenuSearchToggleBookmarksBookmark3: TMenuItem;
     MenuItemMainMenuSearchToggleBookmarksBookmark4: TMenuItem;
@@ -695,6 +695,17 @@ type
     TabSheetView: TsTabSheet;
     Timer: TTimer;
     ActionOpenFileList: TAction;
+    ActionToggleNextBookmark: TAction;
+    ActionTogglePreviousBookmark: TAction;
+    MenuItemSearchToggleBookmarkNext: TMenuItem;
+    MenuItemSearchToggleBookmarkPrevious: TMenuItem;
+    MenuItemSearchToggleBookmarkDivider: TMenuItem;
+    MenuItemMainMenuSearchToggleBookmarksNext: TMenuItem;
+    MenuItemMainMenuSearchToggleBookmarksPrevious: TMenuItem;
+    MenuItemMainMenuSearchToggleBookmarksDivider: TMenuItem;
+    MenuItemToggleBookmarkNext: TMenuItem;
+    MenuItemToggleBookmarkPrevious: TMenuItem;
+    MenuItemToggleBookmarkDivider: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -891,6 +902,8 @@ type
     procedure TitleBarItems6Click(Sender: TObject);
     procedure TitleBarItems8Click(Sender: TObject);
     procedure ActionOpenFileListExecute(Sender: TObject);
+    procedure ActionToggleNextBookmarkExecute(Sender: TObject);
+    procedure ActionTogglePreviousBookmarkExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -1121,27 +1134,19 @@ begin
   DropdownMenuPopup(SpeedButtonFileReopen);
 end;
 
-function IsCtrlDown: Boolean;
+function IsDown(const AVirtualKey: ShortInt): Boolean;
 var
   LKeyboardState: TKeyboardState;
 begin
   GetKeyboardState(LKeyboardState);
-  Result := (LKeyboardState[VK_CONTROL] and 128) <> 0;
-end;
-
-function IsShiftDown: Boolean;
-var
-  LKeyboardState: TKeyboardState;
-begin
-  GetKeyboardState(LKeyboardState);
-  Result := (LKeyboardState[VK_SHIFT] and 128) <> 0;
+  Result := (LKeyboardState[AVirtualKey] and 128) <> 0;
 end;
 
 procedure TMainForm.DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
 var
   LPoint: TPoint;
 begin
-  if not IsCtrlDown and not IsShiftDown then
+  if not IsDown(VK_CONTROL) and not IsDown(VK_SHIFT) and not IsDown(VK_F2) then
   begin
     LPoint := ASpeedButton.ClientToScreen(Point(0, ASpeedButton.Height));
     ASpeedButton.DropdownMenu.Popup(LPoint.X, LPoint.Y);
@@ -1691,6 +1696,36 @@ end;
 procedure TMainForm.ActionSearchGoToLineExecute(Sender: TObject);
 begin
   FDocument.GotoLine;
+end;
+
+procedure TMainForm.ActionToggleNextBookmarkExecute(Sender: TObject);
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := FDocument.GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.GotoNextBookmark
+  else
+  begin
+    LEditor := FDocument.GetActiveSplitEditor;
+    if Assigned(LEditor) then
+      LEditor.GotoNextBookmark
+  end;
+end;
+
+procedure TMainForm.ActionTogglePreviousBookmarkExecute(Sender: TObject);
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := FDocument.GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.GotoPreviousBookmark
+  else
+  begin
+    LEditor := FDocument.GetActiveSplitEditor;
+    if Assigned(LEditor) then
+      LEditor.GotoPreviousBookmark
+  end;
 end;
 
 procedure TMainForm.ActionSearchInSelectionExecute(Sender: TObject);
@@ -2388,6 +2423,7 @@ var
   LIsRecordingStopped: Boolean;
   LActiveDocumentModified: Boolean;
   LCodeFoldingVisible: Boolean;
+  LActiveDocumentBookmarksFound: Boolean;
 begin
   FProcessingEventHandler := True;
   try
@@ -2414,6 +2450,7 @@ begin
     LIsRecordingStopped := False;
     LActiveDocumentModified := False;
     LCodeFoldingVisible := False;
+    LActiveDocumentBookmarksFound := False;
     if LActiveDocumentFound then
     begin
       LSelectionAvailable := LActiveEditor.SelectionAvailable;
@@ -2424,6 +2461,7 @@ begin
       LSyncEditActive := LActiveEditor.SyncEdit.Active;
       LCodeFoldingVisible := LActiveEditor.CodeFolding.Visible;
       LActiveDocumentModified := LActiveEditor.Modified;
+      LActiveDocumentBookmarksFound := LActiveEditor.Bookmarks.Count > 0;
 
       LSearchEnabled := LActiveEditor.Search.Visible;
 
@@ -2550,6 +2588,9 @@ begin
     ActionSearchToggleBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
     ActionSearchGotoBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
     ActionSearchClearBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
+
+    ActionToggleNextBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
+    ActionTogglePreviousBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
 
     ActionViewWordWrap.Enabled := LActiveDocumentFound;
     ActionViewLineNumbers.Enabled := Assigned(FDocument) and (PageControlDocument.PageCount > 1);
