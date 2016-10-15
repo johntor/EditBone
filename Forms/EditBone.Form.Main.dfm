@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetSearch
+      ActivePage = TabSheetTools
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -1721,11 +1721,11 @@ inherited MainForm: TMainForm
             ImageIndex = 70
           end
           object SpeedButtonToolsCharacterMap: TBCSpeedButton
-            Left = 190
+            Left = 250
             Top = 0
             Width = 60
             Height = 56
-            Action = ActionToolsCharacterMap
+            Action = ActionToolsClipboardHistory
             Align = alLeft
             Flat = True
             Font.Charset = DEFAULT_CHARSET
@@ -1738,11 +1738,11 @@ inherited MainForm: TMainForm
             ButtonStyle = tbsTextButton
             SkinData.SkinSection = 'TOOLBUTTON'
             Images = ImagesDataModule.ImageList
-            ImageIndex = 71
+            ImageIndex = 147
           end
           object SpeedButtonToolsDivider2: TBCSpeedButton
             AlignWithMargins = True
-            Left = 250
+            Left = 310
             Top = 4
             Width = 10
             Height = 48
@@ -1764,7 +1764,7 @@ inherited MainForm: TMainForm
             ImageIndex = 1
           end
           object SpeedButtonToolsLanguageEditor: TBCSpeedButton
-            Left = 260
+            Left = 320
             Top = 0
             Width = 65
             Height = 56
@@ -1782,6 +1782,26 @@ inherited MainForm: TMainForm
             SkinData.SkinSection = 'TOOLBUTTON'
             Images = ImagesDataModule.ImageList
             ImageIndex = 75
+          end
+          object BCSpeedButton1: TBCSpeedButton
+            Left = 190
+            Top = 0
+            Width = 60
+            Height = 56
+            Action = ActionToolsCharacterMap
+            Align = alLeft
+            Flat = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Layout = blGlyphTop
+            ParentFont = False
+            ButtonStyle = tbsTextButton
+            SkinData.SkinSection = 'TOOLBUTTON'
+            Images = ImagesDataModule.ImageList
+            ImageIndex = 71
           end
         end
       end
@@ -4753,6 +4773,12 @@ inherited MainForm: TMainForm
     object ActionOpenFileList: TAction
       ShortCut = 32891
       OnExecute = ActionOpenFileListExecute
+    end
+    object ActionToolsClipboardHistory: TAction
+      Category = 'Tools'
+      Caption = 'Clipboard history'
+      ImageIndex = 147
+      OnExecute = ActionToolsClipboardHistoryExecute
     end
   end
   object PopupMenuDocument: TPopupMenu [19]

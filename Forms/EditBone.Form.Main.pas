@@ -706,6 +706,8 @@ type
     MenuItemToggleBookmarkNext: TMenuItem;
     MenuItemToggleBookmarkPrevious: TMenuItem;
     MenuItemToggleBookmarkDivider: TMenuItem;
+    BCSpeedButton1: TBCSpeedButton;
+    ActionToolsClipboardHistory: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -904,6 +906,7 @@ type
     procedure ActionOpenFileListExecute(Sender: TObject);
     procedure ActionToggleNextBookmarkExecute(Sender: TObject);
     procedure ActionTogglePreviousBookmarkExecute(Sender: TObject);
+    procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
   private
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
@@ -968,7 +971,7 @@ uses
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
   BCCommon.StringUtils, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst, BCCommon.Form.Print.Preview,
-  EditBone.DataModule.Images, System.IniFiles;
+  BCCommon.Dialog.ClipboardHistory, EditBone.DataModule.Images, System.IniFiles;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
@@ -2099,6 +2102,12 @@ begin
   UnicodeCharacterMapForm.Open(FDocument.GetActiveEditor);
 end;
 
+procedure TMainForm.ActionToolsClipboardHistoryExecute(Sender: TObject);
+begin
+  inherited;
+  ClipboardHistoryDialog.Open(FDocument.GetActiveEditor);
+end;
+
 procedure TMainForm.ActionViewCloseDirectoryExecute(Sender: TObject);
 begin
   FDirectory.CloseDirectory;
@@ -2662,6 +2671,8 @@ begin
     ActionOutputUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
 
     ActionToolbarMenuSkin.Visible := SkinManager.Active;
+
+    ActionToolsClipboardHistory.Enabled := OptionsContainer.SaveClipboardHistory;
   except
     { intentionally silent }
   end;
