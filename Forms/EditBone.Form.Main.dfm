@@ -3125,11 +3125,19 @@ inherited MainForm: TMainForm
     end
   end
   inherited SkinManager: TBCSkinManager
-    Effects.AllowAnimation = False
     Effects.AllowGlowing = False
     Effects.AllowOuterEffects = True
-    AnimEffects.PageChange.Active = False
+    AnimEffects.DialogShow.Active = True
+    AnimEffects.DialogShow.Time = 120
+    AnimEffects.FormShow.Active = True
+    AnimEffects.FormShow.Time = 120
+    AnimEffects.FormHide.Active = True
+    AnimEffects.FormHide.Time = 120
+    AnimEffects.DialogHide.Active = True
+    AnimEffects.DialogHide.Time = 120
+    AnimEffects.Minimizing.Active = True
     AnimEffects.PageChange.Time = 100
+    AnimEffects.SkinChanging.Active = True
     IsDefault = True
     MenuSupport.UseExtraLine = False
     SkinInfo = 'N/A'

@@ -3323,7 +3323,10 @@ begin
     SkinManager.Brightness := ReadInteger('Options', 'SkinBrightness', 0);
     SkinManager.AnimEffects.BlendOnMoving.Active := ReadBool('Options', 'SkinBlendOnMoving', False);
     SkinManager.ExtendedBorders := ReadBool('Options', 'SkinExtendedBorders', True);
+    SkinManager.Effects.AllowAnimation := ReadBool('Options', 'SkinAllowAnimation', False);
+    SkinManager.Effects.AllowAeroBluring := ReadBool('Options', 'SkinAllowAeroBluring', False);
     SkinManager.Effects.AllowGlowing := ReadBool('Options', 'SkinAllowGlowing', False);
+    SkinManager.Effects.AllowOuterEffects := ReadBool('Options', 'SkinAllowOuterEffects', False);
     UpdatePageControlMargins;
   finally
     Free;
@@ -3670,7 +3673,10 @@ begin
     WriteInteger('Options', 'SkinBrightness', SkinManager.Brightness);
     WriteBool('Options', 'SkinBlendOnMoving', SkinManager.AnimEffects.BlendOnMoving.Active);
     WriteBool('Options', 'SkinExtendedBorders', SkinManager.ExtendedBorders);
+    WriteBool('Options', 'SkinAllowAnimation', SkinManager.Effects.AllowAnimation);
+    WriteBool('Options', 'SkinAllowAeroBluring', SkinManager.Effects.AllowAeroBluring);
     WriteBool('Options', 'SkinAllowGlowing', SkinManager.Effects.AllowGlowing);
+    WriteBool('Options', 'SkinAllowOuterEffects', SkinManager.Effects.AllowOuterEffects);
   finally
     Free;
   end;

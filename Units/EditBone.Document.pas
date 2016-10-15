@@ -730,7 +730,7 @@ var
   LEditor: TBCEditor;
   LCommand: TBCEditorCommand;
 begin
-  if (Key = VK_END) or (Key = VK_HOME) or (Key = VK_UP) or (Key = VK_DOWN) then
+  if (Key = VK_UP) or (Key = VK_DOWN) then
   begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
@@ -740,8 +740,6 @@ begin
       case Key of
         VK_UP: LCommand := ecUp;
         VK_DOWN: LCommand := ecDown;
-        VK_END: LCommand := ecLineEnd;
-        VK_HOME: LCommand := ecLineBegin;
       else
         LCommand := ecNone;
       end;
