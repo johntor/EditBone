@@ -712,7 +712,7 @@ begin
   begin
     if GetNodeLevel(Node) = 0 then
     begin
-      LData := Sender.GetNodeData(Node);
+      LData := GetNodeData(Node);
       if LData.Level <> 2 then
       begin
         CheckType[Node] := ctCheckBox;

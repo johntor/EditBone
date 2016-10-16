@@ -27,7 +27,8 @@ uses
   EditBone.Output in 'Units\EditBone.Output.pas',
   EditBone.Types in 'Units\EditBone.Types.pas',
   EditBone.XMLTree in 'Units\EditBone.XMLTree.pas',
-  EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog};
+  EditBone.Dialog.Popup.Files in 'Dialogs\EditBone.Dialog.Popup.Files.pas' {PopupFilesDialog},
+  EditBone.Dialog.ChangedFiles in 'Dialogs\EditBone.Dialog.ChangedFiles.pas' {ChangedFilesDialog};
 
 {$R *.res}
 

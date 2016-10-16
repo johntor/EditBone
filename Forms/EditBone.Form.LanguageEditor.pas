@@ -329,8 +329,7 @@ begin
   EditLink := TEditLink.Create;
 end;
 
-procedure TLanguageEditorForm.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree;
-  const PaintInfo: TVTPaintInfo);
+procedure TLanguageEditorForm.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
 var
   Data: PObjectNodeRec;
   S: string;

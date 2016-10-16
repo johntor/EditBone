@@ -1900,7 +1900,7 @@ begin
     FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
 
   if Assigned(FClipboardHistoryDialog) then
-    FClipboardHistoryDialog.GetItems;
+    FClipboardHistoryDialog.SetDrawTreeData;
 end;
 
 procedure TMainForm.ActionToolsCompareFilesExecute(Sender: TObject);
@@ -3171,7 +3171,6 @@ end;
 procedure TMainForm.TimerTimer(Sender: TObject);
 begin
   inherited;
-  // TODO: refactor
   FDocument.CheckFileDateTimes;
 end;
 

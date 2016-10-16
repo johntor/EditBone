@@ -179,23 +179,22 @@ end;
 procedure TUnicodeCharacterMapForm.StringGridCharacterDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
   State: TGridDrawState);
 var
-  PC: PWideChar;
+  LPChar: PChar;
   Size: TSize;
 begin
   if StringGridCharacter.ColCount * ARow + ACol > 65535 then
     Exit;
 
-  New(PC);
-  StringToWideChar(Chr(StringGridCharacter.ColCount * ARow + ACol), PC, 2);
-
-  StringGridCharacter.Canvas.Font.Name := ComboBoxFont.Text;
-  StringGridCharacter.Canvas.Font.Height := StringGridCharacter.DefaultRowHeight;
-
-  GetTextExtentPoint32W(StringGridCharacter.Canvas.Handle, PC, 1, Size);
-
-  TextOutW(StringGridCharacter.Canvas.Handle, (Rect.Left + Rect.Right - Size.cx) div 2,
-    Rect.Top, PC, 1);
-  Dispose(PC);
+  GetMem(LPChar, 2 * SizeOf(Char));
+  try
+    StringToWideChar(Chr(StringGridCharacter.ColCount * ARow + ACol), LPChar, 2);
+    StringGridCharacter.Canvas.Font.Name := ComboBoxFont.Text;
+    StringGridCharacter.Canvas.Font.Height := StringGridCharacter.DefaultRowHeight;
+    GetTextExtentPoint32W(StringGridCharacter.Canvas.Handle, LPChar, 1, Size);
+    TextOutW(StringGridCharacter.Canvas.Handle, (Rect.Left + Rect.Right - Size.cx) div 2, Rect.Top, LPChar, 1);
+  finally
+    FreeMem(LPChar);
+  end;
 end;
 
 procedure TUnicodeCharacterMapForm.StringGridCharacterMouseDown(Sender: TObject;

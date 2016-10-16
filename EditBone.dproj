@@ -211,6 +211,10 @@
         <DCCReference Include="Dialogs\EditBone.Dialog.Popup.Files.pas">
             <Form>PopupFilesDialog</Form>
         </DCCReference>
+        <DCCReference Include="Dialogs\EditBone.Dialog.ChangedFiles.pas">
+            <Form>ChangedFilesDialog</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -95,6 +95,7 @@ type
     procedure CheckModifiedDocuments;
     procedure CreateImageList;
     procedure CreateSearchPanel(ATabSheet: TsTabSheet);
+    procedure ReloadChangedFiles(AFileNames: TStrings);
     procedure SelectHighlighter(AEditor: TBCEditor; const FileName: string);
     procedure SetActiveEditorFocus;
     procedure SetActivePageCaptionModified(AModified: Boolean);
@@ -164,7 +165,7 @@ type
     procedure PrintPreview;
     procedure RecordMacro;
     procedure Redo;
-    procedure Refresh(Page: Integer);
+    procedure Refresh(const APage: Integer; const AReloadFile: Boolean);
     procedure RefreshXMLTree;
     procedure Replace;
     procedure Save; overload;
@@ -234,7 +235,8 @@ uses
   BCCommon.FileUtils, BCCommon.Messages, BCCommon.Utils, BCCommon.StringUtils, Winapi.CommCtrl, EditBone.Form.Options,
   BCCommon.Images, System.IniFiles, BCCommon.SQL.Formatter, BCEditor.Editor.KeyCommands, EditBone.DataModule.Images,
   BCControl.SpeedButton, BCControl.Utils, BCEditor.Editor.Utils, BCCommon.Consts, BCEditor.Encoding, Vcl.Clipbrd,
-  BCEditor.Highlighter.Colors, BCCommon.Dialog.Options.Search, Vcl.ValEdit, BCCommon.Encoding;
+  BCEditor.Highlighter.Colors, BCCommon.Dialog.Options.Search, Vcl.ValEdit, BCCommon.Encoding,
+  EditBone.Dialog.ChangedFiles;
 
 { TEBDocument }
 
@@ -1051,7 +1053,7 @@ begin
     { if ini file is open in editor reload it because time has changed }
     for i := 0 to PageControl.PageCount - 2 do
       if PageControl.Pages[i].Caption = ExtractFileName(LIniFile) then
-        Refresh(i);
+        Refresh(i, True);
   finally
     LFiles.Free;
   end;
@@ -2281,62 +2283,88 @@ begin
   end;
 end;
 
+procedure TEBDocument.ReloadChangedFiles(AFileNames: TStrings);
+var
+  LChangedFilesDialog: TChangedFilesDialog;
+  LReload: Boolean;
+  LNode: PVirtualNode;
+  LData: PChangedFilesTreeData;
+begin
+  LChangedFilesDialog := TChangedFilesDialog.Create(nil);
+  try
+    LReload := LChangedFilesDialog.Execute(AFileNames);
+
+    LNode := LChangedFilesDialog.VirtualDrawTree.GetFirst;
+    while Assigned(LNode) do
+    begin
+      LData := LChangedFilesDialog.VirtualDrawTree.GetNodeData(LNode);
+      if LChangedFilesDialog.VirtualDrawTree.CheckState[LNode] = csCheckedNormal then
+        Refresh(LData^.Index, LReload)
+      else
+        Refresh(LData^.Index, False);
+      LNode := LNode.NextSibling;
+    end;
+  finally
+    LChangedFilesDialog.Free;
+  end;
+end;
+
 procedure TEBDocument.CheckFileDateTimes;
 var
   i: Integer;
   LTabSheet: TsTabSheet;
   LFileDateTime: TDateTime;
-  LDialogResult: Integer;
+  LFileNames: TStrings;
 begin
-  LDialogResult := mrNo;
   if FProcessing then
     Exit;
   FProcessing := True;
-  for i := 0 to PageControl.PageCount - 2 do
-  begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
-    if Assigned(LTabSheet.Editor) then
-      if LTabSheet.Editor.DocumentName <> '' then
-      begin
-        LFileDateTime := GetFileDateTime(LTabSheet.Editor.DocumentName);
-        if (LFileDateTime <> 0) and (LFileDateTime <> LTabSheet.Editor.FileDateTime) then
+  LFileNames := TStringList.Create;
+  try
+    for i := 0 to PageControl.PageCount - 2 do
+    begin
+      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      if Assigned(LTabSheet.Editor) then
+        if LTabSheet.Editor.DocumentName <> '' then
         begin
-          if FileExists(LTabSheet.Editor.DocumentName) then
+          LFileDateTime := GetFileDateTime(LTabSheet.Editor.DocumentName);
+          if (LFileDateTime <> 0) and (LFileDateTime <> LTabSheet.Editor.FileDateTime) then
           begin
-            PageControl.TabClosed := True; { just to avoid begin drag }
-            if not(LDialogResult in [mrYesToAll, mrNoToAll]) then
-              LDialogResult := AskYesOrNoAll(Format(LanguageDataModule.GetYesOrNoMessage('DocumentTimeChanged'),
-                [LTabSheet.Editor.DocumentName]));
-            if LDialogResult in [mrYes, mrYesToAll] then
-              Refresh(i);
-          end
-          else
-          begin
-            if OptionsContainer.AutoSave then
-              Save
+            if FileExists(LTabSheet.Editor.DocumentName) then
+              LFileNames.AddObject(LTabSheet.Editor.DocumentName, TObject(i))
             else
             begin
-              LTabSheet.Editor.Modified := True;
-              PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, LTabSheet.Editor.Modified);
-              PageControl.Invalidate;
+              if OptionsContainer.AutoSave then
+                Save
+              else
+              begin
+                LTabSheet.Editor.Modified := True;
+                PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, LTabSheet.Editor.Modified);
+                PageControl.Invalidate;
+              end;
             end;
           end;
         end;
-      end;
+    end;
+    if LFileNames.Count > 0 then
+      ReloadChangedFiles(LFileNames);
+  finally
+    LFileNames.Free;
   end;
   FProcessing := False;
 end;
 
-procedure TEBDocument.Refresh(Page: Integer);
+procedure TEBDocument.Refresh(const APage: Integer; const AReloadFile: Boolean);
 var
   LTabSheet: TsTabSheet;
 begin
-  if (Page < 0) or (Page > PageControl.PageCount - 2) then
+  if (APage < 0) or (APage > PageControl.PageCount - 2) then
     Exit;
-  LTabSheet := PageControl.Pages[Page] as TsTabSheet;
+  LTabSheet := PageControl.Pages[APage] as TsTabSheet;
   if Assigned(LTabSheet.Editor) then
   begin
-    LTabSheet.Editor.LoadFromFile(LTabSheet.Editor.DocumentName);
+    if AReloadFile then
+      LTabSheet.Editor.LoadFromFile(LTabSheet.Editor.DocumentName);
     LTabSheet.Editor.FileDateTime := GetFileDateTime(LTabSheet.Editor.DocumentName);
   end;
 end;
