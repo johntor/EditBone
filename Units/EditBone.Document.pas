@@ -1885,7 +1885,7 @@ begin
     LEditor := GetActiveEditor;
     if Assigned(LEditor) then
     begin
-      LEditor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(Format('<%s></%s>', [LTagName, LTagName])));
+      LEditor.InsertText(PChar(Format('<%s></%s>', [LTagName, LTagName])));
       LEditor.DisplayCaretX := LEditor.DisplayCaretX - Length(LTagName) - 3; { -3 from </> }
     end;
   end;
@@ -1897,7 +1897,7 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-    LEditor.CommandProcessor(ecImeStr, EDITBONE_NONE_CHAR, PWideChar(DateTimeToStr(Now)));
+    LEditor.InsertText(PChar(DateTimeToStr(Now)));
 end;
 
 function TEBDocument.Options(AActionList: TActionList): Boolean;

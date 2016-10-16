@@ -442,15 +442,13 @@ end;
 procedure TLanguageEditorForm.VirtualDrawTreeGetNodeWidth(Sender: TBaseVirtualTree;
   HintCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; var NodeWidth: Integer);
 var
-  Data: PObjectNodeRec;
-  AMargin: Integer;
+  LData: PObjectNodeRec;
 begin
   with Sender as TVirtualDrawTree do
   begin
-    AMargin := TextMargin;
-    Data := Sender.GetNodeData(Node);
-    if Assigned(Data) then
-      NodeWidth := Canvas.TextWidth(Data.Value[Column]) + 2 * AMargin;
+    LData := Sender.GetNodeData(Node);
+    if Assigned(LData) then
+      NodeWidth := Canvas.TextWidth(LData.Value[Column]) + 2 * TextMargin;
   end;
 end;
 

@@ -12,8 +12,8 @@ uses
   BCComponent.DragDrop, System.Diagnostics, EditBone.Output, Vcl.ImgList, acAlphaImageList,  BCEditor.Types,
   BCControl.ProgressBar, EditBone.FindInFiles, BCEditor.MacroRecorder, BCEditor.Print, sDialogs,
   System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,  BCCommon.Dialog.Popup.SearchEngine,
-  BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.TitleBar,
-  BCComponent.SkinManager, sStatusBar;
+  BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.TitleBar, BCCommon.Dialog.ClipboardHistory,
+  BCComponent.SkinManager, sStatusBar, JvExForms, JvClipboardViewer, JvComponentBase, JvClipboardMonitor;
 
 const
   SWindowClassName = 'UniqueWindowClassNameForEditBone';
@@ -708,6 +708,7 @@ type
     MenuItemToggleBookmarkDivider: TMenuItem;
     BCSpeedButton1: TBCSpeedButton;
     ActionToolsClipboardHistory: TAction;
+    ClipboardMonitor: TJvClipboardMonitor;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -907,7 +908,10 @@ type
     procedure ActionToggleNextBookmarkExecute(Sender: TObject);
     procedure ActionTogglePreviousBookmarkExecute(Sender: TObject);
     procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
+    procedure ClipboardMonitorChange(Sender: TObject);
   private
+    FClipboardHistoryItems: TList<string>;
+    FClipboardHistoryDialog: TClipboardHistoryDialog;
     FDirectory: TEBDirectory;
     FDocument: TEBDocument;
     FFindInFilesThread: TFindInFilesThread;
@@ -971,7 +975,7 @@ uses
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
   BCCommon.StringUtils, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst, BCCommon.Form.Print.Preview,
-  BCCommon.Dialog.ClipboardHistory, EditBone.DataModule.Images, System.IniFiles;
+  EditBone.DataModule.Images, System.IniFiles;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
@@ -1884,6 +1888,21 @@ begin
   FDocument.UpdateHighlighterColors;
 end;
 
+procedure TMainForm.ClipboardMonitorChange(Sender: TObject);
+begin
+  inherited;
+  if FClipboardHistoryItems.IndexOf(Clipboard.AsText) <> -1 then
+    Exit;
+
+  FClipboardHistoryItems.Insert(0, Clipboard.AsText);
+
+  while FClipboardHistoryItems.Count > OptionsContainer.ClipboardHistoryItemsCount do
+    FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
+
+  if Assigned(FClipboardHistoryDialog) then
+    FClipboardHistoryDialog.GetItems;
+end;
+
 procedure TMainForm.ActionToolsCompareFilesExecute(Sender: TObject);
 begin
   FDocument.CompareFiles;
@@ -2102,10 +2121,21 @@ begin
   UnicodeCharacterMapForm.Open(FDocument.GetActiveEditor);
 end;
 
+procedure DoOnInsertInEditor(var AText: string);
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := MainForm.FDocument.GetActiveEditor;
+  if Assigned(LEditor) then
+    LEditor.InsertText(AText);
+end;
+
 procedure TMainForm.ActionToolsClipboardHistoryExecute(Sender: TObject);
 begin
   inherited;
-  ClipboardHistoryDialog.Open(FDocument.GetActiveEditor);
+  FClipboardHistoryDialog := ClipboardHistoryDialog;
+  FClipboardHistoryDialog.OnInsertInEditor := DoOnInsertInEditor;
+  FClipboardHistoryDialog.Open(FClipboardHistoryItems);
 end;
 
 procedure TMainForm.ActionViewCloseDirectoryExecute(Sender: TObject);
@@ -2671,8 +2701,6 @@ begin
     ActionOutputUnselectAll.Visible := OptionsContainer.OutputShowCheckBox;
 
     ActionToolbarMenuSkin.Visible := SkinManager.Active;
-
-    ActionToolsClipboardHistory.Enabled := OptionsContainer.SaveClipboardHistory;
   except
     { intentionally silent }
   end;
@@ -2922,6 +2950,8 @@ begin
 
   MainMenu.Images := ImagesDataModule.ImageListSmall;
   OnSkinChange := ChangeSkin;
+
+  FClipboardHistoryItems := TList<string>.Create;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -2939,6 +2969,8 @@ begin
   FOutput.Free;
   OptionsContainer.Free;
   SQLFormatterOptionsContainer.Free;
+  FClipboardHistoryItems.Clear;
+  FClipboardHistoryItems.Free;
 
   inherited;
 end;
@@ -2974,7 +3006,7 @@ begin
   { StatusBar }
   // TODO: use consts instead of numbers
   if OptionsContainer.StatusBarShowMacro then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 60
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := ScaleSize(60)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 0;
   SpeedButtonMacroPlay.Visible := OptionsContainer.StatusBarShowMacro;
@@ -2982,12 +3014,12 @@ begin
   SpeedButtonMacroStop.Visible := OptionsContainer.StatusBarShowMacro;
 
   if OptionsContainer.StatusBarShowCaretPosition then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := ScaleSize(90)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 0;
 
   if OptionsContainer.StatusBarShowKeyState then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := ScaleSize(90)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 0;
 
@@ -3023,6 +3055,10 @@ begin
     SplitterVertical.Align := alRight;
     SplitterVertical.Left := PanelDirectory.Left - 1;
   end;
+
+  if Assigned(FClipboardHistoryItems) then
+  while FClipboardHistoryItems.Count > OptionsContainer.ClipboardHistoryItemsCount do
+    FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
 end;
 
 procedure TMainForm.WMCopyData(var Message: TWMCopyData);

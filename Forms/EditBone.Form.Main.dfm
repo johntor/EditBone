@@ -5772,4 +5772,9 @@ inherited MainForm: TMainForm
       Action = ActionViewUnfoldSelected
     end
   end
+  object ClipboardMonitor: TJvClipboardMonitor
+    OnChange = ClipboardMonitorChange
+    Left = 600
+    Top = 218
+  end
 end
