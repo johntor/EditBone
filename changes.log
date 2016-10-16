@@ -1,3 +1,21 @@
+Version 12.7.0 (October 16, 2016)  
+
+- Added possibility to toggle bookmarks with Ctrl + F2, go to next F2, and go to previous Shift + F2
+- Added clipboard history tool
+- Added allow aero blurring, animation, and outer effects skin options
+- Added bookmark line color option for left margin
+- Added clipboard history items count editor option 
+- Refactored file change notification
+- Fixed search
+- Fixed sync edit
+- Fixed null character painting
+- Fixed bookmark panel click
+- Fixed message dialogs
+- Fixed language changing
+- Fixed unicode character map
+- Updated AlphaSkins controls v11.17 - http://www.alphaskins.com/
+- Updated language files
+
 Version 12.6.6 (October 8, 2016)
 
 - Added clear when closed search option
