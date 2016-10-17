@@ -1891,18 +1891,22 @@ end;
 procedure TMainForm.ClipboardMonitorChange(Sender: TObject);
 begin
   inherited;
-  if IsClipboardFormatAvailable(CF_TEXT) or IsClipboardFormatAvailable(CF_UNICODETEXT) then
-  begin
-    if FClipboardHistoryItems.IndexOf(Clipboard.AsText) <> -1 then
-      Exit;
+  try
+    if IsClipboardFormatAvailable(CF_TEXT) or IsClipboardFormatAvailable(CF_UNICODETEXT) then
+    begin
+      if FClipboardHistoryItems.IndexOf(Clipboard.AsText) <> -1 then
+        Exit;
 
-    FClipboardHistoryItems.Insert(0, Clipboard.AsText);
+      FClipboardHistoryItems.Insert(0, Clipboard.AsText);
 
-    while FClipboardHistoryItems.Count > OptionsContainer.ClipboardHistoryItemsCount do
-      FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
+      while FClipboardHistoryItems.Count > OptionsContainer.ClipboardHistoryItemsCount do
+        FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
 
-    if Assigned(FClipboardHistoryDialog) then
-      FClipboardHistoryDialog.SetDrawTreeData;
+      if Assigned(FClipboardHistoryDialog) then
+        FClipboardHistoryDialog.SetDrawTreeData;
+    end;
+  except
+    { intentionally silent }
   end;
 end;
 
