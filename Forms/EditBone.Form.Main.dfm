@@ -1723,7 +1723,7 @@ inherited MainForm: TMainForm
           object SpeedButtonToolsCharacterMap: TBCSpeedButton
             Left = 250
             Top = 0
-            Width = 60
+            Width = 76
             Height = 56
             Action = ActionToolsClipboardHistory
             Align = alLeft
@@ -1742,7 +1742,7 @@ inherited MainForm: TMainForm
           end
           object SpeedButtonToolsDivider2: TBCSpeedButton
             AlignWithMargins = True
-            Left = 310
+            Left = 326
             Top = 4
             Width = 10
             Height = 48
@@ -1764,7 +1764,7 @@ inherited MainForm: TMainForm
             ImageIndex = 1
           end
           object SpeedButtonToolsLanguageEditor: TBCSpeedButton
-            Left = 320
+            Left = 336
             Top = 0
             Width = 65
             Height = 56

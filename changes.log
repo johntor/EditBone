@@ -1,3 +1,16 @@
+Version 12.7.2 (October 25, 2016)
+
+- Fixed completion proposal
+- Fixed message dialogs
+- Fixed painting
+- Fixed text highlighter
+- Fixed web link clicks in text highlighter
+
+Version 12.7.1 (October 17, 2016)  
+
+- Fixed clipboard history
+- Updated AlphaSkins controls v11.18 - http://www.alphaskins.com/
+
 Version 12.7.0 (October 16, 2016)  
 
 - Added possibility to toggle bookmarks with Ctrl + F2, go to next F2, and go to previous Shift + F2

@@ -52,7 +52,7 @@ begin
     Application.Title := 'EditBone';
     Application.MainFormOnTaskbar := True;
     Application.CreateForm(TMainForm, MainForm);
-  Application.Run;
+    Application.Run;
   {$ifdef RELEASE}
   end
   else
