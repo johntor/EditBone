@@ -1851,10 +1851,10 @@ begin
           if Trim(LTabSheet.Editor.DocumentName) <> '' then
             WriteString('OpenFiles', IntToStr(i), Format('%s;%s;%s;', [LTabSheet.Editor.DocumentName,
               LTabSheet.Editor.Highlighter.Name, LTabSheet.Editor.Highlighter.Colors.Name]));
-          for j := 0 to LTabSheet.Editor.Marks.Count - 1 do
+          for j := 0 to LTabSheet.Editor.Bookmarks.Count - 1 do
             WriteString('Bookmarks', Format('%s:%s', [LTabSheet.Editor.DocumentName, IntToStr(j)]),
-              Format('%s;%s;%s', [IntToStr(LTabSheet.Editor.Marks.Items[j].Index),
-              IntToStr(LTabSheet.Editor.Marks.Items[j].Line), IntToStr(LTabSheet.Editor.Marks.Items[j].Char)]));
+              Format('%s;%s;%s', [IntToStr(LTabSheet.Editor.Bookmarks.Items[j].Index),
+              IntToStr(LTabSheet.Editor.Bookmarks.Items[j].Line), IntToStr(LTabSheet.Editor.Bookmarks.Items[j].Char)]));
           WriteBool('Minimaps', IntToStr(i), LTabSheet.Editor.Minimap.Visible);
           LTextCaretPosition := LTabSheet.Editor.TextCaretPosition;
         end;
