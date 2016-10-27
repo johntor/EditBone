@@ -157,10 +157,10 @@ var
 begin
   Node := VirtualDrawTree.GetFirstSelected;
   Data := VirtualDrawTree.GetNodeData(Node);
+  Hide;
   if Assigned(Data) then
     if Assigned(FSelectFile) then
       FSelectFile(Data.PageIndex);
-  Hide;
 end;
 
 procedure TPopupFilesDialog.VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
