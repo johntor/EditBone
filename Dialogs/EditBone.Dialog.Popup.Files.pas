@@ -32,6 +32,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure VirtualDrawTreeGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind;
       Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
+    procedure ButtonedEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FSelectFile: TSelectFileEvent;
     procedure SetVisibleRows;
@@ -228,6 +229,22 @@ procedure TPopupFilesDialog.ActionSearchExecute(Sender: TObject);
 begin
   ButtonedEdit.RightButton.Visible := Trim(ButtonedEdit.Text) <> '';
   SetVisibleRows;
+end;
+
+procedure TPopupFilesDialog.ButtonedEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  case Key of
+    VK_UP:
+      begin
+        VirtualDrawTree.SetFocus;
+        VirtualDrawTree.Selected[VirtualDrawTree.GetFirstSelected.PrevSibling] := True;
+      end;
+    VK_DOWN:
+      begin
+        VirtualDrawTree.SetFocus;
+        VirtualDrawTree.Selected[VirtualDrawTree.GetFirstSelected.NextSibling] := True;
+      end;
+  end;
 end;
 
 procedure TPopupFilesDialog.SetVisibleRows;
