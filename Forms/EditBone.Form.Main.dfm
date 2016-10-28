@@ -5163,6 +5163,7 @@ inherited MainForm: TMainForm
     Top = 228
   end
   object PrintDialog: TPrintDialog [27]
+    Options = [poPageNums, poSelection]
     Left = 872
     Top = 280
   end

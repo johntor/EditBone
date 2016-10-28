@@ -1554,7 +1554,7 @@ begin
     FDocument.InitializeEditorPrint(EditorPrint);
     EditorPrint.Copies := PrintDialog.Copies;
     EditorPrint.SelectedOnly := PrintDialog.PrintRange = prSelection;
-    EditorPrint.UpdatePages(PrintPreviewDialog.Canvas);
+    //EditorPrint.UpdatePages(PrintPreviewDialog.Canvas);
 
     ProgressBar.Show(EditorPrint.Editor.Lines.Count);
     if PrintDialog.PrintRange = prPageNums then
