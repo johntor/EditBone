@@ -1,3 +1,12 @@
+Version 12.7.3 (October 30, 2016)
+
+- Fixed bookmark saving
+- Fixed printing
+- Fixed title bar popups
+- Fixed painting of editor control
+- Fixed matching pair
+- Fixed word wrap
+
 Version 12.7.2 (October 25, 2016)
 
 - Fixed completion proposal
@@ -54,7 +63,7 @@ Version 12.6.4 (October 2, 2016)
 Version 12.6.3 (October 1, 2016)
 
 - Fixed creating of document tabs
-- Fixed caret positioning 
+- Fixed caret positioning
 - Fixed output
 - Fixed color files
 
