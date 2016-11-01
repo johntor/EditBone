@@ -1,4 +1,4 @@
-Version 12.7.4 
+Version <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.7.4</a> 
 
 Use the Issues page to report bugs or send them directly to lasse@bonecode.com. See also <a href="https://github.com/bonecode/TBCEditor/issues">TBCEditor</a> issues.
 
