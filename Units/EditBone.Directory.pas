@@ -491,7 +491,7 @@ var
   LResult: Boolean;
   LFileTreeView: TBCFileTreeView;
   LSelectedNode: PVirtualNode;
-  LData: PBCFileTreeNodeRec;
+  LData: PBCFileTreeNodeRecord;
 begin
   LFileTreeView := GetFileTreeView;
   if Assigned(LFileTreeView) then

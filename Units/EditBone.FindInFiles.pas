@@ -142,36 +142,42 @@ begin
   end;
 end;
 
+type
+  TStringsProxy = class(TStrings);
+
 function TFindInFilesThread.GetStringList(const AFilename: string): TStringList;
 var
   LFileStream: TFileStream;
   LBuffer: TBytes;
   LWithBom: Boolean;
   LEncoding: System.SysUtils.TEncoding;
+  LSize: Integer;
+  LStrBuffer: string;
 begin
   Result := TStringList.Create;
-  LEncoding := nil;
-  LFileStream := TFileStream.Create(AFilename, fmOpenRead);
+  LFileStream := TFileStream.Create(AFilename, fmOpenRead or fmShareDenyNone);
   try
-    // Identify encoding
-    if IsUTF8(LFileStream, LWithBom) then
-    begin
-      if LWithBom then
-        LEncoding := TEncoding.UTF8
-      else
-        LEncoding := BCEditor.Encoding.TEncoding.UTF8WithoutBOM;
-    end
-    else
-    begin
-      // Read file into buffer
-      SetLength(LBuffer, LFileStream.Size);
-      LFileStream.ReadBuffer(Pointer(LBuffer)^, Length(LBuffer));
-      TEncoding.GetBufferEncoding(LBuffer, LEncoding);
-    end;
+    { Read file into buffer }
+    SetLength(LBuffer, LFileStream.Size);
+    LFileStream.ReadBuffer(Pointer(LBuffer)^, Length(LBuffer));
   finally
     LFileStream.Free;
   end;
-  Result.LoadFromFile(AFilename, LEncoding);
+  { Identify encoding }
+  if IsUTF8Buffer(LBuffer, LWithBOM) then
+  begin
+    if LWithBOM then
+      LEncoding := TEncoding.UTF8
+    else
+      LEncoding := BCEditor.Encoding.TEncoding.UTF8WithoutBOM;
+  end
+  else
+    LEncoding := nil;
+
+	LSize := TEncoding.GetBufferEncoding(LBuffer, LEncoding);
+	LStrBuffer := LEncoding.GetString(LBuffer, LSize, Length(LBuffer) - LSize);
+	SetLength(LBuffer, 0);
+	TStringsProxy(Result).SetTextStr(LStrBuffer);
 end;
 
 end.
