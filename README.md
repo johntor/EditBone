@@ -2,7 +2,7 @@ Version <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_b
 
 Use the Issues page to report bugs or send them directly to lasse@bonecode.com. See also <a href="https://github.com/bonecode/TBCEditor/issues">TBCEditor</a> issues.
 
-<h3>Parameters</h3>
+<h3>Application parameters</h3>
 
 Param | Description 
 --- | --- 
