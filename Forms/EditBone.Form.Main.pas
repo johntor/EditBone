@@ -709,6 +709,11 @@ type
     BCSpeedButton1: TBCSpeedButton;
     ActionToolsClipboardHistory: TAction;
     ClipboardMonitor: TJvClipboardMonitor;
+    ColorDialog: TsColorDialog;
+    ActionEditInsertHexColor: TAction;
+    MenuItemEditInsertColor: TMenuItem;
+    MenuItemInsertColor: TMenuItem;
+    MenuItemMainMenuEditInsertColor: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -909,6 +914,7 @@ type
     procedure ActionTogglePreviousBookmarkExecute(Sender: TObject);
     procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
     procedure ClipboardMonitorChange(Sender: TObject);
+    procedure ActionEditInsertHexColorExecute(Sender: TObject);
   private
     FClipboardHistoryItems: TList<string>;
     FClipboardHistoryDialog: TClipboardHistoryDialog;
@@ -1331,6 +1337,12 @@ end;
 procedure TMainForm.ActionEditIndentIncreaseExecute(Sender: TObject);
 begin
   FDocument.IncreaseIndent;
+end;
+
+procedure TMainForm.ActionEditInsertHexColorExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.InsertHexColor;
 end;
 
 procedure TMainForm.ActionEditInsertDateTimeExecute(Sender: TObject);
@@ -3425,6 +3437,7 @@ begin
   FDocument.PopupMenuXMLTree := PopupMenuXMLTree;
   FDocument.SetBookmarks := SetBookmarks;
   FDocument.SetTitleBarMenuCaptions := SetTitleBarMenuCaptions;
+  FDocument.ColorDialog := ColorDialog;
   FDocument.OpenDialog := OpenDialog;
   FDocument.SaveDialog := SaveDialog;
   FDocument.CreateFileReopenList := CreateFileReopenList;

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, EditBone.Consts, BCEditor.Editor,
-  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList,
+  Vcl.ComCtrls, Vcl.ImgList, Vcl.Menus, BCControl.PageControl, Vcl.Buttons, Vcl.ActnList, sDialogs,
   BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
   BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Marks, Vcl.Dialogs, BCCommon.Frame.Compare,
   BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
@@ -61,19 +61,20 @@ type
     FActionSearchOptions: TAction;
     FActionSearchTextItems: TAction;
     FCaretInfo: string;
+    FColorDialog: TsColorDialog;
     FCompareImageIndex, FNewImageIndex: Integer;
     FCreateFileReopenList: TEBCreateFileReopenList;
     FGetActionList: TEBGetActionList;
     FImages: TImageList;
     FModifiedDocuments: Boolean;
     FNumberOfNewDocument: Integer;
-    FOpenDialog: TOpenDialog;
+    FOpenDialog: TsOpenDialog;
     FPageControl: TBCPageControl;
     FPopupMenuEditor: TPopupMenu;
     FPopupMenuXMLTree: TPopupMenu;
     FProcessing: Boolean;
     FProgressBar: TBCProgressBar;
-    FSaveDialog: TSaveDialog;
+    FSaveDialog: TsSaveDialog;
     FSetBookmarks: TEBSetBookmarks;
     FSetTitleBarMenuCaptions: TEBSetTitleBarMenuCaptions;
     FSkinManager: TBCSkinManager;
@@ -148,6 +149,7 @@ type
     procedure HTMLExport;
     procedure IncreaseIndent;
     procedure InitializeEditorPrint(EditorPrint: TBCEditorPrint);
+    procedure InsertHexColor;
     procedure InsertDateAndTime;
     procedure InsertLine;
     procedure InsertTag;
@@ -208,16 +210,17 @@ type
     property CanRedo: Boolean read GetCanRedo;
     property CanUndo: Boolean read GetCanUndo;
     property CaretInfo: string read FCaretInfo;
+    property ColorDialog: TsColorDialog read FColorDialog write FColorDialog;
     property CreateFileReopenList: TEBCreateFileReopenList read FCreateFileReopenList write FCreateFileReopenList;
     property GetActionList: TEBGetActionList read FGetActionList write FGetActionList;
     property ModifiedDocuments: Boolean read FModifiedDocuments write FModifiedDocuments;
-    property OpenDialog: TOpenDialog read FOpenDialog write FOpenDialog;
+    property OpenDialog: TsOpenDialog read FOpenDialog write FOpenDialog;
     property PageControl: TBCPageControl read FPageControl;
     property PopupMenuEditor: TPopupMenu read FPopupMenuEditor write FPopupMenuEditor;
     property PopupMenuXMLTree: TPopupMenu read FPopupMenuXMLTree write FPopupMenuXMLTree;
     property Processing: Boolean read FProcessing;
     property ProgressBar: TBCProgressBar read FProgressBar write FProgressBar;
-    property SaveDialog: TSaveDialog read FSaveDialog write FSaveDialog;
+    property SaveDialog: TsSaveDialog read FSaveDialog write FSaveDialog;
     property SetBookmarks: TEBSetBookmarks read FSetBookmarks write FSetBookmarks;
     property SetTitleBarMenuCaptions: TEBSetTitleBarMenuCaptions read FSetTitleBarMenuCaptions write FSetTitleBarMenuCaptions;
     property SkinManager: TBCSkinManager read FSkinManager write FSkinManager;
@@ -321,7 +324,7 @@ begin
       LTabSheet.XMLTree.TreeOptions.SelectionOptions := [toFullRowSelect];
       LTabSheet.XMLTree.TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale];
       LTabSheet.XMLTree.TreeOptions.MiscOptions := [toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
-      LTabSheet.XMLTree.TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware];
+      LTabSheet.XMLTree.TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseExplorerTheme];
       LTabSheet.XMLTree.OnClick := XMLTreeClick;
       { vertical splitter }
       LTabSheet.SplitterVertical := TBCSplitter.Create(PageControl.ActivePage);
@@ -1890,6 +1893,18 @@ begin
       LEditor.InsertText(PChar(Format('<%s></%s>', [LTagName, LTagName])));
       LEditor.DisplayCaretX := LEditor.DisplayCaretX - Length(LTagName) - 3; { -3 from </> }
     end;
+  end;
+end;
+
+procedure TEBDocument.InsertHexColor;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+  begin
+    if FColorDialog.Execute then
+      LEditor.InsertText(PChar('#' + ColorToHex(FColorDialog.Color)));
   end;
 end;
 

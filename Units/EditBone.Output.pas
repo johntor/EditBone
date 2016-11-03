@@ -176,7 +176,7 @@ begin
     Align := alClient;
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale];
     TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
-    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused];
+    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused, toUseExplorerTheme];
     TreeOptions.SelectionOptions := [toFullRowSelect, toMiddleClickSelect];
     OnDrawNode := VirtualDrawTreeDrawNode;
     OnFreeNode := VirtualDrawTreeFreeNode;
@@ -582,6 +582,10 @@ begin
   begin
     LVirtualDrawTree := GetOutputTreeView(PageControl.Pages[i]);
     LVirtualDrawTree.Indent := OptionsContainer.OutputIndent;
+    if OptionsContainer.OutputUseExplorerTheme then
+      LVirtualDrawTree.TreeOptions.PaintOptions := LVirtualDrawTree.TreeOptions.PaintOptions + [toUseExplorerTheme]
+    else
+      LVirtualDrawTree.TreeOptions.PaintOptions := LVirtualDrawTree.TreeOptions.PaintOptions - [toUseExplorerTheme];
     if OptionsContainer.OutputShowTreeLines then
       LVirtualDrawTree.TreeOptions.PaintOptions := LVirtualDrawTree.TreeOptions.PaintOptions + [toShowTreeLines]
     else

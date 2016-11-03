@@ -25,6 +25,8 @@ type
     SliderAutoHide: TsSlider;
     StickyLabelAutoHide: TsStickyLabel;
     ComboBoxAlign: TBCComboBox;
+    StickyLabelUseExplorerTheme: TsStickyLabel;
+    SliderUseExplorerTheme: TsSlider;
   protected
     procedure GetData; override;
     procedure Init; override;
@@ -79,6 +81,7 @@ begin
     SliderShowSystemFiles.SliderOn := DirShowSystemFiles;
     SliderShowArchiveFiles.SliderOn := DirShowArchiveFiles;
     SliderShowOverlayIcons.SliderOn := DirShowOverlayIcons;
+    SliderUseExplorerTheme.SliderOn := DirUseExplorerTheme;
     ComboBoxAlign.ItemIndex := DirAlign;
   end;
 end;
@@ -92,8 +95,9 @@ begin
     DirShowHiddenFiles := SliderShowHiddenFiles.SliderOn;
     DirShowSystemFiles := SliderShowSystemFiles.SliderOn;
     DirShowArchiveFiles := SliderShowArchiveFiles.SliderOn;
-    DirIndent := StrToIntDef(EditIndent.Text, 20);
     DirShowOverlayIcons := SliderShowOverlayIcons.SliderOn;
+    DirUseExplorerTheme := SliderUseExplorerTheme.SliderOn;
+    DirIndent := StrToIntDef(EditIndent.Text, 16);
     DirAlign := ComboBoxAlign.ItemIndex;
   end;
 end;

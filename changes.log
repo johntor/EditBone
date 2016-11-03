@@ -1,12 +1,18 @@
+Version 12.8.0 (November 3, 2016)
+
+- Added insert hex color
+- Added use explorer theme option for directory and options
+- Fixed word wrap
+
 Version 12.7.4 (November 1, 2016)
 
-- Fixed bookmarks
+- Fixed bookmarks          
 - Fixed find in files
 
 Version 12.7.3 (October 30, 2016)
 
 - Fixed bookmark saving
-- Fixed printing
+- Fixed printing        
 - Fixed title bar popups
 - Fixed painting of editor control
 - Fixed matching pair

@@ -655,11 +655,11 @@ begin
   begin
     Parent := LPanel;
     Align := alClient;
-    Indent := 20;
+    Indent := 16;
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking,
       toAutoDeleteMovedNodes, toAutoChangeScale];
     TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning, toEditOnClick];
-    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware];
+    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseExplorerTheme];
     PopupMenu := PopupMenuFileTreeView;
     OnClick := FileTreeViewClick;
     OnDblClick := FileTreeViewDblClick;
@@ -776,6 +776,10 @@ begin
       LFileTreeView.ShowSystemFiles := OptionsContainer.DirShowSystemFiles;
       LFileTreeView.ShowArchiveFiles := OptionsContainer.DirShowArchiveFiles;
       LFileTreeView.ShowOverlayIcons := OptionsContainer.DirShowOverlayIcons;
+      if OptionsContainer.DirUseExplorerTheme then
+        LFileTreeView.TreeOptions.PaintOptions := LFileTreeView.TreeOptions.PaintOptions + [toUseExplorerTheme]
+      else
+        LFileTreeView.TreeOptions.PaintOptions := LFileTreeView.TreeOptions.PaintOptions - [toUseExplorerTheme];
       if OptionsContainer.DirShowTreeLines then
         LFileTreeView.TreeOptions.PaintOptions := LFileTreeView.TreeOptions.PaintOptions + [toShowTreeLines]
       else

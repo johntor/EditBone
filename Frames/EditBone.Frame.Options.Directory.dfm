@@ -1,12 +1,12 @@
 inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
   Width = 162
-  Height = 219
+  Height = 247
   object Panel: TBCPanel [0]
     AlignWithMargins = True
     Left = 4
     Top = 0
     Width = 158
-    Height = 219
+    Height = 247
     Margins.Left = 4
     Margins.Top = 0
     Margins.Right = 0
@@ -103,6 +103,20 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       AttachTo = SliderAutoHide
       Gap = 8
     end
+    object StickyLabelUseExplorerTheme: TsStickyLabel
+      Left = 0
+      Top = 142
+      Width = 100
+      Height = 13
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      AutoSize = False
+      Caption = 'Use explorer theme'
+      AttachTo = SliderUseExplorerTheme
+      Gap = 8
+    end
     object SliderShowTreeLines: TsSlider
       Left = 108
       Top = 115
@@ -121,14 +135,14 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
     end
     object EditIndent: TBCEdit
       Left = 0
-      Top = 155
+      Top = 183
       Width = 64
       Height = 21
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      TabOrder = 6
+      TabOrder = 7
       Text = '20'
       SkinData.SkinSection = 'EDIT'
       BoundLabel.Active = True
@@ -225,7 +239,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
     end
     object ComboBoxAlign: TBCComboBox
       Left = 0
-      Top = 197
+      Top = 225
       Width = 157
       Height = 22
       Margins.Left = 4
@@ -242,8 +256,24 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       VerticalAlignment = taAlignTop
       Style = csOwnerDrawFixed
       ItemIndex = -1
-      TabOrder = 7
+      TabOrder = 8
       UseMouseWheel = False
+    end
+    object SliderUseExplorerTheme: TsSlider
+      Left = 108
+      Top = 138
+      Width = 50
+      AutoSize = True
+      TabOrder = 6
+      ImageIndexOff = 0
+      ImageIndexOn = 0
+      FontOn.Charset = DEFAULT_CHARSET
+      FontOn.Color = clWindowText
+      FontOn.Height = -11
+      FontOn.Name = 'Tahoma'
+      FontOn.Style = []
+      SliderCaptionOn = 'Yes'
+      SliderCaptionOff = 'No'
     end
   end
 end

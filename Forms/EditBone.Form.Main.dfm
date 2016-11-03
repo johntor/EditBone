@@ -104,7 +104,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetEdit
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -3308,6 +3308,9 @@ inherited MainForm: TMainForm
     Images = ImagesDataModule.ImageList
     Left = 58
     Top = 523
+    object MenuItemEditInsertColor: TMenuItem
+      Action = ActionEditInsertHexColor
+    end
     object MenuItemEditInsertLine: TMenuItem
       Action = ActionEditInsertLine
     end
@@ -3651,6 +3654,13 @@ inherited MainForm: TMainForm
       Caption = 'Insert'
       ImageIndex = 18
       OnExecute = ActionEditInsertExecute
+    end
+    object ActionEditInsertHexColor: TAction
+      Category = 'Edit'
+      Caption = 'Insert hex color'
+      ImageIndex = 148
+      ShortCut = 24643
+      OnExecute = ActionEditInsertHexColorExecute
     end
     object ActionEditInsertLine: TAction
       Category = 'Edit'
@@ -4997,6 +5007,9 @@ inherited MainForm: TMainForm
     end
     object MenuItemInsert: TMenuItem
       Action = ActionEditInsert
+      object MenuItemInsertColor: TMenuItem
+        Action = ActionEditInsertHexColor
+      end
       object MenuItemInsertLine: TMenuItem
         Action = ActionEditInsertLine
       end
@@ -5299,6 +5312,9 @@ inherited MainForm: TMainForm
       end
       object MenuItemMainMenuEditInsert: TMenuItem
         Action = ActionEditInsert
+        object MenuItemMainMenuEditInsertColor: TMenuItem
+          Action = ActionEditInsertHexColor
+        end
         object MenuItemMainMenuEditInsertLine: TMenuItem
           Action = ActionEditInsertLine
         end
@@ -5777,5 +5793,10 @@ inherited MainForm: TMainForm
     OnChange = ClipboardMonitorChange
     Left = 600
     Top = 218
+  end
+  object ColorDialog: TsColorDialog
+    Options = [cdFullOpen, cdAnyColor]
+    Left = 804
+    Top = 176
   end
 end
