@@ -659,7 +659,7 @@ begin
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking,
       toAutoDeleteMovedNodes, toAutoChangeScale];
     TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning, toEditOnClick];
-    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseExplorerTheme];
+    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware];
     PopupMenu := PopupMenuFileTreeView;
     OnClick := FileTreeViewClick;
     OnDblClick := FileTreeViewDblClick;

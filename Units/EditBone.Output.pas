@@ -176,7 +176,7 @@ begin
     Align := alClient;
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale];
     TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
-    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused, toUseExplorerTheme];
+    TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused];
     TreeOptions.SelectionOptions := [toFullRowSelect, toMiddleClickSelect];
     OnDrawNode := VirtualDrawTreeDrawNode;
     OnFreeNode := VirtualDrawTreeFreeNode;
@@ -212,15 +212,9 @@ begin
     if vsSelected in PaintInfo.Node.States then
     begin
       if Assigned(FSkinManager) then
-      begin
-        Canvas.Brush.Color := FSkinManager.GetHighLightColor;
         LColor := FSkinManager.GetHighLightFontColor
-      end
       else
-      begin
-        Canvas.Brush.Color := clHighlight;
         LColor := clHighlightText;
-      end;
     end;
     Canvas.Font.Color := LColor;
 

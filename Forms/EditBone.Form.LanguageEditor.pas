@@ -355,7 +355,6 @@ begin
     begin
       if Assigned(SkinProvider.SkinData) and Assigned(SkinProvider.SkinData.SkinManager) then
       begin
-        Canvas.Brush.Color := SkinProvider.SkinData.SkinManager.GetHighLightColor;
         if Data.Value[4] <> '' then
           Canvas.Font.Color := clRed
         else
@@ -363,7 +362,6 @@ begin
       end
       else
       begin
-        Canvas.Brush.Color := clHighlight;
         if Data.Value[4] <> '' then
           Canvas.Font.Color := clRed
         else

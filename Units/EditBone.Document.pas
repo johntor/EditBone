@@ -324,7 +324,7 @@ begin
       LTabSheet.XMLTree.TreeOptions.SelectionOptions := [toFullRowSelect];
       LTabSheet.XMLTree.TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes, toAutoChangeScale];
       LTabSheet.XMLTree.TreeOptions.MiscOptions := [toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
-      LTabSheet.XMLTree.TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseExplorerTheme];
+      LTabSheet.XMLTree.TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware];
       LTabSheet.XMLTree.OnClick := XMLTreeClick;
       { vertical splitter }
       LTabSheet.SplitterVertical := TBCSplitter.Create(PageControl.ActivePage);
