@@ -3656,7 +3656,7 @@ begin
       PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
       Application.ProcessMessages;
       FFindInFilesThread := TFindInFilesThread.Create(FindWhatText, FileTypeText, FolderText, SearchCaseSensitive,
-        False, False, False, LookInSubfolders, LFileExtensions);
+        RegularExpressions, Wildcard, WholeWordsOnly, LookInSubfolders, LFileExtensions);
       FFindInFilesThread.OnTerminate := OnTerminateFindInFiles;
       FFindInFilesThread.OnProgressBarStep := OnProgressBarStepFindInFiles;
       FFindInFilesThread.OnCancelSearch := OnCancelSearch;
