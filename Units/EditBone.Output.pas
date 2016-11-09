@@ -33,8 +33,8 @@ type
     function CloseTabSheet(const AFreePage: Boolean = True; const ATabIndex: Integer = -1): Boolean;
     function SelectedLine(var AFilename: string; var ALine: LongWord; var ACharacter: LongWord): Boolean;
     function AddTreeView(const ATabCaption: string): TVirtualDrawTree;
-    procedure AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: WideString; ALine, ACharacter: LongInt;
-      const AText: WideString; const ASearchString: WideString = '');
+    procedure AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: string; const ALine, ACharacter: LongInt;
+      const AText: string; const ASearchString: string; const ALength: Integer);
     procedure ReadOutputFile;
     procedure SetOptions;
     procedure WriteOutputFile;
@@ -259,15 +259,14 @@ begin
         S := StringReplace(S, Chr(9), '', [rfReplaceAll]); { replace tabs }
         Inc(LRect.Left, Canvas.TextWidth(S));
         Canvas.Font.Color := clRed;
-        S := Copy(String(LData.Text), LData.TextCharacter, Length(LData.SearchString));
+        S := Copy(String(LData.Text), LData.TextCharacter, LData.Length);
         Temp := StringReplace(S, '&', '&&', [rfReplaceAll]);
         Canvas.Font.Style := Canvas.Font.Style + [fsBold];
         DrawText(Canvas.Handle, Temp, Length(Temp), LRect, LFormat);
         Canvas.Font.Color := LColor;
         inc(LRect.Left, Canvas.TextWidth(S));
         Canvas.Font.Style := Canvas.Font.Style - [fsBold];
-        S := System.Copy(LData.Text, Integer(LData.TextCharacter) + Integer(System.Length(LData.SearchString)),
-          Length(LData.Text));
+        S := System.Copy(LData.Text, Integer(LData.TextCharacter) + LData.Length, Length(LData.Text));
         DrawText(Canvas.Handle, S, Length(S), LRect, LFormat);
       end;
     end;
@@ -312,8 +311,8 @@ begin
   inherited;
 end;
 
-procedure TEBOutput.AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: WideString; ALine, ACharacter: LongInt;
-  const AText: WideString; const ASearchString: WideString);
+procedure TEBOutput.AddTreeViewLine(AOutputTreeView: TVirtualDrawTree; const AFilename: string; const ALine, ACharacter: LongInt;
+  const AText: string; const ASearchString: string; const ALength: Integer);
 var
   LNode, LLastNode: PVirtualNode;
   LNodeData: POutputRec;
@@ -355,6 +354,7 @@ begin
     LNodeData.Character := ACharacter;
     LNodeData.SearchString := ASearchString;
     LNodeData.Filename := AFilename;
+    LNodeData.Length := ALength;
 
     S := AText;
 
@@ -614,8 +614,9 @@ var
   LFilename, S: string;
   LOutputFile: TStreamReader;
   LVirtualDrawTree: TVirtualDrawTree;
-  LFilenameToken, LText, SearchString: string;
+  LFilenameToken, LText, LSearchString: string;
   LLineToken, LCharacterToken: Cardinal;
+  LLength: Integer;
 begin
   FProcessingTabSheet := True;
   LVirtualDrawTree := nil;
@@ -640,8 +641,10 @@ begin
           S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
           LText := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
           S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
-          SearchString := S;
-          AddTreeViewLine(LVirtualDrawTree, LFilenameToken, LLineToken, LCharacterToken, LText, SearchString);
+          LSearchString := GetNextToken(OUTPUT_FILE_SEPARATOR, S);
+          S := RemoveTokenFromStart(OUTPUT_FILE_SEPARATOR, S);
+          LLength := StrToIntDef(S, Length(LSearchString));
+          AddTreeViewLine(LVirtualDrawTree, LFilenameToken, LLineToken, LCharacterToken, LText, LSearchString, LLength);
         end;
       end;
     finally
@@ -687,8 +690,9 @@ begin
             begin
               LNodeData := LVirtualDrawTree.GetNodeData(LNode);
               if LNodeData.SearchString <> '' then
-                LOutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s', [LNodeData.Filename, OUTPUT_FILE_SEPARATOR, LNodeData.Line,
-                  OUTPUT_FILE_SEPARATOR, LNodeData.Character, OUTPUT_FILE_SEPARATOR, LNodeData.Text, OUTPUT_FILE_SEPARATOR, LNodeData.SearchString]));
+                LOutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s%s%s', [LNodeData.Filename, OUTPUT_FILE_SEPARATOR, LNodeData.Line,
+                  OUTPUT_FILE_SEPARATOR, LNodeData.Character, OUTPUT_FILE_SEPARATOR, LNodeData.Text, OUTPUT_FILE_SEPARATOR,
+                  LNodeData.SearchString, OUTPUT_FILE_SEPARATOR, LNodeData.Length]));
               LNode := LVirtualDrawTree.GetNext(LNode);
             end;
           end;

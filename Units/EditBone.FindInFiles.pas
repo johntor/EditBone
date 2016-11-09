@@ -7,8 +7,8 @@ uses
 
 type
   TOnCancelSearch = function: Boolean of object;
-  TOnAddTreeViewLine = procedure(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString;
-    SearchString: WideString) of object;
+  TOnAddTreeViewLine = procedure(ASender: TObject; const AFilename: string; const ALine, ACharacter: LongInt; const AText: string;
+    const ASearchString: string; const ALength: Integer) of object;
 
   TFindInFilesThread = class(TThread)
   private
@@ -66,7 +66,7 @@ begin
 
   FEditor := TBCEditor.Create(nil);
   FEditor.Search.Enabled := True;
-  FEditor.Search.SearchText := AFindWhatText;
+
   FEditor.Search.SetOption(soCaseSensitive, ASearchCaseSensitive);
   FEditor.Search.SetOption(soWholeWordsOnly, AWholeWordsOnly);
   if ARegularExpressions then
@@ -76,45 +76,50 @@ begin
     FEditor.Search.Engine := seWildcard
   else
     FEditor.Search.Engine := seNormal;
+
+  FEditor.Search.SearchText := AFindWhatText;
 end;
 
 procedure TFindInFilesThread.FindInFiles(const AFolderText: string);
 var
   LIndex: Integer;
   LFileName: string;
-  LTextPosition: TBCEditorTextPosition;
+  LPSearchItem: PBCEditorSearchItem;
 begin
-  for LFileName in BCCommon.FileUtils.GetFiles(AFolderText, FFileTypeText, FLookInSubfolders) do
-  begin
-    Application.ProcessMessages;
-
-    if Assigned(FOnCancelSearch) and FOnCancelSearch then
+  try
+    for LFileName in BCCommon.FileUtils.GetFiles(AFolderText, FFileTypeText, FLookInSubfolders) do
     begin
-      Terminate;
-      Exit;
-    end;
+      Application.ProcessMessages;
 
-    if Assigned(FOnProgressBarStep) then
-      FOnProgressBarStep(Self);
-
-    try
-      FEditor.LoadFromFile(LFileName);
-      Inc(FCount, FEditor.Search.Lines.Count);
-      for LIndex := 0 to FEditor.Search.Lines.Count - 1 do
+      if Assigned(FOnCancelSearch) and FOnCancelSearch then
       begin
-        LTextPosition := PBCEditorTextPosition(FEditor.Search.Lines.Items[LIndex])^;
-
-        if Assigned(FOnAddTreeViewLine) then
-          FOnAddTreeViewLine(Self, LFileName, LTextPosition.Line, LTextPosition.Char, FEditor.Lines[LTextPosition.Line],
-            FEditor.Search.SearchText);
+        Terminate;
+        Exit;
       end;
-    except
-      if Assigned(FOnAddTreeViewLine) then
-        FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
-          [LFileName]), '');
+
+      if Assigned(FOnProgressBarStep) then
+        FOnProgressBarStep(Self);
+
+      try
+        FEditor.LoadFromFile(LFileName);
+        Inc(FCount, FEditor.Search.Lines.Count);
+        for LIndex := 0 to FEditor.Search.Lines.Count - 1 do
+        begin
+          LPSearchItem := PBCEditorSearchItem(FEditor.Search.Lines.Items[LIndex]);
+
+          if Assigned(FOnAddTreeViewLine) then
+            FOnAddTreeViewLine(Self, LFileName, LPSearchItem^.TextPosition.Line, LPSearchItem^.TextPosition.Char,
+              FEditor.Lines[LPSearchItem^.TextPosition.Line], FEditor.Search.SearchText, LPSearchItem^.Length);
+        end;
+      except
+        if Assigned(FOnAddTreeViewLine) then
+          FOnAddTreeViewLine(Self, '', -1, 0, Format(LanguageDataModule.GetWarningMessage('FileAccessError'),
+            [LFileName]), '', 0);
+      end;
     end;
+  finally
+    FEditor.Free;
   end;
-  FEditor.Free;
 end;
 
 end.

@@ -14,8 +14,9 @@ type
     Line: LongInt;
     Character: LongInt;
     TextCharacter: LongWord;
-    Text: WideString;
-    SearchString: WideString;
+    Text: string;
+    SearchString: string;
+    Length: Integer;
   end;
   POutputRec = ^TOutputRec;
 

@@ -881,7 +881,8 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure LanguageMenuClick(Sender: TObject);
-    procedure OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString = '');
+    procedure OnAddTreeViewLine(Sender: TObject; const AFilename: string; const ALine, ACharacter: LongInt;
+      const AText: string; const ASearchString: string; const ALength: Integer);
     procedure OnProgressBarStepFindInFiles(Sender: TObject);
     procedure OnTerminateFindInFiles(Sender: TObject);
     procedure OutputDblClickActionExecute(Sender: TObject);
@@ -3610,9 +3611,10 @@ begin
     FDocument.Open(LFilename);
 end;
 
-procedure TMainForm.OnAddTreeViewLine(Sender: TObject; Filename: WideString; Ln, Ch: LongInt; Text: WideString; SearchString: WideString);
+procedure TMainForm.OnAddTreeViewLine(Sender: TObject; const AFilename: string; const ALine, ACharacter: LongInt;
+  const AText: string; const ASearchString: string; const ALength: Integer);
 begin
-  FOutput.AddTreeViewLine(FOutputTreeView, Filename, Ln, Ch, Text, SearchString);
+  FOutput.AddTreeViewLine(FOutputTreeView, AFilename, ALine, ACharacter, AText, ASearchString, ALength);
 end;
 
 procedure TMainForm.OnProgressBarStepFindInFiles(Sender: TObject);
@@ -3677,7 +3679,7 @@ begin
     if FFindInFilesThread.Count = 0 then
     begin
       FOutput.AddTreeViewLine(FOutputTreeView, '', -1, 0,
-        Format(LanguageDataModule.GetMessage('CannotFindString'), [FFindInFilesThread.FindWhatText]));
+        Format(LanguageDataModule.GetMessage('CannotFindString'), [FFindInFilesThread.FindWhatText]), '', 0);
       StatusBar.Panels[EDITBONE_STATUS_BAR_HINT_PANEL].Text := '';
     end;
     if StrToInt(FormatDateTime('n', FStopWatch.ElapsedMilliseconds / MSecsPerDay)) < 1 then
