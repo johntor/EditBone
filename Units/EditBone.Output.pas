@@ -690,7 +690,7 @@ begin
             begin
               LNodeData := LVirtualDrawTree.GetNodeData(LNode);
               if LNodeData.SearchString <> '' then
-                LOutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s%s%s', [LNodeData.Filename, OUTPUT_FILE_SEPARATOR, LNodeData.Line,
+                LOutputFile.WriteLine(Format('%s%s%d%s%d%s%s%s%s%s%d', [LNodeData.Filename, OUTPUT_FILE_SEPARATOR, LNodeData.Line,
                   OUTPUT_FILE_SEPARATOR, LNodeData.Character, OUTPUT_FILE_SEPARATOR, LNodeData.Text, OUTPUT_FILE_SEPARATOR,
                   LNodeData.SearchString, OUTPUT_FILE_SEPARATOR, LNodeData.Length]));
               LNode := LVirtualDrawTree.GetNext(LNode);
