@@ -235,7 +235,7 @@ begin
     if (LData.Level = 0) or (LData.Level = 2) then
       S := LData.Filename
     else
-      S := String(LData.Text);
+      S := LData.Text;
 
     if Length(S) > 0 then
     begin
@@ -245,21 +245,21 @@ begin
         if LData.Level = 0 then
           S := System.SysUtils.Format('%s [%d]', [S, Node.ChildCount]);
         if LData.Level = 1 then
-          S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line +
+          S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(LData.Filename), LData.Line +
             OptionsContainer.LeftMarginLineNumbersStartFrom, LData.Character]) + S;
         DrawText(Canvas.Handle, S, Length(S), LRect, LFormat)
       end
       else
       begin
-        S := String(LData.Text);
+        S := LData.Text;
         S := System.Copy(S, 0, LData.TextCharacter - 1);
-        S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line +
+        S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(LData.Filename), LData.Line +
           OptionsContainer.LeftMarginLineNumbersStartFrom, LData.Character]) + S;
         DrawText(Canvas.Handle, S, Length(S), LRect, LFormat);
         S := StringReplace(S, Chr(9), '', [rfReplaceAll]); { replace tabs }
         Inc(LRect.Left, Canvas.TextWidth(S));
         Canvas.Font.Color := clRed;
-        S := Copy(String(LData.Text), LData.TextCharacter, LData.Length);
+        S := Copy(LData.Text, LData.TextCharacter, LData.Length);
         Temp := StringReplace(S, '&', '&&', [rfReplaceAll]);
         Canvas.Font.Style := Canvas.Font.Style + [fsBold];
         DrawText(Canvas.Handle, Temp, Length(Temp), LRect, LFormat);
@@ -288,15 +288,15 @@ begin
     case LData.Level of
       0: begin
            Canvas.Font.Style := Canvas.Font.Style + [fsBold];
-           NodeWidth := Canvas.TextWidth(Trim(Format('%s [%d]', [String(LData.FileName), Node.ChildCount]))) + 2 * LMargin;
+           NodeWidth := Canvas.TextWidth(Trim(Format('%s [%d]', [LData.FileName, Node.ChildCount]))) + 2 * LMargin;
          end;
       1: begin
-           S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(String(LData.Filename)), LData.Line, LData.Character]);
+           S := System.SysUtils.Format('%s (%d, %d): ', [ExtractFilename(LData.Filename), LData.Line, LData.Character]);
            Canvas.Font.Style := Canvas.Font.Style + [fsBold];
-           LBoldWidth := Canvas.TextWidth(String(LData.SearchString));
+           LBoldWidth := Canvas.TextWidth(LData.SearchString);
            Canvas.Font.Style := Canvas.Font.Style - [fsBold];
-           LBoldWidth := LBoldWidth - Canvas.TextWidth(string(LData.SearchString));
-           NodeWidth := Canvas.TextWidth(Trim(S + String(LData.Text))) + 2 * LMargin + LBoldWidth;
+           LBoldWidth := LBoldWidth - Canvas.TextWidth(LData.SearchString);
+           NodeWidth := Canvas.TextWidth(Trim(S + LData.Text)) + 2 * LMargin + LBoldWidth;
          end;
     end;
   end;
@@ -398,7 +398,7 @@ begin
   Result := Assigned(LNodeData) and (LNodeData.Text <> '');
   if Result then
   begin
-    AFilename := String(LNodeData.Filename);
+    AFilename := LNodeData.Filename;
     ALine := LNodeData.Line;
     ACharacter := LNodeData.Character;
   end;
@@ -427,7 +427,7 @@ begin
           while Assigned(LChildNode) do
           begin
             LChildData := LOutputTreeView.GetNodeData(LChildNode);
-            LStringList.Add(System.SysUtils.Format('  %s (%d, %d): %s', [ExtractFilename(String(LChildData.Filename)),
+            LStringList.Add(System.SysUtils.Format('  %s (%d, %d): %s', [ExtractFilename(LChildData.Filename),
               LChildData.Line, LChildData.Character, LChildData.Text]));
             LChildNode := LChildNode.NextSibling;
           end;
