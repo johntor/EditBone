@@ -1102,8 +1102,8 @@ begin
         end;
         SetEditorBookmarks(LEditor, Bookmarks);
 
-        LEditor.GotoLineAndCenter(ALine);
-        LEditor.TextCaretPosition := GetTextPosition(AChar, ALine);
+        LEditor.GotoLineAndCenter(ALine, AChar);
+
         if LEditor.CanFocus then
           LEditor.SetFocus;
         if not StartUp then

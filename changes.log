@@ -1,3 +1,21 @@
+Version 12.9.0 (November 12, 2016)
+
+- Added regular expression, wildcard, and whole words only options for find in files
+- Fixed bookmarks
+- Fixed color comboboxes
+- Fixed find in files file mask
+- Fixed use explorer theme option default to false
+- Fixed printing
+- Fixed text position of saved tabs
+- Fixed search
+- Fixed scroll shadow painting
+- Fixed collapse mark painting
+- Fixed word wrap
+- Fixed text highlighter
+- Optimized directory tree control
+- Updated language files
+- Updated AlphaSkins controls v11.19 - http://www.alphaskins.com/
+
 Version 12.8.0 (November 3, 2016)
 
 - Added insert hex color
@@ -6,13 +24,13 @@ Version 12.8.0 (November 3, 2016)
 
 Version 12.7.4 (November 1, 2016)
 
-- Fixed bookmarks          
+- Fixed bookmarks
 - Fixed find in files
 
 Version 12.7.3 (October 30, 2016)
 
 - Fixed bookmark saving
-- Fixed printing        
+- Fixed printing
 - Fixed title bar popups
 - Fixed painting of editor control
 - Fixed matching pair
@@ -26,18 +44,18 @@ Version 12.7.2 (October 25, 2016)
 - Fixed text highlighter
 - Fixed web link clicks in text highlighter
 
-Version 12.7.1 (October 17, 2016)  
+Version 12.7.1 (October 17, 2016)
 
 - Fixed clipboard history
 - Updated AlphaSkins controls v11.18 - http://www.alphaskins.com/
 
-Version 12.7.0 (October 16, 2016)  
+Version 12.7.0 (October 16, 2016)
 
 - Added possibility to toggle bookmarks with Ctrl + F2, go to next F2, and go to previous Shift + F2
 - Added clipboard history tool
 - Added allow aero blurring, animation, and outer effects skin options
 - Added bookmark line color option for left margin
-- Added clipboard history items count editor option 
+- Added clipboard history items count editor option
 - Refactored file change notification
 - Fixed search
 - Fixed sync edit
