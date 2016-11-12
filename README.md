@@ -1,4 +1,4 @@
-Version <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.8.0</a> 
+Version <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.9.0</a> 
 
 Use the Issues page to report bugs or send them directly to lasse@bonecode.com. See also <a href="https://github.com/bonecode/TBCEditor/issues">TBCEditor</a> issues.
 
@@ -20,7 +20,7 @@ Param | Description
 
 <h3>Downloads</h3>
 
-* EditBone v. <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.8.0</a>: <a href="http://www.bonecode.com/downloads/EditBone32.zip">32-bit Windows</a>, <a href="http://www.bonecode.com/downloads/EditBone64.zip">64-bit Windows</a>
+* EditBone v. <a href="http://bonecode.com/downloads/EditBone/changes.html" target="_blank">12.9.0</a>: <a href="http://www.bonecode.com/downloads/EditBone32.zip">32-bit Windows</a>, <a href="http://www.bonecode.com/downloads/EditBone64.zip">64-bit Windows</a>
 * SQL formatter: <a href="http://www.bonecode.com/downloads/SQLFormatter.zip" target="_blank">32-bit</a>, <a href="http://www.bonecode.com/downloads/SQLFormatter64.zip" target="_blank">64-bit</a>
 * <a href="http://bonecode.com/downloads/Languages.zip" target="_blank">Language files</a>  - 
   <img src="http://bonecode.com/images/languages/Arabic.png" alt="Arabic" />
