@@ -1577,10 +1577,8 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
-    DoSearchTextChange(LEditor);
-    LEditor.FindNext;
-  end;
+    if not DoSearchTextChange(LEditor) then
+      LEditor.FindNext;
 end;
 
 procedure TEBDocument.FindPrevious;
@@ -1589,10 +1587,8 @@ var
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
-  begin
-    DoSearchTextChange(LEditor);
-    LEditor.FindPrevious;
-  end;
+    if not DoSearchTextChange(LEditor) then
+      LEditor.FindPrevious;
 end;
 
 procedure TEBDocument.Replace;
