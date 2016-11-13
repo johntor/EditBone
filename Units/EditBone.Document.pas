@@ -896,7 +896,8 @@ begin
   if Assigned(LEditor) then
   begin
     LComboBoxSearchText := GetActiveComboBoxSearchText;
-    if (soSearchOnTyping in LEditor.Search.Options) or Assigned(LComboBoxSearchText) and (LComboBoxSearchText.Text = '') then
+    if (soSearchOnTyping in LEditor.Search.Options) and (LEditor.Search.Engine = seNormal) or
+      Assigned(LComboBoxSearchText) and (LComboBoxSearchText.Text = '') then
       DoSearchTextChange(LEditor, LComboBoxSearchText.Text = '');
   end;
 end;
