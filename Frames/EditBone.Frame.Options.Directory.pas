@@ -97,7 +97,7 @@ begin
     DirShowArchiveFiles := SliderShowArchiveFiles.SliderOn;
     DirShowOverlayIcons := SliderShowOverlayIcons.SliderOn;
     DirUseExplorerTheme := SliderUseExplorerTheme.SliderOn;
-    DirIndent := StrToIntDef(EditIndent.Text, 16);
+    DirIndent := StrToIntDef(EditIndent.Text, 20);
     DirAlign := ComboBoxAlign.ItemIndex;
   end;
 end;

@@ -161,7 +161,6 @@ inherited DirectoryTabDialog: TDirectoryTabDialog
     Caption = ' Options '
     TabOrder = 2
     SkinData.SkinSection = 'GROUPBOX'
-    Checked = False
     object StickyLabelExcludeOtherBranches: TsStickyLabel
       Left = 10
       Top = 67
@@ -238,6 +237,7 @@ inherited DirectoryTabDialog: TDirectoryTabDialog
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
   end
   object EditTabName: TBCEdit

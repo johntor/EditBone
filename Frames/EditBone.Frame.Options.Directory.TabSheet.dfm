@@ -152,6 +152,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderCloseTabByMiddleClick: TsSlider
       Left = 172
@@ -168,6 +169,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderMultiline: TsSlider
       Left = 172
@@ -184,6 +186,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderRightClickSelect: TsSlider
       Left = 172
@@ -200,6 +203,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderSaveTabs: TsSlider
       Left = 172
@@ -216,6 +220,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowCloseButton: TsSlider
       Left = 172
@@ -232,6 +237,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowImage: TsSlider
       Left = 172
@@ -248,6 +254,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowOpenDirectoryButton: TsSlider
       Left = 172
@@ -264,6 +271,7 @@ inherited OptionsDirectoryTabsFrame: TOptionsDirectoryTabsFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
   end
   inherited FrameAdapter: TsFrameAdapter

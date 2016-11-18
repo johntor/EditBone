@@ -55,7 +55,7 @@ begin
   inherited Create(AOwner);
 
   FCommonData := TsCtrlSkinData.Create(Self, True);
-  Indent := 16;
+  Indent := 20;
 end;
 
 destructor TEBXMLTree.Destroy;

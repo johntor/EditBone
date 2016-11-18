@@ -655,7 +655,7 @@ begin
   begin
     Parent := LPanel;
     Align := alClient;
-    Indent := 16;
+    Indent := 20;
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking,
       toAutoDeleteMovedNodes, toAutoChangeScale];
     TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning, toEditOnClick];

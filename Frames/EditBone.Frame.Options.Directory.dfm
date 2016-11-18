@@ -132,6 +132,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object EditIndent: TBCEdit
       Left = 0
@@ -172,6 +173,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowSystemFiles: TsSlider
       Left = 108
@@ -188,6 +190,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowArchiveFiles: TsSlider
       Left = 108
@@ -204,6 +207,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderShowOverlayIcons: TsSlider
       Left = 108
@@ -220,6 +224,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object SliderAutoHide: TsSlider
       Left = 108
@@ -236,6 +241,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
     object ComboBoxAlign: TBCComboBox
       Left = 0
@@ -274,6 +280,7 @@ inherited OptionsDirectoryFrame: TOptionsDirectoryFrame
       FontOn.Style = []
       SliderCaptionOn = 'Yes'
       SliderCaptionOff = 'No'
+      KeepThumbAspectRatio = False
     end
   end
 end
