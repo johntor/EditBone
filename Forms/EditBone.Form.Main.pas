@@ -695,17 +695,14 @@ type
     TabSheetView: TsTabSheet;
     Timer: TTimer;
     ActionOpenFileList: TAction;
-    ActionToggleNextBookmark: TAction;
-    ActionTogglePreviousBookmark: TAction;
-    MenuItemSearchToggleBookmarkNext: TMenuItem;
-    MenuItemSearchToggleBookmarkPrevious: TMenuItem;
-    MenuItemSearchToggleBookmarkDivider: TMenuItem;
-    MenuItemMainMenuSearchToggleBookmarksNext: TMenuItem;
-    MenuItemMainMenuSearchToggleBookmarksPrevious: TMenuItem;
-    MenuItemMainMenuSearchToggleBookmarksDivider: TMenuItem;
-    MenuItemToggleBookmarkNext: TMenuItem;
-    MenuItemToggleBookmarkPrevious: TMenuItem;
-    MenuItemToggleBookmarkDivider: TMenuItem;
+    ActionGotoNextBookmark: TAction;
+    ActionGotoPreviousBookmark: TAction;
+    MenuItemMainMenuSearchGotoBookmarksNext: TMenuItem;
+    MenuItemMainMenuSearchGotoBookmarksPrevious: TMenuItem;
+    MenuItemMainMenuSearchGotoBookmarksDivider: TMenuItem;
+    MenuItemGotoBookmarkNext: TMenuItem;
+    MenuItemGotoBookmarkPrevious: TMenuItem;
+    MenuItemGotoBookmarkDivider: TMenuItem;
     BCSpeedButton1: TBCSpeedButton;
     ActionToolsClipboardHistory: TAction;
     ClipboardMonitor: TJvClipboardMonitor;
@@ -714,6 +711,9 @@ type
     MenuItemEditInsertColor: TMenuItem;
     MenuItemInsertColor: TMenuItem;
     MenuItemMainMenuEditInsertColor: TMenuItem;
+    MenuItemSearchGotoNext: TMenuItem;
+    MenuItemSearchGotoPrevious: TMenuItem;
+    MenuItemSearchSeparator: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -911,8 +911,8 @@ type
     procedure TitleBarItems6Click(Sender: TObject);
     procedure TitleBarItems8Click(Sender: TObject);
     procedure ActionOpenFileListExecute(Sender: TObject);
-    procedure ActionToggleNextBookmarkExecute(Sender: TObject);
-    procedure ActionTogglePreviousBookmarkExecute(Sender: TObject);
+    procedure ActionGotoNextBookmarkExecute(Sender: TObject);
+    procedure ActionGotoPreviousBookmarkExecute(Sender: TObject);
     procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
     procedure ClipboardMonitorChange(Sender: TObject);
     procedure ActionEditInsertHexColorExecute(Sender: TObject);
@@ -1716,7 +1716,7 @@ begin
   FDocument.GotoLine;
 end;
 
-procedure TMainForm.ActionToggleNextBookmarkExecute(Sender: TObject);
+procedure TMainForm.ActionGotoNextBookmarkExecute(Sender: TObject);
 var
   LEditor: TBCEditor;
 begin
@@ -1731,7 +1731,7 @@ begin
   end;
 end;
 
-procedure TMainForm.ActionTogglePreviousBookmarkExecute(Sender: TObject);
+procedure TMainForm.ActionGotoPreviousBookmarkExecute(Sender: TObject);
 var
   LEditor: TBCEditor;
 begin
@@ -2646,8 +2646,8 @@ begin
     ActionSearchGotoBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
     ActionSearchClearBookmarks.Enabled := ActionSearchToggleBookmark.Enabled;
 
-    ActionToggleNextBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
-    ActionTogglePreviousBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
+    ActionGotoNextBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
+    ActionGotoPreviousBookmark.Enabled := LActiveDocumentFound and LActiveDocumentBookmarksFound;
 
     ActionViewWordWrap.Enabled := LActiveDocumentFound;
     ActionViewLineNumbers.Enabled := Assigned(FDocument) and (PageControlDocument.PageCount > 1);

@@ -372,7 +372,7 @@ end;
 
 procedure TEBDocument.CreateSearchPanel(ATabSheet: TsTabSheet);
 var
-  i: Integer;
+  LIndex: Integer;
   LValueListEditor: TValueListEditor;
   LSplitter: TBCSplitter;
   LSpeedButton: TBCSpeedButton;
@@ -443,8 +443,8 @@ begin
     if LValueListEditor.Strings.Count > 0 then
     begin
       EraseSection('SearchItems');
-      for i := 0 to LValueListEditor.Strings.Count - 1 do
-        WriteString('SearchItems', IntToStr(i), LValueListEditor.Values[IntToStr(i)]);
+      for LIndex := 0 to LValueListEditor.Strings.Count - 1 do
+        WriteString('SearchItems', IntToStr(LIndex), LValueListEditor.Values[IntToStr(LIndex)]);
     end;
     ReadSectionValues('SearchItems', LValueListEditor.Strings);
     if LValueListEditor.Strings.Count > 0 then
@@ -771,7 +771,7 @@ end;
 
 procedure TEBDocument.ComboBoxSearchTextKeyPress(Sender: TObject; var Key: Char);
 var
-  i: Integer;
+  LIndex: Integer;
   LComboBoxSearchText: TBCComboBox;
   LItems: TStrings;
   LTabSheet: TsTabSheet;
@@ -787,10 +787,10 @@ begin
           begin
             LComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
             { Update other documents }
-            for i := 0 to FPageControl.PageCount - 2 do
-            if FPageControl.Pages[i] <> FPageControl.ActivePage then
+            for LIndex := 0 to FPageControl.PageCount - 2 do
+            if FPageControl.Pages[LIndex] <> FPageControl.ActivePage then
             begin
-              LTabSheet := FPageControl.Pages[i] as TsTabSheet;
+              LTabSheet := FPageControl.Pages[LIndex] as TsTabSheet;
               if Assigned(LTabSheet.ComboBoxSearchText) then
                 LTabSheet.ComboBoxSearchText.Items.Add(LComboBoxSearchText.Text);
             end;
@@ -836,19 +836,19 @@ end;
 
 procedure TEBDocument.SetSearchMatchesFound;
 var
-  s: string;
+  LMatchCaption: string;
   LTabSheet: TsTabSheet;
 begin
-  s := '';
+  LMatchCaption := '';
   LTabSheet := PageControl.ActivePage as TsTabSheet;
   if Assigned(LTabSheet.Editor) and (LTabSheet.Editor.SearchResultCount > 1) then
-    s := LanguageDataModule.GetConstant('MatchFoundPluralExtension');
+    LMatchCaption := LanguageDataModule.GetConstant('MatchFoundPluralExtension');
   if Assigned(LTabSheet.Editor) and (LTabSheet.Editor.SearchResultCount > 0) then
-    s := Format(LanguageDataModule.GetConstant('MatchFound'), [LTabSheet.Editor.SearchResultCount, s]);
+    LMatchCaption := Format(LanguageDataModule.GetConstant('MatchFound'), [LTabSheet.Editor.SearchResultCount, LMatchCaption]);
 
   if Assigned(LTabSheet.LabelSearchResult) then
   begin
-    LTabSheet.LabelSearchResult.Caption := s;
+    LTabSheet.LabelSearchResult.Caption := LMatchCaption;
     LTabSheet.LabelSearchResult.Left := 0;
   end;
 end;
@@ -904,24 +904,24 @@ end;
 
 procedure TEBDocument.CompareFiles(const AFileName: string; AFileDragDrop: Boolean);
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
   LTempList: TStringList;
 begin
   { create list of open documents }
   LTempList := TStringList.Create;
   try
-    for i := 0 to PageControl.PageCount - 2 do
+    for LIndex := 0 to PageControl.PageCount - 2 do
     begin
-      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
       if Assigned(LTabSheet.Editor) then
         LTempList.Add(LTabSheet.Editor.DocumentName);
     end;
     if AFileName <> '' then
     { find compare tab }
-    for i := 0 to PageControl.PageCount - 2 do
+    for LIndex := 0 to PageControl.PageCount - 2 do
     begin
-      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
       if Assigned(LTabSheet.CompareFrame) then
       begin
         { if there already are two files to compare then continue }
@@ -930,7 +930,7 @@ begin
         else
         begin
           { else set file and exit }
-          PageControl.ActivePageIndex := i;
+          PageControl.ActivePageIndex := LIndex;
           LTabSheet.CompareFrame.SetCompareFile(AFileName, AFileDragDrop);
           Exit;
         end;
@@ -996,24 +996,24 @@ end;
 
 procedure TEBDocument.SetEditorBookmarks(Editor: TBCEditor; Bookmarks: TStrings);
 var
-  i: Integer;
-  LTemp: string;
+  LIndex: Integer;
+  LToken: string;
   LBookmarkIndex: Integer;
   LTextPosition: TBCEditorTextPosition;
 begin
   if Assigned(Bookmarks) then
   begin
-    for i := 0 to Bookmarks.Count - 1 do
+    for LIndex := 0 to Bookmarks.Count - 1 do
     begin
-      LTemp := Bookmarks.Strings[i];
-      if Pos(Editor.DocumentName, LTemp) <> 0 then
+      LToken := Bookmarks.Strings[LIndex];
+      if Pos(Editor.DocumentName, LToken) <> 0 then
       begin
-        LTemp := RemoveTokenFromStart('=', LTemp);
-        LBookmarkIndex := StrToInt(GetNextToken(';', LTemp));
-        LTemp := RemoveTokenFromStart(';', LTemp);
-        LTextPosition.Line := StrToInt(GetNextToken(';', LTemp));
-        LTemp := RemoveTokenFromStart(';', LTemp);
-        LTextPosition.Char := StrToInt(LTemp);
+        LToken := RemoveTokenFromStart('=', LToken);
+        LBookmarkIndex := StrToInt(GetNextToken(';', LToken));
+        LToken := RemoveTokenFromStart(';', LToken);
+        LTextPosition.Line := StrToInt(GetNextToken(';', LToken));
+        LToken := RemoveTokenFromStart(';', LToken);
+        LTextPosition.Char := StrToInt(LToken);
         Editor.SetBookMark(LBookmarkIndex, LTextPosition);
       end;
     end;
@@ -1077,7 +1077,7 @@ procedure TEBDocument.Open(const FileName: string = ''; Bookmarks: TStrings = ni
   StartUp: Boolean = False; ShowMinimap: Boolean = False; const AHighlighter: string = ''; const AColor: string = '';
   ASetActivePage: Boolean = True);
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
   LEditor: TBCEditor;
 begin
@@ -1088,8 +1088,8 @@ begin
       OpenDialog.Filter := OptionsContainer.Filters;
       OpenDialog.Title := LanguageDataModule.GetConstant('Open');
       if OpenDialog.Execute(Application.Handle) then
-        for i := 0 to OpenDialog.Files.Count - 1 do
-          Open(OpenDialog.Files[i])
+        for LIndex := 0 to OpenDialog.Files.Count - 1 do
+          Open(OpenDialog.Files[LIndex])
     end
     else
     begin
@@ -1174,7 +1174,7 @@ end;
 
 procedure TEBDocument.CloseAll;
 var
-  i, LResult: Integer;
+  LIndex, LResult: Integer;
 begin
   Application.ProcessMessages;
   FProcessing := True;
@@ -1193,11 +1193,11 @@ begin
       FProgressBar.Show(PageControl.PageCount - 2);
       Application.ProcessMessages;
       PageControl.Visible := False;
-      for i := PageControl.PageCount - 2 downto 0 do
-        if TsTabSheet(PageControl.Pages[i]).TabType = ttTab then
+      for LIndex := PageControl.PageCount - 2 downto 0 do
+        if TsTabSheet(PageControl.Pages[LIndex]).TabType = ttTab then
         begin
           ProgressBar.StepIt;
-          PageControl.Pages[i].Free;
+          PageControl.Pages[LIndex].Free;
         end;
       PageControl.Visible := True;
     finally
@@ -1214,7 +1214,7 @@ end;
 
 procedure TEBDocument.CloseAllOtherPages;
 var
-  i: Integer;
+  LIndex: Integer;
   LResult: Integer;
   LActiveEditor, LEditor: TBCEditor;
 begin
@@ -1230,11 +1230,11 @@ begin
     LResult := SaveChanges(True);
 
     if LResult = mrYes then
-      for i := 0 to PageControl.PageCount - 2 do
+      for LIndex := 0 to PageControl.PageCount - 2 do
       begin
-        LEditor := (PageControl.Pages[i] as TsTabSheet).Editor;
+        LEditor := (PageControl.Pages[LIndex] as TsTabSheet).Editor;
         if Assigned(LEditor) and LEditor.Modified and (LEditor <> LActiveEditor) then
-          Save(PageControl.Pages[i]);
+          Save(PageControl.Pages[LIndex]);
       end;
   end;
 
@@ -1246,10 +1246,10 @@ begin
       FProgressBar.Show(PageControl.PageCount - 3);
       Application.ProcessMessages;
       PageControl.Visible := False;
-      for i := PageControl.PageCount - 2 downto 1 do
+      for LIndex := PageControl.PageCount - 2 downto 1 do
       begin
         ProgressBar.StepIt;
-        PageControl.Pages[i].Free;
+        PageControl.Pages[LIndex].Free;
       end;
       PageControl.Visible := True;
       FProgressBar.Hide;
@@ -1344,7 +1344,7 @@ end;
 
 procedure TEBDocument.SaveAll;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   FProcessing := True;
@@ -1352,13 +1352,13 @@ begin
   Screen.Cursor := crHourGlass;
   try
     FProgressBar.Show(PageControl.PageCount - 2);
-    for i := 0 to PageControl.PageCount - 2 do
+    for LIndex := 0 to PageControl.PageCount - 2 do
     begin
       ProgressBar.StepIt;
       Application.ProcessMessages;
-      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
       if Assigned(LTabSheet.Editor) and LTabSheet.Editor.Modified then
-        Save(PageControl.Pages[i]);
+        Save(PageControl.Pages[LIndex]);
     end;
     FProgressBar.Hide;
   finally
@@ -1594,7 +1594,7 @@ end;
 
 procedure TEBDocument.Replace;
 var
-  i: Integer;
+  LIndex: Integer;
   LEditor: TBCEditor;
   LResult: Integer;
 begin
@@ -1627,15 +1627,15 @@ begin
         Screen.Cursor := crHourGlass;
         try
           FProgressBar.Show(PageControl.PageCount - 2);
-          for i := 0 to PageControl.PageCount - 2 do
+          for LIndex := 0 to PageControl.PageCount - 2 do
           begin
             ProgressBar.StepIt;
             Application.ProcessMessages;
-            LEditor := (PageControl.Pages[i] as TsTabSheet).Editor;
+            LEditor := (PageControl.Pages[LIndex] as TsTabSheet).Editor;
             GetOptions(LEditor);
-            LEditor.CaretZero;
+            LEditor.MoveCaretToBOF;
             LEditor.ReplaceText(SearchFor, ReplaceWith);
-            PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, LEditor.Modified);
+            PageControl.Pages[LIndex].Caption := FormatFileName(PageControl.Pages[LIndex].Caption, LEditor.Modified);
           end;
         finally
           Screen.Cursor := crDefault;
@@ -1659,14 +1659,14 @@ end;
 
 function TEBDocument.ToggleWordWrap: Boolean;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   OptionsContainer.WordWrapEnabled := not OptionsContainer.WordWrapEnabled;
   Result := OptionsContainer.WordWrapEnabled;
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     LTabSheet.Editor.WordWrap.Enabled := Result;
     if Assigned(LTabSheet.SplitEditor) then
       LTabSheet.SplitEditor.WordWrap.Enabled := Result;
@@ -1675,14 +1675,14 @@ end;
 
 function TEBDocument.ToggleSpecialChars: Boolean;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   OptionsContainer.SpecialCharsEnabled := not OptionsContainer.SpecialCharsEnabled;
   Result := OptionsContainer.SpecialCharsEnabled;
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     LTabSheet.Editor.SpecialChars.Visible := Result;
     LTabSheet.Editor.SpecialChars.EndOfLine.Visible := Result;
     if Assigned(LTabSheet.SplitEditor) then
@@ -1697,7 +1697,7 @@ end;
 
 procedure TEBDocument.ToggleSelectionMode;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 
   procedure ToggleSelectionMode(AEditor: TBCEditor);
@@ -1714,9 +1714,9 @@ var
 
 begin
   OptionsContainer.SelectionModeEnabled := not OptionsContainer.SelectionModeEnabled;
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     ToggleSelectionMode(LTabSheet.Editor);
     ToggleSelectionMode(LTabSheet.SplitEditor);
   end;
@@ -1724,14 +1724,14 @@ end;
 
 function TEBDocument.ToggleLineNumbers: Boolean;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   OptionsContainer.LineNumbersEnabled := not OptionsContainer.LineNumbersEnabled;
   Result := OptionsContainer.LineNumbersEnabled;
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     LTabSheet.Editor.LeftMargin.LineNumbers.Visible := Result;
     if Assigned(LTabSheet.SplitEditor) then
       LTabSheet.SplitEditor.LeftMargin.LineNumbers.Visible := Result;
@@ -1742,8 +1742,8 @@ end;
 
 function TEBDocument.ReadIniOpenFiles: Boolean;
 var
-  i: Integer;
-  s, LFileName, LHighlighter, LColor: string;
+  LIndex: Integer;
+  LToken, LFileName, LHighlighter, LColor: string;
   LFileNamesList, LBookmarksList: TStrings;
   LCaretXList, LCaretYList, LMinimapsList: TValueListEditor;
   LCaretX, LCaretY: Integer;
@@ -1781,27 +1781,27 @@ begin
     ReadSectionValues('CaretY', LCaretYList.Strings);
     ReadSectionValues('Minimaps', LMinimapsList.Strings);
 
-    for i := 0 to LFileNamesList.Count - 1 do
+    for LIndex := 0 to LFileNamesList.Count - 1 do
     begin
-      s := RemoveTokenFromStart('=', LFileNamesList.Strings[i]);
-      LFileName := GetNextToken(';', s);
+      LToken := RemoveTokenFromStart('=', LFileNamesList.Strings[LIndex]);
+      LFileName := GetNextToken(';', LToken);
       if FileExists(LFileName) then
       begin
-        s := RemoveTokenFromStart(';', s);
-        LHighlighter := GetNextToken(';', s);
-        s := RemoveTokenFromStart(';', s);
-        LColor := GetNextToken(';', s);
-        LCaretX := GetIntegerListItem(LCaretXList, i);
-        LCaretY := GetIntegerListItem(LCaretYList, i);
-        LMinimap := GetBooleanListItem(LMinimapsList, i);
+        LToken := RemoveTokenFromStart(';', LToken);
+        LHighlighter := GetNextToken(';', LToken);
+        LToken := RemoveTokenFromStart(';', LToken);
+        LColor := GetNextToken(';', LToken);
+        LCaretX := GetIntegerListItem(LCaretXList, LIndex);
+        LCaretY := GetIntegerListItem(LCaretYList, LIndex);
+        LMinimap := GetBooleanListItem(LMinimapsList, LIndex);
         Open(LFileName, LBookmarksList, LCaretY, LCaretX, True, LMinimap, LHighlighter, LColor);
       end;
     end;
 
-    i := ReadInteger('Options', 'ActivePageIndex', 0);
-    if i < PageControl.PageCount then
+    LIndex := ReadInteger('Options', 'ActivePageIndex', 0);
+    if LIndex < PageControl.PageCount then
     begin
-      PageControl.ActivePageIndex := i;
+      PageControl.ActivePageIndex := LIndex;
       if Assigned(FSetTitleBarMenuCaptions) then
         FSetTitleBarMenuCaptions;
     end;
@@ -1820,10 +1820,10 @@ end;
 
 procedure TEBDocument.UpdateSearchItems(AItems: TStrings);
 var
-  i: Integer;
+  LIndex: Integer;
 begin
-  for i := 0 to PageControl.PageCount - 2 do
-    (PageControl.Pages[i] as TsTabSheet).FComboBoxSearchText.Items.Assign(AItems);
+  for LIndex := 0 to PageControl.PageCount - 2 do
+    (PageControl.Pages[LIndex] as TsTabSheet).FComboBoxSearchText.Items.Assign(AItems);
 end;
 
 procedure TEBDocument.WriteIniFile;
@@ -2001,7 +2001,7 @@ end;
 
 procedure TEBDocument.SetOptions;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   PageControl.MultiLine := OptionsContainer.DocMultiLine;
@@ -2014,9 +2014,9 @@ begin
   if Assigned(FTabSheetNew) then
     FTabSheetNew.TabVisible := OptionsContainer.DocShowNewDocumentButton;
   { assign to every Editor }
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     OptionsContainer.AssignTo(LTabSheet.Editor);
     if Assigned(LTabSheet.SplitEditor) then
       OptionsContainer.AssignTo(LTabSheet.SplitEditor);
@@ -2179,15 +2179,15 @@ end;
 
 function TEBDocument.GetModifiedDocuments(CheckActive: Boolean): Boolean;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
   Result := True;
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     if (LTabSheet.TabType = ttTab) and LTabSheet.TabVisible then
-      if CheckActive or ((PageControl.ActivePageIndex <> i) and not CheckActive) then
+      if CheckActive or ((PageControl.ActivePageIndex <> LIndex) and not CheckActive) then
         if Assigned(LTabSheet.Editor) then
           if LTabSheet.Editor.Modified then
             Exit;
@@ -2284,14 +2284,14 @@ end;
 
 procedure TEBDocument.PreviousPage;
 var
-  i: Integer;
+  LIndex: Integer;
 begin
   if Assigned(PageControl) then
   begin
-    i := PageControl.ActivePageIndex - 1;
-    if i < 0 then
-      i := PageControl.PageCount - 2;
-    PageControl.ActivePage := PageControl.Pages[i] as TsTabSheet;;
+    LIndex := PageControl.ActivePageIndex - 1;
+    if LIndex < 0 then
+      LIndex := PageControl.PageCount - 2;
+    PageControl.ActivePage := PageControl.Pages[LIndex] as TsTabSheet;;
   end;
 end;
 
@@ -2323,7 +2323,7 @@ end;
 
 procedure TEBDocument.CheckFileDateTimes;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
   LFileDateTime: TDateTime;
   LFileNames: TStrings;
@@ -2333,9 +2333,9 @@ begin
   FProcessing := True;
   LFileNames := TStringList.Create;
   try
-    for i := 0 to PageControl.PageCount - 2 do
+    for LIndex := 0 to PageControl.PageCount - 2 do
     begin
-      LTabSheet := PageControl.Pages[i] as TsTabSheet;
+      LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
       if Assigned(LTabSheet.Editor) then
         if LTabSheet.Editor.DocumentName <> '' then
         begin
@@ -2343,7 +2343,7 @@ begin
           if (LFileDateTime <> 0) and (LFileDateTime <> LTabSheet.Editor.FileDateTime) then
           begin
             if FileExists(LTabSheet.Editor.DocumentName) then
-              LFileNames.AddObject(LTabSheet.Editor.DocumentName, TObject(i))
+              LFileNames.AddObject(LTabSheet.Editor.DocumentName, TObject(LIndex))
             else
             begin
               if OptionsContainer.AutoSave then
@@ -2351,7 +2351,7 @@ begin
               else
               begin
                 LTabSheet.Editor.Modified := True;
-                PageControl.Pages[i].Caption := FormatFileName(PageControl.Pages[i].Caption, LTabSheet.Editor.Modified);
+                PageControl.Pages[LIndex].Caption := FormatFileName(PageControl.Pages[LIndex].Caption, LTabSheet.Editor.Modified);
                 PageControl.Invalidate;
               end;
             end;
@@ -2563,12 +2563,12 @@ end;
 
 procedure TEBDocument.UpdateHighlighterColors;
 var
-  i: Integer;
+  LIndex: Integer;
   LTabSheet: TsTabSheet;
 begin
-  for i := 0 to PageControl.PageCount - 2 do
+  for LIndex := 0 to PageControl.PageCount - 2 do
   begin
-    LTabSheet := PageControl.Pages[i] as TsTabSheet;
+    LTabSheet := PageControl.Pages[LIndex] as TsTabSheet;
     if Assigned(LTabSheet.Editor) then
     begin
       LTabSheet.Editor.Highlighter.Colors.LoadFromFile(LTabSheet.Editor.Highlighter.Colors.FileName);
@@ -2579,7 +2579,7 @@ end;
 
 procedure TEBDocument.SetSkinColors(Editor: TBCEditor);
 var
-  i: Integer;
+  LIndex: Integer;
   LColor: TColor;
 begin
   LColor := SkinManager.GetActiveEditColor;
@@ -2603,16 +2603,18 @@ begin
     Editor.Selection.Colors.Foreground := SkinManager.GetHighLightFontColor;
   if OptionsContainer.SkinSelectionBackground then
     Editor.Selection.Colors.Background := SkinManager.GetHighLightColor;
-  for i := 0 to Editor.Highlighter.Colors.Styles.Count - 1 do
-    if PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[i])^.Name = 'Editor' then
+  for LIndex := 0 to Editor.Highlighter.Colors.Styles.Count - 1 do
+  begin
+    if PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[LIndex])^.Name = 'Editor' then
     begin
       if OptionsContainer.SkinForeground then
-        PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[i])^.Foreground :=
+        PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[LIndex])^.Foreground :=
           SkinManager.GetActiveEditFontColor;
       if OptionsContainer.SkinBackground then
-        PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[i])^.Background := LColor;
+        PBCEditorHighlighterElement(Editor.Highlighter.Colors.Styles.Items[LIndex])^.Background := LColor;
       Break;
     end;
+  end;
   Editor.Highlighter.UpdateColors;
 end;
 
@@ -2829,30 +2831,30 @@ begin
     if Trim(LEditor.Text) <> '' then
     begin
       LEditor.Text := BCCommon.StringUtils.FormatJSON(LEditor.Text, AIndentSize);
-      LEditor.CaretZero;
+      LEditor.MoveCaretToBOF;
     end;
 end;
 
 procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; const FileName: string);
 var
   LExt, LItemString, LToken: string;
-  i: Integer;
+  LIndex: Integer;
 begin
   LExt := '*' + LowerCase(ExtractFileExt(FileName));
 
-  for i := 0 to OptionsContainer.FileTypes.Count - 1 do
+  for LIndex := 0 to OptionsContainer.FileTypes.Count - 1 do
   begin
-    LItemString := StringBetween(OptionsContainer.FileTypes.ValueFromIndex[i], '(', ')');
+    LItemString := StringBetween(OptionsContainer.FileTypes.ValueFromIndex[LIndex], '(', ')');
     while LItemString <> '' do
     begin
       LToken := GetNextToken(';', LItemString);
       LItemString := RemoveTokenFromStart(';', LItemString);
       if LExt = LToken then
       begin
-        if Pos('SQL', OptionsContainer.FileTypes.Names[i]) <> 0 then
+        if Pos('SQL', OptionsContainer.FileTypes.Names[LIndex]) <> 0 then
           SetHighlighter(AEditor, OptionsContainer.DefaultSQLHighlighter)
         else
-          SetHighlighter(AEditor, OptionsContainer.FileTypes.Names[i]);
+          SetHighlighter(AEditor, OptionsContainer.FileTypes.Names[LIndex]);
         Exit;
       end;
     end;

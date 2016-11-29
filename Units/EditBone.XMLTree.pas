@@ -396,7 +396,7 @@ begin
 
     Expanded[GetFirst] := True;
     EndUpdate;
-    Editor.CaretZero;
+    Editor.MoveCaretToBOF;
   finally
     LNodeStack.Free;
   end;

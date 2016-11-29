@@ -108,8 +108,9 @@ begin
           LPSearchItem := PBCEditorSearchItem(FEditor.Search.Lines.Items[LIndex]);
 
           if Assigned(FOnAddTreeViewLine) then
-            FOnAddTreeViewLine(Self, LFileName, LPSearchItem^.TextPosition.Line, LPSearchItem^.TextPosition.Char,
-              FEditor.Lines[LPSearchItem^.TextPosition.Line], FEditor.Search.SearchText, LPSearchItem^.Length);
+            FOnAddTreeViewLine(Self, LFileName, LPSearchItem^.BeginTextPosition.Line, LPSearchItem^.BeginTextPosition.Char,
+              FEditor.Lines[LPSearchItem^.BeginTextPosition.Line], FEditor.Search.SearchText,
+              LPSearchItem^.EndTextPosition.Char - LPSearchItem^.BeginTextPosition.Char); // TODO: fix multiline
         end;
       except
         if Assigned(FOnAddTreeViewLine) then
