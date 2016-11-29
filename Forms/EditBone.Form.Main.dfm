@@ -1,6 +1,6 @@
 inherited MainForm: TMainForm
   Caption = 'EditBone'
-  ClientHeight = 702
+  ClientHeight = 722
   ClientWidth = 1111
   KeyPreview = True
   Position = poDefault
@@ -11,7 +11,7 @@ inherited MainForm: TMainForm
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
     Left = 0
-    Top = 548
+    Top = 568
     Width = 1111
     Height = 5
     Cursor = crVSplit
@@ -21,7 +21,7 @@ inherited MainForm: TMainForm
   end
   inherited StatusBar: TBCStatusBar
     AlignWithMargins = True
-    Top = 677
+    Top = 697
     Width = 1111
     Height = 25
     Margins.Left = 0
@@ -1935,7 +1935,7 @@ inherited MainForm: TMainForm
     Left = 0
     Top = 123
     Width = 1111
-    Height = 425
+    Height = 445
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -1951,7 +1951,7 @@ inherited MainForm: TMainForm
       Left = 329
       Top = 0
       Width = 5
-      Height = 425
+      Height = 445
       Visible = False
       SkinData.SkinSection = 'SPLITTER'
     end
@@ -1959,7 +1959,7 @@ inherited MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 329
-      Height = 425
+      Height = 445
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1976,7 +1976,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 329
-        Height = 425
+        Height = 445
         ActivePage = TabSheetDirectory
         Align = alClient
         DoubleBuffered = True
@@ -2011,7 +2011,7 @@ inherited MainForm: TMainForm
       Left = 334
       Top = 0
       Width = 777
-      Height = 425
+      Height = 445
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -2028,7 +2028,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 777
-        Height = 425
+        Height = 445
         Margins.Left = 0
         Margins.Top = 5
         Margins.Right = 0
@@ -3074,7 +3074,7 @@ inherited MainForm: TMainForm
   end
   object PanelOutput: TBCPanel [5]
     Left = 0
-    Top = 553
+    Top = 573
     Width = 1111
     Height = 121
     Margins.Left = 0
@@ -3308,17 +3308,17 @@ inherited MainForm: TMainForm
     Images = ImagesDataModule.ImageList
     Left = 58
     Top = 523
+    object MenuItemEditInsertDate: TMenuItem
+      Action = ActionEditInsertDateTime
+    end
     object MenuItemEditInsertColor: TMenuItem
       Action = ActionEditInsertHexColor
-    end
-    object MenuItemEditInsertLine: TMenuItem
-      Action = ActionEditInsertLine
     end
     object MenuItemEditInsertTags: TMenuItem
       Action = ActionEditInsertTag
     end
-    object MenuItemEditInsertDate: TMenuItem
-      Action = ActionEditInsertDateTime
+    object MenuItemEditInsertLine: TMenuItem
+      Action = ActionEditInsertLine
     end
   end
   object PopupMenuEditDelete: TPopupMenu [10]
@@ -3657,7 +3657,7 @@ inherited MainForm: TMainForm
     end
     object ActionEditInsertHexColor: TAction
       Category = 'Edit'
-      Caption = 'Insert hex color'
+      Caption = 'Hex color'
       ImageIndex = 148
       ShortCut = 24643
       OnExecute = ActionEditInsertHexColorExecute
@@ -5007,17 +5007,17 @@ inherited MainForm: TMainForm
     end
     object MenuItemInsert: TMenuItem
       Action = ActionEditInsert
+      object MenuItemDateandTime: TMenuItem
+        Action = ActionEditInsertDateTime
+      end
       object MenuItemInsertColor: TMenuItem
         Action = ActionEditInsertHexColor
-      end
-      object MenuItemInsertLine: TMenuItem
-        Action = ActionEditInsertLine
       end
       object MenuItemInsertTag: TMenuItem
         Action = ActionEditInsertTag
       end
-      object MenuItemDateandTime: TMenuItem
-        Action = ActionEditInsertDateTime
+      object MenuItemInsertLine: TMenuItem
+        Action = ActionEditInsertLine
       end
     end
     object MenuItemDelete: TMenuItem
@@ -5312,17 +5312,17 @@ inherited MainForm: TMainForm
       end
       object MenuItemMainMenuEditInsert: TMenuItem
         Action = ActionEditInsert
+        object MenuItemMainMenuEditInsertDateAndTime: TMenuItem
+          Action = ActionEditInsertDateTime
+        end
         object MenuItemMainMenuEditInsertColor: TMenuItem
           Action = ActionEditInsertHexColor
-        end
-        object MenuItemMainMenuEditInsertLine: TMenuItem
-          Action = ActionEditInsertLine
         end
         object MenuItemMainMenuEditInsertHTMLXMLTags: TMenuItem
           Action = ActionEditInsertTag
         end
-        object MenuItemMainMenuEditInsertDateAndTime: TMenuItem
-          Action = ActionEditInsertDateTime
+        object MenuItemMainMenuEditInsertLine: TMenuItem
+          Action = ActionEditInsertLine
         end
       end
       object MenuItemMainMenuEditDelete: TMenuItem
