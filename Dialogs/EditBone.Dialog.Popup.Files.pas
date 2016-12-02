@@ -117,9 +117,9 @@ begin
 
   Width := LMaxWidth + 80;
   Height := Min(Integer(VirtualDrawTree.DefaultNodeHeight) * AFiles.Count + ButtonedEdit.Height +
-    VirtualDrawTree.BorderWidth * 2 + ScaleSize(2), TForm(Self.PopupParent).Height - GetSystemMetrics(SM_CYCAPTION) - 10);
+    VirtualDrawTree.BorderWidth * 2 + 2, TForm(Self.PopupParent).Height - GetSystemMetrics(SM_CYCAPTION) - 10);
 
-  ShowPopupForm(Self, Point(Left, Top + ScaleSize(2)));
+  ShowPopupForm(Self, Point(Left, Top + 2));
 end;
 
 procedure TPopupFilesDialog.FormDestroy(Sender: TObject);

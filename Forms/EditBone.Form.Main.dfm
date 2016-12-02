@@ -3,6 +3,7 @@ inherited MainForm: TMainForm
   ClientHeight = 722
   ClientWidth = 1111
   KeyPreview = True
+  OldCreateOrder = True
   Position = poDefault
   OnClose = FormClose
   OnKeyDown = FormKeyDown
@@ -1929,6 +1930,21 @@ inherited MainForm: TMainForm
         end
       end
     end
+    object SkinSelector: TsSkinSelector
+      Left = 962
+      Top = 2
+      Width = 145
+      Height = 22
+      ItemMargin = 8
+      ThumbSize = tsMedium
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
   end
   object PanelMiddle: TBCPanel [3]
     AlignWithMargins = True
@@ -3157,13 +3173,13 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Height = 16
+        Visible = False
         ImageIndex = 86
+        Height = 16
+        Width = 16
         Index = 0
         Name = 'TitleBarItemMenu'
         ShowHint = False
-        Visible = False
-        Width = 16
       end
       item
         Caption = 'EditBone'
@@ -3173,11 +3189,11 @@ inherited MainForm: TMainForm
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
         Height = 21
+        Width = 53
         Index = 1
         Name = 'TitleBarItemCaption'
         ShowHint = False
         Style = bsInfo
-        Width = 53
       end
       item
         Caption = ' '
@@ -3195,16 +3211,33 @@ inherited MainForm: TMainForm
       end
       item
         Align = tbaRight
+        Caption = 'Auto'
+        DropdownMenu = PopupMenuDummy
         FontData.Font.Charset = DEFAULT_CHARSET
         FontData.Font.Color = clWindowText
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        Height = 22
+        Width = 56
         Index = 3
+        Name = 'TitleBarItemScaleMode'
+        ShowHint = False
+        Style = bsMenu
+        OnClick = TitleBarItems3Click
+      end
+      item
+        Align = tbaRight
+        FontData.Font.Charset = DEFAULT_CHARSET
+        FontData.Font.Color = clWindowText
+        FontData.Font.Height = -11
+        FontData.Font.Name = 'Tahoma'
+        FontData.Font.Style = []
+        Width = 6
+        Index = 4
         Name = 'TitleBarItemSpacing1'
         ShowHint = False
         Style = bsSpacing
-        Width = 6
       end
       item
         Align = tbaRight
@@ -3216,11 +3249,11 @@ inherited MainForm: TMainForm
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
         Height = 22
-        Index = 4
+        Width = 56
+        Index = 5
         Name = 'TitleBarItemEncoding'
         ShowHint = False
         Style = bsMenu
-        Width = 56
         OnClick = TitleBarItems4Click
       end
       item
@@ -3230,11 +3263,11 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Index = 5
+        Width = 6
+        Index = 6
         Name = 'TitleBarItemSpacing2'
         ShowHint = False
         Style = bsSpacing
-        Width = 6
       end
       item
         Align = tbaRight
@@ -3246,11 +3279,11 @@ inherited MainForm: TMainForm
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
         Height = 22
-        Index = 6
+        Width = 52
+        Index = 7
         Name = 'TitleBarItemHighlighter'
         ShowHint = False
         Style = bsMenu
-        Width = 52
         OnClick = TitleBarItems6Click
       end
       item
@@ -3260,11 +3293,11 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Index = 7
+        Width = 6
+        Index = 8
         Name = 'TitleBarItemSpacing3'
         ShowHint = False
         Style = bsSpacing
-        Width = 6
       end
       item
         Align = tbaRight
@@ -3276,11 +3309,11 @@ inherited MainForm: TMainForm
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
         Height = 22
-        Index = 8
+        Width = 68
+        Index = 9
         Name = 'TitleBarItemColors'
         ShowHint = False
         Style = bsMenu
-        Width = 68
         OnClick = TitleBarItems8Click
       end
       item
@@ -3290,11 +3323,11 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
-        Index = 9
+        Width = 2
+        Index = 10
         Name = 'TitleBarItemSpacing4'
         ShowHint = False
         Style = bsSpacing
-        Width = 2
       end>
     Left = 36
     Top = 234
@@ -3464,6 +3497,9 @@ inherited MainForm: TMainForm
       end
       object MenuItemToolbarMenuViewOutput: TMenuItem
         Action = ActionViewOutput
+      end
+      object Scalemode1: TMenuItem
+        Action = ActionViewScaleModeSelection
       end
       object MenuItemToolbarMenuViewStatusBar: TMenuItem
         Action = ActionViewStatusBar
@@ -4315,6 +4351,12 @@ inherited MainForm: TMainForm
       Caption = 'Highlighter'
       Hint = 'Show or hide the highlighter selection'
       OnExecute = ActionViewHighlighterSelectionExecute
+    end
+    object ActionViewScaleModeSelection: TAction
+      Category = 'View'
+      Caption = 'Scale mode'
+      Hint = 'Show or hide the scale mode selection'
+      OnExecute = ActionViewScaleModeSelectionExecute
     end
     object ActionViewColorSelection: TAction
       Category = 'View'
