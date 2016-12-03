@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Grids, Vcl.ActnList, BCEditor.Editor, BCControl.ComboBox, sFontCtrls, BCControl.Panel,
-  BCControl.Statusbar, System.Actions, sPanel, Vcl.StdCtrls, sComboBox, sStatusBar;
+  BCControl.Statusbar, System.Actions, sPanel, Vcl.StdCtrls, sComboBox, sStatusBar, sSkinProvider;
 
 const
   WM_AFTER_SHOW = WM_USER + 301; // custom message
@@ -20,6 +20,7 @@ type
     PanelImage: TBCPanel;
     StatusBar: TBCStatusBar;
     StringGridCharacter: TStringGrid;
+    SkinProvider: TsSkinProvider;
     procedure StringGridCharacterDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
     procedure FormDestroy(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

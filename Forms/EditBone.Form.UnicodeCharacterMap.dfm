@@ -46,7 +46,8 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000000000000000000000000000000000000000
     000000000000000000000000000000000000000000000000000000000000}
-  OldCreateOrder = False
+  OldCreateOrder = True
+  Scaled = False
   OnClose = FormClose
   OnDestroy = FormDestroy
   OnResize = FormResize
@@ -3441,5 +3442,11 @@ object UnicodeCharacterMapForm: TUnicodeCharacterMapForm
     object ActionInsert: TAction
       OnExecute = ActionInsertExecute
     end
+  end
+  object SkinProvider: TsSkinProvider
+    SkinData.SkinSection = 'FORM'
+    TitleButtons = <>
+    Left = 240
+    Top = 266
   end
 end

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, Winapi.Windows, System.Classes, Vcl.Graphics, Vcl.Forms, Vcl.Controls, Vcl.StdCtrls,
   Vcl.ExtCtrls, BCCommon.Dialog.Base, BCControl.Panel, sLabel,
-  acImage, BCControl.Labels, Vcl.Imaging.pngimage, sPanel;
+  acImage, BCControl.Labels, Vcl.Imaging.pngimage, sPanel, sSkinProvider;
 
 type
   TAboutDialog = class(TBCBaseDialog)

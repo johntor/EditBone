@@ -3431,6 +3431,7 @@ begin
     SkinManager.Effects.AllowAeroBluring := ReadBool('Options', 'SkinAllowAeroBluring', False);
     SkinManager.Effects.AllowGlowing := ReadBool('Options', 'SkinAllowGlowing', False);
     SkinManager.Effects.AllowOuterEffects := ReadBool('Options', 'SkinAllowOuterEffects', False);
+    SkinManager.Options.ScaleMode := TacScaleMode(ReadInteger('Options', 'ScaleMode', Ord(smAuto)));
     UpdatePageControlMargins;
   finally
     Free;
@@ -3784,6 +3785,7 @@ begin
     WriteBool('Options', 'SkinAllowAeroBluring', SkinManager.Effects.AllowAeroBluring);
     WriteBool('Options', 'SkinAllowGlowing', SkinManager.Effects.AllowGlowing);
     WriteBool('Options', 'SkinAllowOuterEffects', SkinManager.Effects.AllowOuterEffects);
+    WriteInteger('Options', 'ScaleMode', Ord(SkinManager.Options.ScaleMode));
   finally
     Free;
   end;

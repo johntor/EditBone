@@ -8,7 +8,6 @@ inherited AboutDialog: TAboutDialog
   Color = clBtnFace
   Font.Name = 'Segoe UI'
   FormStyle = fsStayOnTop
-  OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
   PixelsPerInch = 96

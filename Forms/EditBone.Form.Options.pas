@@ -389,7 +389,7 @@ function TOptionsForm.Execute(ActionList: TObjectList<TAction>): Boolean;
 begin
   FActionList := ActionList;
   try
-    ReadIniFile;
+    //ReadIniFile;
     UpdateLanguage(Self, GetSelectedLanguage);
     Result := Showmodal = mrOk;
     WriteIniFile;
@@ -674,6 +674,7 @@ var
 
 begin
   inherited;
+  ReadIniFile;
   CreateTree;
 
   with TIniFile.Create(GetIniFilename) do
