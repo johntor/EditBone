@@ -62,9 +62,9 @@ type
     ScrollBox: TBCScrollBox;
     SkinProvider: TsSkinProvider;
     Splitter: TBCSplitter;
-    VirtualDrawTreeOptions: TVirtualDrawTree;
     ActionEditorSyncEdit: TAction;
     ActionEditorWordWrap: TAction;
+    VirtualDrawTreeOptions: TVirtualDrawTree;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -135,11 +135,20 @@ var
   i: Integer;
   Data: POptionsRec;
   Node, ChildNode: PVirtualNode;
+  LTextHeight: Integer;
 begin
   with VirtualDrawTreeOptions do
   begin
+    Images := ImagesDataModule.ImageListSmall;
+    NodeDataSize := SizeOf(TOptionsRec);
+
     Clear;
     i := 0;
+
+    Canvas.Font.Assign(Font);
+    LTextHeight := Canvas.TextHeight('Tg');
+    DefaultNodeHeight := LTextHeight;
+
     { Editor }
     Node := AddChild(nil);
     Data := GetNodeData(Node);
@@ -375,13 +384,12 @@ begin
       Data.ImageIndex := ActionSQLWhitespace.ImageIndex;
       Data.Caption := ActionSQLWhitespace.Caption;
 
-      //Node.ChildCount := 7;
       Node.ChildCount := VirtualDrawTreeOptions.ChildCount[Node];
       VirtualDrawTreeOptions.Selected[Node] := True;
       VirtualDrawTreeOptions.Expanded[Node] := True;
     end;
 
-    VirtualDrawTreeOptions.Selected[VirtualDrawTreeOptions.GetFirst] := True;
+    Selected[GetFirst] := True;
   end;
 end;
 
@@ -647,10 +655,12 @@ end;
 
 procedure TOptionsForm.FormCreate(Sender: TObject);
 begin
-  VirtualDrawTreeOptions.NodeDataSize := SizeOf(TOptionsRec);
+  inherited;
+
+  //VirtualDrawTreeOptions.NodeDataSize := SizeOf(TOptionsRec);
   { IDE can lose these properties }
   ActionList.Images := ImagesDataModule.ImageListSmall;
-  VirtualDrawTreeOptions.Images := ImagesDataModule.ImageListSmall;
+  //VirtualDrawTreeOptions.Images := ImagesDataModule.ImageListSmall;
   FSQLFormatterDLLFound := FileExists(GetSQLFormatterDLLFilename);
 end;
 
@@ -674,8 +684,9 @@ var
 
 begin
   inherited;
-  ReadIniFile;
+
   CreateTree;
+  ReadIniFile;
 
   with TIniFile.Create(GetIniFilename) do
   try

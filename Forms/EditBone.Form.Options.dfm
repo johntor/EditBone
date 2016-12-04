@@ -73,6 +73,29 @@ object OptionsForm: TOptionsForm
       Height = 489
       SkinData.SkinSection = 'SPLITTER'
     end
+    object OptionsPanel: TBCPanel
+      Left = 209
+      Top = 6
+      Width = 505
+      Height = 489
+      Align = alClient
+      BevelOuter = bvNone
+      DoubleBuffered = True
+      ParentColor = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      SkinData.SkinSection = 'CHECKBOX'
+      object ScrollBox: TBCScrollBox
+        Left = 0
+        Top = 0
+        Width = 505
+        Height = 489
+        Align = alClient
+        BorderStyle = bsNone
+        TabOrder = 0
+        SkinData.SkinSection = 'CHECKBOX'
+      end
+    end
     object VirtualDrawTreeOptions: TVirtualDrawTree
       AlignWithMargins = True
       Left = 3
@@ -92,10 +115,10 @@ object OptionsForm: TOptionsForm
       Header.MainColumn = -1
       Images = ImagesDataModule.ImageListSmall
       SelectionBlendFactor = 255
-      TabOrder = 0
+      TabOrder = 1
       TreeOptions.MiscOptions = [toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning]
       TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowDropmark, toShowRoot, toThemeAware]
-      TreeOptions.SelectionOptions = [toFullRowSelect]
+      TreeOptions.SelectionOptions = [toFullRowSelect, toMiddleClickSelect]
       OnClick = VirtualDrawTreeOptionsClick
       OnDrawNode = VirtualDrawTreeOptionsDrawNode
       OnFreeNode = VirtualDrawTreeOptionsFreeNode
@@ -103,29 +126,6 @@ object OptionsForm: TOptionsForm
       OnGetNodeWidth = VirtualDrawTreeOptionsGetNodeWidth
       OnKeyUp = VirtualDrawTreeOptionsKeyUp
       Columns = <>
-    end
-    object OptionsPanel: TBCPanel
-      Left = 209
-      Top = 6
-      Width = 505
-      Height = 489
-      Align = alClient
-      BevelOuter = bvNone
-      DoubleBuffered = True
-      ParentColor = True
-      ParentDoubleBuffered = False
-      TabOrder = 1
-      SkinData.SkinSection = 'CHECKBOX'
-      object ScrollBox: TBCScrollBox
-        Left = 0
-        Top = 0
-        Width = 505
-        Height = 489
-        Align = alClient
-        BorderStyle = bsNone
-        TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-      end
     end
   end
   object PanelButton: TBCPanel
@@ -327,6 +327,7 @@ object OptionsForm: TOptionsForm
   end
   object SkinProvider: TsSkinProvider
     SkinData.SkinSection = 'FORM'
+    SkinData.OuterEffects.Visibility = ovAlways
     TitleButtons = <>
     Left = 271
     Top = 52

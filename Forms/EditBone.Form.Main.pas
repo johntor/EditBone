@@ -1113,7 +1113,9 @@ end;
 
 procedure TMainForm.SelectedScaleModeClick(const AIndex: Integer);
 begin
+  SkinManager.BeginUpdate;
   SkinManager.Options.ScaleMode := TacScaleMode(AIndex);
+  SkinManager.EndUpdate(True, False);
   SetTitleBarMenuCaptions;
 end;
 
@@ -3421,6 +3423,7 @@ begin
       for i := 1 to Length(ToolbarItemsArray) do
          WriteString('ToolbarItems', IntToStr(i - 1), ToolbarItemsArray[i]);
 
+    SkinManager.BeginUpdate;
     SkinManager.SkinName := ReadString('Options', 'SelectedSkin', 'Windows 10');
     SkinManager.HueOffset := ReadInteger('Options', 'SkinHueOffset', 0);
     SkinManager.Saturation := ReadInteger('Options', 'SkinSaturation', 10);
@@ -3432,6 +3435,7 @@ begin
     SkinManager.Effects.AllowGlowing := ReadBool('Options', 'SkinAllowGlowing', False);
     SkinManager.Effects.AllowOuterEffects := ReadBool('Options', 'SkinAllowOuterEffects', False);
     SkinManager.Options.ScaleMode := TacScaleMode(ReadInteger('Options', 'ScaleMode', Ord(smAuto)));
+    SkinManager.EndUpdate(True, False);
     UpdatePageControlMargins;
   finally
     Free;

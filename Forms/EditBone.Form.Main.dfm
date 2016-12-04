@@ -3173,6 +3173,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Visible = False
         ImageIndex = 86
         Height = 16
@@ -3188,6 +3191,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 21
         Width = 53
         Index = 1
@@ -3203,6 +3209,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 21
         Index = 2
         Name = 'TitleBarItemFilename'
@@ -3218,6 +3227,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 22
         Width = 56
         Index = 3
@@ -3233,6 +3245,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Width = 6
         Index = 4
         Name = 'TitleBarItemSpacing1'
@@ -3248,6 +3263,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 22
         Width = 56
         Index = 5
@@ -3263,6 +3281,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Width = 6
         Index = 6
         Name = 'TitleBarItemSpacing2'
@@ -3278,6 +3299,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 22
         Width = 52
         Index = 7
@@ -3293,6 +3317,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Width = 6
         Index = 8
         Name = 'TitleBarItemSpacing3'
@@ -3308,6 +3335,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Height = 22
         Width = 68
         Index = 9
@@ -3323,6 +3353,9 @@ inherited MainForm: TMainForm
         FontData.Font.Height = -11
         FontData.Font.Name = 'Tahoma'
         FontData.Font.Style = []
+        FontData.UseSysFontName = False
+        FontData.UseSysSize = False
+        FontData.UseSysStyle = False
         Width = 2
         Index = 10
         Name = 'TitleBarItemSpacing4'
