@@ -105,6 +105,7 @@ end;
 
 procedure TUnicodeCharacterMapForm.FormShow(Sender: TObject);
 begin
+  ReadSizePosIniFile;
   { Post the custom message WM_AFTER_SHOW to our form }
   if FOnStartUp then
     PostMessage(Self.Handle, WM_AFTER_SHOW, 0, 0);
@@ -129,7 +130,6 @@ begin
   ComboBoxFont.DropDownCount := 16;
   FEditor := AEditor;
   UpdateLanguage(Self, GetSelectedLanguage);
-  ReadSizePosIniFile;
   Show;
 end;
 

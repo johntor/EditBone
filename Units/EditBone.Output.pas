@@ -129,6 +129,7 @@ var
   LVirtualDrawTree: TVirtualDrawTree;
   LPanel: TBCPanel;
   LTabCaption: string;
+  LTextHeight: Integer;
 begin
   LTabCaption := StringReplace(ATabCaption, '&', '&&', [rfReplaceAll]);
   { check if there already is a tab with same name }
@@ -174,7 +175,7 @@ begin
   begin
     Parent := LPanel;
     Align := alClient;
-    TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoScrollOnExpand, toAutoTristateTracking, toAutoChangeScale];
+    TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoChangeScale, toAutoScrollOnExpand, toAutoTristateTracking];
     TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
     TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused];
     TreeOptions.SelectionOptions := [toFullRowSelect, toMiddleClickSelect];
@@ -184,6 +185,23 @@ begin
     OnInitNode := VirtualDrawTreeInitNode;
     OnDblClick := TabsheetDblClick;
     NodeDataSize := SizeOf(TOutputRec);
+
+    Canvas.Font.Assign(Font);
+    LTextHeight := Canvas.TextHeight('Tg');
+    DefaultNodeHeight := LTextHeight;
+
+    //if not CanFocus then
+    //  Indent := Round((Screen.PixelsPerInch / 96.0) * Indent); { This is done because output is read before form is shown. }
+
+    Indent := OptionsContainer.OutputIndent;
+    if OptionsContainer.OutputUseExplorerTheme then
+      TreeOptions.PaintOptions := TreeOptions.PaintOptions + [toUseExplorerTheme]
+    else
+      TreeOptions.PaintOptions := TreeOptions.PaintOptions - [toUseExplorerTheme];
+    if OptionsContainer.OutputShowTreeLines then
+      TreeOptions.PaintOptions := TreeOptions.PaintOptions + [toShowTreeLines]
+    else
+      TreeOptions.PaintOptions := TreeOptions.PaintOptions - [toShowTreeLines];
   end;
   Result := LVirtualDrawTree;
   LTabSheet.TabVisible := True;
