@@ -127,7 +127,7 @@ function TEBOutput.AddTreeView(const ATabCaption: string): TVirtualDrawTree;
 var
   LTabSheet: TsTabSheet;
   LVirtualDrawTree: TVirtualDrawTree;
-  LPanel: TBCPanel;
+  //LPanel: TBCPanel;
   LTabCaption: string;
   LTextHeight: Integer;
 begin
@@ -155,12 +155,12 @@ begin
   LTabSheet.Caption := LTabCaption;
   PageControl.ActivePage := LTabSheet;
 
-  { Panel needed because Virtual tree's AlignWithMargins does not work. Remove when fixed. }
-  LPanel := TBCPanel.Create(LTabSheet);
-  with LPanel do
+  LVirtualDrawTree := TVirtualDrawTree.Create(LTabSheet);
+  with LVirtualDrawTree do
   begin
     Parent := LTabSheet;
     Align := alClient;
+
     AlignWithMargins := True;
     Margins.Left := 2;
     Margins.Top := 2;
@@ -169,12 +169,7 @@ begin
     else
       Margins.Right := 4;
     Margins.Bottom := 2;
-  end;
-  LVirtualDrawTree := TVirtualDrawTree.Create(LPanel);
-  with LVirtualDrawTree do
-  begin
-    Parent := LPanel;
-    Align := alClient;
+
     TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScroll, toAutoChangeScale, toAutoScrollOnExpand, toAutoTristateTracking];
     TreeOptions.MiscOptions := [toCheckSupport, toFullRepaintOnResize, toToggleOnDblClick, toWheelPanning];
     TreeOptions.PaintOptions := [toHideFocusRect, toShowButtons, toShowRoot, toThemeAware, toGhostedIfUnfocused];
@@ -189,9 +184,6 @@ begin
     Canvas.Font.Assign(Font);
     LTextHeight := Canvas.TextHeight('Tg');
     DefaultNodeHeight := LTextHeight;
-
-    //if not CanFocus then
-    //  Indent := Round((Screen.PixelsPerInch / 96.0) * Indent); { This is done because output is read before form is shown. }
 
     Indent := OptionsContainer.OutputIndent;
     if OptionsContainer.OutputUseExplorerTheme then
@@ -558,20 +550,10 @@ begin
 end;
 
 function TEBOutput.GetOutputTreeView(ATabSheet: TTabSheet): TVirtualDrawTree;
-var
-  LPanel: TBCPanel;
 begin
   Result := nil;
-  if Assigned(ATabSheet) then
-    if Assigned(ATabSheet.Controls[0]) then
-      if ATabSheet.Controls[0] is TBCPanel then
-      begin
-        LPanel := TBCPanel(ATabSheet.Controls[0]);
-        if Assigned(LPanel) then
-          if Assigned(LPanel.Controls[0]) then
-            if LPanel.Controls[0] is TVirtualDrawTree then
-              Result := TVirtualDrawTree(LPanel.Controls[0]);
-      end;
+  if Assigned(ATabSheet) and Assigned(ATabSheet.Controls[0]) and (ATabSheet.Controls[0] is TVirtualDrawTree) then
+    Result := TVirtualDrawTree(ATabSheet.Controls[0]);
 end;
 
 procedure TEBOutput.SetOptions;
