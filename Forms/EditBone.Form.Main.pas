@@ -14,7 +14,7 @@ uses
   System.Generics.Collections, BCControl.ComboBox, Vcl.AppEvnts,  BCCommon.Dialog.Popup.SearchEngine,
   BCCommon.Dialog.Popup.Highlighter.Color, sPanel, sSplitter, BCComponent.TitleBar, BCCommon.Dialog.ClipboardHistory,
   BCComponent.SkinManager, sStatusBar, JvExForms, JvClipboardViewer, JvComponentBase, JvClipboardMonitor, Vcl.StdCtrls,
-  BCCommon.Dialog.Popup.ScaleMode, sComboBoxes, sComboBox;
+  sComboBoxes, sComboBox, sTrackBar;
 
 const
   SWindowClassName = 'UniqueWindowClassNameForEditBone';
@@ -599,9 +599,6 @@ type
     SpeedButtonHelpDivider1: TBCSpeedButton;
     SpeedButtonHelpDivider2: TBCSpeedButton;
     SpeedButtonHelpVisitHomepage: TBCSpeedButton;
-    SpeedButtonMacroPlay: TBCSpeedButton;
-    SpeedButtonMacroRecordPause: TBCSpeedButton;
-    SpeedButtonMacroStop: TBCSpeedButton;
     SpeedButtonSearchClearBookmarks: TBCSpeedButton;
     SpeedButtonSearchDivider1: TBCSpeedButton;
     SpeedButtonSearchDivider2: TBCSpeedButton;
@@ -716,8 +713,9 @@ type
     MenuItemSearchGotoPrevious: TMenuItem;
     MenuItemSearchSeparator: TMenuItem;
     SkinSelector: TsSkinSelector;
-    ActionViewScaleModeSelection: TAction;
-    Scalemode1: TMenuItem;
+    SpeedButtonMacroPlay: TBCSpeedButton;
+    SpeedButtonMacroRecordPause: TBCSpeedButton;
+    SpeedButtonMacroStop: TBCSpeedButton;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -921,8 +919,6 @@ type
     procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
     procedure ClipboardMonitorChange(Sender: TObject);
     procedure ActionEditInsertHexColorExecute(Sender: TObject);
-    procedure TitleBarItems3Click(Sender: TObject);
-    procedure ActionViewScaleModeSelectionExecute(Sender: TObject);
   private
     FClipboardHistoryItems: TList<string>;
     FClipboardHistoryDialog: TClipboardHistoryDialog;
@@ -937,7 +933,6 @@ type
     FPopupFilesDialog: TPopupFilesDialog;
     FPopupHighlighterColorDialog: TPopupHighlighterColorDialog;
     FPopupHighlighterDialog: TPopupHighlighterDialog;
-    FPopupScaleModeDialog: TPopupScaleModeDialog;
     FPopupSearchEngineDialog: TBCPopupSearchEngineDialog;
     FProcessingEventHandler: Boolean;
     FSQLFormatterDLLFound: Boolean;
@@ -2334,12 +2329,6 @@ begin
   FDocument.PreviousPage;
 end;
 
-procedure TMainForm.ActionViewScaleModeSelectionExecute(Sender: TObject);
-begin
-  inherited;
-  ActionViewScaleModeSelection.Checked := not ActionViewScaleModeSelection.Checked
-end;
-
 procedure TMainForm.ActionViewSelectionModeExecute(Sender: TObject);
 begin
   FDocument.ToggleSelectionMode;
@@ -2574,8 +2563,6 @@ begin
     SplitterHorizontal.Visible := PanelOutput.Visible;
     SplitterHorizontal.Top := PanelOutput.Top - SplitterHorizontal.Height; { always top of panel output }
 
-    TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Visible := ActionViewScaleModeSelection.Checked;
-    TitleBar.Items[EDITBONE_TITLE_BAR_SPACING1].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ActionViewEncodingSelection.Checked;
     TitleBar.Items[EDITBONE_TITLE_BAR_SPACING2].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ActionViewHighlighterSelection.Checked;
@@ -3048,7 +3035,7 @@ begin
   { StatusBar }
   // TODO: use consts instead of numbers
   if OptionsContainer.StatusBarShowMacro then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 60
+    StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := ScaleSize(60)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_MACRO_PANEL].Width := 0;
   SpeedButtonMacroPlay.Visible := OptionsContainer.StatusBarShowMacro;
@@ -3056,19 +3043,19 @@ begin
   SpeedButtonMacroStop.Visible := OptionsContainer.StatusBarShowMacro;
 
   if OptionsContainer.StatusBarShowCaretPosition then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := ScaleSize(90)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_CARET_POSITION_PANEL].Width := 0;
 
   if OptionsContainer.StatusBarShowKeyState then
-    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 90
+    StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := ScaleSize(90)
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Width := 0;
 
   if OptionsContainer.StatusBarShowModified then
   begin
     StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := EDITBONE_STATUS_BAR_PANEL_WIDTH;
-    LPanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text) + 10;
+    LPanelWidth := StatusBar.Canvas.TextWidth(StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text);
     if LPanelWidth > EDITBONE_STATUS_BAR_PANEL_WIDTH then
       StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := LPanelWidth;
   end
@@ -3270,28 +3257,6 @@ begin
   UnlockFormPaint;
 end;
 
-procedure TMainForm.TitleBarItems3Click(Sender: TObject);
-var
-  LPoint: TPoint;
-begin
-  inherited;
-
-  if not Assigned(FPopupEncodingDialog) then
-  begin
-    FPopupScaleModeDialog := TPopupScaleModeDialog.Create(Self);
-    FPopupScaleModeDialog.PopupParent := Self;
-    FPopupScaleModeDialog.OnSelectScaleMode := SelectedScaleModeClick;
-  end;
-
-  LPoint := GetTitleBarItemLeftBottom(EDITBONE_TITLE_BAR_SCALE_MODE);
-  FPopupScaleModeDialog.Left := LPoint.X;
-  FPopupScaleModeDialog.Top := LPoint.Y;
-
-  LockFormPaint;
-  FPopupScaleModeDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Caption);
-  UnlockFormPaint;
-end;
-
 procedure TMainForm.TitleBarItems4Click(Sender: TObject);
 var
   LPoint: TPoint;
@@ -3402,7 +3367,6 @@ begin
     { Options }
     StatusBar.Visible := ReadBool('Options', 'ShowStatusbar', True);
     PanelDirectory.Visible := ReadBool('Options', 'ShowDirectory', False);
-    TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Visible := ReadBool('Options', 'ShowScaleModeSelection', False);
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible := ReadBool('Options', 'ShowEncodingSelection', True);
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible := ReadBool('Options', 'ShowHighlighterSelection', True);
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ReadBool('Options', 'ShowHighlighterColorSelection', True);
@@ -3413,7 +3377,6 @@ begin
     ActionViewLineNumbers.Checked := OptionsContainer.LineNumbersEnabled;
     ActionViewSpecialChars.Checked := OptionsContainer.SpecialCharsEnabled;
     ActionViewSelectionMode.Checked := OptionsContainer.SelectionModeEnabled;
-    ActionViewScaleModeSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Visible;
     ActionViewEncodingSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     ActionViewHighlighterSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
     ActionViewColorSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
@@ -3434,7 +3397,6 @@ begin
     SkinManager.Effects.AllowAeroBluring := ReadBool('Options', 'SkinAllowAeroBluring', False);
     SkinManager.Effects.AllowGlowing := ReadBool('Options', 'SkinAllowGlowing', False);
     SkinManager.Effects.AllowOuterEffects := ReadBool('Options', 'SkinAllowOuterEffects', False);
-    SkinManager.Options.ScaleMode := TacScaleMode(ReadInteger('Options', 'ScaleMode', Ord(smAuto)));
     SkinManager.EndUpdate(True, False);
     UpdatePageControlMargins;
   finally
@@ -3775,7 +3737,6 @@ begin
     WriteBool('Options', 'ShowToolbar', PanelToolbar.Visible);
     WriteBool('Options', 'ShowStatusbar', StatusBar.Visible);
     WriteBool('Options', 'ShowDirectory', PanelDirectory.Visible);
-    WriteBool('Options', 'ShowScaleModeSelection', TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Visible);
     WriteBool('Options', 'ShowEncodingSelection', TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible);
     WriteBool('Options', 'ShowHighlighterSelection', TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible);
     WriteBool('Options', 'ShowHighlighterColorSelection', TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible);
@@ -3789,7 +3750,6 @@ begin
     WriteBool('Options', 'SkinAllowAeroBluring', SkinManager.Effects.AllowAeroBluring);
     WriteBool('Options', 'SkinAllowGlowing', SkinManager.Effects.AllowGlowing);
     WriteBool('Options', 'SkinAllowOuterEffects', SkinManager.Effects.AllowOuterEffects);
-    WriteInteger('Options', 'ScaleMode', Ord(SkinManager.Options.ScaleMode));
   finally
     Free;
   end;
@@ -3802,7 +3762,6 @@ begin
   LEditor := FDocument.GetActiveEditor;
   if Assigned(LEditor) then
   begin
-    TitleBar.Items[EDITBONE_TITLE_BAR_SCALE_MODE].Caption := ScaleModeToText(SkinManager.Options.ScaleMode);
     TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption := EncodingToText(LEditor.Encoding);
     TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption := LEditor.Highlighter.Name;
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption := LEditor.Highlighter.Colors.Name;

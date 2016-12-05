@@ -12,7 +12,7 @@ inherited MainForm: TMainForm
   TextHeight = 13
   object SplitterHorizontal: TBCSplitter [0]
     Left = 0
-    Top = 568
+    Top = 574
     Width = 1111
     Height = 5
     Cursor = crVSplit
@@ -22,9 +22,8 @@ inherited MainForm: TMainForm
   end
   inherited StatusBar: TBCStatusBar
     AlignWithMargins = True
-    Top = 697
+    Top = 703
     Width = 1111
-    Height = 25
     Margins.Left = 0
     Margins.Right = 0
     Margins.Bottom = 0
@@ -46,15 +45,20 @@ inherited MainForm: TMainForm
       item
         Width = 50
       end>
-    ParentColor = True
+    ParentFont = True
+    ParentShowHint = False
+    ShowHint = True
+    UseSystemFont = False
     OnDrawPanel = StatusBarDrawPanel
+    SkinData.SkinManager = SkinManager
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 2
-      Top = 3
+      Top = 2
       Width = 16
       Height = 16
       Action = ActionMacroPlayback
       Flat = True
+      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 87
@@ -62,11 +66,12 @@ inherited MainForm: TMainForm
     end
     object SpeedButtonMacroRecordPause: TBCSpeedButton
       Left = 20
-      Top = 3
+      Top = 2
       Width = 16
       Height = 16
       Action = ActionMacroRecord
       Flat = True
+      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 88
@@ -74,11 +79,12 @@ inherited MainForm: TMainForm
     end
     object SpeedButtonMacroStop: TBCSpeedButton
       Left = 38
-      Top = 3
+      Top = 2
       Width = 16
       Height = 16
       Action = ActionMacroStop
       Flat = True
+      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 90
@@ -1951,7 +1957,7 @@ inherited MainForm: TMainForm
     Left = 0
     Top = 123
     Width = 1111
-    Height = 445
+    Height = 451
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -1967,7 +1973,7 @@ inherited MainForm: TMainForm
       Left = 329
       Top = 0
       Width = 5
-      Height = 445
+      Height = 451
       Visible = False
       SkinData.SkinSection = 'SPLITTER'
     end
@@ -1975,7 +1981,7 @@ inherited MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 329
-      Height = 445
+      Height = 451
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -1992,7 +1998,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 329
-        Height = 445
+        Height = 451
         ActivePage = TabSheetDirectory
         Align = alClient
         DoubleBuffered = True
@@ -2027,7 +2033,7 @@ inherited MainForm: TMainForm
       Left = 334
       Top = 0
       Width = 777
-      Height = 445
+      Height = 451
       Margins.Left = 0
       Margins.Top = 5
       Margins.Right = 0
@@ -2044,7 +2050,7 @@ inherited MainForm: TMainForm
         Left = 0
         Top = 0
         Width = 777
-        Height = 445
+        Height = 451
         Margins.Left = 0
         Margins.Top = 5
         Margins.Right = 0
@@ -3090,7 +3096,7 @@ inherited MainForm: TMainForm
   end
   object PanelOutput: TBCPanel [5]
     Left = 0
-    Top = 573
+    Top = 579
     Width = 1111
     Height = 121
     Margins.Left = 0
@@ -3154,9 +3160,8 @@ inherited MainForm: TMainForm
     AnimEffects.Minimizing.Active = True
     AnimEffects.PageChange.Time = 100
     AnimEffects.SkinChanging.Active = True
-    IsDefault = True
     MenuSupport.UseExtraLine = False
-    SkinInfo = 'N/A'
+    Options.ChangeSysColors = True
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
@@ -3194,8 +3199,8 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
-        Height = 21
-        Width = 53
+        Height = 19
+        Width = 48
         Index = 1
         Name = 'TitleBarItemCaption'
         ShowHint = False
@@ -3212,47 +3217,12 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
-        Height = 21
+        Height = 19
+        Width = 21
         Index = 2
         Name = 'TitleBarItemFilename'
         ShowHint = False
         OnClick = TitleBarItems2Click
-      end
-      item
-        Align = tbaRight
-        Caption = 'Auto'
-        DropdownMenu = PopupMenuDummy
-        FontData.Font.Charset = DEFAULT_CHARSET
-        FontData.Font.Color = clWindowText
-        FontData.Font.Height = -11
-        FontData.Font.Name = 'Tahoma'
-        FontData.Font.Style = []
-        FontData.UseSysFontName = False
-        FontData.UseSysSize = False
-        FontData.UseSysStyle = False
-        Height = 22
-        Width = 56
-        Index = 3
-        Name = 'TitleBarItemScaleMode'
-        ShowHint = False
-        Style = bsMenu
-        OnClick = TitleBarItems3Click
-      end
-      item
-        Align = tbaRight
-        FontData.Font.Charset = DEFAULT_CHARSET
-        FontData.Font.Color = clWindowText
-        FontData.Font.Height = -11
-        FontData.Font.Name = 'Tahoma'
-        FontData.Font.Style = []
-        FontData.UseSysFontName = False
-        FontData.UseSysSize = False
-        FontData.UseSysStyle = False
-        Width = 6
-        Index = 4
-        Name = 'TitleBarItemSpacing1'
-        ShowHint = False
-        Style = bsSpacing
       end
       item
         Align = tbaRight
@@ -3266,9 +3236,9 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
-        Height = 22
-        Width = 56
-        Index = 5
+        Height = 20
+        Width = 53
+        Index = 3
         Name = 'TitleBarItemEncoding'
         ShowHint = False
         Style = bsMenu
@@ -3285,7 +3255,7 @@ inherited MainForm: TMainForm
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
         Width = 6
-        Index = 6
+        Index = 4
         Name = 'TitleBarItemSpacing2'
         ShowHint = False
         Style = bsSpacing
@@ -3302,9 +3272,9 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
-        Height = 22
-        Width = 52
-        Index = 7
+        Height = 20
+        Width = 51
+        Index = 5
         Name = 'TitleBarItemHighlighter'
         ShowHint = False
         Style = bsMenu
@@ -3321,7 +3291,7 @@ inherited MainForm: TMainForm
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
         Width = 6
-        Index = 8
+        Index = 6
         Name = 'TitleBarItemSpacing3'
         ShowHint = False
         Style = bsSpacing
@@ -3338,9 +3308,9 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
-        Height = 22
-        Width = 68
-        Index = 9
+        Height = 20
+        Width = 64
+        Index = 7
         Name = 'TitleBarItemColors'
         ShowHint = False
         Style = bsMenu
@@ -3357,7 +3327,7 @@ inherited MainForm: TMainForm
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
         Width = 2
-        Index = 10
+        Index = 8
         Name = 'TitleBarItemSpacing4'
         ShowHint = False
         Style = bsSpacing
@@ -3530,9 +3500,6 @@ inherited MainForm: TMainForm
       end
       object MenuItemToolbarMenuViewOutput: TMenuItem
         Action = ActionViewOutput
-      end
-      object Scalemode1: TMenuItem
-        Action = ActionViewScaleModeSelection
       end
       object MenuItemToolbarMenuViewStatusBar: TMenuItem
         Action = ActionViewStatusBar
@@ -4384,12 +4351,6 @@ inherited MainForm: TMainForm
       Caption = 'Highlighter'
       Hint = 'Show or hide the highlighter selection'
       OnExecute = ActionViewHighlighterSelectionExecute
-    end
-    object ActionViewScaleModeSelection: TAction
-      Category = 'View'
-      Caption = 'Scale mode'
-      Hint = 'Show or hide the scale mode selection'
-      OnExecute = ActionViewScaleModeSelectionExecute
     end
     object ActionViewColorSelection: TAction
       Category = 'View'
