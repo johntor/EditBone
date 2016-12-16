@@ -96,7 +96,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IniFiles,  BCCommon.Language.Utils, BCCommon.Utils, Winapi.Windows,
+  System.IniFiles, System.Math, BCCommon.Language.Utils, BCCommon.Utils, Winapi.Windows,
   System.Types, BCCommon.Frame.Options.Editor.Minimap, BCCommon.Frame.Options.Editor.Scroll,
   BCCommon.Frame.Options.Editor.Selection, BCCommon.Frame.Options.Editor.SpecialChars,
   BCCommon.Frame.Options.Editor.Tabulator, EditBone.Frame.Options.Editor.Defaults,
@@ -147,7 +147,7 @@ begin
 
     Canvas.Font.Assign(Font);
     LTextHeight := Canvas.TextHeight('Tg');
-    DefaultNodeHeight := LTextHeight;
+    DefaultNodeHeight := Max(LTextHeight, 18);
 
     { Editor }
     Node := AddChild(nil);

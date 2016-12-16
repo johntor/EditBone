@@ -55,7 +55,7 @@ type
 implementation
 
 uses
-  BCCommon.Options.Container, System.UITypes, Vcl.Clipbrd, BCCommon.Messages,
+  BCCommon.Options.Container, System.UITypes, System.Math, Vcl.Clipbrd, BCCommon.Messages,
   BCCommon.Language.Strings, BCCommon.FileUtils, BCCommon.Consts, BCCommon.StringUtils, System.Types,
   BCControl.Panel;
 
@@ -183,7 +183,7 @@ begin
 
     Canvas.Font.Assign(Font);
     LTextHeight := Canvas.TextHeight('Tg');
-    DefaultNodeHeight := LTextHeight;
+    DefaultNodeHeight := Max(LTextHeight, 18);
 
     Indent := OptionsContainer.OutputIndent;
     if OptionsContainer.OutputUseExplorerTheme then
