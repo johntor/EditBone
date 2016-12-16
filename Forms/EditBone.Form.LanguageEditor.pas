@@ -506,6 +506,7 @@ begin
   Caption := GetCaption;
   VirtualDrawTree.BeginUpdate;
   VirtualDrawTree.Clear;
+  VirtualDrawTree.DefaultNodeHeight := VirtualDrawTree.Images.Height + 2;
   SectionStringList := TStringList.Create;
   StringList := TStringList.Create;
   with TMemIniFile.Create(FileName, TEncoding.Unicode) do
@@ -558,6 +559,8 @@ var
     end;
 
   begin
+    VirtualDrawTree.DefaultNodeHeight := VirtualDrawTree.Images.Height + 2;
+
     NodeKey := GetNodeKey(NodeText);
 
     { check if node already exists }

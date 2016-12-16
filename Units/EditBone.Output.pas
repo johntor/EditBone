@@ -129,7 +129,6 @@ var
   LVirtualDrawTree: TVirtualDrawTree;
   //LPanel: TBCPanel;
   LTabCaption: string;
-  LTextHeight: Integer;
 begin
   LTabCaption := StringReplace(ATabCaption, '&', '&&', [rfReplaceAll]);
   { check if there already is a tab with same name }
@@ -181,9 +180,7 @@ begin
     OnDblClick := TabsheetDblClick;
     NodeDataSize := SizeOf(TOutputRec);
 
-    Canvas.Font.Assign(Font);
-    LTextHeight := Canvas.TextHeight('Tg');
-    DefaultNodeHeight := Max(LTextHeight, 18);
+    DefaultNodeHeight := Max(Canvas.TextHeight('Tg'), 18);
 
     Indent := OptionsContainer.OutputIndent;
     if OptionsContainer.OutputUseExplorerTheme then
@@ -334,6 +331,7 @@ begin
     Exit;
   if not Assigned(AOutputTreeView) then
     Exit;
+  AOutputTreeView.DefaultNodeHeight := Max(AOutputTreeView.Canvas.TextHeight('Tg'), 18);
   AOutputTreeView.BeginUpdate;
   LLastNode := AOutputTreeView.GetLast;
   if Assigned(LLastNode) then

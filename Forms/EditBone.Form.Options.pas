@@ -135,7 +135,6 @@ var
   i: Integer;
   Data: POptionsRec;
   Node, ChildNode: PVirtualNode;
-  LTextHeight: Integer;
 begin
   with VirtualDrawTreeOptions do
   begin
@@ -145,9 +144,7 @@ begin
     Clear;
     i := 0;
 
-    Canvas.Font.Assign(Font);
-    LTextHeight := Canvas.TextHeight('Tg');
-    DefaultNodeHeight := Max(LTextHeight, 18);
+    DefaultNodeHeight := Max(Canvas.TextHeight('Tg'), 18);
 
     { Editor }
     Node := AddChild(nil);

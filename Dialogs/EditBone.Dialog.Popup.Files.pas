@@ -85,6 +85,7 @@ begin
   LSelectedNode := nil;
   LSelectedFile := Copy(ASelectedFile, 2, Length(ASelectedFile) - 2); { Remove [] }
   VirtualDrawTree.Clear;
+  VirtualDrawTree.DefaultNodeHeight := VirtualDrawTree.Images.Height + 2;
   for i := 0 to AFiles.Count - 1 do
   begin
     LNode := VirtualDrawTree.AddChild(nil);

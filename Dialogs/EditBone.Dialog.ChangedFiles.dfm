@@ -6,7 +6,7 @@ inherited ChangedFilesDialog: TChangedFilesDialog
   Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object PanelButtons: TBCPanel
+  object PanelButtons: TBCPanel [0]
     AlignWithMargins = True
     Left = 3
     Top = 264
@@ -47,7 +47,7 @@ inherited ChangedFilesDialog: TChangedFilesDialog
       TabOrder = 1
     end
   end
-  object VirtualDrawTree: TVirtualDrawTree
+  object VirtualDrawTree: TVirtualDrawTree [1]
     AlignWithMargins = True
     Left = 0
     Top = 6
@@ -88,7 +88,7 @@ inherited ChangedFilesDialog: TChangedFilesDialog
       item
         Options = [coEnabled, coParentBidiMode, coParentColor, coVisible, coAutoSpring]
         Position = 0
-        Width = 231
+        Width = 235
         WideText = 'File'
       end
       item
@@ -96,11 +96,5 @@ inherited ChangedFilesDialog: TChangedFilesDialog
         Width = 400
         WideText = 'Path'
       end>
-  end
-  object SkinProvider: TsSkinProvider
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 196
-    Top = 74
   end
 end

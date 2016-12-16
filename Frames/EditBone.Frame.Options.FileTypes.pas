@@ -38,7 +38,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Winapi.Windows, BCCommon.StringUtils, BCCommon.Language.Strings;
+  Winapi.Windows, System.Math, BCCommon.StringUtils, BCCommon.Language.Strings;
 
 var
   FOptionsFileTypesFrame: TOptionsFileTypesFrame;
@@ -67,6 +67,7 @@ var
 begin
   VirtualDrawTree.BeginUpdate;
   VirtualDrawTree.Clear;
+  VirtualDrawTree.DefaultNodeHeight := Max(VirtualDrawTree.Canvas.TextHeight('Tg'), 18);
   for i := 0 to OptionsContainer.FileTypes.Count - 1 do
   begin
     Node := VirtualDrawTree.AddChild(nil);

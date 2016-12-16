@@ -44,8 +44,8 @@ type
 implementation
 
 uses
-  Winapi.Windows, System.SysUtils, System.Generics.Collections, System.Types, BCEditor.Editor.Utils, VirtualTrees.Utils,
-  EditBone.Consts;
+  Winapi.Windows, System.SysUtils, System.Math, System.Generics.Collections, System.Types, BCEditor.Editor.Utils,
+  VirtualTrees.Utils, EditBone.Consts;
 
 const
   CWHITESPACE = [EDITBONE_SPACE_CHAR, EDITBONE_TAB_CHAR];
@@ -381,6 +381,7 @@ begin
 
     Clear;
     NodeDataSize := SizeOf(TXMLTreeRec);
+    DefaultNodeHeight := Max(Canvas.TextHeight('Tg'), 18);
     BeginUpdate;
 
     LLines := TStringList.Create;

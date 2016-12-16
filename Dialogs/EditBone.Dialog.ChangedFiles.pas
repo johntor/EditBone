@@ -19,7 +19,6 @@ type
     PanelButtons: TBCPanel;
     ButtonFind: TButton;
     ButtonCancel: TButton;
-    SkinProvider: TsSkinProvider;
     VirtualDrawTree: TVirtualDrawTree;
     procedure VirtualDrawTreeDrawNode(Sender: TBaseVirtualTree; const PaintInfo: TVTPaintInfo);
     procedure VirtualDrawTreeInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
@@ -39,7 +38,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Types;
+  System.Math, System.Types;
 
 function TChangedFilesDialog.Execute(AFileNames: TStrings): Boolean;
 begin
@@ -56,6 +55,7 @@ var
 begin
   VirtualDrawTree.BeginUpdate;
   VirtualDrawTree.Clear;
+  VirtualDrawTree.DefaultNodeHeight := Max(Canvas.TextHeight('Tg'), 18);
   for LIndex := 0 to AFileNames.Count - 1 do
   begin
     LNode := VirtualDrawTree.AddChild(nil);
