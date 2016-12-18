@@ -148,7 +148,7 @@ procedure TLanguageEditorForm.ActionFileNewExecute(Sender: TObject);
 var
   SelectedLanguage, LanguagePath: string;
 begin
-  SelectedLanguage := GetSelectedLanguage('English');
+  SelectedLanguage := GetSelectedLanguage;
   LanguagePath := IncludeTrailingPathDelimiter(Format('%s%s', [ExtractFilePath(ParamStr(0)), 'Languages']));
   if not DirectoryExists(LanguagePath) then
     Exit;
@@ -625,7 +625,7 @@ var
 begin
   ReadIniFile;
 
-  SelectedLanguage := GetSelectedLanguage('English');
+  SelectedLanguage := GetSelectedLanguage;
   UpdateLanguage(Self, SelectedLanguage);
   LanguagePath := IncludeTrailingPathDelimiter(Format('%s%s', [ExtractFilePath(ParamStr(0)), 'Languages']));
   if not DirectoryExists(LanguagePath) then

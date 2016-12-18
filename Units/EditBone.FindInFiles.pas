@@ -3,7 +3,7 @@ unit EditBone.FindInFiles;
 interface
 
 uses
-  System.Classes, System.Types, BCEditor.Editor;
+  System.Classes, System.Types, BCEditor.Types, BCEditor.Editor;
 
 type
   TOnCancelSearch = function: Boolean of object;
@@ -25,8 +25,8 @@ type
     procedure FindInFiles(const AFolderText: string);
   public
     constructor Create(const AFindWhatText, AFileTypeText, AFolderText: string;
-      ASearchCaseSensitive, ARegularExpressions, AWildcard, AWholeWordsOnly, ALookInSubfolders: Boolean;
-      const AFileExtensions: string); overload;
+      ASearchCaseSensitive, AWholeWordsOnly, ALookInSubfolders: Boolean;
+      const AFileExtensions: string; const ASearchEngine: TBCEditorSearchEngine); overload;
     procedure Execute; override;
     property Count: Integer read FCount;
     property FindWhatText: string read FFindWhatText;
@@ -38,8 +38,8 @@ type
 implementation
 
 uses
-  Winapi.Windows, System.SysUtils, BCControl.Utils, BCCommon.Language.Strings, Vcl.Forms, BCEditor.Types,
-  BCEditor.Encoding, BCEditor.Editor.Utils, EditBone.Consts, BCCommon.FileUtils;
+  Winapi.Windows, System.SysUtils, BCControl.Utils, BCCommon.Language.Strings, Vcl.Forms, BCEditor.Encoding,
+  BCEditor.Editor.Utils, EditBone.Consts, BCCommon.FileUtils;
 
 procedure TFindInFilesThread.Execute;
 begin
@@ -51,8 +51,8 @@ begin
 end;
 
 constructor TFindInFilesThread.Create(const AFindWhatText, AFileTypeText, AFolderText: string;
-  ASearchCaseSensitive, ARegularExpressions, AWildcard, AWholeWordsOnly, ALookInSubfolders: Boolean;
-  const AFileExtensions: string);
+  ASearchCaseSensitive, AWholeWordsOnly, ALookInSubfolders: Boolean; const AFileExtensions: string;
+  const ASearchEngine: TBCEditorSearchEngine);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
@@ -69,14 +69,7 @@ begin
 
   FEditor.Search.SetOption(soCaseSensitive, ASearchCaseSensitive);
   FEditor.Search.SetOption(soWholeWordsOnly, AWholeWordsOnly);
-  if ARegularExpressions then
-    FEditor.Search.Engine := seRegularExpression
-  else
-  if AWildcard then
-    FEditor.Search.Engine := seWildcard
-  else
-    FEditor.Search.Engine := seNormal;
-
+  FEditor.Search.Engine := ASearchEngine;
   FEditor.Search.SearchText := AFindWhatText;
 end;
 

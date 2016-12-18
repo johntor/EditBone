@@ -2,7 +2,8 @@ Version 12.10.0 (December 18, 2016)
 
 - Added skin selector (View->Skin selector)
 - Added highlighters for MIME and Swift
-- Added direction into replace dialog
+- Added direction and origin into replace dialog
+- Fixed find in files and replace dialogs
 - Fixed high DPI scaling
 - Fixed moving to next and previous word
 - Fixed bookmarks

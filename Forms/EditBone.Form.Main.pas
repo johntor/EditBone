@@ -906,7 +906,7 @@ type
     procedure SelectedHighlighterClick(AHighlighterName: string);
     procedure SelectedHighlighterColorClick(AHighlighterColorName: string);
     procedure SelectedScaleModeClick(const AIndex: Integer);
-    procedure SelectedSearchEngineClick(ASearchEngine: TBCEditorSearchEngine);
+    procedure SelectedSearchEngineClick(const ASearchEngine: TBCEditorSearchEngine);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
     procedure TabSheetFindInFilesClickBtn(Sender: TObject);
     procedure TabSheetOpenClickBtn(Sender: TObject);
@@ -1690,7 +1690,7 @@ begin
   end;
 end;
 
-procedure TMainForm.SelectedSearchEngineClick(ASearchEngine: TBCEditorSearchEngine);
+procedure TMainForm.SelectedSearchEngineClick(const ASearchEngine: TBCEditorSearchEngine);
 
   procedure SetSearchEngine(AEditor: TBCEditor);
   begin
@@ -1948,7 +1948,7 @@ end;
 procedure TMainForm.ActionToolsLanguageEditorExecute(Sender: TObject);
 begin
   LanguageEditorForm.Open;
-  Self.ReadLanguageFile(GetSelectedLanguage('English'));
+  Self.ReadLanguageFile(GetSelectedLanguage);
 end;
 
 procedure TMainForm.CreateToolbar(ACreate: Boolean = False);
@@ -2823,7 +2823,7 @@ begin
   if not DirectoryExists(LLanguagePath) then
     Exit;
 
-  LLanguageName := GetSelectedLanguage('English');
+  LLanguageName := GetSelectedLanguage;
   for LFileName in TDirectory.GetFiles(LLanguagePath, '*.lng') do
   begin
     LMenuItem := TMenuItem.Create(Application);
@@ -3163,7 +3163,7 @@ begin
   if not LOpenFilesFound and not LParamFilesFound then
     FDocument.New;
 
-  Self.ReadLanguageFile(GetSelectedLanguage('English'));
+  Self.ReadLanguageFile(GetSelectedLanguage);
 
   CreateFileReopenList;
 
@@ -3688,7 +3688,7 @@ begin
       PanelOutput.Top := StatusBar.Top - PanelOutput.Height; { always top of status bar }
       Application.ProcessMessages;
       FFindInFilesThread := TFindInFilesThread.Create(FindWhatText, FileTypeText, FolderText, SearchCaseSensitive,
-        RegularExpressions, Wildcard, WholeWordsOnly, LookInSubfolders, LFileExtensions);
+        WholeWordsOnly, LookInSubfolders, LFileExtensions, SearchEngine);
       FFindInFilesThread.OnTerminate := OnTerminateFindInFiles;
       FFindInFilesThread.OnProgressBarStep := OnProgressBarStepFindInFiles;
       FFindInFilesThread.OnCancelSearch := OnCancelSearch;
