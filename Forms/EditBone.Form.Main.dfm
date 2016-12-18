@@ -50,7 +50,6 @@ inherited MainForm: TMainForm
     ShowHint = True
     UseSystemFont = False
     OnDrawPanel = StatusBarDrawPanel
-    SkinData.SkinManager = SkinManager
     object SpeedButtonMacroPlay: TBCSpeedButton
       Left = 2
       Top = 2
@@ -58,7 +57,6 @@ inherited MainForm: TMainForm
       Height = 16
       Action = ActionMacroPlayback
       Flat = True
-      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 87
@@ -71,7 +69,6 @@ inherited MainForm: TMainForm
       Height = 16
       Action = ActionMacroRecord
       Flat = True
-      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 88
@@ -84,7 +81,6 @@ inherited MainForm: TMainForm
       Height = 16
       Action = ActionMacroStop
       Flat = True
-      SkinData.SkinManager = SkinManager
       SkinData.SkinSection = 'TOOLBUTTON'
       Images = ImagesDataModule.ImageList
       ImageIndex = 90
@@ -111,7 +107,7 @@ inherited MainForm: TMainForm
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      ActivePage = TabSheetFile
+      ActivePage = TabSheetView
       Align = alClient
       DoubleBuffered = False
       Font.Charset = DEFAULT_CHARSET
@@ -3150,6 +3146,7 @@ inherited MainForm: TMainForm
   inherited SkinManager: TBCSkinManager
     Effects.AllowGlowing = False
     Effects.AllowOuterEffects = True
+    ExtendedBorders = True
     AnimEffects.DialogShow.Active = True
     AnimEffects.DialogShow.Time = 120
     AnimEffects.FormShow.Active = True
@@ -3161,8 +3158,10 @@ inherited MainForm: TMainForm
     AnimEffects.Minimizing.Active = True
     AnimEffects.PageChange.Time = 100
     AnimEffects.SkinChanging.Active = True
+    IsDefault = True
     MenuSupport.UseExtraLine = False
     Options.ChangeSysColors = True
+    SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
