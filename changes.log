@@ -1,3 +1,22 @@
+Version 12.10.0 (December 18, 2016)
+
+- Added skin selector (View->Skin selector)
+- Added highlighters for MIME and Swift
+- Added direction into replace dialog
+- Fixed high DPI scaling
+- Fixed moving to next and previous word
+- Fixed bookmarks
+- Fixed insert hex color
+- Fixed mouse click with unicode characters and code folding
+- Fixed search and replace to support multi-line search patterns
+- Fixed search result painting
+- Fixed slider thumb aspect ratio
+- Fixed word wrap in printing
+- Fixed color comboboxes
+- Fixed highlighter colors
+- Updated language files
+- Updated AlphaSkins controls v11.22 - http://www.alphaskins.com/
+
 Version 12.9.0 (November 12, 2016)
 
 - Added regular expression, wildcard, and whole words only options for find in files

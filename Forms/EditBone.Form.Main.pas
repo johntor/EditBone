@@ -716,6 +716,8 @@ type
     SpeedButtonMacroPlay: TBCSpeedButton;
     SpeedButtonMacroRecordPause: TBCSpeedButton;
     SpeedButtonMacroStop: TBCSpeedButton;
+    S1: TMenuItem;
+    ActionViewSkinSelector: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -919,6 +921,7 @@ type
     procedure ActionToolsClipboardHistoryExecute(Sender: TObject);
     procedure ClipboardMonitorChange(Sender: TObject);
     procedure ActionEditInsertHexColorExecute(Sender: TObject);
+    procedure ActionViewSkinSelectorExecute(Sender: TObject);
   private
     FClipboardHistoryItems: TList<string>;
     FClipboardHistoryDialog: TClipboardHistoryDialog;
@@ -2334,6 +2337,13 @@ begin
   FDocument.ToggleSelectionMode;
 end;
 
+procedure TMainForm.ActionViewSkinSelectorExecute(Sender: TObject);
+begin
+  inherited;
+  ActionViewSkinSelector.Checked := not ActionViewSkinSelector.Checked;
+  OptionsContainer.SkinSelectorVisible := not OptionsContainer.SkinSelectorVisible;
+end;
+
 procedure TMainForm.ActionViewSpecialCharsExecute(Sender: TObject);
 begin
   ActionViewSpecialChars.Checked := FDocument.ToggleSpecialChars;
@@ -2570,6 +2580,10 @@ begin
     TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible := ActionViewColorSelection.Checked;
     TitleBar.Items[EDITBONE_TITLE_BAR_SPACING4].Visible := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
 
+    SkinSelector.Visible := ActionViewSkinSelector.Checked;
+    if ActionViewSkinSelector.Checked then
+      SkinSelector.Left := ClientWidth - SkinSelector.Width - 3;
+
     ActionViewXMLTree.Enabled := LActiveDocumentFound and LIsXMLDocument;
     if ActionViewXMLTree.Enabled then
       ActionViewXMLTree.Checked := FDocument.XMLTreeVisible;
@@ -2696,21 +2710,22 @@ begin
     end
     else
       StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Text := '';
+
     GetKeyboardState(LKeyState);
     if OptionsContainer.StatusBarShowKeyState then
-    begin
-      if LKeyState[VK_INSERT] = 0 then
-      begin
-        LConstant := LanguageDataModule.GetConstant('Insert');
-        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
-          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
-      end;
-      if LKeyState[VK_INSERT] = 1 then
-      begin
-        LConstant := LanguageDataModule.GetConstant('Overwrite');
-        if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
-          StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
-      end;
+    case LKeyState[VK_INSERT] of
+      0:
+        begin
+          LConstant := LanguageDataModule.GetConstant('Insert');
+          if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
+            StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
+        end;
+      1:
+        begin
+          LConstant := LanguageDataModule.GetConstant('Overwrite');
+          if StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text <> LConstant then
+            StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := LConstant;
+        end;
     end
     else
       StatusBar.Panels[EDITBONE_STATUS_BAR_INSERT_KEYSTATE_PANEL].Text := '';
@@ -3088,10 +3103,6 @@ begin
   if Assigned(FClipboardHistoryItems) then
   while FClipboardHistoryItems.Count > OptionsContainer.ClipboardHistoryItemsCount do
     FClipboardHistoryItems.Delete(FClipboardHistoryItems.Count - 1);
-
-  SkinSelector.Visible := OptionsContainer.SkinSelectorVisible;
-  if SkinSelector.Visible then
-    SkinSelector.Left := ClientWidth - SkinSelector.Width - 3;
 end;
 
 procedure TMainForm.WMCopyData(var Message: TWMCopyData);
@@ -3380,6 +3391,8 @@ begin
     ActionViewEncodingSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Visible;
     ActionViewHighlighterSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Visible;
     ActionViewColorSelection.Checked := TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Visible;
+
+    ActionViewSkinSelector.Checked := OptionsContainer.SkinSelectorVisible;
 
     { if items doesn't exist in ini, create them }
     if not SectionExists('ToolbarItems') then

@@ -124,17 +124,19 @@ var
 begin
   ActionFileSave.Enabled := VirtualDrawTree.Tag = 1;
 
+  GetKeyboardState(KeyState);
+  case KeyState[VK_INSERT] of
+    0:
+      if StatusBar.Panels[0].Text <> LanguageDataModule.GetConstant('Insert') then
+        StatusBar.Panels[0].Text := ' ' + LanguageDataModule.GetConstant('Insert');
+    1:
+      if StatusBar.Panels[0].Text <> LanguageDataModule.GetConstant('Overwrite') then
+        StatusBar.Panels[0].Text := ' ' + LanguageDataModule.GetConstant('Overwrite');
+  end;
+
   InfoText := GetModifiedInfo;
   if StatusBar.Panels[1].Text <> InfoText then
     StatusBar.Panels[1].Text := InfoText;
-
-  GetKeyboardState(KeyState);
-  if KeyState[VK_INSERT] = 0 then
-    if StatusBar.Panels[0].Text <> LanguageDataModule.GetConstant('Insert') then
-      StatusBar.Panels[0].Text := ' ' + LanguageDataModule.GetConstant('Insert');
-  if KeyState[VK_INSERT] = 1 then
-    if StatusBar.Panels[0].Text <> LanguageDataModule.GetConstant('Overwrite') then
-      StatusBar.Panels[0].Text := ' ' + LanguageDataModule.GetConstant('Overwrite');
 end;
 
 procedure TLanguageEditorForm.ActionExitExecute(Sender: TObject);
@@ -347,7 +349,7 @@ begin
       Canvas.Font.Color := clRed
     else
     if Assigned(SkinProvider.SkinData) and Assigned(SkinProvider.SkinData.SkinManager) then
-      Canvas.Font.Color := SkinProvider.SkinData.SkinManager.GetActiveEditFontColor //clWindowText; //LColor;
+      Canvas.Font.Color := SkinProvider.SkinData.SkinManager.GetActiveEditFontColor
     else
       Canvas.Font.Color := clWindowText;
 

@@ -1942,6 +1942,7 @@ inherited MainForm: TMainForm
       Width = 145
       Height = 22
       ItemMargin = 8
+      ShowNoSkin = False
       ThumbSize = tsMedium
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -3181,6 +3182,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Visible = False
         ImageIndex = 86
         Height = 16
@@ -3199,6 +3201,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Height = 19
         Width = 48
         Index = 1
@@ -3217,6 +3220,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Height = 19
         Width = 21
         Index = 2
@@ -3236,6 +3240,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Height = 20
         Width = 53
         Index = 3
@@ -3254,6 +3259,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Width = 6
         Index = 4
         Name = 'TitleBarItemSpacing2'
@@ -3272,6 +3278,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Height = 20
         Width = 51
         Index = 5
@@ -3290,6 +3297,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Width = 6
         Index = 6
         Name = 'TitleBarItemSpacing3'
@@ -3308,6 +3316,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Height = 20
         Width = 64
         Index = 7
@@ -3326,6 +3335,7 @@ inherited MainForm: TMainForm
         FontData.UseSysFontName = False
         FontData.UseSysSize = False
         FontData.UseSysStyle = False
+        Cursor = crDefault
         Width = 2
         Index = 8
         Name = 'TitleBarItemSpacing4'
@@ -3500,6 +3510,9 @@ inherited MainForm: TMainForm
       end
       object MenuItemToolbarMenuViewOutput: TMenuItem
         Action = ActionViewOutput
+      end
+      object S1: TMenuItem
+        Action = ActionViewSkinSelector
       end
       object MenuItemToolbarMenuViewStatusBar: TMenuItem
         Action = ActionViewStatusBar
@@ -4369,6 +4382,11 @@ inherited MainForm: TMainForm
       Caption = 'Menu bar'
       Hint = 'Show or hide the menu bar'
       OnExecute = ActionViewMenuBarExecute
+    end
+    object ActionViewSkinSelector: TAction
+      Category = 'View'
+      Caption = 'Skin selector'
+      OnExecute = ActionViewSkinSelectorExecute
     end
     object ActionViewStatusBar: TAction
       Category = 'View'
