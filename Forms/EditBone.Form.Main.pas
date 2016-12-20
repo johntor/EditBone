@@ -718,6 +718,7 @@ type
     SpeedButtonMacroStop: TBCSpeedButton;
     S1: TMenuItem;
     ActionViewSkinSelector: TAction;
+    ActionSearchFindAll: TAction;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -922,6 +923,7 @@ type
     procedure ClipboardMonitorChange(Sender: TObject);
     procedure ActionEditInsertHexColorExecute(Sender: TObject);
     procedure ActionViewSkinSelectorExecute(Sender: TObject);
+    procedure ActionSearchFindAllExecute(Sender: TObject);
   private
     FClipboardHistoryItems: TList<string>;
     FClipboardHistoryDialog: TClipboardHistoryDialog;
@@ -1701,6 +1703,12 @@ procedure TMainForm.SelectedSearchEngineClick(const ASearchEngine: TBCEditorSear
 begin
   SetSearchEngine(FDocument.GetActiveEditor);
   SetSearchEngine(FDocument.GetActiveSplitEditor);
+end;
+
+procedure TMainForm.ActionSearchFindAllExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.FindAll;
 end;
 
 procedure TMainForm.ActionSearchFindInFilesExecute(Sender: TObject);
@@ -2660,6 +2668,7 @@ begin
     ActionSearchGotoLine.Enabled := LActiveDocumentFound;
     ActionSearchReplace.Enabled := LActiveDocumentFound;
     ActionSearchFindInFiles.Enabled := Assigned(FOutput) and not FOutput.ProcessingTabSheet;
+    ActionSearchFindAll.Enabled := LActiveDocumentFound;
     ActionSearchFindNext.Enabled := LActiveDocumentFound;
     ActionSearchFindPrevious.Enabled := LActiveDocumentFound;
     ActionSearchToggleBookmark.Enabled := OptionsContainer.LeftMarginShowBookmarks and LActiveDocumentFound;
@@ -3475,6 +3484,7 @@ begin
   FDocument.ActionSearchCaseSensitive := ActionSearchCaseSensitive;
   FDocument.ActionSearchTextItems := ActionSearchTextItems;
   FDocument.ActionSearchEngine := ActionSearchEngine;
+  FDocument.ActionSearchFindAll := ActionSearchFindAll;
   FDocument.ActionSearchFindPrevious := ActionSearchFindPrevious;
   FDocument.ActionSearchFindNext := ActionSearchFindNext;
   FDocument.ActionSearchInSelection := ActionSearchInSelection;

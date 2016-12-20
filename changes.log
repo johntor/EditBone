@@ -1,4 +1,12 @@
-Version 12.10.2 (December 19, 2016) 
+Version 12.11.0 (December 20, 2016)
+
+- Added title bar options
+- Added find all - adds caret for every match
+- Fixed modified file name formatting
+- Fixed Lua highlighter
+- Updated language files
+
+Version 12.10.2 (December 19, 2016)
 
 - Fixed modified file name formatting
 - Fixed directory icon in find in files

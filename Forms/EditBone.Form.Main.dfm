@@ -3833,6 +3833,13 @@ inherited MainForm: TMainForm
       ShortCut = 24646
       OnExecute = ActionSearchFindInFilesExecute
     end
+    object ActionSearchFindAll: TAction
+      Category = 'Search'
+      Caption = 'Find all'
+      Hint = 'Find all matching texts'
+      ImageIndex = 151
+      OnExecute = ActionSearchFindAllExecute
+    end
     object ActionSearchFindNext: TAction
       Category = 'Search'
       Caption = 'Find next'

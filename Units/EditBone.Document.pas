@@ -55,6 +55,7 @@ type
     FActionSearchCaseSensitive: TAction;
     FActionSearchClose: TAction;
     FActionSearchEngine: TAction;
+    FActionSearchFindAll: TAction;
     FActionSearchFindNext: TAction;
     FActionSearchFindPrevious: TAction;
     FActionSearchInSelection: TAction;
@@ -135,6 +136,7 @@ type
     procedure DeleteWhiteSpace;
     procedure DeleteWord;
     procedure FileProperties;
+    procedure FindAll;
     procedure FindNext;
     procedure FindPrevious;
     procedure FoldAll;
@@ -200,6 +202,7 @@ type
     property ActionSearchCaseSensitive: TAction read FActionSearchCaseSensitive write FActionSearchCaseSensitive;
     property ActionSearchClose: TAction read FActionSearchClose write FActionSearchClose;
     property ActionSearchEngine: TAction read FActionSearchEngine write FActionSearchEngine;
+    property ActionSearchFindAll: TAction read FActionSearchFindAll write FActionSearchFindAll;
     property ActionSearchFindNext: TAction read FActionSearchFindNext write FActionSearchFindNext;
     property ActionSearchFindPrevious: TAction read FActionSearchFindPrevious write FActionSearchFindPrevious;
     property ActionSearchInSelection: TAction read FActionSearchInSelection write FActionSearchInSelection;
@@ -517,6 +520,22 @@ begin
     OnClick := ActionSearchFindNext.OnExecute;
     ImageIndex := ActionSearchFindNext.ImageIndex;
     Hint := ActionSearchFindNext.Hint;
+    Images := ImagesDataModule.ImageListSmall;
+    Left := LLeft + Width;
+    LLeft := Left + Width;
+  end;
+  { Find all button }
+  LSpeedButton := TBCSpeedButton.Create(ATabSheet);
+  with LSpeedButton do
+  begin
+    Align := alLeft;
+    Parent := ATabSheet.PanelSearch;
+    Width := 21;
+    ShowCaption := False;
+    SkinData.SkinSection := 'TOOLBUTTON';
+    OnClick := ActionSearchFindAll.OnExecute;
+    ImageIndex := ActionSearchFindAll.ImageIndex;
+    Hint := ActionSearchFindall.Hint;
     Images := ImagesDataModule.ImageListSmall;
     Left := LLeft + Width;
     LLeft := Left + Width;
@@ -1569,6 +1588,16 @@ begin
           LTabSheet.ComboBoxSearchText.SetFocus;
         end;
   end;
+end;
+
+procedure TEBDocument.FindAll;
+var
+  LEditor: TBCEditor;
+begin
+  LEditor := GetActiveEditor;
+  if Assigned(LEditor) then
+    if not DoSearchTextChange(LEditor) then
+      LEditor.FindAll;
 end;
 
 procedure TEBDocument.FindNext;
