@@ -2356,8 +2356,7 @@ end;
 
 procedure TMainForm.ActionViewStatusBarExecute(Sender: TObject);
 begin
-  with StatusBar do
-  Visible := not Visible;
+  StatusBar.Visible := not StatusBar.Visible;
 end;
 
 procedure TMainForm.ActionViewSyncEditExecute(Sender: TObject);
@@ -3074,6 +3073,7 @@ begin
   else
     StatusBar.Panels[EDITBONE_STATUS_BAR_MODIFIED_INFO_PANEL].Width := 0;
 
+  OptionsContainer.AssignTo(TitleBar);
   OptionsContainer.AssignTo(StatusBar);
   { Output }
   if Assigned(FOutput) then

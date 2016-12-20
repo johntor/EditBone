@@ -288,6 +288,10 @@ object OptionsForm: TOptionsForm
       Caption = 'Status bar'
       ImageIndex = 119
     end
+    object ActionTitleBar: TAction
+      Caption = 'Title bar'
+      ImageIndex = 150
+    end
     object ActionSQLAlignments: TAction
       Caption = 'Alignments'
       ImageIndex = 121

@@ -65,6 +65,7 @@ type
     ActionEditorSyncEdit: TAction;
     ActionEditorWordWrap: TAction;
     VirtualDrawTreeOptions: TVirtualDrawTree;
+    ActionTitleBar: TAction;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -107,11 +108,12 @@ uses
   BCCommon.Frame.Options.Editor.LeftMargin, BCCommon.Frame.Options.Editor.RightMargin,
   EditBone.Frame.Options.FileTypes, EditBone.Frame.Options.Directory, EditBone.Frame.Options.Directory.TabSheet,
   EditBone.Frame.Options.Output.TabSheet, BCCommon.Frame.Options.Compare, BCCommon.Frame.Options.Editor.SyncEdit,
-  BCCommon.Frame.Options.MainMenu, BCCommon.Frame.Options.StatusBar, BCCommon.Frame.Options.Output,
-  BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print,  BCCommon.Frame.Options.Editor.WordWrap,
-  BCCommon.Frame.Options.SQL.Select, BCCommon.Frame.Options.SQL.Alignments, BCCommon.Frame.Options.SQL.Insert,
-  BCCommon.Frame.Options.SQL.Update, BCCommon.Frame.Options.SQL.Whitespace, BCCommon.Frame.Options.SQL.Capitalization,
-  BCCommon.Frame.Options.SQL.Indentation, BCCommon.Frame.Options.SQL.Formatter;
+  BCCommon.Frame.Options.MainMenu, BCCommon.Frame.Options.StatusBar, BCCommon.Frame.Options.TitleBar,
+  BCCommon.Frame.Options.Output, BCCommon.Frame.Options.Toolbar, BCCommon.Frame.Options.Print,
+  BCCommon.Frame.Options.Editor.WordWrap, BCCommon.Frame.Options.SQL.Select, BCCommon.Frame.Options.SQL.Alignments,
+  BCCommon.Frame.Options.SQL.Insert, BCCommon.Frame.Options.SQL.Update, BCCommon.Frame.Options.SQL.Whitespace,
+  BCCommon.Frame.Options.SQL.Capitalization, BCCommon.Frame.Options.SQL.Indentation,
+  BCCommon.Frame.Options.SQL.Formatter;
 
 var
   FOptionsForm: TOptionsForm;
@@ -324,6 +326,12 @@ begin
     Data.Index := PostInc(i);
     Data.ImageIndex := ActionStatusBar.ImageIndex;
     Data.Caption := ActionStatusBar.Caption;
+    { Title Bar }
+    Node := AddChild(nil);
+    Data := GetNodeData(Node);
+    Data.Index := PostInc(i);
+    Data.ImageIndex := ActionTitleBar.ImageIndex;
+    Data.Caption := ActionTitleBar.Caption;
     { File types }
     Node := AddChild(nil);
     Data := GetNodeData(Node);
@@ -471,99 +479,78 @@ end;
 
 procedure TOptionsForm.SetVisibleFrame;
 var
-  i, Level, ParentIndex: Integer;
-  TreeNode: PVirtualNode;
+  LIndex, LLevel, LParentIndex: Integer;
+  LTreeNode: PVirtualNode;
 begin
   inherited;
-  TreeNode := VirtualDrawTreeOptions.GetFirstSelected;
-  if Assigned(TreeNode) then
+  LTreeNode := VirtualDrawTreeOptions.GetFirstSelected;
+  if Assigned(LTreeNode) then
   begin
-    Level := VirtualDrawTreeOptions.GetNodeLevel(TreeNode);
-    ParentIndex := -1;
-    if Level = 1 then
-      ParentIndex := TreeNode.Parent.Index;
-    for i := 0 to ComponentCount - 1 do
-      if Components[i] is TFrame then
-        (Components[i] as TFrame).Hide;
+    LLevel := VirtualDrawTreeOptions.GetNodeLevel(LTreeNode);
+    LParentIndex := -1;
+    if LLevel = 1 then
+      LParentIndex := LTreeNode.Parent.Index;
+    for LIndex := 0 to ComponentCount - 1 do
+      if Components[LIndex] is TFrame then
+        (Components[LIndex] as TFrame).Hide;
 
     { don't set the visibility value with the condition because the frame is created }
-    if (Level = 0) and (TreeNode.Index = 0) then
-      OptionsEditorOptionsFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 0) then
-      OptionsEditorCaretFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 1) then
-      OptionsEditorCodeFoldingFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 2) then
-      OptionsEditorColorFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 3) then
-      OptionsEditorCompletionProposalFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 4) then
-      OptionsEditorDefaultsFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 5) then
-      OptionsEditorFontFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 6) then
-      OptionsEditorLeftMarginFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 7) then
-      OptionsEditorMatchingPairFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 8) then
-      OptionsEditorMinimapFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 9) then
-      OptionsEditorRightMarginFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 10) then
-      OptionsEditorScrollFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 11) then
-      OptionsEditorSearchFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 12) then
-      OptionsEditorSelectionFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 13) then
-      OptionsEditorSpecialCharsFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 14) then
-      OptionsEditorSyncEditFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 15) then
-      OptionsEditorTabsFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 16) then
-      OptionsEditorTabulatorFrame(Self).ShowFrame;
-    if (ParentIndex = 0) and (Level = 1) and (TreeNode.Index = 17) then
-      OptionsEditorWordWrapFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 1) then
-      OptionsDirectoryFrame(Self).ShowFrame;
-    if (ParentIndex = 1) and (Level = 1) and (TreeNode.Index = 0) then
-      OptionsDirectoryTabsFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 2) then
-      OptionsOutputFrame(Self).ShowFrame;
-    if (ParentIndex = 2) and (Level = 1) and (TreeNode.Index = 0) then
-      OptionsOutputTabsFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 3) then
-      OptionsCompareFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 4) then
-      OptionsPrintFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 5) then
-      OptionsMainMenuFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 6) then
-      OptionsToolbarFrame(Self, FActionList).Show;
-    if (Level = 0) and (TreeNode.Index = 7) then
-      OptionsStatusBarFrame(Self).ShowFrame;
-    if (Level = 0) and (TreeNode.Index = 8) then
-      OptionsFileTypesFrame(Self).ShowFrame;
-    if FSQLFormatterDLLFound then
-    begin
-      { SQL Formatter options }
-      if (Level = 0) and (TreeNode.Index = 9) then
-        OptionsSQLFormatterFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 0) then
-        OptionsSQLAlignmentsFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 1) then
-        OptionsSQLCapitalizationFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 2) then
-        OptionsSQLIndentationFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 3) then
-        OptionsSQLInsertFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 4) then
-        OptionsSQLSelectFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 5) then
-        OptionsSQLUpdateFrame(Self).ShowFrame;
-      if (ParentIndex = 9) and (Level = 1) and (TreeNode.Index = 6) then
-        OptionsSQLWhitespaceFrame(Self).ShowFrame;
+    case LLevel of
+      0:
+        case LTreeNode.Index of
+          0: OptionsEditorOptionsFrame(Self).ShowFrame;
+          1: OptionsDirectoryFrame(Self).ShowFrame;
+          2: OptionsOutputFrame(Self).ShowFrame;
+          3: OptionsCompareFrame(Self).ShowFrame;
+          4: OptionsPrintFrame(Self).ShowFrame;
+          5: OptionsMainMenuFrame(Self).ShowFrame;
+          6: OptionsToolbarFrame(Self, FActionList).Show;
+          7: OptionsStatusBarFrame(Self).ShowFrame;
+          8: OptionsTitleBarFrame(Self).ShowFrame;
+          9: OptionsFileTypesFrame(Self).ShowFrame;
+          10:
+            if FSQLFormatterDLLFound then
+              OptionsSQLFormatterFrame(Self).ShowFrame;
+        end;
+      1:
+        case LParentIndex of
+          0:
+            case LTreeNode.Index of
+              0: OptionsEditorCaretFrame(Self).ShowFrame;
+              1: OptionsEditorCodeFoldingFrame(Self).ShowFrame;
+              2: OptionsEditorColorFrame(Self).ShowFrame;
+              3: OptionsEditorCompletionProposalFrame(Self).ShowFrame;
+              4: OptionsEditorDefaultsFrame(Self).ShowFrame;
+              5: OptionsEditorFontFrame(Self).ShowFrame;
+              6: OptionsEditorLeftMarginFrame(Self).ShowFrame;
+              7: OptionsEditorMatchingPairFrame(Self).ShowFrame;
+              8: OptionsEditorMinimapFrame(Self).ShowFrame;
+              9: OptionsEditorRightMarginFrame(Self).ShowFrame;
+              10: OptionsEditorScrollFrame(Self).ShowFrame;
+              11: OptionsEditorSearchFrame(Self).ShowFrame;
+              12: OptionsEditorSelectionFrame(Self).ShowFrame;
+              13: OptionsEditorSpecialCharsFrame(Self).ShowFrame;
+              14: OptionsEditorSyncEditFrame(Self).ShowFrame;
+              15: OptionsEditorTabsFrame(Self).ShowFrame;
+              16: OptionsEditorTabulatorFrame(Self).ShowFrame;
+              17: OptionsEditorWordWrapFrame(Self).ShowFrame;
+            end;
+          1:
+            OptionsDirectoryTabsFrame(Self).ShowFrame;
+          2:
+            OptionsOutputTabsFrame(Self).ShowFrame;
+          9:
+            if FSQLFormatterDLLFound then
+            case LTreeNode.Index of
+              0: OptionsSQLAlignmentsFrame(Self).ShowFrame;
+              1: OptionsSQLCapitalizationFrame(Self).ShowFrame;
+              2: OptionsSQLIndentationFrame(Self).ShowFrame;
+              3: OptionsSQLInsertFrame(Self).ShowFrame;
+              4: OptionsSQLSelectFrame(Self).ShowFrame;
+              5: OptionsSQLUpdateFrame(Self).ShowFrame;
+              6: OptionsSQLWhitespaceFrame(Self).ShowFrame;
+            end;
+        end;
     end;
   end;
 end;
