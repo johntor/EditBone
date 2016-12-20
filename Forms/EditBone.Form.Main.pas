@@ -2548,16 +2548,13 @@ begin
         LIsRecordingMacro := LActiveEditor.MacroRecorder.State = msRecording;
         LIsRecordingStopped := LActiveEditor.MacroRecorder.State = msStopped;
       end;
-
-      if LActiveEditor.DocumentName <> '' then
-        LActiveDocumentName := FormatFileName(LActiveEditor.DocumentName, LActiveEditor.Modified);
-
       LSelectionModeChecked := LActiveEditor.Selection.Mode = smColumn;
     end;
-    if LActiveDocumentName = '' then
-      if LActiveDocumentFound then
-        if PageControlDocument.ActivePage.TabType = ttTab then
-          LActiveDocumentName := FormatFileName(PageControlDocument.ActivePage.Caption, LActiveEditor.Modified);
+    if LActiveDocumentFound and (PageControlDocument.ActivePage.TabType = ttTab) then
+    begin
+      LActiveDocumentName := LActiveEditor.FilePath;
+      LActiveDocumentName := LActiveDocumentName + PageControlDocument.ActivePage.Caption;
+    end;
 
     if LActiveSplitDocumentFound then
       LSelectionAvailable := LSelectionAvailable or LActiveSplitEditor.SelectionAvailable;
