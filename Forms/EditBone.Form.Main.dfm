@@ -3160,7 +3160,6 @@ inherited MainForm: TMainForm
     AnimEffects.SkinChanging.Active = True
     MenuSupport.UseExtraLine = False
     Options.ChangeSysColors = True
-    SkinInfo = 'N/A'
     ThirdParty.ThirdEdits = 'TBCEditorPrintPreview'#13#10'TBCButtonedEdit'#13#10
     ThirdParty.ThirdButtons = ' '#13#10'TButton'#13#10
     ThirdParty.ThirdGrids = ' '#13#10'TStringGrid'#13#10
@@ -3379,6 +3378,9 @@ inherited MainForm: TMainForm
     end
     object MenuItemEditSortDescending: TMenuItem
       Action = ActionEditSortDesc
+    end
+    object Random1: TMenuItem
+      Action = ActionEditSortRandom
     end
   end
   object PopupMenuSearchGotoBookmarks: TPopupMenu [14]
@@ -3788,6 +3790,13 @@ inherited MainForm: TMainForm
       ImageIndex = 32
       ShortCut = 24644
       OnExecute = ActionEditSortDescExecute
+    end
+    object ActionEditSortRandom: TAction
+      Category = 'Edit'
+      Caption = 'Random'
+      Hint = 'Sort random'
+      ImageIndex = 152
+      OnExecute = ActionEditSortRandomExecute
     end
     object ActionEditToggleCase: TAction
       Category = 'Edit'
@@ -5086,6 +5095,9 @@ inherited MainForm: TMainForm
       object MenuItemSortDescending: TMenuItem
         Action = ActionEditSortDesc
       end
+      object Random3: TMenuItem
+        Action = ActionEditSortRandom
+      end
     end
     object MenuItemSeparator5: TMenuItem
       Caption = '-'
@@ -5390,6 +5402,9 @@ inherited MainForm: TMainForm
         end
         object MenuItemMainMenuEditSortDescending: TMenuItem
           Action = ActionEditSortDesc
+        end
+        object Random2: TMenuItem
+          Action = ActionEditSortRandom
         end
       end
       object MenuItemMainMenuEditDivider4: TMenuItem

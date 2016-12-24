@@ -719,6 +719,10 @@ type
     S1: TMenuItem;
     ActionViewSkinSelector: TAction;
     ActionSearchFindAll: TAction;
+    ActionEditSortRandom: TAction;
+    Random1: TMenuItem;
+    Random2: TMenuItem;
+    Random3: TMenuItem;
     procedure ActionDirectoryContextMenuExecute(Sender: TObject);
     procedure ActionDirectoryDeleteExecute(Sender: TObject);
     procedure ActionDirectoryFindInFilesExecute(Sender: TObject);
@@ -924,6 +928,7 @@ type
     procedure ActionEditInsertHexColorExecute(Sender: TObject);
     procedure ActionViewSkinSelectorExecute(Sender: TObject);
     procedure ActionSearchFindAllExecute(Sender: TObject);
+    procedure ActionEditSortRandomExecute(Sender: TObject);
   private
     FClipboardHistoryItems: TList<string>;
     FClipboardHistoryDialog: TClipboardHistoryDialog;
@@ -1415,6 +1420,12 @@ procedure TMainForm.ActionEditSortExecute(Sender: TObject);
 begin
   inherited;
   DropdownMenuPopup(SpeedButtonEditSort);
+end;
+
+procedure TMainForm.ActionEditSortRandomExecute(Sender: TObject);
+begin
+  inherited;
+  FDocument.Sort(soRandom);
 end;
 
 procedure TMainForm.ActionEditToggleCaseExecute(Sender: TObject);

@@ -183,7 +183,7 @@ type
     procedure SetHighlighterColor(AEditor: TBCEditor; const AColorName: string);
     procedure SetOptions;
     procedure ShowInfo;
-    procedure Sort(ASortOrder: TBCEditorSortOrder = soToggle);
+    procedure Sort(ASortOrder: TBCEditorSortOrder);
     procedure StopMacro;
     procedure SyncEdit;
     procedure ToggleBookmark(AItemIndex: Integer);
@@ -2467,7 +2467,7 @@ begin
     LEditor.DeleteWhiteSpace;
 end;
 
-procedure TEBDocument.Sort(ASortOrder: TBCEditorSortOrder = soToggle);
+procedure TEBDocument.Sort(ASortOrder: TBCEditorSortOrder);
 var
   LEditor: TBCEditor;
 begin
