@@ -1,3 +1,12 @@
+Version 12.12.0 (December 30, 2016)
+
+- Added random sort
+- Fixed code folding
+- Fixed guide lines painting
+- Fixed file tree editing
+- Fixed word wrap
+- Updated language files
+
 Version 12.11.0 (December 20, 2016)
 
 - Added title bar options

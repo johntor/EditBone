@@ -2,7 +2,7 @@ program EditBone;
 								  
 uses
   {$ifdef DEBUG}
-  //FastMM4,
+  FastMM4,
   {$endif }
   Winapi.Windows,
   Winapi.Messages,
@@ -34,7 +34,7 @@ uses
 
 {$ifdef RELEASE}
 var
-  i: Integer;
+  LIndex: Integer;
   LParam: string;
   LWindow: HWND;
   LCopyDataStruct: TCopyDataStruct;
@@ -58,9 +58,9 @@ begin
   else
   begin
     FillChar(LCopyDataStruct, Sizeof(TCopyDataStruct), 0);
-    for i := 1 to ParamCount do
+    for LIndex := 1 to ParamCount do
     begin
-      LParam := ParamStr(i);
+      LParam := ParamStr(LIndex);
       LCopyDataStruct.cbData := (Length(LParam) + 1) * SizeOf(Char);
       LCopyDataStruct.lpData := PChar(LParam);
       SendMessage(LWindow, WM_COPYDATA, 0, NativeInt(@LCopyDataStruct));
