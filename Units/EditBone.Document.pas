@@ -8,7 +8,7 @@ uses
   BCControl.ProgressBar, BCControl.Panel, sLabel, sPageControl, BCEditor.Types, BCControl.StatusBar,
   BCEditor.MacroRecorder, BCEditor.Print, BCEditor.Editor.Marks, Vcl.Dialogs, BCCommon.Frame.Compare,
   BCEditor.Print.Types, EditBone.XMLTree, BCControl.Splitter, BCControl.ComboBox, System.Generics.Collections,
-  BCComponent.SkinManager;
+  BCComponent.SkinManager, EditBone.Types;
 
 type
   TEBSetBookmarks = procedure of object;
@@ -87,7 +87,6 @@ type
     function FindOpenFile(const FileName: string): TBCEditor;
     function GetActiveDocumentName: string;
     function GetActiveFileName: string;
-    function GetActivePageCaption: string;
     function GetCanRedo: Boolean;
     function GetCanUndo: Boolean;
     function GetModifiedDocuments(CheckActive: Boolean = True): Boolean;
@@ -143,9 +142,7 @@ type
     procedure FoldAllDownFromSelectedLine;
     procedure FoldAllUpFromSelectedLine;
     procedure FoldAllSelected;
-    procedure FormatJSON(AIndentSize: Integer);
-    procedure FormatSQL;
-    procedure FormatXML;
+    procedure FormatDocument(const AFileType: TFormatType; const AIndentSize: Integer = -1);
     procedure GotoBookmarks(ItemIndex: Integer);
     procedure GotoLine;
     procedure HTMLExport;
@@ -1385,11 +1382,6 @@ begin
   FProcessing := False;
 end;
 
-function TEBDocument.GetActivePageCaption: string;
-begin
-  Result := FormatFileName(PageControl.ActivePage.Caption);
-end;
-
 procedure TEBDocument.Undo;
 var
   LEditor: TBCEditor;
@@ -1399,7 +1391,7 @@ begin
   begin
     LEditor.DoUndo;
     if LEditor.UndoList.ItemCount = 0 then
-      PageControl.ActivePage.Caption := GetActivePageCaption;
+      PageControl.ActivePage.Caption := FormatFileName(PageControl.ActivePage.Caption, LEditor.Modified);
   end;
   CheckModifiedDocuments;
 end;
@@ -2822,9 +2814,10 @@ begin
   ToggleMinimap(GetActiveSplitEditor);
 end;
 
-procedure TEBDocument.FormatXML;
+procedure TEBDocument.FormatDocument(const AFileType: TFormatType; const AIndentSize: Integer = -1);
 var
   LEditor: TBCEditor;
+  LText: string;
 begin
   LEditor := GetActiveEditor;
   if Assigned(LEditor) then
@@ -2832,35 +2825,18 @@ begin
     LEditor.BeginUndoBlock;
     try
       LEditor.SelectAll;
-      LEditor.SelectedText := BCCommon.StringUtils.FormatXML(LEditor.Text);
+      case AFileType of
+        ftJSON: LText := BCCommon.StringUtils.FormatJSON(LEditor.Text, AIndentSize);
+        ftSQL: LText := BCCommon.SQL.Formatter.FormatSQL(LEditor.Text, TSQLDatabase(SQLFormatterOptionsContainer.SQLDatabase));
+        ftXML: LText := BCCommon.StringUtils.FormatXML(LEditor.Text);
+      end;
+      LEditor.SelectedText := LText;
     finally
       LEditor.EndUndoBlock;
-      LEditor.SetFocus;
+      LEditor.MoveCaretToBOF;
+      PageControl.ActivePage.Caption := FormatFileName(PageControl.ActivePage.Caption, LEditor.Modified);
     end;
   end;
-end;
-
-procedure TEBDocument.FormatSQL;
-var
-  LEditor: TBCEditor;
-begin
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    if Trim(LEditor.Text) <> '' then
-      LEditor.Text := BCCommon.SQL.Formatter.FormatSQL(LEditor.Text, TSQLDatabase(SQLFormatterOptionsContainer.SQLDatabase));
-end;
-
-procedure TEBDocument.FormatJSON(AIndentSize: Integer);
-var
-  LEditor: TBCEditor;
-begin
-  LEditor := GetActiveEditor;
-  if Assigned(LEditor) then
-    if Trim(LEditor.Text) <> '' then
-    begin
-      LEditor.Text := BCCommon.StringUtils.FormatJSON(LEditor.Text, AIndentSize);
-      LEditor.MoveCaretToBOF;
-    end;
 end;
 
 procedure TEBDocument.SelectHighlighter(AEditor: TBCEditor; const FileName: string);

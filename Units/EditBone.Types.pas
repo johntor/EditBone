@@ -20,6 +20,8 @@ type
   end;
   POutputRec = ^TOutputRec;
 
+  TFormatType = (ftJSON, ftSQL, ftXML);
+
 implementation
 
 end.

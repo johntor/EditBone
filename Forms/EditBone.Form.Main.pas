@@ -995,7 +995,7 @@ uses
   BCEditor.Encoding, EditBone.Form.UnicodeCharacterMap, EditBone.Dialog.About, BCCommon.Dialog.DownloadURL,
   BCCommon.Form.Convert, EditBone.Form.LanguageEditor, BCCommon.Messages, BCCommon.Form.SearchForFiles,
   BCCommon.StringUtils, BCCommon.Dialog.SkinSelect, sGraphUtils, sConst, BCCommon.Form.Print.Preview,
-  EditBone.DataModule.Images, System.IniFiles;
+  EditBone.DataModule.Images, System.IniFiles, EditBone.Types;
 
 procedure TMainForm.CreateParams(var Params: TCreateParams);
 begin
@@ -1261,35 +1261,35 @@ end;
 procedure TMainForm.ActionDocumentFormatJSONIndent2Execute(Sender: TObject);
 begin
   inherited;
-  FDocument.FormatJSON(2);
+  FDocument.FormatDocument(ftJSON, 2);
 end;
 
 procedure TMainForm.ActionDocumentFormatJSONIndent3Execute(Sender: TObject);
 begin
   inherited;
-  FDocument.FormatJSON(3);
+  FDocument.FormatDocument(ftJSON, 3);
 end;
 
 procedure TMainForm.ActionDocumentFormatJSONIndent4Execute(Sender: TObject);
 begin
   inherited;
-  FDocument.FormatJSON(4);
+  FDocument.FormatDocument(ftJSON, 4);
 end;
 
 procedure TMainForm.ActionDocumentFormatJSONMinifyExecute(Sender: TObject);
 begin
   inherited;
-  FDocument.FormatJSON(-1);
+  FDocument.FormatDocument(ftJSON);
 end;
 
 procedure TMainForm.ActionDocumentFormatSQLExecute(Sender: TObject);
 begin
-  FDocument.FormatSQL;
+  FDocument.FormatDocument(ftSQL);
 end;
 
 procedure TMainForm.ActionDocumentFormatXMLExecute(Sender: TObject);
 begin
-  FDocument.FormatXML;
+  FDocument.FormatDocument(ftXML);
 end;
 
 procedure TMainForm.ActionDocumentHTMLExportExecute(Sender: TObject);
