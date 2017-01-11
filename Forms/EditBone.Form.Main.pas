@@ -78,7 +78,7 @@ type
     ActionFilePrintPreview: TAction;
     ActionFileProperties: TAction;
     ActionFileReopen: TAction;
-    ActionFileReopenClear: TAction;
+    ActionFileReopenProperties: TAction;
     ActionFileSave: TAction;
     ActionFileSaveAll: TAction;
     ActionFileSaveAs: TAction;
@@ -776,7 +776,7 @@ type
     procedure ActionFilePrintExecute(Sender: TObject);
     procedure ActionFilePrintPreviewExecute(Sender: TObject);
     procedure ActionFilePropertiesExecute(Sender: TObject);
-    procedure ActionFileReopenClearExecute(Sender: TObject);
+    procedure ActionFileReopenPropertiesExecute(Sender: TObject);
     procedure ActionFileReopenExecute(Sender: TObject);
     procedure ActionFileSaveAllExecute(Sender: TObject);
     procedure ActionFileSaveAsExecute(Sender: TObject);
@@ -957,7 +957,6 @@ type
     procedure CreateObjects;
     procedure CreateToolbar(ACreate: Boolean = False);
     procedure DropdownMenuPopup(ASpeedButton: TBCSpeedButton);
-    procedure LockFormPaint;
     procedure MoveSelection(AEditor: TBCEditor; const AVirtualKey: Byte);
     procedure ReadApplicationParams;
     procedure ReadIniOptions;
@@ -967,7 +966,6 @@ type
     procedure SetFields;
     procedure SetImages;
     procedure SetOptions;
-    procedure UnlockFormPaint;
     procedure UpdateMenuBarLanguage;
     procedure UpdatePageControlMargins;
     procedure WriteIniFile;
@@ -1153,11 +1151,32 @@ begin
   BrowseURL(FormatFileName(FDocument.ActiveDocumentName), OptionsContainer.DefaultBrowser);
 end;
 
-procedure TMainForm.ActionFileReopenClearExecute(Sender: TObject);
+procedure TMainForm.ActionFileReopenPropertiesExecute(Sender: TObject);
+var
+  LIndex: Integer;
+  LFiles: TStringList;
 begin
-  with TIniFile.Create(GetIniFilename) do
+  with TItemListDialog.Create(Self) do
   try
-    EraseSection('FileReopenFiles');
+    Caption := LanguageDataModule.GetConstant('ReopenItems');
+    LFiles := TStringList.Create;
+    with TIniFile.Create(GetIniFilename) do
+    try
+      ReadSectionValues('FileReopenFiles', LFiles);
+      for LIndex := 0 to LFiles.Count - 1 do
+        LFiles.Strings[LIndex] := LFiles.ValueFromIndex[LIndex];
+      ListBox.Items.Assign(LFiles);
+      if ShowModal = mrOk then
+      begin
+        EraseSection('FileReopenFiles');
+        LFiles.Assign(ListBox.Items);
+        for LIndex := 0 to LFiles.Count - 1 do
+          WriteString('FileReopenFiles', IntToStr(LIndex), LFiles.Strings[LIndex]);
+      end;
+    finally
+      LFiles.Free;
+      Free;
+    end;
   finally
     Free;
   end;
@@ -1697,9 +1716,9 @@ begin
       FPopupSearchEngineDialog.PopupParent := Self;
       FPopupSearchEngineDialog.OnSelectSearchEngine := SelectedSearchEngineClick;
     end;
-    LockFormPaint;
+    SkinProvider.SkinData.BeginUpdate;
     FPopupSearchEngineDialog.Execute(LEditor.Search.Engine);
-    UnlockFormPaint;
+    SkinProvider.SkinData.EndUpdate;
   end;
 end;
 
@@ -3275,14 +3294,14 @@ begin
   FPopupFilesDialog.Left := LPoint.X;
   FPopupFilesDialog.Top := LPoint.Y;
 
-  LockFormPaint;
+  SkinProvider.SkinData.BeginUpdate;
   LFiles := GetFiles;
   try
     FPopupFilesDialog.Execute(LFiles, TitleBar.Items[EDITBONE_TITLE_BAR_FILENAME].Caption);
   finally
     LFiles.Free;
   end;
-  UnlockFormPaint;
+  SkinProvider.SkinData.EndUpdate;
 end;
 
 procedure TMainForm.TitleBarItems4Click(Sender: TObject);
@@ -3302,9 +3321,9 @@ begin
   FPopupEncodingDialog.Left := LPoint.X;
   FPopupEncodingDialog.Top := LPoint.Y;
 
-  LockFormPaint;
+  SkinProvider.SkinData.BeginUpdate;
   FPopupEncodingDialog.Execute(TitleBar.Items[EDITBONE_TITLE_BAR_ENCODING].Caption);
-  UnlockFormPaint;
+  SkinProvider.SkinData.EndUpdate;
 end;
 
 function TMainForm.GetTitleBarItemLeftBottom(AIndex: Integer): TPoint;
@@ -3327,18 +3346,6 @@ begin
   end;
 end;
 
-procedure TMainForm.LockFormPaint;
-begin
-  SkinProvider.SkinData.BeginUpdate;
-  SkinProvider.Form.Perform(WM_SETREDRAW, 0, 0);
-end;
-
-procedure TMainForm.UnlockFormPaint;
-begin
-  SkinProvider.SkinData.EndUpdate;
-  SkinProvider.Form.Perform(WM_SETREDRAW, 1, 0);
-end;
-
 procedure TMainForm.TitleBarItems6Click(Sender: TObject);
 var
   LPoint: TPoint;
@@ -3356,9 +3363,9 @@ begin
   FPopupHighlighterDialog.Left := LPoint.X;
   FPopupHighlighterDialog.Top := LPoint.Y;
 
-  LockFormPaint;
+  SkinProvider.SkinData.BeginUpdate;
   FPopupHighlighterDialog.Execute(OptionsContainer.HighlighterStrings, TitleBar.Items[EDITBONE_TITLE_BAR_HIGHLIGHTER].Caption);
-  UnlockFormPaint;
+  SkinProvider.SkinData.EndUpdate;
 end;
 
 procedure TMainForm.TitleBarItems8Click(Sender: TObject);
@@ -3378,9 +3385,9 @@ begin
   FPopupHighlighterColorDialog.Left := LPoint.X;
   FPopupHighlighterColorDialog.Top := LPoint.Y;
 
-  LockFormPaint;
+  SkinProvider.SkinData.BeginUpdate;
   FPopupHighlighterColorDialog.Execute(OptionsContainer.HighlighterColorStrings, TitleBar.Items[EDITBONE_TITLE_BAR_COLORS].Caption);
-  UnlockFormPaint;
+  SkinProvider.SkinData.EndUpdate;
 end;
 
 procedure TMainForm.ReadIniOptions;
@@ -3552,8 +3559,8 @@ end;
 
 procedure TMainForm.CreateFileReopenList;
 var
-  i, j, LImageIndex: Integer;
-  s: string;
+  LIndex, LFileIndex, LImageIndex: Integer;
+  LFileName: string;
   LFiles: TStrings;
   LMenuItem, LMenuItem2: TMenuItem;
   LSystemImageList: TImageList;
@@ -3577,22 +3584,22 @@ begin
     try
       ReadSectionValues('FileReopenFiles', LFiles);
       { Files }
-      j := 0;
-      for i := 0 to LFiles.Count - 1 do
+      LFileIndex := 0;
+      for LIndex := 0 to LFiles.Count - 1 do
       begin
-        s := System.Copy(LFiles.Strings[i], Pos('=', LFiles.Strings[i]) + 1, Length(LFiles.Strings[i]));
-        if FileExists(s) then
+        LFileName := LFiles.ValueFromIndex[LIndex];
+        if FileExists(LFileName) then
         begin
           LMenuItem := TMenuItem.Create(PopupMenuFileReopen);
           LMenuItem2 :=  TMenuItem.Create(MainMenu);
           LMenuItem.OnClick := ActionSelectReopenFileExecute;
           LMenuItem2.OnClick := ActionSelectReopenFileExecute;
-          LMenuItem.Caption := Format('%d %s', [j, s]);
-          LMenuItem2.Caption := Format('%d %s', [j, s]);
+          LMenuItem.Caption := Format('%d %s', [LFileIndex, LFileName]);
+          LMenuItem2.Caption := LMenuItem.Caption;
           { Add image to imagelist }
           LIcon := TIcon.Create;
           try
-            LImageIndex := GetIconIndex(s, SHGFI_ICON or SHGFI_ADDOVERLAYS);
+            LImageIndex := GetIconIndex(LFileName, SHGFI_ICON or SHGFI_ADDOVERLAYS);
             LSystemImageList.GetIcon(LImageIndex, LIcon);
             LImageIndex := ImageList_AddIcon(ImagesDataModule.ImageListSmall.Handle, LIcon.Handle);
           finally
@@ -3600,7 +3607,7 @@ begin
           end;
           LMenuItem.ImageIndex := LImageIndex;
           LMenuItem2.ImageIndex := LImageIndex;
-          Inc(j);
+          Inc(LFileIndex);
 
           PopupMenuFileReopen.Items.Add(LMenuItem);
           MenuItemMainMenuFileReopen.Add(LMenuItem2);
@@ -3618,10 +3625,10 @@ begin
         MenuItemMainMenuFileReopen.Add(LMenuItem);
         { Clear }
         LMenuItem := TMenuItem.Create(PopupMenuFileReopen);
-        LMenuItem.Action := ActionFileReopenClear;
+        LMenuItem.Action := ActionFileReopenProperties;
         PopupMenuFileReopen.Items.Add(LMenuItem);
         LMenuItem := TMenuItem.Create(MainMenu);
-        LMenuItem.Action := ActionFileReopenClear;
+        LMenuItem.Action := ActionFileReopenProperties;
         MenuItemMainMenuFileReopen.Add(LMenuItem);
       end;
     finally
